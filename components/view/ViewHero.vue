@@ -4,20 +4,18 @@ import { Assets, DisplacementFilter } from 'pixi.js'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useHomeStore } from '~/store/useHomeStore'
 
+const { $gsap } = useNuxtApp()
+
 // PINIA 🍍 
 const store = useHomeStore()
 
-const { $gsap } = useNuxtApp()
-
 const pixiCtx = useTemplateRef<any>('pixi')
 const logoEl = useTemplateRef<any>('mylogo')
-const titleEl = useTemplateRef<any>('title')
 
 let app: PIXI.Application
 let filter: DisplacementFilter
 let ripple: PIXI.Sprite
 let logo: PIXI.Sprite
-
 let ctx: gsap.Context
 
 onMounted(async () => {
@@ -76,7 +74,7 @@ onMounted(async () => {
 
             st.addLabel('start')
                 .fromTo(logoEl.value, { opacity: 1 }, { opacity: 0.2 }, "ripple")
-                .fromTo(".auth-intro__header,.auth-intro__text", { duration: .2, opacity: 1 }, { duration: .2, opacity: 0 }, "ripple")
+                .fromTo(".auth-intro__header,.auth-intro__text", { duration: .1, opacity: 1 }, { duration: .1, opacity: 0 }, "ripple")
                 .fromTo(ripple.scale, { x: 0, y: 0 }, { x: 5.5, y: 5.5 }, "ripple")
                 .to(filter.scale, { x: 5.5, y: 5.5 }, "ripple")
 

@@ -4,8 +4,13 @@ definePageMeta({
     layout: 'default'
 });
 
+const {$lenis} = useNuxtApp();
+
 const route = useRoute();
-console.log(route.params.id)
+
+onMounted(() => {
+    $lenis.scrollTo(0 ,{immediate: true, force:true});   
+})
 </script>
 
 <template>
@@ -14,6 +19,6 @@ console.log(route.params.id)
 
 <style scoped>
 .test {
-    height: 100vh;
+    height: 120vh;
 }
 </style>

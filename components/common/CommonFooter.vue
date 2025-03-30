@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import SplitType from "split-type"
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useHomeStore } from "~/store/useHomeStore"
+import { useLayoutStore } from "~/store/useLayoutStore"
 
-// PINIA 🍍
-const store = useHomeStore()
-
+// Footer uses layout store
+const store = useLayoutStore()
 const { $gsap } = useNuxtApp()
+const route = useRoute()
+
+let sections:any
 
 onMounted(() => {
   $gsap.registerPlugin(ScrollTrigger)
+  sections = $gsap.utils.toArray(".splitme")
+})
 
-  let sections = $gsap.utils.toArray(".split")
+watch(route, value => {
+
   sections.forEach((sec: any) => {
     const splitTxt = new SplitType(sec, { types: "words" })
     $gsap.from(splitTxt.words, {
@@ -19,9 +24,9 @@ onMounted(() => {
       y: +20,
       scrollTrigger: {
         trigger: sec,
-        start: "top 40%",
+        start: "bottom bottom",
         scrub: false,
-        end: "top 90%",
+        end: "bottom bottom",
         toggleActions: "play none none reverse",
       },
       transformOrigin: "top",
@@ -29,7 +34,9 @@ onMounted(() => {
       duration: 0.2,
     })
   })
+
 })
+
 </script>
 
 <template>
@@ -37,33 +44,33 @@ onMounted(() => {
   <div class="footer">
     <div class="footer__col1">
       <section class="footer__contact">
-        <div class="footer__contact__title split">
+        <div class="footer__contact__title splitme">
           {{ store.data?.contact?.emailTitle }}
         </div>
-        <div class="split">{{ store.data?.contact?.email }}</div>
+        <div class="splitme">{{ store.data?.contact?.email }}</div>
       </section>
 
       <section class="footer__address">
-        <div class="footer__address__title split">
+        <div class="footer__address__title splitme">
           {{ store.data?.contact?.addressTitle }}
         </div>
-        <div class="split">{{ store.data?.contact?.address }}</div>
+        <div class="splitme">{{ store.data?.contact?.address }}</div>
       </section>
     </div>
 
     <div class="footer__col2">
       <section class="footer__social">
-        <div class="footer__social__title split">Social</div>
+        <div class="footer__social__title splitme">Social</div>
         <div v-for="social in store.data?.socials" :key="social.id">
           <NuxtLink :to="social.socialURL as string" rel="noopener" target="_blank">
-            <div class="split">{{ social.name }}</div>
+            <div class="splitme">{{ social.name }}</div>
           </NuxtLink>
         </div>
       </section>
     </div>
 
     <div class="footer__col3">
-      <div class="intro split">{{ store.data?.form?.formIntro }}</div>
+      <div class="intro splitme">{{ store.data?.form?.formIntro }}</div>
       <MailFormW3 />
     </div>
 
@@ -73,7 +80,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.split {
+.splitme {
   -webkit-font-kerning: none;
   font-kerning: none;
 }
@@ -86,6 +93,7 @@ section {
   max-width: 400px;
   margin-bottom: 50px;
   font-size: 20px;
+  font-family: $sans-text;
   color: $accent2;
 }
 
@@ -103,7 +111,7 @@ section {
   padding-top: 100px;
   padding: 100px 20px 0 20px;
   min-height: 600px;
-  font-family: $sans-ui;
+  font-family: $sans-text;
   color: $accent1;
   font-size: 15px;
   color: primary;
@@ -112,7 +120,7 @@ section {
   &__contact {
     &__title {
       font-family: $serif-head;
-      font-size: 18px;
+      font-size: 16px;
       color: $accent2;
     }
   }
@@ -120,7 +128,7 @@ section {
   &__address {
     &__title {
       font-family: $serif-head;
-      font-size: 18px;
+      font-size: 16px;
       color: $accent2;
     }
   }
@@ -128,7 +136,7 @@ section {
   &__social {
     &__title {
       font-family: $serif-head;
-      font-size: 18px;
+      font-size: 16px;
       color: $accent2;
     }
   }

@@ -2,7 +2,7 @@
 import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-// HMM
+
   app: {
     baseURL: '/'
   },
@@ -10,6 +10,8 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
 
   modules: [
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
     'nuxt-graphql-client',
     '@vueuse/nuxt',
     'nuxt-svgo',
@@ -18,10 +20,7 @@ export default defineNuxtConfig({
     '@nuxtjs/robots',
     'nuxt-site-config',
     '@nuxtjs/seo',
-    '@pinia/nuxt', 
     '@nuxt/fonts',
-    'pinia-plugin-persistedstate/nuxt',
-
   ],
 
   fonts: {
@@ -84,7 +83,8 @@ export default defineNuxtConfig({
   },
 
   plugins: [
-    { src: '@/plugins/gsap.client.ts', mode: 'client' }
+    { src: '@/plugins/gsap.client.ts', mode: 'client' },
+    { src: '@/plugins/lenis.client.ts', mode: 'client' }
   ],
 
   build: {

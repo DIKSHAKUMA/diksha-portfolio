@@ -39,5 +39,4 @@ query home {
   form(where: { id: "cm8ed03k6glf007mln6mz61au" }) {
     formIntro
   }
-
 }

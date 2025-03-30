@@ -10,6 +10,7 @@ const dataName = ref<string>("")
 const isOver = ref<boolean>(false)
 const bgColor = ref<string>("")
 const dispStr = ref<string>("")
+const firstRun = ref<boolean>(true)
 
 const loopStarted = ref<boolean>(false)
 const pos = { x: 0, y: 0 }
@@ -73,21 +74,24 @@ onMounted(() => {
         let rotation = getAngle(vel.x, vel.y)
         let scale = getScale(vel.x, vel.y)
 
-        // Set transform data to Jelly Blob
+        // Set transform data to Jelly Blobr
+        if (shape.value?.getBoundingClientRect()){
         $gsap.to(shape.value, {
-            x: Math.round(pos.x - shape.value!.getBoundingClientRect().width / 2),
-            y: Math.round(pos.y - shape.value!.getBoundingClientRect().height / 2),
+            x: Math.round(pos.x - shape.value.getBoundingClientRect().width / 2),
+            y: Math.round(pos.y - shape.value.getBoundingClientRect().height / 2),
             //rotation: rotation + "_short",
             scaleX: 1 + scale,
             scaleY: 1 - scale,
             duration: 0.0,
+            
         })
+    }
     }
 
     //The Blob! Thanks to https://codepen.io/GreenSock/pen/YzQabVQ
     const getScale = (diffX: number, diffY: number) => {
         const distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2))
-        return Math.min(distance / 100, 0.2)
+        return Math.min(distance / 50, 0.2)
     }
 
     const getAngle = (diffX: number, diffY: number) => {
@@ -98,7 +102,13 @@ onMounted(() => {
         () => [xpos.value, ypos.value],
         ([newXpos, newYpos], [prevXpos, prevYpos]) => {
             setFromEvent()
-        }
+
+            if(firstRun.value) {
+                $gsap.set('.cursor', {autoAlpha:1})
+            }
+
+            firstRun.value = false
+        },
     )
 })
 </script>
@@ -123,13 +133,12 @@ onMounted(() => {
     position: fixed;
     z-index: 9000;
     width: 100%;
-    opacity: 0.9;
+    visibility: hidden;
 
     &__shape {
         display: flex;
         align-items: center;
         justify-content: center;
-        ;
         top: 0;
         left: 0;
         right: 0;

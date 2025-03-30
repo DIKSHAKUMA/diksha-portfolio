@@ -1,4 +1,4 @@
-query contact {
+query layout {
   contact(where: { emailTitle: "Contact" }) {
     address
     addressTitle
@@ -10,7 +10,6 @@ query contact {
     socialURL
     id
   }
-
     form(where: {id: "cm8ed03k6glf007mln6mz61au"}) {
     formIntro
   }

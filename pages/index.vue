@@ -1,31 +1,32 @@
 <script setup lang="ts">
 import { useHomeStore } from '~/store/useHomeStore'
 
-// PINIA 🍍 
 const store = useHomeStore()
-// Fetch data so child components can access
+// Fetch data for home page
 await callOnce('home', () => store.fetchData())
 
 definePageMeta({
-    layout: 'default'
-});
+    layout: 'default',
+})
+
+const { $lenis } = useNuxtApp();
 
 const scrollConfig = reactive({
     text: '                       Swedish frontend developer & photographer. UI/UX / this / *  Based: Barcelona / London ...',
     speed: "1"
 })
 
-const isNext = ref<boolean>(false)
-
-onMounted(async () => {
-    nextTick(() => {
-        isNext.value = true;
-    })
+onMounted(() => {
+    console.log("YAA")
+    $lenis.resize()
+    //$lenis.scrollTo(1, { immediate:true, force: true });
+    window.scrollTo(0,0)
 })
+
 </script>
 
 <template>
-    <div class="home-wrapper" :class="{ show: isNext }">
+    <div class="home-wrapper" >
         <ViewHero />
         <ViewSelProjects />
         <UITextScroller :text="scrollConfig.text" :speed="scrollConfig.speed" />
@@ -37,16 +38,15 @@ onMounted(async () => {
     height: 100vh;
 }
 
-// might be the gsap but we really need wait for both components to render on next tick
-.show {
-    visibility: visible !important;
-}
-
 .home-wrapper {
-    visibility: hidden;
     overflow-y: hidden;
     flex-flow: column;
     display: flex;
     position: relative;
+}
+
+body {
+    margin: 0;
+    padding: 0;
 }
 </style>

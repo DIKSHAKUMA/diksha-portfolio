@@ -5,83 +5,99 @@ import { useHomeStore } from '~/store/useHomeStore'
 
 // PINIA 🍍 
 const store = useHomeStore()
-
 const { $gsap } = useNuxtApp()
 
-onMounted(async() => {
-    $gsap.registerPlugin(ScrollTrigger)
+let ctx: gsap.Context
 
-    let pt = $gsap.timeline({
-        scrollTrigger: {
-            trigger: '.pin-intro',
-            pin: ".pin-intro", // pin the trigger element while active
-            pinSpacing: false,
-            start: 'top top', // when the top of the trigger hits the top of the viewport
-            endTrigger: ".projects",
-            end: 'bottom bottom',
-            scrub: 1
-            //markers: { startColor: "black", endColor: "orange", fontSize: "18px", fontWeight: "bold", indent: 20 }
-        }
-    })
-    // Reveal and unreveal text thanks youtube
-    let sectionsChar = $gsap.utils.toArray('.split-char');
-    sectionsChar.forEach((sec: any) => {
-        const splitTxt = new SplitType(sec, { types: 'chars' })
-        $gsap.from(splitTxt.chars, {
-            autoAlpha: 0,
-            y: +20,
+onMounted(async () => {
+
+    ctx = $gsap.context((self) => {
+        
+        $gsap.registerPlugin(ScrollTrigger)
+
+        // Pin section heading
+        let pt = $gsap.timeline({
             scrollTrigger: {
-                trigger: sec,
-                start: 'top 80%',
-                scrub: false,
-                end: 'top 20%',
-                toggleActions: "play none none reverse",
-            },
-            transformOrigin: 'top',
-            stagger: .1,
-            duration: .2
+                trigger: '.pin-intro',
+                pin: ".pin-intro", // pin the trigger element while active
+                pinSpacing: false,
+                start: 'top top', // when the top of the trigger hits the top of the viewport
+                endTrigger: ".projects",
+                end: 'bottom bottom',
+                scrub: 1
+                //markers: { startColor: "black", endColor: "orange", fontSize: "18px", fontWeight: "bold", indent: 20 }
+            }
         })
+
+        // Animate secton heading Selected projects
+        let sectionsChar = $gsap.utils.toArray('.split-char');
+        sectionsChar.forEach((sec: any) => {
+            const splitTxt = new SplitType(sec, { types: 'chars' })
+            $gsap.from(splitTxt.chars, {
+                autoAlpha: 0,
+                y: +20,
+                scrollTrigger: {
+                    trigger: sec,
+                    start: 'top 40%',
+                    scrub: false,
+                    end: 'top 50%',
+                    toggleActions: "play none none reverse",
+                    //markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 }
+                },
+                transformOrigin: 'top',
+                stagger: .1,
+                duration: .2
+            })
+        })
+
+
+        // Animate projects
+        let sections = $gsap.utils.toArray('.split');
+
+        // The project text below images
+        sections.forEach((sec: any) => {
+            const splitTxt = new SplitType(sec, { types: 'words' })
+            $gsap.from(splitTxt.words, {
+                autoAlpha: 0,
+                y: +20,
+                scrollTrigger: {
+                    trigger: sec,
+                    start: 'top 95%',
+                    scrub: false,
+                    end: 'top 85%',
+                    toggleActions: "play none none reverse",
+                },
+                transformOrigin: 'top',
+                stagger: .1,
+                duration: .2
+            })
+        })
+
+        // The images
+        let images = $gsap.utils.toArray('.unblur');
+        images.forEach((img: any) => {
+            $gsap.from(img, {
+                opacity: 0,
+                filter: 'blur(20px)',
+                scrollTrigger: {
+                    trigger: img,
+                    start: 'top 80%',
+                    scrub: false,
+                    end: 'top 70%',
+                    toggleActions: "play none none reverse",
+                },
+                transformOrigin: 'top',
+                stagger: .1,
+                duration: .6
+            })
+        })
+
     })
 
+})
 
-    // Reveal and unreveal text thanks youtube
-    let sections = $gsap.utils.toArray('.split');
-    sections.forEach((sec: any) => {
-        const splitTxt = new SplitType(sec, { types: 'words' })
-        $gsap.from(splitTxt.words, {
-            autoAlpha: 0,
-            y: +20,
-            scrollTrigger: {
-                trigger: sec,
-                start: 'top 80%',
-                scrub: false,
-                end: 'top 20%',
-                toggleActions: "play none none reverse",
-            },
-            transformOrigin: 'top',
-            stagger: .1,
-            duration: .2
-        })
-    })
-
-    let images = $gsap.utils.toArray('.unblur');
-    images.forEach((img: any) => {
-        $gsap.from(img, {
-            opacity: 0,
-            filter: 'blur(20px)',
-            scrollTrigger: {
-                trigger: img,
-                start: 'top 80%',
-                scrub: false,
-                end: 'top 20%',
-                toggleActions: "play none none reverse",
-            },
-            transformOrigin: 'top',
-            stagger: .1,
-            duration: .6
-        })
-    })
-
+onUnmounted(() => {
+    ctx.revert()
 })
 </script>
 
@@ -91,7 +107,6 @@ onMounted(async() => {
             <div class="prj-intro__header split-char">Selected Projects.</div>
         </section>
     </div>
-
     <div class="projects">
         <div v-for="proj in store.data?.projects" :key="proj.slug">
             <div class="projects__proj action" data-name="View me" data-color="#FFF">

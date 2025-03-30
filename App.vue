@@ -1,24 +1,26 @@
 <script setup lang="ts">
-import Lenis from 'lenis'
-const isMounted = ref<boolean>(false);
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import { useHomeStore } from './store/useHomeStore'
+import { useLayoutStore } from './store/useLayoutStore'
+
+// PINIA 🍍 
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
+const isMounted = ref<boolean>(false)
+const store1 = useHomeStore()
+const store2 = useLayoutStore()
 
 onMounted(() => {
     isMounted.value = true
-    // Initialize Lenis for smoth scroll
-    const lenis = new Lenis({
-        autoRaf: true,
-    });
-
-    lenis?.scrollTo(0, { immediate: true });
 })
 </script>
 
 <template>
-    <div class="hide" :class="{ 'on-ready': isMounted }">
         <NuxtLayout>
             <NuxtPage />
         </NuxtLayout>
-    </div>
 </template>
 
 <style lang="scss">
@@ -30,21 +32,20 @@ body {
     -moz-font-smoothing: antialiased;
     -o-font-smoothing: antialiased;
     font-family: $sans-text;
+    margin: 0;
+    padding: 0;
 }
 
-html {
-      scroll-snap-type: y proximity;
-    }
-.html{
-      /* Adjust font size */
-  -webkit-text-size-adjust: 100%;
-  /* Font varient */
-  font-variant-ligatures: none;
-  -webkit-font-variant-ligatures: none;
-  /* Smoothing */
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
+.html {
+    /* Adjust font size */
+    -webkit-text-size-adjust: 100%;
+    /* Font varient */
+    font-variant-ligatures: none;
+    -webkit-font-variant-ligatures: none;
+    /* Smoothing */
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
 }
 
 body {
