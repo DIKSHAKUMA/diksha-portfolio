@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useMousePos } from "~/composable/useMousePos"
+import EyeSvg from '~/assets/svg/eye.svg'
 
 const { xpos, ypos } = useMousePos()
 const { $gsap } = useNuxtApp()
@@ -11,6 +12,7 @@ const isOver = ref<boolean>(false)
 const bgColor = ref<string>("")
 const dispStr = ref<string>("")
 const firstRun = ref<boolean>(true)
+const showSVG = ref<boolean>(false)
 
 const loopStarted = ref<boolean>(false)
 const pos = { x: 0, y: 0 }
@@ -28,9 +30,9 @@ onMounted(() => {
         sections.forEach((sec: any) => {
             sec.addEventListener("mouseover", () => {
                 isOver.value = true
-                dataName.value = sec.dataset.name
-                bgColor.value = "#f4f3ee"
-                dispStr.value = sec.dataset.vis
+                dataName.value = sec.dataset.name;
+
+                dispStr.value = sec.dataset.vis  // 'none'
             })
 
             sec.addEventListener("mouseout", () => {
@@ -75,17 +77,17 @@ onMounted(() => {
         let scale = getScale(vel.x, vel.y)
 
         // Set transform data to Jelly Blobr
-        if (shape.value?.getBoundingClientRect()){
-        $gsap.to(shape.value, {
-            x: Math.round(pos.x - shape.value.getBoundingClientRect().width / 2),
-            y: Math.round(pos.y - shape.value.getBoundingClientRect().height / 2),
-            //rotation: rotation + "_short",
-            scaleX: 1 + scale,
-            scaleY: 1 - scale,
-            duration: 0.0,
-            
-        })
-    }
+        if (shape.value?.getBoundingClientRect()) {
+            $gsap.to(shape.value, {
+                x: Math.round(pos.x - shape.value.getBoundingClientRect().width / 2),
+                y: Math.round(pos.y - shape.value.getBoundingClientRect().height / 2),
+                //rotation: rotation + "_short",
+                scaleX: 1 + scale,
+                scaleY: 1 - scale,
+                duration: 0.0,
+
+            })
+        }
     }
 
     //The Blob! Thanks to https://codepen.io/GreenSock/pen/YzQabVQ
@@ -103,10 +105,9 @@ onMounted(() => {
         ([newXpos, newYpos], [prevXpos, prevYpos]) => {
             setFromEvent()
 
-            if(firstRun.value) {
-                $gsap.set('.cursor', {autoAlpha:1})
+            if (firstRun.value) {
+                $gsap.set('.cursor', { autoAlpha: 1 })
             }
-
             firstRun.value = false
         },
     )
@@ -117,8 +118,12 @@ onMounted(() => {
     <div class="cursor" :style="{ display: dispStr }">
         <div class="cursor__shape" :style="{ backgroundColor: bgColor }" :class="{ 'cursor__shape--over': isOver }"
             ref="shape">
-            <div class="cursor__shape__text" :class="{ 'cursor__shape__text--on': isOver }" ref="text">
-                {{ dataName }} <i />
+            <div v-if="dataName !== 'eye-svg'" class="cursor__shape__text"
+                :class="{ 'cursor__shape__text--on': isOver }" ref="text">
+                {{ dataName }}
+            </div>
+            <div v-if="dataName == 'eye-svg'">
+                <EyeSvg class="eye" />
             </div>
             <div class="media"></div>
         </div>
@@ -126,6 +131,11 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+.eye {
+    width: 60px;
+    height: auto;
+}
+
 .cursor {
     font-family: $sans-ui;
     font-weight: 400;
@@ -134,6 +144,7 @@ onMounted(() => {
     z-index: 9000;
     width: 100%;
     visibility: hidden;
+    mix-blend-mode:difference;
 
     &__shape {
         display: flex;
@@ -148,20 +159,20 @@ onMounted(() => {
         border: 1px solid $accent1;
         border-radius: 50%;
         pointer-events: none;
-        background-color: $secondary;
+        background-color: $primary;
         transform-origin: center center;
         will-change: width, height, transform, border;
         transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
 
         &--over {
-            border-radius: 50px;
-            width: 100px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
+            fill: black;
         }
 
         &__text {
             display: flex;
-            color: $secondary;
+            color: $primary;
             align-items: center;
             justify-content: center;
             backface-visibility: hidden;
@@ -169,12 +180,6 @@ onMounted(() => {
             -webkit-text-size-adjust: 100%;
             text-rendering: optimizeLegibility;
             white-space: nowrap;
-
-            &--on i::after {
-                color: black;
-                content: "\2197";
-                font-size: 20px;
-            }
         }
     }
 }

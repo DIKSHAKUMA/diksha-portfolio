@@ -1,15 +1,15 @@
 <script setup lang="ts">
+import { Meta } from '#components'
 import { useHomeStore } from '~/store/useHomeStore'
 
+//const { $lenis } = useNuxtApp();
 const store = useHomeStore()
 // Fetch data for home page
 await callOnce('home', () => store.fetchData())
 
 definePageMeta({
-    layout: 'default',
+    layout: 'default'
 })
-
-const { $lenis } = useNuxtApp();
 
 const scrollConfig = reactive({
     text: '                       Swedish frontend developer & photographer. UI/UX / this / *  Based: Barcelona / London ...',
@@ -17,16 +17,13 @@ const scrollConfig = reactive({
 })
 
 onMounted(() => {
-    console.log("YAA")
-    $lenis.resize()
-    //$lenis.scrollTo(1, { immediate:true, force: true });
-    window.scrollTo(0,0)
+    console.log("index mounted")
+    //setTimeout(()=>{  window.scrollTo(0,0), 0})
 })
-
 </script>
 
 <template>
-    <div class="home-wrapper" >
+    <div class="home-wrapper">
         <ViewHero />
         <ViewSelProjects />
         <UITextScroller :text="scrollConfig.text" :speed="scrollConfig.speed" />
@@ -39,14 +36,10 @@ onMounted(() => {
 }
 
 .home-wrapper {
-    overflow-y: hidden;
+    /*overflow-y: hidden;*/
     flex-flow: column;
     display: flex;
     position: relative;
-}
-
-body {
-    margin: 0;
-    padding: 0;
+    overflow-x: hidden;
 }
 </style>

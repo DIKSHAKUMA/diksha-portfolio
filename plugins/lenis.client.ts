@@ -1,13 +1,10 @@
 import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-export default defineNuxtPlugin((nuxtApp) => {
 
-    console.log("OOPS")
+export default defineNuxtPlugin((nuxtApp) => {
     const lenis = new Lenis({
         autoRaf: true,
     });
-
+    
     return {
         provide: {
             lenis

@@ -26,11 +26,11 @@ const PATH = useRuntimeConfig().public.s3Path
 //Add tracks here; no plans to make a DOM playlist
 const playlist = reactive([
 
-    { artist: "Oneheart", track: "Øneheart, Antent, Dean Korso - silence is speaking.mp3" },
+    { artist: "Lorn", track: "Lorn - Folding (Original Mix).mp3" },
     
-    { artist: "Ashess", track: "ashess - she is the moment.mp3" },
+    { artist: "ashess", track: "ashess - only you (Original Mix).mp3" },
 
-    { artist: "Shibíre", track: "shibíre - Hometown.mp3" }
+    { artist: "Sky_s Memoirs", track: "Sky_s Memoirs - Nova (Original Mix).mp3" }
 
 ])
 

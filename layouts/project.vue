@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useLayoutStore } from "~/store/useLayoutStore"
-
-const store = useLayoutStore()
-// Fetch data for nav and footer
-await callOnce('layout', () => store.fetchData())
+onMounted(() => {
+  console.log("layout")
+})
 </script>
 
 <template>
@@ -13,7 +11,6 @@ await callOnce('layout', () => store.fetchData())
     <div class="folio-wrapper">
       <slot />
     </div>
-    <CommonFooter />
   </div>
 </template>
 
@@ -22,6 +19,5 @@ await callOnce('layout', () => store.fetchData())
   /*overflow-y: hidden;*/
   padding-right: 20px;
   padding-left: 20px;
-  position:relative;
 }
 </style>

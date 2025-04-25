@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/vue/24/solid'
-
 const model = defineModel({ default: false })
 
 defineProps<{ title: string }>()

@@ -9,10 +9,11 @@ const { $gsap } = useNuxtApp()
 
 let ctx: gsap.Context
 
-onMounted(async () => {
+onMounted(() => {
 
+    console.log("here now")
     ctx = $gsap.context((self) => {
-        
+
         $gsap.registerPlugin(ScrollTrigger)
 
         // Pin section heading
@@ -42,6 +43,7 @@ onMounted(async () => {
                     scrub: false,
                     end: 'top 50%',
                     toggleActions: "play none none reverse",
+                    preventOverlaps: true, // <- HERE
                     //markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 }
                 },
                 transformOrigin: 'top',
@@ -49,7 +51,6 @@ onMounted(async () => {
                 duration: .2
             })
         })
-
 
         // Animate projects
         let sections = $gsap.utils.toArray('.split');
@@ -102,22 +103,25 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="pin-intro">
-        <section class="prj-intro">
-            <div class="prj-intro__header split-char">Selected Projects.</div>
-        </section>
-    </div>
-    <div class="projects">
-        <div v-for="proj in store.data?.projects" :key="proj.slug">
-            <div class="projects__proj action" data-name="View me" data-color="#FFF">
-                <NuxtLink :to="`/projects/${proj.slug}`">
-                    <NuxtImg class="unblur" :src="proj.image[0].handle" provider="hygraph" alt="Project image"
-                        format="webp" sizes="sm:100vw md:50vw lg:40svw" densities="x1 x2"></NuxtImg>
-                </NuxtLink>
-            </div>
-            <div class="projects__name split">{{ proj.name }}</div>
-            <div class="projects__tags split">{{ proj.tags }}</div>
+    <div>
+        <div class="pin-intro">
+            <section class="prj-intro">
+                <div class="prj-intro__header split-char">Selected Projects.</div>
+            </section>
         </div>
+        <div class="projects">
+            <div v-for="proj in store.data?.projects" :key="proj.slug">
+                <div class="projects__proj action" data-name="eye-svg" data-color="#FFF">
+                    <NuxtLink :to="`/projects/${proj.slug}`">
+                        <NuxtImg class="unblur" :src="proj.image[0].handle" provider="hygraph" alt="Project image"
+                            format="webp" sizes="sm:100vw md:50vw lg:40svw" densities="x1 x2"></NuxtImg>
+                    </NuxtLink>
+                </div>
+                <div class="projects__name split">{{ proj.name }}</div>
+                <div class="projects__tags split">{{ proj.tags }}</div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -150,7 +154,7 @@ onUnmounted(() => {
 
     &__header {
         font-size: clamped(46px, 100px, 380px, 1920px);
-        font-weight: 600;
+        font-weight:500;
         line-height: .9;
     }
 }
@@ -172,7 +176,6 @@ onUnmounted(() => {
 
     &__name {
         color: $secondary;
-        font-weight: 600;
         font-size: clamped(15px, 30px, 380px, 1920px);
         font-family: $serif-head;
     }

@@ -4,7 +4,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
 
   app: {
-    baseURL: '/'
+    baseURL: '/',
+    layoutTransition: { name: 'layout', mode: 'out-in' }
   },
 
   devtools: { enabled: false },
@@ -23,20 +24,6 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
   ],
 
-  fonts: {
-    defaults: {
-      weights: [400, 500, 600, 700, 800],
-      styles: ['normal', 'italic']
-    },
-    families: [
-      { name: 'Lora', provider: 'google' },
-      { name: 'Sora', provider: 'google' },
-      { name: 'Lexend', provider: 'google' },
-    ],
-    devtools: false,
-    processCSSVariables: true
-  },
-
   'graphql-client': {
     codegen: {
       silent: true,
@@ -54,15 +41,15 @@ export default defineNuxtConfig({
   // Hygraph base URL for assets
   image: {
     hygraph: {
-      baseURL: '',
+      baseURL: 'https://eu-west-2.graphassets.com/cm4tev3k1008n01uo6egngvzu',
       format: ['webp']
     }
   },
 
   runtimeConfig: {
     public: {
-      FORM_API: '',
-      GQL_HOST: ''
+      FORM_API: '4fd08721-1c97-4a42-abbc-369421143454',
+      GQL_HOST: 'https://eu-west-2.cdn.hygraph.com/content/cm4tetqve01n107umfec1iqbg/master'
     }
   },
 

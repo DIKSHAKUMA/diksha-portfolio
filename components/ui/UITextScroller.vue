@@ -10,7 +10,7 @@ const { $gsap } = useNuxtApp()
 const parentEl = useParentElement()
 
 //TODO: Ok so TYpeScript / ESLint is finding some 'any' types, fix when have time
-onNuxtReady(() => {
+onMounted(() => {
 
     if (!process.client) return
 

@@ -8,35 +8,33 @@ const store = useLayoutStore()
 const { $gsap } = useNuxtApp()
 const route = useRoute()
 
-let sections:any
+let sections: any
 
 onMounted(() => {
   $gsap.registerPlugin(ScrollTrigger)
   sections = $gsap.utils.toArray(".splitme")
-})
 
-watch(route, value => {
-
-  sections.forEach((sec: any) => {
-    const splitTxt = new SplitType(sec, { types: "words" })
-    $gsap.from(splitTxt.words, {
-      autoAlpha: 0,
-      y: +20,
-      scrollTrigger: {
-        trigger: sec,
-        start: "bottom bottom",
-        scrub: false,
-        end: "bottom bottom",
-        toggleActions: "play none none reverse",
-      },
-      transformOrigin: "top",
-      stagger: 0.1,
-      duration: 0.2,
+  watch(route, value => {
+    sections.forEach((sec: any) => {
+      const splitTxt = new SplitType(sec, { types: "words" })
+      $gsap.from(splitTxt.words, {
+        autoAlpha: 0,
+        y: +20,
+        scrollTrigger: {
+          trigger: sec,
+          start: "bottom bottom",
+          scrub: false,
+          end: "bottom bottom",
+          toggleActions: "play none none reverse",
+        },
+        transformOrigin: "top",
+        stagger: 0.1,
+        duration: 0.2,
+      })
     })
   })
 
 })
-
 </script>
 
 <template>
@@ -80,6 +78,8 @@ watch(route, value => {
 </template>
 
 <style lang="scss" scoped>
+
+
 .splitme {
   -webkit-font-kerning: none;
   font-kerning: none;
@@ -92,9 +92,8 @@ section {
 .intro {
   max-width: 400px;
   margin-bottom: 50px;
-  font-size: 20px;
-  font-family: $sans-text;
-  color: $accent2;
+  font-size: 28px;
+  font-family: $serif-head;
 }
 
 .made {
@@ -111,33 +110,30 @@ section {
   padding-top: 100px;
   padding: 100px 20px 0 20px;
   min-height: 600px;
-  font-family: $sans-text;
-  color: $accent1;
-  font-size: 15px;
-  color: primary;
+  color: $primary;
   background-color: $secondary;
-
+  font-family: $sans-text;
+  font-weight: 400;
+  font-size: 15px;
+  
   &__contact {
     &__title {
       font-family: $serif-head;
-      font-size: 16px;
-      color: $accent2;
+      font-size: 18px;
     }
   }
 
   &__address {
     &__title {
       font-family: $serif-head;
-      font-size: 16px;
-      color: $accent2;
+      font-size: 18px;
     }
   }
 
   &__social {
     &__title {
       font-family: $serif-head;
-      font-size: 16px;
-      color: $accent2;
+      font-size: 18px;
     }
   }
 

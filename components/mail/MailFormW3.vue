@@ -84,7 +84,7 @@ const submitForm = async () => {
 
 form * {
     font-family: $sans-text;
-    color: $accent2;
+    color: $primary;
     font-weight: 400;
     caret-color: $accent2;
 }
@@ -97,11 +97,10 @@ form {
 
     h2 {
         font-size: 20px;
-        color: $accent2;
     }
 
     label ::placeholder {
-        color: $accent1;
+        color: $primary;
     }
 
     input {
@@ -113,9 +112,8 @@ form {
     input,
     textarea {
         background-color: $secondary;
-        color: $primary;
         border: none;
-        border-bottom: 5px solid $accent2;
+        border-bottom: 5px solid $accent1;
         outline: none;
     }
 
@@ -141,7 +139,7 @@ form {
 
     button:hover {
         border-radius: 10px;
-        background-color: $accent1;
+        background-color: $accent2;
     }
 }
 </style>
