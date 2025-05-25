@@ -4,7 +4,9 @@ import { Assets, DisplacementFilter } from 'pixi.js'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useHomeStore } from '~/store/useHomeStore'
 
+const { $lenis } = useNuxtApp()
 const { $gsap } = useNuxtApp()
+
 // PINIA 🍍 
 const store = useHomeStore()
 const pixiCtx = useTemplateRef<any>('pixi')
@@ -19,22 +21,28 @@ let ctx: gsap.Context
 
 onMounted(async () => {
     if (import.meta.client) {
+        console.log("YEP")
+        $lenis.scrollTo(0, {  force: true })
+
+        pixiCtx.value.fillStyle = '#1E201E'
 
         $gsap.registerPlugin(ScrollTrigger)
         app = new PIXI.Application()
 
+
         $gsap.set(logoEl.value, { alpha: 0 })
 
         // Initialize the application
-        app.init({ backgroundAlpha: 0, canvas: pixiCtx.value });
+        app.init({ backgroundAlpha: 0, canvas: pixiCtx.value })
 
-        const image = await Assets.load('/thelogo.png')
+
+        const image = await Assets.load('/img/electrohead.png')
         logo = PIXI.Sprite.from(image)
         logo.alpha = 0
-        const displacer = await Assets.load('/displacemap.png')
+        const displacer = await Assets.load('/img/displacemap.png')
 
         ripple = PIXI.Sprite.from(displacer)
-
+        0;
         app.stage.addChild(logo)
         app.stage.addChild(ripple)
 
@@ -65,11 +73,12 @@ onMounted(async () => {
             let st = $gsap.timeline({
                 // yes, we can add it to an entire timeline!
                 scrollTrigger: {
-                    trigger: '.logo',
+                    trigger: 'logo',
                     pinSpacing: true,
                     start: 'top top', // when the top of the trigger hits the top of the viewport
                     end: '+=500', // end after scrolling 500px beyond the start
                     scrub: .5, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+                    toggleActions: "restart none none none"
                 }
             })
 
@@ -115,7 +124,7 @@ onUnmounted(() => {
     height: 100%;
 
     &__pixi {
-        width: clamp(300px, 40vw, 500px);
+        width: clamp(300px, 40vw, 600px);
         height: auto;
         background-color: $primary ;
         background: $primary ;
@@ -132,10 +141,10 @@ onUnmounted(() => {
     align-items: flex-start;
 
     &__header {
-        font-size: clamped(88px, 150px, 480px, 1920px);
+        font-size: clamped(88px, 130px, 480px, 1920px);
         font-weight: 500;
         line-height: .9;
-        font-family: $serif-head;
+        font-family: $sans-text;
         text-wrap: wrap;
 
         @include this-and-above('lg') {
@@ -145,9 +154,9 @@ onUnmounted(() => {
 
     &__text {
         font-size: clamped(15px, 23px, 480px, 1920px);
-        font-weight: 400;
+        font-weight: 300;
         max-width: 500px;
-        padding: 0 0 15px 10px;
+        padding: 0 0 5px 10px;
     }
 
     @include this-and-above('lg') {

@@ -142,9 +142,8 @@ onMounted(() => {
         font-family: $sans-text;
         color: $secondary;
         font-weight: 500;
-        font-size: clamped(100px, 200px, 480px, 1920px);
+        font-size: clamped(100px, 160px, 480px, 1920px);
         will-change: transform;
-        text-transform: uppercase;
     }
 }
 </style>

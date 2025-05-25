@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 definePageMeta({
-    layout: 'project'
+    layout: 'default'
 });
 
 const { $lenis } = useNuxtApp();

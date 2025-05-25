@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { useMousePos } from "~/composable/useMousePos"
-import EyeSvg from '~/assets/svg/eye.svg'
 
 const { xpos, ypos } = useMousePos()
 const { $gsap } = useNuxtApp()
 
-const text = useTemplateRef<HTMLHtmlElement>("text")
 const shape = useTemplateRef<HTMLHtmlElement>("shape")
 const dataName = ref<string>("")
 const isOver = ref<boolean>(false)
@@ -17,10 +15,8 @@ const showSVG = ref<boolean>(false)
 const loopStarted = ref<boolean>(false)
 const pos = { x: 0, y: 0 }
 const vel = { x: 0, y: 0 }
-
 const route = useRoute();
 
-//TODO : Cleanup
 onMounted(() => {
     // A little ugly with a watcher inside route but Jelly am I and I need to know what is on the next route! Jelly, I am.
     watch(route, value => {
@@ -31,21 +27,20 @@ onMounted(() => {
             sec.addEventListener("mouseover", () => {
                 isOver.value = true
                 dataName.value = sec.dataset.name;
-
-                dispStr.value = sec.dataset.vis  // 'none'
+                dispStr.value = sec.dataset.vis  // 'none' is sometimes needed, set it in component with data-vis
             })
 
             sec.addEventListener("mouseout", () => {
                 isOver.value = false
                 dataName.value = ""
-                bgColor.value = "#1E201E"
+                bgColor.value = "#697565"
                 dispStr.value = "block"
             })
 
             sec.addEventListener("click", () => {
                 isOver.value = false
                 dataName.value = ""
-                bgColor.value = "#1E201E"
+                bgColor.value = "#697565"
                 dispStr.value = "block"
             })
         })
@@ -85,7 +80,6 @@ onMounted(() => {
                 scaleX: 1 + scale,
                 scaleY: 1 - scale,
                 duration: 0.0,
-
             })
         }
     }
@@ -112,21 +106,32 @@ onMounted(() => {
         },
     )
 })
+
+const classObject = computed(() => ({
+
+    'cursor__shape': dataName.value === 'yo' || dataName.value === 'menu' || dataName.value === 'proj' || dataName.value === '',
+    'cursor__shape--proj': isOver.value && dataName.value === 'proj',
+    'cursor__shape--menu': isOver.value && dataName.value === 'menu',
+    'cursor__shape--yo': isOver.value && dataName.value === 'yo'
+}))
 </script>
 
 <template>
     <div class="cursor" :style="{ display: dispStr }">
-        <div class="cursor__shape" :style="{ backgroundColor: bgColor }" :class="{ 'cursor__shape--over': isOver }"
-            ref="shape">
-            <div v-if="dataName !== 'eye-svg'" class="cursor__shape__text"
-                :class="{ 'cursor__shape__text--on': isOver }" ref="text">
-                {{ dataName }}
+
+        <div :style="{ backgroundColor: bgColor }" :class="classObject" ref="shape">
+            <div v-if="dataName === 'proj'" class="cursor__shape__text">
+                Discover
             </div>
-            <div v-if="dataName == 'eye-svg'">
-                <EyeSvg class="eye" />
+            <div v-if="dataName === 'menu'" class="cursor__shape__text">
+
+            </div>
+            <div v-if="dataName === 'yo'" class="cursor__shape__text">
+                <p>Yo!</p>
             </div>
             <div class="media"></div>
         </div>
+
     </div>
 </template>
 
@@ -134,9 +139,11 @@ onMounted(() => {
 .eye {
     width: 60px;
     height: auto;
+    pointer-events: none;
 }
 
 .cursor {
+    pointer-events: none;
     font-family: $sans-ui;
     font-weight: 400;
     font-size: 14px;
@@ -144,30 +151,44 @@ onMounted(() => {
     z-index: 9000;
     width: 100%;
     visibility: hidden;
-    mix-blend-mode:difference;
 
     &__shape {
         display: flex;
         align-items: center;
         justify-content: center;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        background-color: $accent2;
         width: 20px;
         height: 20px;
-        border: 1px solid $accent1;
+        border: 1px solid $secondary;
         border-radius: 50%;
         pointer-events: none;
-        background-color: $primary;
+
         transform-origin: center center;
         will-change: width, height, transform, border;
         transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
 
-        &--over {
-            width: 80px;
-            height: 80px;
-            fill: black;
+        /* different hover states */
+        &--proj {
+            width: 100px;
+            height: 50px;
+            border-radius: 10px;
+        }
+
+        &--menu {
+            width: 100px;
+            height: 100px;
+            opacity: .1;
+        }
+
+        /* Easter egg */
+        &--yo {
+            width: 100px;
+            height: 100px;
+            opacity: .5;
+            font-size:18px;
+            p {
+                color:$secondary;
+            }
         }
 
         &__text {
@@ -180,6 +201,7 @@ onMounted(() => {
             -webkit-text-size-adjust: 100%;
             text-rendering: optimizeLegibility;
             white-space: nowrap;
+            opacity: 1 !important;
         }
     }
 }

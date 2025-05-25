@@ -9,11 +9,11 @@ await callOnce('layout', () => store.fetchData())
 <template>
   <div>
     <UIMouseCursor />
-    <CommonHeader />
+
     <div class="folio-wrapper">
       <slot />
     </div>
-    <CommonFooter />
+
   </div>
 </template>
 

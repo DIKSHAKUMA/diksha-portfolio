@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { Meta } from '#components'
 import { useHomeStore } from '~/store/useHomeStore'
 
-//const { $lenis } = useNuxtApp();
+const { $lenis } = useNuxtApp();
 const store = useHomeStore()
 // Fetch data for home page
 await callOnce('home', () => store.fetchData())
@@ -17,8 +16,7 @@ const scrollConfig = reactive({
 })
 
 onMounted(() => {
-    console.log("index mounted")
-    //setTimeout(()=>{  window.scrollTo(0,0), 0})
+    $lenis.scrollTo(0, { immediate: true, force: true })
 })
 </script>
 

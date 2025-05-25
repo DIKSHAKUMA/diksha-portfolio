@@ -79,7 +79,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 
-
 .splitme {
   -webkit-font-kerning: none;
   font-kerning: none;
@@ -93,7 +92,7 @@ section {
   max-width: 400px;
   margin-bottom: 50px;
   font-size: 28px;
-  font-family: $serif-head;
+  font-family: $sans-text;
 }
 
 .made {
@@ -118,21 +117,21 @@ section {
   
   &__contact {
     &__title {
-      font-family: $serif-head;
+      font-family: $sans-text;
       font-size: 18px;
     }
   }
 
   &__address {
     &__title {
-      font-family: $serif-head;
+      font-family: $sans-text;
       font-size: 18px;
     }
   }
 
   &__social {
     &__title {
-      font-family: $serif-head;
+      font-family: $sans-text;
       font-size: 18px;
     }
   }

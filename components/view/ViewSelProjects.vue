@@ -98,7 +98,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-    ctx.revert()
+   
 })
 </script>
 
@@ -111,7 +111,7 @@ onUnmounted(() => {
         </div>
         <div class="projects">
             <div v-for="proj in store.data?.projects" :key="proj.slug">
-                <div class="projects__proj action" data-name="eye-svg" data-color="#FFF">
+                <div class="projects__proj action" data-name="proj" data-color="#FFF">
                     <NuxtLink :to="`/projects/${proj.slug}`">
                         <NuxtImg class="unblur" :src="proj.image[0].handle" provider="hygraph" alt="Project image"
                             format="webp" sizes="sm:100vw md:50vw lg:40svw" densities="x1 x2"></NuxtImg>
@@ -135,9 +135,10 @@ onUnmounted(() => {
     transform: initial;
     scroll-snap-align: start;
     z-index: 100;
+    /*
     backdrop-filter: blur(20px);
     -webkit-mask-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, $primary 20%, $primary 100%);
-    mask-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, $primary 20%, $primary 100%);
+    mask-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, $primary 20%, $primary 100%);*/
 }
 
 .prj-intro {
@@ -150,12 +151,12 @@ onUnmounted(() => {
     color: $secondary;
     margin: 0px 0 30px 0;
     padding-top: 20px;
-    font-family: $serif-head;
+    font-family: $sans-text;
 
     &__header {
-        font-size: clamped(46px, 100px, 380px, 1920px);
+        font-size: clamped(46px, 60px, 380px, 1920px);
         font-weight:500;
-        line-height: .9;
+        line-height: .8;
     }
 }
 
@@ -177,7 +178,7 @@ onUnmounted(() => {
     &__name {
         color: $secondary;
         font-size: clamped(15px, 30px, 380px, 1920px);
-        font-family: $serif-head;
+        font-family: $sans-text;
     }
 
     &__tags {
