@@ -18,6 +18,8 @@ const vel = { x: 0, y: 0 }
 const route = useRoute();
 
 onMounted(() => {
+    const root = document.documentElement
+    const currentColor = getComputedStyle(root)
     // A little ugly with a watcher inside route but Jelly am I and I need to know what is on the next route! Jelly, I am.
     watch(route, value => {
 
@@ -27,20 +29,21 @@ onMounted(() => {
             sec.addEventListener("mouseover", () => {
                 isOver.value = true
                 dataName.value = sec.dataset.name;
-                dispStr.value = sec.dataset.vis  // 'none' is sometimes needed, set it in component with data-vis
+                dispStr.value = sec.dataset.vis
+                bgColor.value = currentColor.getPropertyValue('--accent2');
             })
 
             sec.addEventListener("mouseout", () => {
                 isOver.value = false
                 dataName.value = ""
-                bgColor.value = "#697565"
+                bgColor.value = currentColor.getPropertyValue('--accent2');
                 dispStr.value = "block"
             })
 
             sec.addEventListener("click", () => {
                 isOver.value = false
                 dataName.value = ""
-                bgColor.value = "#697565"
+                bgColor.value = currentColor.getPropertyValue('--accent2');
                 dispStr.value = "block"
             })
         })
@@ -108,7 +111,6 @@ onMounted(() => {
 })
 
 const classObject = computed(() => ({
-
     'cursor__shape': dataName.value === 'yo' || dataName.value === 'menu' || dataName.value === 'proj' || dataName.value === '',
     'cursor__shape--proj': isOver.value && dataName.value === 'proj',
     'cursor__shape--menu': isOver.value && dataName.value === 'menu',
@@ -146,7 +148,7 @@ const classObject = computed(() => ({
     pointer-events: none;
     font-family: $sans-ui;
     font-weight: 400;
-    font-size: 14px;
+    font-size: $fs-14;
     position: fixed;
     z-index: 9000;
     width: 100%;
@@ -171,12 +173,12 @@ const classObject = computed(() => ({
         &--proj {
             width: 100px;
             height: 50px;
-            border-radius: 10px;
+            border-radius: 5px;
         }
 
         &--menu {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             opacity: .1;
         }
 
@@ -185,15 +187,16 @@ const classObject = computed(() => ({
             width: 100px;
             height: 100px;
             opacity: .5;
-            font-size:18px;
+            font-size: $fs-18;
+
             p {
-                color:$secondary;
+                color: $secondary;
             }
         }
 
         &__text {
             display: flex;
-            color: $primary;
+            color: $secondary;
             align-items: center;
             justify-content: center;
             backface-visibility: hidden;

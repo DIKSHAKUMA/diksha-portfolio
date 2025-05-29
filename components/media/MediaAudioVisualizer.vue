@@ -35,7 +35,7 @@ const createAnalyserData = () => {
     if (audioCtx.state === 'suspended') {
         audioCtx.resume()
     }
-    barWidth = 10
+    barWidth = 11
 }
 
 /**
@@ -53,7 +53,7 @@ const startAnimRequest = () => {
             analyser.value?.getByteFrequencyData(dataArray)
             for (let i = 0; i < bufferLength; i++) {
                 const barHeight = dataArray[i]
-                ctx.fillStyle = `rgb(${barHeight + 72} 30 20)`
+                ctx.fillStyle = `rgb(82 109 ${ barHeight +  50} )`
                 ctx.fillRect(x, canvas.value.height - barHeight, barWidth, barHeight)
                 x += barWidth +2
             }
@@ -92,9 +92,9 @@ onMounted(() => {
 
 <style scoped lang="scss">
 #canvas {
-    bottom: 26px;
+    bottom: 24px;
     position: absolute;
-    width: 100px;
+    width: 150px;
     height: 25px;
     -webkit-user-select: none;
     -moz-user-select: none;

@@ -1,163 +1,124 @@
 <script setup lang="ts">
-import SplitType from "split-type"
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useLayoutStore } from "~/store/useLayoutStore"
+import { useHaikuStore } from '~/store/useHaikuStore';
 
-// Footer uses layout store
-const store = useLayoutStore()
-const { $gsap } = useNuxtApp()
-const route = useRoute()
-
-let sections: any
+const store = useHaikuStore()
 
 onMounted(() => {
-  $gsap.registerPlugin(ScrollTrigger)
-  sections = $gsap.utils.toArray(".splitme")
-
-  watch(route, value => {
-    sections.forEach((sec: any) => {
-      const splitTxt = new SplitType(sec, { types: "words" })
-      $gsap.from(splitTxt.words, {
-        autoAlpha: 0,
-        y: +20,
-        scrollTrigger: {
-          trigger: sec,
-          start: "bottom bottom",
-          scrub: false,
-          end: "bottom bottom",
-          toggleActions: "play none none reverse",
-        },
-        transformOrigin: "top",
-        stagger: 0.1,
-        duration: 0.2,
-      })
-    })
-  })
 
 })
 </script>
 
 <template>
+  <footer class="footer-wrapper">
+    <div class="footer">
 
-  <div class="footer">
-    <div class="footer__col1">
-      <section class="footer__contact">
-        <div class="footer__contact__title splitme">
-          {{ store.data?.contact?.emailTitle }}
+      <div class="col">
+        <div>
+          <h2>Navigation</h2>
+          <p>
+            <NuxtLink to="/works" data-name="menu" class="action">Works</NuxtLink>
+          </p>
+          <p>
+            <NuxtLink to="/photography" data-name="menu" class="action">Photography</NuxtLink>
+          </p>
+          <p>
+            <NuxtLink to="/about" data-name="menu" class="action">About</NuxtLink>
+          </p>
+          <p>
+            <NuxtLink to="/contact" data-name="menu" class="action">Contact</NuxtLink>
+          </p>
         </div>
-        <div class="splitme">{{ store.data?.contact?.email }}</div>
-      </section>
+      </div>
 
-      <section class="footer__address">
-        <div class="footer__address__title splitme">
-          {{ store.data?.contact?.addressTitle }}
+      <div class="col">
+        <div>
+          <h2>Contact</h2>
+          <p><a href="mailto:hello@thomasjt.com" data-name="menu" class="action">hello@thomasjt.com</a></p>
+          <p>
+            <NuxtLink to="https://discordapp.com/users/1326292436187611199" target="_blank" data-name="menu"
+              class="action">Discord</NuxtLink>
+          </p>
         </div>
-        <div class="splitme">{{ store.data?.contact?.address }}</div>
-      </section>
-    </div>
+      </div>
 
-    <div class="footer__col2">
-      <section class="footer__social">
-        <div class="footer__social__title splitme">Social</div>
-        <div v-for="social in store.data?.socials" :key="social.id">
-          <NuxtLink :to="social.socialURL as string" rel="noopener" target="_blank">
-            <div class="splitme">{{ social.name }}</div>
-          </NuxtLink>
+      <div class="break"></div>
+
+      <div class="col">
+        <div>
+          <h2>Haiku</h2>
+          <pre><p>{{ store.data?.haikus[Math.floor(Math.random() * 2)].haiku }}</p></pre>
         </div>
-      </section>
+      </div>
+
+      <div class="col">
+        <div>
+          <h2>Association</h2>
+          <p>
+            <NuxtLink to="https://github.com/thorstensson" target="_blank" data-name="menu" class="action">GitHub
+            </NuxtLink>
+          </p>
+          <p>
+            <NuxtLink to="https://thomasthorstensson.tumblr.com/" target="_blank" data-name="menu" class="action">Tumblr
+            </NuxtLink>
+          </p>
+          <p>
+            <NuxtLink to="https://www.goodreads.com/user/show/25619759-thomas-thorstensson" target="_blank"
+              data-name="menu" class="action">Goodreads</NuxtLink>
+          </p>
+        </div>
+      </div>
+
     </div>
-
-    <div class="footer__col3">
-      <div class="intro splitme">{{ store.data?.form?.formIntro }}</div>
-      <MailFormW3 />
-    </div>
-
-    <div class="made">Made by Thomas</div>
-
-  </div>
+  </footer>
 </template>
 
 <style lang="scss" scoped>
-
-.splitme {
-  -webkit-font-kerning: none;
-  font-kerning: none;
+h2 {
+  color: $accent2;
 }
 
-section {
-  margin-bottom: 100px;
+/* Not prepared to make hover color global yet */
+p a:hover {
+  color: $accent2;
 }
 
-.intro {
-  max-width: 400px;
-  margin-bottom: 50px;
-  font-size: 28px;
-  font-family: $sans-text;
-}
-
-.made {
-  align-self: flex-end;
-  margin: 0 20px 20px 0;
-  white-space: nowrap;
-  text-align: right;
+.footer-wrapper {
+  position: absolute;
+  margin-top: auto;
+  width: 100%;
+  background-color: $accent1;
+  padding: 20px 100px 30px 100px;
 }
 
 .footer {
   display: flex;
   flex-wrap: wrap;
-  gap: 50px;
-  padding-top: 100px;
-  padding: 100px 20px 0 20px;
-  min-height: 600px;
-  color: $primary;
-  background-color: $secondary;
-  font-family: $sans-text;
-  font-weight: 400;
-  font-size: 15px;
-  
-  &__contact {
-    &__title {
-      font-family: $sans-text;
-      font-size: 18px;
-    }
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: fit-content;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  font-family: "Space Grotesk", "Space Grotesk Fallback: Arial";
+  color: $secondary;
+  font-size: 0.875rem;
+
+}
+
+.break {
+  flex-basis: 100%;
+  height: 0;
+
+  @include this-and-above("md") {
+    display: none;
   }
+}
 
-  &__address {
-    &__title {
-      font-family: $sans-text;
-      font-size: 18px;
-    }
-  }
+.col {
+  width: 150px;
 
-  &__social {
-    &__title {
-      font-family: $sans-text;
-      font-size: 18px;
-    }
-  }
-
-  &__col1 {
-    flex-flow: column;
-  }
-
-  &__col2 {
-    margin-right: 0%;
-
-    @include this-and-above("md") {
-      flex-wrap: nowrap;
-    }
-
-    @include this-and-above("lg") {
-      margin-right: 20%;
-    }
-
-    @include this-and-above("xl") {
-      margin-right: 33%;
-    }
-  }
-
-  &__col3 {
-    flex-grow: 1;
+  @include this-and-above("md") {
+    width: unset
   }
 }
 </style>

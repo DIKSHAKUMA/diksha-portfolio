@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import { useLayoutStore } from "~/store/useLayoutStore"
-
-const store = useLayoutStore()
-// Fetch data for nav and footer
-await callOnce('layout', () => store.fetchData())
 </script>
 
 <template>
@@ -17,7 +12,7 @@ await callOnce('layout', () => store.fetchData())
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .folio-wrapper {
   /*overflow-y: hidden;*/
   padding-right: 20px;

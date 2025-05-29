@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import { useHaikuStore } from '~/store/useHaikuStore';
 import { useHomeStore } from '~/store/useHomeStore'
 
 const { $lenis } = useNuxtApp();
+
+// Pinia 🍍
 const store = useHomeStore()
-// Fetch data for home page
 await callOnce('home', () => store.fetchData())
+
+const store2 = useHaikuStore();
+await callOnce('haiku', () => store2.fetchData())
 
 definePageMeta({
     layout: 'default'

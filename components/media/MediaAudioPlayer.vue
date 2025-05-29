@@ -1,12 +1,9 @@
 <script setup lang="ts">
 /**
  * An even more slimmed down version of the player.
- * TODO: when portfolio is done, revisit this for improvements
- * (should I use Audio class, load server side?)
  */
 
 import { ref, useTemplateRef, reactive, watch, onMounted, computed } from 'vue'
-
 import { useStoreRef } from '@/composable/useStoreRef'
 
 const spectrum = useTemplateRef('spectrum')
@@ -16,22 +13,26 @@ const trackDuration = ref<string>("00.00")
 const trackIndex = ref<number>(0)
 const currentTrack = ref<string>("")
 const isPlaying = ref<boolean>(false)
+const panelTrack = useTemplateRef('panel-track')
+const isMounted = ref<boolean>(false)
 
 const doPlay = ref<boolean>(false)
 const title = ref<string>("Sound")
 
+// The panel width, if track text wider then GSAP yoyo
+const TRACK_WIDTH = 145
+
 const PATH = useRuntimeConfig().public.s3Path
+const { $gsap } = useNuxtApp()
+
 
 
 //Add tracks here; no plans to make a DOM playlist
 const playlist = reactive([
-
-    { artist: "Lorn", track: "Lorn - Folding (Original Mix).mp3" },
-    
-    { artist: "ashess", track: "ashess - only you (Original Mix).mp3" },
-
-    { artist: "Sky_s Memoirs", track: "Sky_s Memoirs - Nova (Original Mix).mp3" }
-
+    { artist: "Oscuro", track: "Oscuro - BlauDisS - Openness.mp3" },
+    { artist: "Unseen Elementz", track: "Unseen Elementz - Waiting (Future Garage).mp3" },
+    { artist: "Tomokari & PALMS HIGH", track: "Tomokari & PALMS HIGH - Rumours.mp3" },
+    { artist: "Progmalite", track: "Progmalite - Statica - Single.mp3" }
 ])
 
 // Check for remaining tracks
@@ -137,18 +138,45 @@ watch(() => doPlay.value, (newValue, oldValue) => {
     togglePlay();
 })
 
+// GSAP, yoyo text left to right if title wider than display
+watch(
+    [isPlaying, trackIndex],
+    () => {
+        const { width } = panelTrack.value?.getBoundingClientRect() || {}
+        if (isPlaying.value && (width && width > TRACK_WIDTH)) {
+            const remWidth = width - TRACK_WIDTH + 10
+            $gsap.fromTo(".panel__box__track", { x: 0 }, {
+                duration: width / 100, x: -remWidth, repeat: -1, yoyo: true, ease: "sine.inOut"
+            })
+        } else {
+            $gsap.to(".panel__box__track", { x: 0, duration: 1, ease: "sine.inOut", overwrite: 'auto' })
+        }
+    }, { flush: 'post' }
+)
+
 onMounted(() => {
     const { addElem } = useStoreRef()
     addElem("audioEl", audioEl)
     currentTrack.value = currTrack.value
+    isMounted.value = true
+
 })
 
 </script>
 
 <template>
     <div class="player-wrapper">
-        <audio type="audio/mp3" :src="`${PATH}/${currentTrack}`" preload="auto" v-on:timeupdate="timeUpdate"
-            v-on:durationchange="durationUpdate" v-on:ended="onTrackEnded" ref="audio-element"></audio>
+        <div v-if="isMounted">
+            <audio type="audio/mp3" :src="`${PATH}/${currentTrack}`" preload="auto" v-on:timeupdate="timeUpdate"
+                v-on:durationchange="durationUpdate" v-on:ended="onTrackEnded" ref="audio-element"
+                crossorigin="anonymous"></audio>
+        </div>
+        <div class="panel">
+            <div class="panel__box">
+                <div :class="{ 'panel__box__track--paused': !isPlaying }" class="panel__box__track" ref="panel-track">{{
+                    currentTrack }}</div>
+            </div>
+        </div>
         <div class="controls">
             <UIAudioToggle v-model="doPlay" :title />
         </div>
@@ -159,18 +187,46 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-body {
+.player-wrapper {
+    width: 240px;
+    height: 50px;
     -webkit-overflow-scrolling: none;
     overflow: hidden;
     overscroll-behavior: none;
 }
 
-.player-wrapper {
-    width: 240px;
-    height: 70px;
-    -webkit-overflow-scrolling: none;
-    overflow: hidden;
-    overscroll-behavior: none;
+.panel {
+    position: relative;
+    width: -moz-fit-content;
+    width: fit-content;
+    color: $accent2;
+    border-radius: 25px;
+    top: 26px;
+    right: -57px;
+
+    &__box {
+        position: relative;
+        width: 145px;
+        border-radius: 4px;
+        padding: 0 5px 0 5px;
+        overflow: hidden;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+
+        &__track {
+            white-space: nowrap;
+            text-align: center;
+            width: -moz-fit-content;
+            width: fit-content;
+            font-family: 'Lexend';
+            font-size: $fs-10;
+        }
+
+        &__track--paused {
+            display:none;
+        }
+    }
 }
 
 .controls {

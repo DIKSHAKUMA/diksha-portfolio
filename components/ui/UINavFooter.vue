@@ -3,13 +3,13 @@
 
 <template>
     <div>
+        <hr class="modal-hr">
         <div class="social">
             <slot name="social"></slot>
         </div>
         <div class="contact">
             <slot name="contact"></slot>
         </div>
-        <hr class="modal-hr">
     </div>
 </template>
 
@@ -17,11 +17,8 @@
 <style lang="scss" scoped>
 .contact,
 .social {
-    position: relative;
-    right: 0px;
-    top: 20px;
     color: #ECDFCC;
-    font-size: 15px;
+    font-size: $fs-16;
     line-height: 1.2;
     text-decoration: none;
     z-index: 100;
@@ -30,18 +27,18 @@
         display: none;
     }
 }
-.contact{
-    margin-top:10px;
+
+.contact {
+    margin-top: 10px;
 }
 
 .modal-hr {
-    position: absolute;
     width: 100%;
-    bottom: 60px;
-    right: 0;
     border: none;
     height: 2px;
-    color: $secondary;
-    background-color: $secondary;
+    color: $accent1;
+    align-self: center;
+    background-color: $accent2;
+    margin-bottom: 40px;
 }
 </style>

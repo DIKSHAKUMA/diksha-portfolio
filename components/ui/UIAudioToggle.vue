@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/vue/24/solid'
+
 const model = defineModel({ default: false })
 
 defineProps<{ title: string }>()
@@ -25,6 +27,7 @@ const togglePlay = () => {
         color: $secondary;
         position: absolute;
         padding-bottom: 8px;
+        bottom:13px;
         display: none;
         transition: color .3s;
         cursor: pointer;
@@ -36,7 +39,7 @@ const togglePlay = () => {
 
         @media (hover: hover) {
             &:hover {
-                color: $accent3;
+                color:$accent2;
             }
         }
     }

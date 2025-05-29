@@ -10,11 +10,12 @@ onMounted(() => {
 </script>
 
 <template>
-    <div  class="off" :class="{'on':isLoaded}">
+    <div class="main off" :class="{'on':isLoaded}">
         <UINavBar />
         <NuxtLayout>
             <NuxtPage />
         </NuxtLayout>
+        <CommonFooter />
     </div>
 </template>
 
@@ -28,8 +29,12 @@ body {
     font-family: $sans-text;
     margin: 0;
     padding: 0;
+     min-height: 100vh;
 }
 
+.main{
+
+}
 .off {
     opacity: 0;
     transition:opacity 1s;

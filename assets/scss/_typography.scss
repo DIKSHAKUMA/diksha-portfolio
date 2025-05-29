@@ -1,36 +1,23 @@
-// Generic stuff for text
-// Might not use all of the below but leaving it in
+@use "variables";
 
+a,
+a:hover,
+a:active,
+a:visited {
+    cursor: pointer;
+    color: unset;
+    text-decoration: none;
+}
 
-// Rollup effect on hover states. Maybe create a UI partial...
-.hover {
-    overflow: hidden;
-    position: relative;
-    display: inline-block;
+h1,
+h2,
+h3 {
+    padding-bottom: 0px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-family: variables.$sans-ui;
+}
 
-    span {
-        margin: 0;
-        padding: 0;
-        float: right;
-    }
-
-    .hover--fx {
-        white-space: nowrap;
-        transition: transform 0.4s cubic-bezier(0.4, 0.8, 0.74, 1);
-    }
-
-    .hover--fx:last-child {
-        position: absolute;
-        transform: translateY(100%);
-    }
-
-    &:hover .hover--fx:first-child {
-        transform: translateY(-100%);
-    }
-
-    &:hover .hover--fx:last-child {
-        transform: translate(0);
-        clear: both;
-        float: right;
-    }
+p {
+    line-height: 1.2;
 }

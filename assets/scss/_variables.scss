@@ -1,10 +1,15 @@
-$primary: #1E201E; // bg
-$secondary: #ECDFCC; // font
-$accent1:#3C3D37;
-$accent2:#697565;
+$primary: #1e201e; // bg
+$secondary: #ecdfcc; // font
+$accent1: #3c3d37;
+$accent2: #697565;
+
+$primary: #252422; // bg
+$secondary: #fffcf2; // font
+$accent1: #403d39;
+$accent2: #ccc5b9;
+$accent3: #697565;
 
 // Fonts
-
 $sans-ui: "Lexend";
 $sans-ui-opt: auto;
 $sans-ui-wgt: 600;
@@ -15,23 +20,19 @@ $sans-text-opt: auto;
 $sans-text-wgt: 500;
 $sans-text-stl: normal;
 
-// Sizes
-$h1: 80px;
-$h1-lg: 100px;
-$h1-xl: 140px;
-$h1-xxl: 160px;
+// Font sizes rem - px (we do not set a base)
+// Naming as if base was 16, browser default
+// But by not setting base we free user up
+// Using clamp mixin where responsive is needed (see mixins)
 
-// Padding
-$page-hpad: 20px;
-$page-hpad-lg: 60px;
-$page-hpad-xl: 60px;
-$page-hpad-xxl: 70px;
+$fs-18: 1.125rem; //18
+$fs-16: 1rem; //16
+$fs-14: 0.875rem; //14
+$fs-10: 0.625rem; //10
 
-$page-vpad: 20px;
-$page-vpad-lg: 300px;
-$page-vpad-xl: 300px;
-$page-vpad-xxl: 460px;
-
-$roffset-lg:150px;
-$roffset-xl:300px;
-$roffset-xxl:500px;
+:root {
+    --primary: #{$primary};
+    --secondary: #{$secondary};
+    --accent1: #{$accent1};
+    --accent2: #{$accent2};
+}

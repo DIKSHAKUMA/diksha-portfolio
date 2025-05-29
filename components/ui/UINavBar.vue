@@ -75,13 +75,13 @@ checkScreenWidth();
 
                 </template>
                 <template #social>
-                    <a target='_blank' href='#'>hello@thomasthorstensson.com</a><br>
+
                 </template>
             </UINavHeader>
 
             <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
                 <div class="nav__list">
-                    <NuxtLink to="/" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                    <NuxtLink to="/works" data-name="menu" class="nav__item action" activeClass="nav--link-active"
                         no-prefetch>
                         Works
                     </NuxtLink>
@@ -91,9 +91,9 @@ checkScreenWidth();
                         Photography
                     </NuxtLink>
 
-                    <NuxtLink to="/blog" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                    <NuxtLink to="/contact" data-name="menu" class="nav__item action" activeClass="nav--link-active"
                         no-prefetch>
-                        Blog
+                        Contact
                     </NuxtLink>
 
                     <NuxtLink to="/about" data-name="menu" class="nav__item action" activeClass="nav--link-active"
@@ -129,18 +129,6 @@ checkScreenWidth();
 </template>
 
 <style lang="scss" scoped>
-* {
-    user-select: none;
-}
-
-a,
-a:hover,
-a:active,
-a:visited {
-    cursor: pointer;
-    color: unset;
-    text-decoration: none;
-}
 
 .logo {
     width: 50px;
@@ -161,10 +149,14 @@ a:visited {
     z-index: 999;
     overflow: hidden;
     transition: top .4s;
-    background-color: $primary;
+    mix-blend-mode: normal;
 
     &--moveup {
         top: -100px;
+    }
+
+    @include this-and-above('lg') {
+        mix-blend-mode: difference;
     }
 }
 
@@ -173,11 +165,10 @@ a:visited {
     align-items: center;
     height: 100%;
     font-family: $sans-ui;
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: 400;
+    font-size: $fs-16;
     max-width: 95%;
     margin: auto;
-    background-color: $primary;
 }
 
 .header-wrapper {
@@ -186,7 +177,6 @@ a:visited {
     flex: 1 1 auto;
     height: 80px;
     color: $secondary;
-    font-weight: isColorDark($primary);
 
     &--alt-color {
         color: $secondary;
@@ -194,16 +184,12 @@ a:visited {
 }
 
 .footer-wrapper {
+    display: flex;
+    flex-flow: column;
     position: relative;
-    right: 60px;
+    align-items: flex-end;
     top: 798px;
-    width: auto;
-    text-align: right;
-
-    :deep(.contact),
-    :deep(.social) {
-        font-weight: isColorDark($primary);
-    }
+    width: 80%;
 }
 
 .nav {
@@ -213,17 +199,19 @@ a:visited {
     width: 100%;
     height: 100vh;
     color: $secondary;
-    background-color: $primary;
     transition: left .4s cubic-bezier(.075, .82, .165, 1);
 
     &--open {
-        font-weight: $sans-ui-wgt;
+        font-weight: 600;
         left: 0%;
         touch-action: none;
         -webkit-overflow-scrolling: none;
         overflow: hidden;
-        /* Other browsers */
         overscroll-behavior: none;
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 60px;
+        background-color: $primary;
     }
 
     &--closed {
@@ -250,12 +238,11 @@ a:visited {
     &__item {
         display: block;
         cursor: pointer;
-        font-size: 60px;
+        font-size: clamped(30px, 100px, 480px, 1920px);
         white-space: nowrap;
         line-height: 1.1;
         transition: color .3s;
         padding: 0 15px;
-
     }
 
     &__item:hover,
@@ -270,14 +257,15 @@ a:visited {
         position: relative;
         width: initial;
         height: 80px;
-        background-color: $primary;
         color: $secondary;
-        font-weight: isColorDark($primary);
+
+        mix-blend-mode: normal;
 
         &--closed {
             opacity: 1;
             left: unset;
             right: 0;
+            background-color: transparent;
         }
 
         &__list {
@@ -299,7 +287,7 @@ a:visited {
             display: inline-block;
             margin: 0;
             position: relative;
-            font-size: 16px;
+            font-size: $fs-16;
             line-height: unset;
         }
     }

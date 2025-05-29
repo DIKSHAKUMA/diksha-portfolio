@@ -21,8 +21,8 @@ let ctx: gsap.Context
 
 onMounted(async () => {
     if (import.meta.client) {
-        console.log("YEP")
-        $lenis.scrollTo(0, {  force: true })
+
+        $lenis.scrollTo(0, { force: true })
 
         pixiCtx.value.fillStyle = '#1E201E'
 
@@ -42,7 +42,7 @@ onMounted(async () => {
         const displacer = await Assets.load('/img/displacemap.png')
 
         ripple = PIXI.Sprite.from(displacer)
-        0;
+
         app.stage.addChild(logo)
         app.stage.addChild(ripple)
 
@@ -73,20 +73,35 @@ onMounted(async () => {
             let st = $gsap.timeline({
                 // yes, we can add it to an entire timeline!
                 scrollTrigger: {
-                    trigger: 'logo',
+                    trigger: '.logo',
                     pinSpacing: true,
                     start: 'top top', // when the top of the trigger hits the top of the viewport
-                    end: '+=500', // end after scrolling 500px beyond the start
+                    end: '+=100', // end after scrolling 500px beyond the start
                     scrub: .5, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
-                    toggleActions: "restart none none none"
+                    toggleActions: "restart none reverse reset",
                 }
             })
 
             st.addLabel('start')
                 .fromTo(logoEl.value, { opacity: 1 }, { opacity: 1 }, "ripple")
-                .fromTo(".auth-intro__header,.auth-intro__text", { duration: .1, opacity: 1 }, { duration: .1, opacity: 0 }, "ripple")
+              
                 .fromTo(ripple.scale, { x: 0, y: 0 }, { x: 5.5, y: 5.5 }, "ripple")
                 .to(filter.scale, { x: 5.5, y: 5.5 }, "ripple")
+
+            let tt = $gsap.timeline({
+                // yes, we can add it to an entire timeline!
+                scrollTrigger: {
+                    trigger: '.pin-intro',
+                    pinSpacing: true,
+                    start: 'top bottom', // when the top of the trigger hits the top of the viewport
+                    end: '+=100', // end after scrolling 500px beyond the start
+                    scrub: .5, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+                    toggleActions: "restart none reverse reset",
+                }
+            })
+
+            tt.addLabel('start')
+                .fromTo(".auth-intro__header,.auth-intro__text", { duration: .1, opacity: 1 }, { duration: .1, opacity: 0 })
         })
     }
 })
@@ -141,7 +156,7 @@ onUnmounted(() => {
     align-items: flex-start;
 
     &__header {
-        font-size: clamped(88px, 130px, 480px, 1920px);
+        font-size: clamped(50px, 130px, 480px, 1920px);
         font-weight: 500;
         line-height: .9;
         font-family: $sans-text;
