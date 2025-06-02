@@ -5,6 +5,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         autoRaf: true,
     });
     
+    console.log("lenis instance", lenis)
     return {
         provide: {
             lenis

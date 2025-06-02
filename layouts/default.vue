@@ -3,8 +3,6 @@
 
 <template>
   <div>
-    <UIMouseCursor />
-
     <div class="folio-wrapper">
       <slot />
     </div>

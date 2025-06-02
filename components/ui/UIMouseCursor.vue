@@ -18,6 +18,8 @@ const vel = { x: 0, y: 0 }
 const route = useRoute();
 
 onMounted(() => {
+
+    console.log("MOUNTING--------")
     const root = document.documentElement
     const currentColor = getComputedStyle(root)
     // A little ugly with a watcher inside route but Jelly am I and I need to know what is on the next route! Jelly, I am.

@@ -1,8 +1,14 @@
 <script setup lang="ts">
 
 definePageMeta({
-    layout: 'default'
-});
+    layout: 'default',
+    key: route => route.fullPath,
+
+    pageTransition: {
+        name: 'saki',
+        mode: 'out-in'
+    }
+})
 
 const { $lenis } = useNuxtApp();
 const route = useRoute();
@@ -25,7 +31,7 @@ onMounted(() => {
 }
 
 .link {
-    position:relative;
-    top:0;
+    position: relative;
+    top: 50px;
 }
 </style>

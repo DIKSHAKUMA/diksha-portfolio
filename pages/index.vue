@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import { useHaikuStore } from '~/store/useHaikuStore';
-import { useHomeStore } from '~/store/useHomeStore'
 
 const { $lenis } = useNuxtApp();
 
-// Pinia 🍍
-const store = useHomeStore()
-await callOnce('home', () => store.fetchData())
-
-const store2 = useHaikuStore();
-await callOnce('haiku', () => store2.fetchData())
-
 definePageMeta({
-    layout: 'default'
+    layout: 'default',
+    pageTransition: {
+        name: 'saki',
+        mode: 'out-in'
+    }
 })
 
 const scrollConfig = reactive({
@@ -27,6 +22,7 @@ onMounted(() => {
 
 <template>
     <div class="home-wrapper">
+            <UIMouseCursor />
         <ViewHero />
         <ViewSelProjects />
         <UITextScroller :text="scrollConfig.text" :speed="scrollConfig.speed" />
@@ -44,5 +40,6 @@ onMounted(() => {
     display: flex;
     position: relative;
     overflow-x: hidden;
+    z-index: inherit;
 }
 </style>

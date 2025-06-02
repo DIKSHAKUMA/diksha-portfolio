@@ -2,9 +2,11 @@
 import { useHaikuStore } from '~/store/useHaikuStore';
 
 const store = useHaikuStore()
+const random = ref("")
+
 
 onMounted(() => {
-
+  random.value = store.data?.haikus[Math.floor(Math.random() * 2)].haiku
 })
 </script>
 
@@ -46,7 +48,7 @@ onMounted(() => {
       <div class="col">
         <div>
           <h2>Haiku</h2>
-          <pre><p>{{ store.data?.haikus[Math.floor(Math.random() * 2)].haiku }}</p></pre>
+          <pre><p>{{ random }}</p></pre>
         </div>
       </div>
 
@@ -82,6 +84,10 @@ p a:hover {
   color: $accent2;
 }
 
+pre {
+  font-family: $sans-text;
+}
+
 .footer-wrapper {
   position: absolute;
   margin-top: auto;
@@ -99,10 +105,9 @@ p a:hover {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
-  font-family: "Space Grotesk", "Space Grotesk Fallback: Arial";
+  font-family: $sans-text;
   color: $secondary;
   font-size: 0.875rem;
-
 }
 
 .break {

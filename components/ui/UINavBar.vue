@@ -2,6 +2,7 @@
 import { ref, onBeforeUnmount } from 'vue';
 import ElectroSVG from '@/assets/svg/electrohead.svg'
 
+const navlist = useTemplateRef('navlist')
 const isDown = ref(false);
 const isMobileActive = ref(false);
 
@@ -10,6 +11,7 @@ let currScrollPos: number
 let prevScrollPos: number
 
 const { $gsap } = useNuxtApp()
+const colorMode = useColorMode()
 
 if (import.meta.client) {
     screenWidth = ref(window.innerWidth)
@@ -21,6 +23,7 @@ if (import.meta.client) {
  */
 const toggleMenu = () => {
     isMobileActive.value = !isMobileActive.value;
+    
     if (isMobileActive.value) {
         $gsap.fromTo(".nav__item", { opacity: 0 }, { duration: .5, opacity: 1, stagger: .2, ease: "sine.inOut", delay: .5 })
     }
@@ -28,38 +31,41 @@ const toggleMenu = () => {
 
 const closeMenu = () => {
     if (screenWidth.value < 992) {
-        toggleMenu();
+        toggleMenu()
     }
 }
 
 const checkScreenWidth = () => {
     if (import.meta.client) {
-        screenWidth.value = window.innerWidth;
+        screenWidth.value = window.innerWidth
         if (screenWidth.value > 992) {
-            isMobileActive.value = false;
+            isMobileActive.value = false
         }
     }
 }
 
 const onScroll = () => {
-    currScrollPos = window.scrollY;
+    currScrollPos = window.scrollY
 
     if (prevScrollPos && prevScrollPos >= currScrollPos) {
-        isDown.value = false;
+        isDown.value = false
     } else if (prevScrollPos && prevScrollPos <= currScrollPos) {
-        isDown.value = true;
+        isDown.value = true
     }
-    prevScrollPos = currScrollPos;
+
+    prevScrollPos = currScrollPos
 }
 
 onMounted(() => {
     onScroll()
+    // cannot bind with css as colormode is client side, need light colour to reflect in mix blend mode so
+    if (colorMode.preference === 'light') navlist.value!.style.color = '#fffcf2'
     window.addEventListener('scroll', onScroll)
-    window.addEventListener('resize', checkScreenWidth);
+    window.addEventListener('resize', checkScreenWidth)
 })
 
-onBeforeUnmount(() => window.removeEventListener('resize', checkScreenWidth));
-checkScreenWidth();
+onBeforeUnmount(() => window.removeEventListener('resize', checkScreenWidth))
+checkScreenWidth()
 </script>
 
 <template>
@@ -67,9 +73,9 @@ checkScreenWidth();
     <div class="nav-wrapper" :class="{ 'nav-wrapper--moveup': isDown }">
         <div class="nav-wrapper__inner">
 
-            <UINavHeader class="header-wrapper" :class="{ 'header-wrapper--alt-color': isMobileActive }">
-                <template #name>
-
+            <UINavHeader class="header-wrapper">
+                <template #icon>
+                    <UIColorModeSwitch />
                 </template>
                 <template #contact>
 
@@ -80,28 +86,29 @@ checkScreenWidth();
             </UINavHeader>
 
             <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
-                <div class="nav__list">
-                    <NuxtLink to="/works" data-name="menu" class="nav__item action" activeClass="nav--link-active"
-                        no-prefetch>
-                        Works
-                    </NuxtLink>
+             
+                    <div class="nav__list" ref="navlist">
+                        <NuxtLink to="/works" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                            no-prefetch>
+                            Works
+                        </NuxtLink>
 
-                    <NuxtLink to="/photography" data-name="menu" class="nav__item action" activeClass="nav--link-active"
-                        no-prefetch>
-                        Photography
-                    </NuxtLink>
+                        <NuxtLink to="/photography" data-name="menu" class="nav__item action"
+                            activeClass="nav--link-active" no-prefetch>
+                            Photography
+                        </NuxtLink>
 
-                    <NuxtLink to="/contact" data-name="menu" class="nav__item action" activeClass="nav--link-active"
-                        no-prefetch>
-                        Contact
-                    </NuxtLink>
+                        <NuxtLink to="/contact" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                            no-prefetch>
+                            Contact
+                        </NuxtLink>
 
-                    <NuxtLink to="/about" data-name="menu" class="nav__item action" activeClass="nav--link-active"
-                        no-prefetch>
-                        About
-                    </NuxtLink>
-                </div>
-
+                        <NuxtLink to="/about" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                            no-prefetch>
+                            About
+                        </NuxtLink>
+                    </div>
+              
                 <UINavFooter class="footer-wrapper">
                     <template #social>
                         <ElectroSVG class="logo action" data-name="yo" />
@@ -129,7 +136,6 @@ checkScreenWidth();
 </template>
 
 <style lang="scss" scoped>
-
 .logo {
     width: 50px;
     height: auto;
@@ -150,6 +156,8 @@ checkScreenWidth();
     overflow: hidden;
     transition: top .4s;
     mix-blend-mode: normal;
+    color: $secondary;
+
 
     &--moveup {
         top: -100px;
@@ -176,11 +184,6 @@ checkScreenWidth();
     align-items: center;
     flex: 1 1 auto;
     height: 80px;
-    color: $secondary;
-
-    &--alt-color {
-        color: $secondary;
-    }
 }
 
 .footer-wrapper {
@@ -198,7 +201,6 @@ checkScreenWidth();
     right: 0;
     width: 100%;
     height: 100vh;
-    color: $secondary;
     transition: left .4s cubic-bezier(.075, .82, .165, 1);
 
     &--open {
@@ -211,7 +213,7 @@ checkScreenWidth();
         display: flex;
         justify-content: flex-end;
         padding-right: 60px;
-        background-color: $primary;
+        background-color: $accent1;
     }
 
     &--closed {
@@ -257,9 +259,6 @@ checkScreenWidth();
         position: relative;
         width: initial;
         height: 80px;
-        color: $secondary;
-
-        mix-blend-mode: normal;
 
         &--closed {
             opacity: 1;
@@ -277,6 +276,7 @@ checkScreenWidth();
             padding: 0;
             list-style: none;
             width: fit-content;
+
         }
 
         &__item::before {

@@ -84,7 +84,7 @@ onMounted(async () => {
 
             st.addLabel('start')
                 .fromTo(logoEl.value, { opacity: 1 }, { opacity: 1 }, "ripple")
-              
+
                 .fromTo(ripple.scale, { x: 0, y: 0 }, { x: 5.5, y: 5.5 }, "ripple")
                 .to(filter.scale, { x: 5.5, y: 5.5 }, "ripple")
 
@@ -119,6 +119,7 @@ onUnmounted(() => {
                 <canvas class="logo__pixi" ref="pixi" id="pixi"></canvas>
             </section>
         </div>
+        <!--Not a place for h1, h2 etc, quite designy part -->
         <section class="auth-intro" aria-label="Quick summary" ref="title">
             <div class="auth-intro__header">{{ store.data.author?.name }}</div>
             <div class="auth-intro__text">{{ store.data.author?.intro }}</div>
@@ -169,9 +170,13 @@ onUnmounted(() => {
 
     &__text {
         font-size: clamped(15px, 23px, 480px, 1920px);
-        font-weight: 300;
+        font-weight: 400;
         max-width: 500px;
         padding: 0 0 5px 10px;
+
+        @media (prefers-color-scheme: light) {
+
+        }
     }
 
     @include this-and-above('lg') {

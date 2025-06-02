@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     'nuxt-site-config',
     '@nuxtjs/seo',
     '@nuxt/fonts',
+    '@nuxtjs/color-mode',
   ],
 
   vite: {

@@ -5,8 +5,8 @@ const slots = useSlots();
 
 <template>
     <div>
-        <div v-if="slots.name" class="name">
-            <slot name="name"></slot>
+        <div v-if="slots.icon" class="icon">
+            <slot name="icon"></slot>
         </div>
         <div v-if="slots.contact" class="contact">
             <slot name="contact"></slot>
@@ -18,7 +18,7 @@ const slots = useSlots();
 </template>
 
 <style lang="scss" scoped>
-.name,
+.icon,
 .contact,
 .social {
     z-index: 100;
@@ -26,7 +26,7 @@ const slots = useSlots();
     margin-right: auto;
 }
 
-.name:empty,
+.icon:empty,
 .contact:empty,
 .social:empty {
     display: none;
