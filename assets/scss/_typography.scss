@@ -1,4 +1,5 @@
 @use "variables";
+@use "functions";
 
 a,
 a:hover,
@@ -11,11 +12,30 @@ a:visited {
 
 h1,
 h2,
-h3 {
-    padding-bottom: 0px;
-    margin-bottom: 5px;
+h3,
+h4 {
+    padding: 0;
+    margin: 0;
     font-weight: 600;
     font-family: variables.$sans-ui;
+}
+
+h1 {
+    margin-bottom:.1rem;
+}
+
+h4 {
+    margin-bottom:1rem;
+}
+
+/* Simply h tags are set globally with clamp*/
+
+h1 {
+    font-size: functions.clamped(32px, 40px, 380px, 1920px);
+}
+
+h4 {
+    font-size: functions.clamped(14px, 16px, 380px, 1920px);
 }
 
 p {

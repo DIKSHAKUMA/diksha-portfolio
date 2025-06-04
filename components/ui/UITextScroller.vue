@@ -124,7 +124,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .wrapper {
-    overflow: hidden;
+    overflow-x:hidden;
     width: 100%;
     height: -moz-fit-content;
     height: fit-content;

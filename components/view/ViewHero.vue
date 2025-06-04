@@ -29,12 +29,10 @@ onMounted(async () => {
         $gsap.registerPlugin(ScrollTrigger)
         app = new PIXI.Application()
 
-
         $gsap.set(logoEl.value, { alpha: 0 })
 
         // Initialize the application
         app.init({ backgroundAlpha: 0, canvas: pixiCtx.value })
-
 
         const image = await Assets.load('/img/electrohead.png')
         logo = PIXI.Sprite.from(image)
@@ -61,8 +59,6 @@ onMounted(async () => {
         }, 500)
 
         ctx = $gsap.context((self) => {
-
-
             //set a pulse
             $gsap.fromTo(logo, { alpha: 0 }, { duration: 1, alpha: 1, delay: 1 })
             let tl = $gsap.timeline({ repeat: 1 })
@@ -184,6 +180,10 @@ onUnmounted(() => {
         align-items: flex-end;
         justify-content: flex-start;
         gap: 20px;
+    }
+
+    canvas {
+        background-color: $primary;
     }
 }
 </style>

@@ -4,17 +4,15 @@
 <template>
   <div>
     <div class="folio-wrapper">
+      <UIMouseCursor />
       <slot />
     </div>
-
   </div>
 </template>
 
 <style scoped lang="scss">
 .folio-wrapper {
   /*overflow-y: hidden;*/
-  padding-right: 20px;
-  padding-left: 20px;
-  position:relative;
+  position: relative;
 }
 </style>

@@ -12,7 +12,7 @@ definePageMeta({
 
 const scrollConfig = reactive({
     text: '                       Swedish frontend developer & photographer. UI/UX / this / *  Based: Barcelona / London ...',
-    speed: "1"
+    speed: "1.5"
 })
 
 onMounted(() => {
@@ -21,10 +21,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="home-wrapper">
-            <UIMouseCursor />
-        <ViewHero />
-        <ViewSelProjects />
+    <div>
+        <div class="home-wrapper">
+            <ViewHero />
+            <ViewSelProjects />
+        </div>
         <UITextScroller :text="scrollConfig.text" :speed="scrollConfig.speed" />
     </div>
 </template>
@@ -39,7 +40,13 @@ onMounted(() => {
     flex-flow: column;
     display: flex;
     position: relative;
-    overflow-x: hidden;
+    overflow-x: visible;
     z-index: inherit;
+    margin: 0 $sm-spacer;
+
+    @include this-and-above('sm') {
+        margin: 0 $md-spacer;
+    }
+
 }
 </style>

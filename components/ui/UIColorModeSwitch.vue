@@ -2,17 +2,17 @@
 
 const model = defineModel({ default: false })
 const colorMode = useColorMode()
+const icon = useTemplateRef('icon')
 
 const toggleDarkmode = () => {
     model.value = !model.value;
    (model.value) ? colorMode.preference = 'dark' : colorMode.preference = 'light'
-   console.log("---toggle darkmode")
 }
 </script>
 
 <template>
     <div class="darkmode action" data-name="menu" @click="toggleDarkmode" :class="[model ? 'darkmode--on' : 'darkmode--off']">
-        <Icon name="ix:light-dark" mode="svg" size="38" />
+        <Icon name="ix:light-dark" mode="svg" color="#fffcf2" size="38" ref="icon" />
     </div>
 </template>
 
@@ -26,6 +26,7 @@ const toggleDarkmode = () => {
     transform-origin: center;
     height:38px;
     margin-bottom:5px;
+    opacity: .6;
     color: $secondary;
 
     &--off {

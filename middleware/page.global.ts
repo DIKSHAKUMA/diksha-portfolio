@@ -2,11 +2,15 @@ import { useTransitionStore } from "~/store/useTransitionStore"
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 export default defineNuxtRouteMiddleware((to, from) => {
+    // skip middleware on server
+    if (import.meta.server) return
+
+    if (useNuxtApp().isHydrating) return
+
     const store = useTransitionStore()
     const { $gsap } = useNuxtApp()
 
     from.meta.pageTransition.onLeave = (el, done) => {
-
         store.isTransitionFinished = false
         store.isTransitionStarted = false
         store.isTransitionStarted = true
@@ -14,9 +18,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
         let tl = $gsap.timeline({
             onComplete() {
-                $gsap.set([
-                    //select what to reset here
-                ], {
+                $gsap.set('.venice__blind', {
                     clearProps: 'all'
                 })
 
@@ -25,24 +27,19 @@ export default defineNuxtRouteMiddleware((to, from) => {
                         st.kill()
                     }
                 })
-
                 done()
             }
         })
 
-        // simple test
         tl.set('.venice', { autoAlpha: 1 })
-        tl.fromTo('.venice__blind', { scaleX: 0, autoAlpha: 0 }, { duration: .2, scaleX: 1.1, autoAlpha: 1, stagger: .05, transformOrigin: "0% 50%", roundProps:["opacity"] })
-        console.log('onLeave')
-
+        tl.fromTo('.venice__blind', { scaleX: 0 }, { duration: .2, scaleX: 1.1, stagger: .05, transformOrigin: "0% 50%" })
     }
 
     to.meta.pageTransition.onBeforeEnter = (el, done) => {
-        $gsap.set(".venice__blind", { scaleX: 0, opacity:0 })
+        $gsap.set(".venice__blind", { scaleX: 0 })
     }
 
     to.meta.pageTransition.onEnter = (el, done) => {
-
         let tl = $gsap.timeline({
             onComplete() {
                 $gsap.set('.venice__blind', {
@@ -58,8 +55,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
             }
         })
 
-        // simple test, for complex we need watchers for transitionState in relevant components
-        tl.fromTo('.venice__blind', { scaleX: 1.2, autoAlpha: 1 }, { duration: .2, scaleX: 0, autoAlpha: 0, stagger: .05, transformOrigin: "0% 50%" })
+        tl.fromTo('.venice__blind', { scaleX: 1.2 }, { duration: .2, scaleX: 0, stagger: .05, transformOrigin: "0% 50%" })
     }
-
 })

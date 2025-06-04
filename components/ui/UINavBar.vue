@@ -23,7 +23,7 @@ if (import.meta.client) {
  */
 const toggleMenu = () => {
     isMobileActive.value = !isMobileActive.value;
-    
+
     if (isMobileActive.value) {
         $gsap.fromTo(".nav__item", { opacity: 0 }, { duration: .5, opacity: 1, stagger: .2, ease: "sine.inOut", delay: .5 })
     }
@@ -86,29 +86,29 @@ checkScreenWidth()
             </UINavHeader>
 
             <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
-             
-                    <div class="nav__list" ref="navlist">
-                        <NuxtLink to="/works" data-name="menu" class="nav__item action" activeClass="nav--link-active"
-                            no-prefetch>
-                            Works
-                        </NuxtLink>
 
-                        <NuxtLink to="/photography" data-name="menu" class="nav__item action"
-                            activeClass="nav--link-active" no-prefetch>
-                            Photography
-                        </NuxtLink>
+                <div class="nav__list" ref="navlist">
+                    <NuxtLink to="/works" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                        no-prefetch>
+                        Work
+                    </NuxtLink>
 
-                        <NuxtLink to="/contact" data-name="menu" class="nav__item action" activeClass="nav--link-active"
-                            no-prefetch>
-                            Contact
-                        </NuxtLink>
+                    <NuxtLink to="/photography" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                        no-prefetch>
+                        Lab
+                    </NuxtLink>
 
-                        <NuxtLink to="/about" data-name="menu" class="nav__item action" activeClass="nav--link-active"
-                            no-prefetch>
-                            About
-                        </NuxtLink>
-                    </div>
-              
+                    <NuxtLink to="/contact" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                        no-prefetch>
+                        About
+                    </NuxtLink>
+
+                    <NuxtLink to="/about" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                        no-prefetch>
+                        Contact
+                    </NuxtLink>
+                </div>
+
                 <UINavFooter class="footer-wrapper">
                     <template #social>
                         <ElectroSVG class="logo action" data-name="yo" />
@@ -175,8 +175,11 @@ checkScreenWidth()
     font-family: $sans-ui;
     font-weight: 400;
     font-size: $fs-16;
-    max-width: 95%;
-    margin: auto;
+    margin: 0 $sm-spacer;
+
+    @include this-and-above('sm') {
+        margin: 0 $md-spacer;
+    }
 }
 
 .header-wrapper {
@@ -244,7 +247,7 @@ checkScreenWidth()
         white-space: nowrap;
         line-height: 1.1;
         transition: color .3s;
-        padding: 0 15px;
+        padding-left: 30px;
     }
 
     &__item:hover,
@@ -287,7 +290,7 @@ checkScreenWidth()
             display: inline-block;
             margin: 0;
             position: relative;
-            font-size: $fs-16;
+            font-size: $fs-18;
             line-height: unset;
         }
     }

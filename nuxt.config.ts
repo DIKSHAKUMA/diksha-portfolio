@@ -13,6 +13,17 @@ export default defineNuxtConfig({
     // ...etc
   },
 
+  fonts: {
+    adobe: {
+      id: ['ngt5epe']
+    },
+    families: [
+      { name: 'Aktiv Grotesk', provider: 'adobe' },
+      { name: 'Neue Haas Unica', provider: 'adobe' },
+      { name: 'Dorival UI Variable', provider: 'adobe' }
+    ],
+  },
+
   modules: [
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',

@@ -21,7 +21,7 @@ onMounted(() => {
                 trigger: '.pin-intro',
                 pin: ".pin-intro", // pin the trigger element while active
                 pinSpacing: false,
-                start: 'top top', // when the top of the trigger hits the top of the viewport
+                start: 'top 5%', // when the top of the trigger hits the top of the viewport
                 endTrigger: ".projects",
                 end: 'bottom center',
                 scrub: 1
@@ -103,7 +103,7 @@ onUnmounted(() => {
     <div>
         <div class="pin-intro">
             <section class="prj-intro">
-                <div class="prj-intro__header split-char">Selected Projects.</div>
+                <div class="prj-intro__header split-char">Selected Work</div>
             </section>
         </div>
         <div class="projects">
@@ -149,7 +149,7 @@ onUnmounted(() => {
     mix-blend-mode: difference;
 
     &__header {
-        font-size: clamped(46px, 80px, 380px, 1920px);
+        font-size: clamped(46px, 90px, 380px, 1920px);
         font-weight: 500;
         line-height: .8;
     }
@@ -180,10 +180,11 @@ img:hover {
     }
 
     &__name {
-        margin-top:5px;
+        margin-top: 5px;
         color: $secondary;
-        font-size: clamped(15px, 30px, 380px, 1920px);
-        font-family: $sans-text;
+        font-size: clamped(15px, 24px, 380px, 1920px);
+        font-family: $sans-ui;
+        font-weight: 400;
     }
 
     &__tags {
@@ -202,6 +203,7 @@ img:hover {
         }
     }
 
+   
     @include this-and-above('md') {
         padding: 0 30px;
     }

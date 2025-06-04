@@ -13,8 +13,9 @@ const isLoaded = ref(false)
 const { $gsap } = useNuxtApp()
 
 // we can use this later for landig hook animation
+// TODO : need to plug in blend animation in on mounted stage
 onMounted(() => {
-    isLoaded.value = true
+    isLoaded.value = true;
 })
 
 </script>
@@ -31,7 +32,6 @@ onMounted(() => {
         <div class="venice__blind"></div>
         <div class="venice__blind"></div>
         <div class="venice__blind"></div>
-
         <div class="venice__blind"></div>
         <div class="venice__blind"></div>
         <div class="venice__blind"></div>
@@ -90,6 +90,9 @@ body {
     z-index: 9999;
     visibility: hidden;
     pointer-events: none;
+               background-image: url('img/electrohead.png');
+               background-repeat:no-repeat;
+               background-position: center center;
 
     &__blind {
         display: inline-block;
