@@ -146,8 +146,7 @@ onUnmounted(() => {
     padding-top: 20px;
     font-family: $sans-ui;
     color: $secondary;
-    mix-blend-mode: difference;
-
+    
     &__header {
         font-size: clamped(46px, 90px, 380px, 1920px);
         font-weight: 500;

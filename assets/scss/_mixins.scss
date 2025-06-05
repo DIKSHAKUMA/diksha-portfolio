@@ -2,7 +2,6 @@
 @use "sass:map";
 
 @mixin blend-mode-difference {
-    mix-blend-mode: difference;
     background-clip: text;
     background-color: variables.$primary;
     -webkit-text-fill-color: transparent;

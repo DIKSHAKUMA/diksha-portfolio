@@ -17,28 +17,34 @@
 <style lang="scss" scoped>
 .contact,
 .social {
-    color: #ECDFCC;
-    font-size: $fs-16;
+    font-size: $fs-18;
     line-height: 1.2;
     text-decoration: none;
     z-index: 100;
+    position: absolute;
+    top: 40px;
+    line-height: 1.5;
+    cursor: pointer;
 
     @include this-and-above('lg') {
         display: none;
     }
 }
 
+.social {
+    align-self: flex-start;
+}
+
 .contact {
-    margin-top: 10px;
+    align-self: flex-end;
 }
 
 .modal-hr {
     width: 100%;
     border: none;
     height: 2px;
-    color: $accent1;
     align-self: center;
-    background-color: $accent2;
+    background-color: $secondary;
     margin-bottom: 40px;
 }
 </style>

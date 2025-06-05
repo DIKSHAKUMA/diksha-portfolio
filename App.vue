@@ -14,9 +14,25 @@ const { $gsap } = useNuxtApp()
 
 // we can use this later for landig hook animation
 // TODO : need to plug in blend animation in on mounted stage
+
 onMounted(() => {
     isLoaded.value = true;
+    $gsap.set(".venice__blind", { scaleX: 0 })
+    $gsap.fromTo('.venice__blind', { scaleX: 1, autoAlpha: 1 }, { duration: .2, autoAlpha: 0, scaleX: 0, stagger: .05, transformOrigin: "0% 50%", onComplete: clearProps })
 })
+
+const clearProps = () => {
+    $gsap.set('.venice__blind', {
+        clearProps: 'all'
+    })
+    $gsap.set('.venice', { autoAlpha: 0 })
+}
+
+
+const nuxtApp = useNuxtApp()
+const loading = ref(false)
+
+
 
 </script>
 
@@ -88,11 +104,10 @@ body {
     height: 100vh;
     position: fixed;
     z-index: 9999;
-    visibility: hidden;
     pointer-events: none;
-               background-image: url('img/electrohead.png');
-               background-repeat:no-repeat;
-               background-position: center center;
+    background-repeat: no-repeat;
+    background-position: center center;
+    visibility: visible;
 
     &__blind {
         display: inline-block;
@@ -101,7 +116,7 @@ body {
         overflow: hidden;
         width: 5%;
         height: 100vh;
-        will-change: transform;
+
         background-color: $secondary;
     }
 }

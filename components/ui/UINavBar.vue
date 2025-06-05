@@ -23,10 +23,12 @@ if (import.meta.client) {
  */
 const toggleMenu = () => {
     isMobileActive.value = !isMobileActive.value;
-
     if (isMobileActive.value) {
-        $gsap.fromTo(".nav__item", { opacity: 0 }, { duration: .5, opacity: 1, stagger: .2, ease: "sine.inOut", delay: .5 })
+        $gsap.fromTo(".nav__item", { opacity: 0, x: -40 }, { duration: .3, opacity: 1, x: 0, stagger: .2, ease: "power3.out", delay: .5 })
+    } else {
+        $gsap.to(".nav__item", { duration: .2, opacity: 0 })
     }
+    console.log("isMobileActive", isMobileActive.value)
 }
 
 const closeMenu = () => {
@@ -77,33 +79,29 @@ checkScreenWidth()
                 <template #icon>
                     <UIColorModeSwitch />
                 </template>
-                <template #contact>
-
-                </template>
-                <template #social>
-
-                </template>
+                <template #contact></template>
+                <template #social></template>
             </UINavHeader>
 
             <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
 
                 <div class="nav__list" ref="navlist">
-                    <NuxtLink to="/works" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
                         no-prefetch>
                         Work
                     </NuxtLink>
 
-                    <NuxtLink to="/photography" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
                         no-prefetch>
                         Lab
                     </NuxtLink>
 
-                    <NuxtLink to="/contact" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
                         no-prefetch>
                         About
                     </NuxtLink>
 
-                    <NuxtLink to="/about" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                    <NuxtLink to="/" data-name="menu" class="nav__item action" activeClass="nav--link-active"
                         no-prefetch>
                         Contact
                     </NuxtLink>
@@ -114,7 +112,11 @@ checkScreenWidth()
                         <ElectroSVG class="logo action" data-name="yo" />
                     </template>
                     <template #contact>
-                        <a href="mailto:someone@example.com">hello@thomasjt.com</a><br />
+                        <a data-name="menu" class="action"
+                            href="mailto:someone@example.com">hello@thomasjt.com</a><br />
+                        <NuxtLink to="https://github.com/thorstensson" target="_blank" data-name="menu" class="action">
+                            GitHub
+                        </NuxtLink>
                     </template>
                 </UINavFooter>
             </div>
@@ -155,16 +157,12 @@ checkScreenWidth()
     z-index: 999;
     overflow: hidden;
     transition: top .4s;
-    mix-blend-mode: normal;
+    font-family: $sans-ui;
     color: $secondary;
-
+    background-color: $primary;
 
     &--moveup {
         top: -100px;
-    }
-
-    @include this-and-above('lg') {
-        mix-blend-mode: difference;
     }
 }
 
@@ -172,8 +170,7 @@ checkScreenWidth()
     display: flex;
     align-items: center;
     height: 100%;
-    font-family: $sans-ui;
-    font-weight: 400;
+    font-weight: 500;
     font-size: $fs-16;
     margin: 0 $sm-spacer;
 
@@ -193,9 +190,9 @@ checkScreenWidth()
     display: flex;
     flex-flow: column;
     position: relative;
-    align-items: flex-end;
     top: 798px;
     width: 80%;
+    height: fit-content;
 }
 
 .nav {
@@ -216,7 +213,7 @@ checkScreenWidth()
         display: flex;
         justify-content: flex-end;
         padding-right: 60px;
-        background-color: $accent1;
+        background-color: $primary;
     }
 
     &--closed {
@@ -232,11 +229,9 @@ checkScreenWidth()
         width: -moz-fit-content;
         width: fit-content;
         text-align: right;
-        font-family: "Space Grotesk", "Space Grotesk Fallback: Arial";
 
-        // Bubbles
-        @include this-and-above('lg') {
-            font-family: $sans-ui;
+        a {
+            margin-bottom: 1rem;
         }
     }
 
@@ -247,14 +242,21 @@ checkScreenWidth()
         white-space: nowrap;
         line-height: 1.1;
         transition: color .3s;
-        padding-left: 30px;
+        padding-right: 0px;
+           color: $secondary;
+
+        &:hover {
+            color: var(--accent1);
+        }
     }
 
-    &__item:hover,
     &--link-active::before {
-        color: $accent2;
-        content: '\25CF';
+        color: var(--accent1);
+        content: "•";
+        margin-left: -15px;
+        font-size: 19px;
     }
+
 
     // Switch to desktop
     @include this-and-above('lg') {
@@ -279,19 +281,27 @@ checkScreenWidth()
             padding: 0;
             list-style: none;
             width: fit-content;
-
-        }
-
-        &__item::before {
-            line-height: unset;
         }
 
         &__item {
             display: inline-block;
             margin: 0;
-            position: relative;
+            /*position: relative;*/
             font-size: $fs-18;
             line-height: unset;
+            padding-right: 30px;
+            color: $secondary;
+            opacity: 1 !important;
+
+            &:last-child {
+                padding-right: 0;
+            }
+        }
+
+        &--link-active::before {
+            margin-left: -12px;
+            font-size: 12px;
+            vertical-align: text-bottom;
         }
     }
 }
@@ -308,7 +318,7 @@ checkScreenWidth()
     span {
         width: 5px;
         height: 5px;
-        background-color: $accent2;
+        background-color: $secondary;
         display: block;
         border-radius: 50%;
         position: absolute;

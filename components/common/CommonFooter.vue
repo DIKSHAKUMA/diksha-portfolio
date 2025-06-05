@@ -28,16 +28,16 @@ onMounted(() => {
         <div>
           <h4>Explore</h4>
           <p>
-            <NuxtLink to="/works" data-name="menu" class="action">Works</NuxtLink>
+            <NuxtLink to="/" data-name="menu" class="action">Works</NuxtLink>
           </p>
           <p>
-            <NuxtLink to="/photography" data-name="menu" class="action">Photography</NuxtLink>
+            <NuxtLink to="/" data-name="menu" class="action">Photography</NuxtLink>
           </p>
           <p>
-            <NuxtLink to="/about" data-name="menu" class="action">About</NuxtLink>
+            <NuxtLink to="/" data-name="menu" class="action">About</NuxtLink>
           </p>
           <p>
-            <NuxtLink to="/contact" data-name="menu" class="action">Contact</NuxtLink>
+            <NuxtLink to="/" data-name="menu" class="action">Contact</NuxtLink>
           </p>
         </div>
 
@@ -74,7 +74,7 @@ h2 {
 
 /* Not prepared to make hover color global yet */
 p a:hover {
-  color: $accent2;
+  color: $accent1;
 }
 
 pre {

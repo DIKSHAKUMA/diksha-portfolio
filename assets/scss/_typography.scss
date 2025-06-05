@@ -6,8 +6,13 @@ a:hover,
 a:active,
 a:visited {
     cursor: pointer;
-    color: unset;
     text-decoration: none;
+}
+
+a:hover {
+    color: variables.$accent1;
+    -webkit-filter: blur(1px);
+            filter: blur(1px);
 }
 
 h1,
@@ -21,11 +26,11 @@ h4 {
 }
 
 h1 {
-    margin-bottom:.1rem;
+    margin-bottom: 0.1rem;
 }
 
 h4 {
-    margin-bottom:1rem;
+    margin-bottom: 1rem;
 }
 
 /* Simply h tags are set globally with clamp*/

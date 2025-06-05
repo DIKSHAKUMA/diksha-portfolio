@@ -153,7 +153,7 @@ onUnmounted(() => {
     align-items: flex-start;
 
     &__header {
-        font-size: clamped(50px, 130px, 480px, 1920px);
+        font-size: clamped(50px, 128px, 480px, 1920px);
         font-weight: 500;
         line-height: .9;
         font-family: $sans-text;
@@ -165,13 +165,14 @@ onUnmounted(() => {
     }
 
     &__text {
-        font-size: clamped(15px, 23px, 480px, 1920px);
+        font-size: clamped(15px, 22px, 480px, 1920px);
         font-weight: 400;
         max-width: 500px;
-        padding: 0 0 5px 10px;
+        margin: 20px 0 5px 10px;
+        line-height: 1.2;
 
-        @media (prefers-color-scheme: light) {
-
+        @include this-and-above('lg') {
+            margin: 20px 0 5px 120px;
         }
     }
 
