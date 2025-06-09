@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 export default defineNuxtRouteMiddleware((to, from) => {
     // skip middleware on server
     if (import.meta.server) return
-
     if (useNuxtApp().isHydrating) return
 
     const store = useTransitionStore()
@@ -30,7 +29,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
                 done()
             }
         })
-
         tl.set('.venice', { autoAlpha: 1 })
         tl.fromTo('.venice__blind', { scaleX: 0 }, { duration: .2, scaleX: 1.1, stagger: .05, transformOrigin: "0% 50%" })
     }
@@ -54,7 +52,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
                 done()
             }
         })
-
         tl.fromTo('.venice__blind', { scaleX: 1.2 }, { duration: .2, scaleX: 0, stagger: .05, transformOrigin: "0% 50%" })
     }
 })

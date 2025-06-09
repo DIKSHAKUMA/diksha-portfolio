@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "sass:map";
+@use "sass:color";
 
 /**
  * Returns a CSS clamp function which resolves to $size-at-min-width when page width is

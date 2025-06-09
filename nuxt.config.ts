@@ -14,13 +14,12 @@ export default defineNuxtConfig({
   },
 
   fonts: {
+    processCSSVariables: true,
     adobe: {
       id: ['ngt5epe']
     },
     families: [
-      { name: 'Aktiv Grotesk', provider: 'adobe' },
-      { name: 'Neue Haas Unica', provider: 'adobe' },
-      { name: 'Dorival UI Variable', provider: 'adobe' }
+      { name: 'Neue Haas Grotesk', provider: 'adobe' }
     ],
   },
 
@@ -38,6 +37,10 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxtjs/color-mode',
   ],
+
+  colorMode: {
+    preference: 'dark'
+  },
 
   vite: {
     css: {

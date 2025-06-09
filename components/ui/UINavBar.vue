@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from 'vue';
-import ElectroSVG from '@/assets/svg/electrohead.svg'
+import { ref, onBeforeUnmount } from 'vue'
+import LogoSVGLight from '@/assets/svg/logo-light.svg'
+import LogoSVGDark from '@/assets/svg/logo-dark.svg'
 
+
+
+const colorSwitch = useTemplateRef('colorSwitch')
 const navlist = useTemplateRef('navlist')
-const isDown = ref(false);
-const isMobileActive = ref(false);
+const isDown = ref(false)
+const isMobileActive = ref(false)
+const isLightMode = ref<boolean>(false)
 
 let screenWidth: any
 let currScrollPos: number
@@ -28,7 +33,6 @@ const toggleMenu = () => {
     } else {
         $gsap.to(".nav__item", { duration: .2, opacity: 0 })
     }
-    console.log("isMobileActive", isMobileActive.value)
 }
 
 const closeMenu = () => {
@@ -54,19 +58,28 @@ const onScroll = () => {
     } else if (prevScrollPos && prevScrollPos <= currScrollPos) {
         isDown.value = true
     }
-
     prevScrollPos = currScrollPos
 }
+
 
 onMounted(() => {
     onScroll()
     // cannot bind with css as colormode is client side, need light colour to reflect in mix blend mode so
-    if (colorMode.preference === 'light') navlist.value!.style.color = '#fffcf2'
+    if (colorMode.preference === 'light') navlist.value!.style.color = '#fffcf2';
     window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', checkScreenWidth)
+
+    // In this case, the value is just a trigger, the comparison is for what color mode we are in: it can be cached
+    watch(() => isLightMode.value, (newValue, oldValue) => {
+        (newValue == true) ? colorMode.preference = 'light' : colorMode.preference = 'dark';
+    }, { immediate: true })
+
 })
 
-onBeforeUnmount(() => window.removeEventListener('resize', checkScreenWidth))
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', checkScreenWidth)
+    window.removeEventListener('scroll', onScroll)
+})
 checkScreenWidth()
 </script>
 
@@ -76,40 +89,48 @@ checkScreenWidth()
         <div class="nav-wrapper__inner">
 
             <UINavHeader class="header-wrapper">
-                <template #icon>
-                    <UIColorModeSwitch />
+                <template #logo>
+                    <ClientOnly>
+                    <div v-if="colorMode.preference == 'dark'">
+                        <LogoSVGLight class="logo" />
+                    </div>
+                    <div v-if="colorMode.preference == 'light'">
+                        <LogoSVGDark class="logo" />
+                    </div>
+                    </ClientOnly>
                 </template>
-                <template #contact></template>
-                <template #social></template>
+                <template #mode>
+                    <UIAppleSwitch v-model="isLightMode" title1="DARK" title2="LIGHT" ref="colorSwitch" />
+                </template>
             </UINavHeader>
 
             <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
 
                 <div class="nav__list" ref="navlist">
-                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
-                        no-prefetch>
-                        Work
-                    </NuxtLink>
-
-                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
-                        no-prefetch>
-                        Lab
-                    </NuxtLink>
-
-                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
-                        no-prefetch>
-                        About
-                    </NuxtLink>
-
                     <NuxtLink to="/" data-name="menu" class="nav__item action" activeClass="nav--link-active"
                         no-prefetch>
-                        Contact
+                        WORK
+                    </NuxtLink>
+
+                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                        no-prefetch>
+                        LAB
+                    </NuxtLink>
+
+                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                        no-prefetch>
+                        ABOUT
+                    </NuxtLink>
+
+                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                        no-prefetch>
+                        CONTACT
                     </NuxtLink>
                 </div>
 
                 <UINavFooter class="footer-wrapper">
                     <template #social>
-                        <ElectroSVG class="logo action" data-name="yo" />
+
                     </template>
                     <template #contact>
                         <a data-name="menu" class="action"
@@ -139,8 +160,14 @@ checkScreenWidth()
 
 <style lang="scss" scoped>
 .logo {
-    width: 50px;
+    width: 30px;
     height: auto;
+
+    svg {
+        -webkit-backface-visibility: hidden;
+        -webkit-transform: translateZ(0) scale(1.0, 1.0);
+        transform: translateZ(0);
+    }
 }
 
 .modal-open {
@@ -160,9 +187,15 @@ checkScreenWidth()
     font-family: $sans-ui;
     color: $secondary;
     background-color: $primary;
+    height: 64px;
 
     &--moveup {
         top: -100px;
+    }
+
+    @include this-and-above('lg') {
+        background-color: unset;
+        backdrop-filter: blur(10px);
     }
 }
 
@@ -183,16 +216,18 @@ checkScreenWidth()
     display: flex;
     align-items: center;
     flex: 1 1 auto;
-    height: 80px;
+    height: 100%;
 }
 
 .footer-wrapper {
     display: flex;
     flex-flow: column;
-    position: relative;
-    top: 798px;
+    position: absolute;
+    bottom: 120px;
     width: 80%;
+    height: -moz-fit-content;
     height: fit-content;
+    right: 70px;
 }
 
 .nav {
@@ -201,7 +236,7 @@ checkScreenWidth()
     right: 0;
     width: 100%;
     height: 100vh;
-    transition: left .4s cubic-bezier(.075, .82, .165, 1);
+    transition: all .4s cubic-bezier(.075, .82, .165, 1);
 
     &--open {
         font-weight: 600;
@@ -213,10 +248,11 @@ checkScreenWidth()
         display: flex;
         justify-content: flex-end;
         padding-right: 60px;
-        background-color: $primary;
+        background-color: $accent2;
     }
 
     &--closed {
+        transition-delay: .2s;
         left: -100%;
     }
 
@@ -238,12 +274,12 @@ checkScreenWidth()
     &__item {
         display: block;
         cursor: pointer;
-        font-size: clamped(30px, 100px, 480px, 1920px);
+        font-size: clamped(30px, 150px, 480px, 1920px);
         white-space: nowrap;
         line-height: 1.1;
         transition: color .3s;
         padding-right: 0px;
-           color: $secondary;
+        color: $secondary;
 
         &:hover {
             color: var(--accent1);
@@ -251,7 +287,7 @@ checkScreenWidth()
     }
 
     &--link-active::before {
-        color: var(--accent1);
+        color: $secondary;
         content: "•";
         margin-left: -15px;
         font-size: 19px;
@@ -281,6 +317,10 @@ checkScreenWidth()
             padding: 0;
             list-style: none;
             width: fit-content;
+
+            a {
+                margin-bottom: 0rem;
+            }
         }
 
         &__item {
@@ -289,7 +329,7 @@ checkScreenWidth()
             /*position: relative;*/
             font-size: $fs-18;
             line-height: unset;
-            padding-right: 30px;
+            padding-right: 25px;
             color: $secondary;
             opacity: 1 !important;
 
@@ -299,9 +339,12 @@ checkScreenWidth()
         }
 
         &--link-active::before {
-            margin-left: -12px;
+            margin-left: -11px;
             font-size: 12px;
             vertical-align: text-bottom;
+            position: relative;
+            right: -3px;
+            top: 1px;
         }
     }
 }

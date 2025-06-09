@@ -15,8 +15,9 @@ onMounted(() => {
 
         $gsap.registerPlugin(ScrollTrigger)
 
-        // Pin for Selectted Projects
-        let pt = $gsap.timeline({
+        // Pin for Selected works text
+        let worksPinTl = $gsap.timeline({
+
             scrollTrigger: {
                 trigger: '.pin-intro',
                 pin: ".pin-intro", // pin the trigger element while active
@@ -29,39 +30,39 @@ onMounted(() => {
             }
         })
 
-        // Animate letters in Selected projects
-        let sectionsChar = $gsap.utils.toArray('.split-char');
+        // Clip words Selected Works and reveal with polygon path, best done separate from above
+        let sectionsChar = $gsap.utils.toArray('.split-intro-w');
         sectionsChar.forEach((sec: any) => {
-            const splitTxt = new SplitType(sec, { types: 'chars' })
-            $gsap.from(splitTxt.chars, {
-                autoAlpha: 0,
-                y: +20,
+            const splitTxt = new SplitType(sec, { types: 'words' })
+            $gsap.set(splitTxt.words, { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', })
+            $gsap.to(splitTxt.words, {
+                autoAlpha: 1,
+                clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
                 scrollTrigger: {
                     trigger: sec,
                     start: 'top 90%',
                     scrub: false,
                     end: 'top 50%',
-                    toggleActions: "play none none reset",
+                    toggleActions: "play none none reverse",
                     preventOverlaps: true, // <- HERE
                     //markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 }
                 },
-                transformOrigin: 'top',
-                stagger: .1,
-                duration: .2
+                duration: .4,
+                stagger: .4
             })
         })
 
-        // Animate projects
-        let sections = $gsap.utils.toArray('.split');
+        // Animate project words
+        let sections = $gsap.utils.toArray('.split-proj-w');
         // The project text below images
         sections.forEach((sec: any) => {
             const splitTxt = new SplitType(sec, { types: 'words' })
             $gsap.from(splitTxt.words, {
                 autoAlpha: 0,
-                y: +20,
+   
                 scrollTrigger: {
                     trigger: sec,
-                    start: 'top 95%',
+                    start: 'top 90%',
                     scrub: false,
                     end: 'top 85%',
                     toggleActions: "play none none reverse",
@@ -72,10 +73,11 @@ onMounted(() => {
             })
         })
 
-        // The images
+        // Reveal the project images 
         let images = $gsap.utils.toArray('.projects__proj');
         images.forEach((img: any) => {
             $gsap.to(img, {
+                yPercent: 0,
                 opacity: 1,
 
                 clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
@@ -86,10 +88,9 @@ onMounted(() => {
                     end: 'top 70%',
                     toggleActions: "play none none reverse",
                 },
-                duration: .6
+                duration: .3
             })
         })
-
 
     })
 })
@@ -103,7 +104,7 @@ onUnmounted(() => {
     <div>
         <div class="pin-intro">
             <section class="prj-intro">
-                <div class="prj-intro__header split-char">Selected Work</div>
+                <div class="prj-intro__header split-intro-w">Selected Works</div>
             </section>
         </div>
         <div class="projects">
@@ -114,8 +115,8 @@ onUnmounted(() => {
                             sizes="sm:100vw md:40vw lg:35vw xl:30vw" densities="x1 x2"></NuxtImg>
                     </NuxtLink>
                 </div>
-                <div class="projects__name split">{{ proj.name }}</div>
-                <div class="projects__tags split">{{ proj.tags }}</div>
+                <div class="projects__name split-proj-w">{{ proj.name }}</div>
+                <div class="projects__tags split-proj-w">{{ proj.tags }}</div>
             </div>
         </div>
 
@@ -146,7 +147,7 @@ onUnmounted(() => {
     padding-top: 20px;
     font-family: $sans-ui;
     color: $secondary;
-    
+
     &__header {
         font-size: clamped(46px, 90px, 380px, 1920px);
         font-weight: 500;
@@ -160,7 +161,7 @@ img {
 }
 
 img:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .projects {
@@ -202,7 +203,7 @@ img:hover {
         }
     }
 
-   
+
     @include this-and-above('md') {
         padding: 0 30px;
     }

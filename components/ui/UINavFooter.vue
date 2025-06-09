@@ -17,7 +17,7 @@
 <style lang="scss" scoped>
 .contact,
 .social {
-    font-size: $fs-18;
+    font-size: clamped(14px, 28px, 480px, 1920px);
     line-height: 1.2;
     text-decoration: none;
     z-index: 100;
@@ -40,11 +40,13 @@
 }
 
 .modal-hr {
-    width: 100%;
+width: 85%;
     border: none;
     height: 2px;
     align-self: center;
     background-color: $secondary;
     margin-bottom: 40px;
+    position: absolute;
+    right: 0px;
 }
 </style>

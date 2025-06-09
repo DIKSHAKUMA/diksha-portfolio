@@ -68,8 +68,8 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-h2 {
-  color: $accent2;
+h1 {
+  color: $accent1;
 }
 
 /* Not prepared to make hover color global yet */

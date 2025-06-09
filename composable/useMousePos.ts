@@ -13,7 +13,7 @@ export function useMousePos() {
 
   if (import.meta.client) {
     onMounted(() => window.addEventListener('mousemove', update))
-    onUnmounted(() => window.removeEventListener('mousemove', update))
+    onBeforeUnmount(() => window.removeEventListener('mousemove', update))
   }
 
   // expose managed state as return value

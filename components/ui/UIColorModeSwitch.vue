@@ -1,26 +1,22 @@
 <script setup lang="ts">
-const model = defineModel({ default: false })
 const colorMode = useColorMode()
-const icon = useTemplateRef('icon')
+const isToggle = ref(false) // just a visual switch regardless of value because mode can be cached
 
-
-// TODO: Fix below it assumes we are in light mode which is wrong.
 const toggleDarkmode = () => {
-    console.log("modelValue color", model.value)
-    model.value = !model.value;
-    (model.value) ? colorMode.preference = 'dark' : colorMode.preference = 'light'
+    isToggle.value = !isToggle.value;
+    (colorMode.preference == 'dark') ? colorMode.preference = 'light' : colorMode.preference = 'dark'
 }
 </script>
 
 <template>
-    <div class="darkmode action" data-name="menu" @click="toggleDarkmode"
-        :class="[model ? 'darkmode--on' : 'darkmode--off']">
+    <div class="mode__icon" data-name="menu" @click="toggleDarkmode"
+        :class="[isToggle ? 'mode__icon--rotate0' : 'mode__icon--rotate180']">
         <Icon class="darkmode__svg" name="ix:light-dark" mode="svg" size="38" ref="icon" />
     </div>
 </template>
 
 <style lang="scss" scoped>
-.darkmode {
+.mode__icon {
     color: $accent2;
     bottom: 13px;
     transition: color .3s;
@@ -30,11 +26,11 @@ const toggleDarkmode = () => {
     height: 38px;
     margin-bottom: 5px;
 
-    &--off {
+    &--rotate0 {
         transform: rotate(0deg);
     }
 
-    &--on {
+    &--rotate180 {
         transform: rotate(180deg);
     }
 

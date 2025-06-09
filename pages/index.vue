@@ -22,6 +22,7 @@ onMounted(() => {
 
 <template>
     <div>
+              <UIMouseCursor />
         <div class="home-wrapper">
             <ViewHero />
             <ViewSelProjects />

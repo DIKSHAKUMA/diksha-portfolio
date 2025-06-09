@@ -5,39 +5,25 @@ const slots = useSlots();
 
 <template>
     <div>
-        <div v-if="slots.icon" class="icon">
-            <slot name="icon"></slot>
+        <div v-if="slots.logo" class="logo">
+            <slot name="logo"></slot>
         </div>
-        <div v-if="slots.contact" class="contact">
-            <slot name="contact"></slot>
-        </div>
-        <div v-if="slots.social" class="social">
-            <slot name="social"></slot>
+        <div v-if="slots.mode" class="mode">
+            <slot name="mode"></slot>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-.icon,
-.contact,
-.social {
+.logo{
     z-index: 100;
     color: inherit;
     margin-right: auto;
 }
 
-.icon:empty,
-.contact:empty,
-.social:empty {
-    display: none;
-}
-
-.contact,
-.social {
-    display: none;
-
-    @include this-and-above('lg') {
-        display: inline;
-    }
+.mode{
+    margin-left: auto;
+    padding-right: 60px;
+    letter-spacing: .5px;
 }
 </style>

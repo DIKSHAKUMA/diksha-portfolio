@@ -20,6 +20,7 @@ onMounted(() => {
 
 <template>
     <div class="test">
+        <UIMouseCursor />
         <div>Route is {{ route.params.id }}</div>
         <NuxtLink class="link" to="/">Home</NuxtLink>
     </div>
