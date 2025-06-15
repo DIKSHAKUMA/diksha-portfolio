@@ -91,12 +91,12 @@ checkScreenWidth()
             <UINavHeader class="header-wrapper">
                 <template #logo>
                     <ClientOnly>
-                    <div v-if="colorMode.preference == 'dark'">
-                        <LogoSVGLight class="logo" />
-                    </div>
-                    <div v-if="colorMode.preference == 'light'">
-                        <LogoSVGDark class="logo" />
-                    </div>
+                        <div v-if="colorMode.preference == 'dark'">
+                            <LogoSVGLight class="logo" />
+                        </div>
+                        <div v-if="colorMode.preference == 'light'">
+                            <LogoSVGDark class="logo" />
+                        </div>
                     </ClientOnly>
                 </template>
                 <template #mode>
@@ -159,6 +159,10 @@ checkScreenWidth()
 </template>
 
 <style lang="scss" scoped>
+.action {
+    transition: transform 0.1s linear;
+}
+
 .logo {
     width: 30px;
     height: auto;
@@ -280,6 +284,7 @@ checkScreenWidth()
         transition: color .3s;
         padding-right: 0px;
         color: $secondary;
+        // for the magnet links for some reason need be here too
 
         &:hover {
             color: var(--accent1);
@@ -332,6 +337,7 @@ checkScreenWidth()
             padding-right: 25px;
             color: $secondary;
             opacity: 1 !important;
+             transition: transform 0.1s linear;
 
             &:last-child {
                 padding-right: 0;

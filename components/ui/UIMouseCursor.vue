@@ -14,7 +14,6 @@ const firstRun = ref<boolean>(true)
 const loopStarted = ref<boolean>(false)
 const pos = { x: 0, y: 0 }
 const vel = { x: 0, y: 0 }
-const route = useRoute()
 
 const classObject = computed(() => ({
     'cursor__shape': dataName.value === 'yo' || dataName.value === 'menu' || dataName.value === 'proj' || dataName.value === '',
@@ -88,7 +87,8 @@ watch(
 onMounted(async () => {
     await nextTick()
     let sections = $gsap.utils.toArray(".action")
-    
+
+    // Mouse over info states
     sections.forEach((sec: any) => {
         sec.addEventListener("mouseover", function overHandler() {
             isOver.value = true
@@ -109,7 +109,23 @@ onMounted(async () => {
         })
     })
 
+    // Since we probably don't want the images to animate  we need something else than .action maybe .magnet
+    let links = $gsap.utils.toArray(".action")
+    links.forEach((link: any) => {
+        link.addEventListener('mousemove', magnetMove)
+        link.addEventListener('mouseleave', magnetMove)
+    })
 })
+
+const magnetMove = (e: any) => {
+    const { offsetX: x, offsetY: y } = e,
+        { offsetWidth: width, offsetHeight: height } = e.currentTarget,
+        move = 10,
+        xMove = x / width * (move * 2) - move,
+        yMove = y / height * (move * 2) - move;
+    e.currentTarget.style.transform = `translate(${xMove}px, ${yMove}px)`;
+    if (e.type === 'mouseleave') e.currentTarget.style.transform = '';
+}
 
 onBeforeUnmount(() => {
     let sections = $gsap.utils.toArray(".action")

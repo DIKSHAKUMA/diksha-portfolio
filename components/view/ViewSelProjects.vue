@@ -180,7 +180,7 @@ img:hover {
     }
 
     &__name {
-        margin-top: 5px;
+        margin-top: 20px;
         color: $secondary;
         font-size: clamped(15px, 24px, 380px, 1920px);
         font-family: $sans-ui;

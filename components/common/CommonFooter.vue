@@ -68,6 +68,15 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+.action {
+  transition: transform 0.1s linear;
+}
+
+p a {
+  position: relative;
+  display: block;
+}
+
 h1 {
   color: $accent1;
 }
