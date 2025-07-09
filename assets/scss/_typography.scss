@@ -12,7 +12,7 @@ a:visited {
 a:hover {
     color: variables.$accent1;
     -webkit-filter: blur(1px);
-            filter: blur(1px);
+    filter: blur(1px);
 }
 
 h1,
@@ -21,26 +21,35 @@ h3,
 h4 {
     padding: 0;
     margin: 0;
-    font-weight: 600;
     font-family: variables.$sans-ui;
+    font-weight: 400;
 }
 
-h1 {
-    margin-bottom: 0.1rem;
-}
-
-h4 {
-    margin-bottom: 1rem;
-}
 
 /* Simply h tags are set globally with clamp*/
 
 h1 {
     font-size: functions.clamped(32px, 40px, 380px, 1920px);
+    margin-bottom: .5rem;
+    color: variables.$accent1
+}
+
+h2 {
+    font-size: functions.clamped(24px, 32px, 380px, 1920px);
+    margin-bottom: .5rem;
+    color: variables.$accent1
+}
+
+h3 {
+    font-size: functions.clamped(20px, 24px, 380px, 1920px);
+    margin-bottom: .5rem;
+    color: variables.$accent1
 }
 
 h4 {
-    font-size: functions.clamped(14px, 16px, 380px, 1920px);
+    font-size: functions.clamped(16px, 20px, 380px, 1920px);
+    margin-bottom: .5rem;
+    color: variables.$accent1
 }
 
 p {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useHaikuStore } from '~/store/useHaikuStore';
+import { useFolioStore } from '~/store/useFolioStore';
 
-const store = useHaikuStore()
+const store = useFolioStore()
 const random = ref("")
 
 onMounted(() => {
@@ -14,53 +14,54 @@ onMounted(() => {
     <div class="footer">
 
       <div class="footer__col1">
-        <div>
+        <section>
           <h1>Let's work together</h1>
-          <p class="email action" data-name="menu"><a href="mailto:hello@thomasjt.com" data-name="menu"
-              class="action">hello@thomasjt.com</a>
+          <p class="email action magnet" data-name="menu"><a href="mailto:hello@thomasjt.com"
+              data-name="menu">hello@thomasjt.com</a>
           </p>
-        </div>
+        </section>
       </div>
 
       <div class="break"></div>
 
       <div class="footer__col2">
-        <div>
+        <section>
           <h4>Explore</h4>
           <p>
-            <NuxtLink to="/" data-name="menu" class="action">Works</NuxtLink>
+            <NuxtLink to="/" data-name="menu" class="action magnet">Work</NuxtLink>
           </p>
           <p>
-            <NuxtLink to="/" data-name="menu" class="action">Photography</NuxtLink>
+            <NuxtLink to="/" data-name="menu" class="action magnet">Blog</NuxtLink>
           </p>
           <p>
-            <NuxtLink to="/" data-name="menu" class="action">About</NuxtLink>
+            <NuxtLink to="/" data-name="menu" class="action magnet">About</NuxtLink>
           </p>
           <p>
-            <NuxtLink to="/" data-name="menu" class="action">Contact</NuxtLink>
+            <NuxtLink to="/" data-name="menu" class="action magnet">Contact</NuxtLink>
           </p>
-        </div>
+        </section>
 
-        <div>
-          <h4>Haiku</h4>
-          <pre><p>{{ random }}</p></pre>
-        </div>
-
-        <div>
-          <h4>Socials</h4>
+        <section>
+          <h4>Social</h4>
           <p>
-            <NuxtLink to="https://github.com/thorstensson" target="_blank" data-name="menu" class="action">GitHub
+            <NuxtLink to="https://github.com/thorstensson" target="_blank" data-name="menu" class="action magnet">GitHub
             </NuxtLink>
           </p>
           <p>
-            <NuxtLink to="https://thomasthorstensson.tumblr.com/" target="_blank" data-name="menu" class="action">Tumblr
+            <NuxtLink to="https://thomasthorstensson.tumblr.com/" target="_blank" data-name="menu"
+              class="action magnet">Tumblr
             </NuxtLink>
           </p>
           <p>
             <NuxtLink to="https://www.goodreads.com/user/show/25619759-thomas-thorstensson" target="_blank"
-              data-name="menu" class="action">Goodreads</NuxtLink>
+              data-name="menu" class="action magnet">Goodreads</NuxtLink>
           </p>
-        </div>
+        </section>
+
+        <section>
+          <h4>Random Haiku</h4>
+          <pre><p>{{ random }}</p></pre>
+        </section>
       </div>
 
     </div>
@@ -68,7 +69,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.action {
+.magnet {
   transition: transform 0.1s linear;
 }
 
@@ -77,7 +78,8 @@ p a {
   display: block;
 }
 
-h1 {
+h1,
+h4 {
   color: $accent1;
 }
 
@@ -88,6 +90,7 @@ p a:hover {
 
 pre {
   font-family: $sans-text;
+  font-variation-settings: "slnt" 0, "wght" 500;
 }
 
 .email {
@@ -101,10 +104,30 @@ pre {
   position: absolute;
   margin-top: auto;
   width: 100%;
-  padding: 40px $sm-spacer;
+  padding: 40px $px-16-spacer;
+  margin-top: 192px;
 
   @include this-and-above("sm") {
-    padding: 60px $md-spacer;
+    padding: 60px $px-64-spacer;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: fit-content;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  color: $secondary;
+  font-size: clamped(12px, 18px, 380px, 1920px);
+  row-gap: 30px;
+
+  @include this-and-above("lg") {
+    row-gap: 0;
   }
 }
 
@@ -118,27 +141,6 @@ pre {
   position: absolute;
   transform: translate(-50%, 0);
   width: 50%;
-}
-
-.footer {
-  display: flex;
-  flex-flow: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  min-height: fit-content;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  font-family: $sans-text;
-  color: $secondary;
-  font-size: clamped(12px, 18px, 380px, 1920px);
-
-  row-gap: 30px;
-
-  @include this-and-above("lg") {
-    row-gap: 0;
-  }
 }
 
 .footer__col2 {

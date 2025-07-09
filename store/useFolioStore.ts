@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 const _data = ref()
 const _error = ref()
 
-export const useHaikuStore = defineStore('haiku', {
+export const useFolioStore = defineStore('folio', {
     state: () => ({
         data: _data,
         error: _error,
@@ -14,7 +14,7 @@ export const useHaikuStore = defineStore('haiku', {
     actions: {
         async fetchData() {
             const { data, error, } = await useAsyncGql({
-                operation: 'haiku',
+                operation: 'folio',
             })
             _data.value = data
             _error.value = error

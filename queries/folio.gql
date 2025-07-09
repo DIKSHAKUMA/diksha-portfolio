@@ -1,0 +1,48 @@
+query folio {
+  about(where: {slug: "thomas-thorstensson"}) {
+    name
+    bio
+    intro
+  }
+
+  intro(where: {slug: "intros"}) {
+    aboutIntroTitle
+    aboutIntroDesc
+    projIntroTitle
+    projIntroDesc
+    siteIntroTitle
+    siteIntroDesc
+    techIntroTitle
+    techIntroDesc
+  }
+
+  projects {
+    name
+    client
+    endclient
+    date
+    demo
+    description
+    id
+    sourceCode
+    slug
+    tags
+    image {
+      id
+      handle
+    }
+  }
+
+  haikus(first: 2, where: {}) {
+    id
+    haiku
+  }
+
+  contact(where: {slug: "contact"}) {
+    address
+    addressTitle
+    email
+    emailTitle
+  }
+  
+}

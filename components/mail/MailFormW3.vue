@@ -83,7 +83,6 @@ const submitForm = async () => {
 }
 
 form * {
-    font-family: $sans-text;
     color: $primary;
     font-weight: 400;
     caret-color: $accent2;
@@ -127,7 +126,6 @@ form {
         background-color: none;
         color: $primary;
         z-index: 200;
-        font-family: $sans-ui;
     }
 
     textarea {

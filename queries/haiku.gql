@@ -1,8 +1,0 @@
- query haiku {
-
-  haikus(first: 2) {
-    id
-    haiku
-  }
-  
-}

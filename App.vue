@@ -1,19 +1,13 @@
 <script setup lang="ts">
-import { useHaikuStore } from '~/store/useHaikuStore';
-import { useHomeStore } from '~/store/useHomeStore'
+import { useFolioStore } from '~/store/useFolioStore'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 // Pinia 🍍
-const store = useHomeStore()
-await callOnce('home', () => store.fetchData())
-
-const store2 = useHaikuStore();
-await callOnce('haiku', () => store2.fetchData())
+const store = useFolioStore()
+await callOnce('projects', () => store.fetchData())
 
 const isLoaded = ref(false)
 const { $gsap } = useNuxtApp()
-
-// we can use this later for landig hook animation
-// TODO : need to plug in blend animation in on mounted stage
 
 onMounted(() => {
     isLoaded.value = true;
@@ -23,16 +17,13 @@ onMounted(() => {
 
 const clearProps = () => {
     $gsap.set('.venice__blind', {
-        clearProps: 'all'
+        clearProps: 'scaleX, autoAlpha'
     })
     $gsap.set('.venice', { autoAlpha: 0 })
 }
 
-
 const nuxtApp = useNuxtApp()
 const loading = ref(false)
-
-
 
 </script>
 
@@ -69,27 +60,21 @@ const loading = ref(false)
 <style lang="scss">
 html,
 body {
-    background-color: $primary;
-    -webkit-font-smoothing: antialiased;
-    -moz-font-smoothing: antialiased;
-    -o-font-smoothing: antialiased;
-    font-family: $sans-text;
     margin: 0;
     padding: 0;
     min-height: 100vh;
     transition: background-color 1s;
+    background-color: $primary;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: $sans-text;
+    font-variation-settings: "slnt" 0, "wght" 500;
 }
 
 .html {
-    /* Adjust font size */
-    -webkit-text-size-adjust: 100%;
-    /* Font varient */
-    font-variant-ligatures: none;
-    -webkit-font-variant-ligatures: none;
-    /* Smoothing */
-    text-rendering: optimizeLegibility;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
     height: 100%;
     overflow-y: auto;
 }
@@ -108,6 +93,7 @@ body {
     background-repeat: no-repeat;
     background-position: center center;
     visibility: visible;
+    overflow: hidden;
 
     &__blind {
         display: inline-block;

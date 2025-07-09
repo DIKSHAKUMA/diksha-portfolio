@@ -15,12 +15,16 @@ export default defineNuxtConfig({
 
   fonts: {
     processCSSVariables: true,
-    adobe: {
-      id: ['ngt5epe']
-    },
+
     families: [
-      { name: 'Neue Haas Grotesk', provider: 'adobe' }
+      { name: 'Inter', provider: 'google' },
+      { name: 'PPNeueMontreal-Variable', provider: 'local' },
     ],
+
+    defaults: {
+      weights: [300, 400, 500, 600, 700, 900],
+      styles: ['normal', 'italic'],
+    },
   },
 
   modules: [

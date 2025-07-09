@@ -1,17 +1,19 @@
-/*theme 2*/
 .dark-mode {
     --primary: #171717;
     --secondary: #faf7ff;
-    --accent1: #aca7cb;
-    --accent2: #2c2a38;
+    --accent1: #c6d69a;
+    --accent2: #597368;
+    --accent3: #232323;
     --color-scheme: dark;
 }
 
+// TODO: need an accent 4 to counter accent 3
 .light-mode {
     --primary: #faf7ff;
     --secondary: #171717;
-    --accent1: #2c2a38;
-    --accent2: #aca7cb;
+    --accent1: #597368;
+    --accent2: #c6d69a;
+    --accent3: #232323;
     --color-scheme: light;
 }
 
@@ -19,6 +21,7 @@ $primary: var(--primary);
 $secondary: var(--secondary);
 $accent1: var(--accent1);
 $accent2: var(--accent2);
+$accent3: var(--accent3);
 $color-scheme: var(--color-scheme);
 
 // Fonts
@@ -27,7 +30,7 @@ $sans-ui-opt: auto;
 $sans-ui-wgt: 600;
 $sans-ui-stl: normal;
 
-$sans-text: "Neue Haas Grotesk Text";
+$sans-text: "PPNeueMontreal-Variable", sans-serif;
 $sans-text-opt: auto;
 $sans-text-wgt: 400;
 $sans-text-stl: normal;
@@ -44,5 +47,8 @@ $fs-10: 0.625rem; //10
 
 // We need some spacers to control folio margins
 // Baptized spacer cuz can be padding (footer)
-$sm-spacer: 16px;
-$md-spacer: 60px;
+$px-16-spacer: 16px;
+$px-32-spacer: 32px;
+$px-64-spacer: 64px;
+$px-128-spacer: 128px;
+$px-256-spacer: 256px;

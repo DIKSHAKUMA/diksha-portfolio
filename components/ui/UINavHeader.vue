@@ -6,11 +6,12 @@ const slots = useSlots();
 <template>
     <div>
         <div v-if="slots.logo" class="logo">
-            <slot name="logo"></slot>
+            T.Thorstensson
         </div>
         <div v-if="slots.mode" class="mode">
             <slot name="mode"></slot>
         </div>
+        <div></div>
     </div>
 </template>
 
@@ -18,12 +19,13 @@ const slots = useSlots();
 .logo{
     z-index: 100;
     color: inherit;
-    margin-right: auto;
+    /*margin-right: auto;*/
+    font-size: clamped(14px, 18px, 480px, 1920px);
 }
 
 .mode{
-    margin-left: auto;
-    padding-right: 60px;
+    /*margin-left: auto;
+    padding-right: 60px;*/
     letter-spacing: .5px;
 }
 </style>

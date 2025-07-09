@@ -219,7 +219,6 @@ onMounted(() => {
             text-align: center;
             width: -moz-fit-content;
             width: fit-content;
-            font-family: 'Lexend';
             font-size: $fs-10;
         }
 

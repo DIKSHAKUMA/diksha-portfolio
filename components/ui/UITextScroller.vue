@@ -116,8 +116,8 @@ onMounted(() => {
 <template>
     <div class="wrapper">
         <div class="rail">
-            <h4 v-html="text"></h4>
-            <h4 v-html="text"></h4>
+            <h4>{{ text }}</h4>
+            <h4>{{ text }}</h4>
         </div>
     </div>
 </template>
@@ -129,7 +129,6 @@ onMounted(() => {
     height: -moz-fit-content;
     height: fit-content;
     align-items: center;
-    padding: 200px 0 200px 1px;
 }
 
 .rail {
@@ -137,12 +136,12 @@ onMounted(() => {
 
     h4 {
         white-space: pre;
-        line-height: 1em;
         margin: 0 2rem 0 0;
         font-family: $sans-text;
+        font-variation-settings: "slnt" 0, "wght" 500;
+        letter-spacing: .5rem;
         color: $secondary;
-        font-weight: 500;
-        font-size: clamped(100px, 160px, 480px, 1920px);
+        font-size: clamped(100px, 140px, 480px, 1920px);
         will-change: transform;
     }
 }

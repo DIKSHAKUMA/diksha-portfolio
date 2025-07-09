@@ -1,7 +1,5 @@
 <script setup lang="ts">
 
-const { $lenis } = useNuxtApp();
-
 definePageMeta({
     layout: 'default',
     pageTransition: {
@@ -9,6 +7,8 @@ definePageMeta({
         mode: 'out-in'
     }
 })
+
+const { $lenis } = useNuxtApp();
 
 const scrollConfig = reactive({
     text: '                       Swedish frontend developer & photographer. UI/UX / this / *  Based: Barcelona / London ...',
@@ -25,7 +25,8 @@ onMounted(() => {
         <UIMouseCursor />
         <div class="home-wrapper">
             <ViewHero />
-            <ViewSelProjects />
+            <ViewAboutFront />
+            <ViewProjectsFront />
         </div>
         <UITextScroller :text="scrollConfig.text" :speed="scrollConfig.speed" />
     </div>
@@ -36,18 +37,15 @@ onMounted(() => {
     height: 100vh;
 }
 
+/* I set no side margin here as I want to separate margins for author heading and intro (ViewHero.vue) in harmony with navbar width; 
+margins are instead effected in ViewProjectsFront.vue  */
 .home-wrapper {
-    /*overflow-y: hidden;*/
     flex-flow: column;
     display: flex;
     position: relative;
     overflow-x: visible;
     z-index: inherit;
-    margin: 0 $sm-spacer;
-
-    @include this-and-above('sm') {
-        margin: 0 $md-spacer;
-    }
-
+    /*this to push down UITextScroller.vue */
+    margin-bottom: 200px;
 }
 </style>

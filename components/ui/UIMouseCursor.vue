@@ -15,6 +15,10 @@ const loopStarted = ref<boolean>(false)
 const pos = { x: 0, y: 0 }
 const vel = { x: 0, y: 0 }
 
+/**
+ * As per usual we try to follow the order : refs, comp props, methods, watchers, hooks, returns, exposes
+ */
+
 const classObject = computed(() => ({
     'cursor__shape': dataName.value === 'yo' || dataName.value === 'menu' || dataName.value === 'proj' || dataName.value === '',
     'cursor__shape--proj': isOver.value && dataName.value === 'proj',
@@ -73,7 +77,6 @@ watch(
     () => [xpos.value, ypos.value],
     ([newXpos, newYpos], [prevXpos, prevYpos]) => {
         setFromEvent()
-
         if (firstRun.value) {
             $gsap.set('.cursor', { autoAlpha: 1 })
         }
@@ -109,14 +112,15 @@ onMounted(async () => {
         })
     })
 
-    // Since we probably don't want the images to animate  we need something else than .action maybe .magnet
-    let links = $gsap.utils.toArray(".action")
+    // Since we probably don't want the images to animate, we need something else than .action, .magnet
+    let links = $gsap.utils.toArray(".magnet")
     links.forEach((link: any) => {
         link.addEventListener('mousemove', magnetMove)
         link.addEventListener('mouseleave', magnetMove)
     })
 })
 
+// Magnet effect on links on mouse over
 const magnetMove = (e: any) => {
     const { offsetX: x, offsetY: y } = e,
         { offsetWidth: width, offsetHeight: height } = e.currentTarget,
@@ -180,21 +184,23 @@ onBeforeUnmount(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: $primary;
+        background-color: $accent2;
         width: 20px;
         height: 20px;
-        border: 1px solid $secondary;
+        border: 1px solid $accent1;
         border-radius: 50%;
         pointer-events: none;
         transform-origin: center center;
         will-change: width, height, transform, border;
         transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
 
+        backdrop-filter: blur(10px);
+
         /* different hover states */
         &--proj {
-            width: 110px;
-            height: 50px;
-            border-radius: 10px;
+            width: 100px;
+            height: 100px;
+            background-color: unset;
         }
 
         &--menu {

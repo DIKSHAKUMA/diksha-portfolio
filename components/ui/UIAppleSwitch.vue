@@ -1,27 +1,19 @@
 <script setup lang="ts">
-
 const title = ref("")
 const input = useTemplateRef<any>("myInput")
 const model = defineModel({ default: false })
-
-// ex negro, blanco
-const props = defineProps<{ title1: string, title2: string }>()
-
-// by default title 1 (switch on left side)
-title.value = props.title1;
-
-const change = () => {
-    (model.value) ? title.value = props.title1 : title.value = props.title2
-}
-
 </script>
 
 <template>
     <div>
         <label class="ios-switch action" data-name="menu">
             <div class="ios-switch__title">{{ title }}</div>
-            <input type="checkbox" name="checkbox" v-model="model" @input="change" ref="myInput">
-            <i></i>
+            <input type="checkbox" name="checkbox" v-model="model" ref="myInput">
+            <i>
+                <Icon :class="{ 'icon--dark': model }" class="icon"
+                    :name="model ? 'line-md:sun-rising-loop' : 'line-md:sunny-outline-to-moon-alt-loop-transition'"
+                    size="15" />
+            </i>
         </label>
     </div>
 </template>
@@ -31,6 +23,16 @@ const change = () => {
 Adapted by me to Vue & Credit to the CSS creator @s
 https://dev.to/urielbitton/how-to-design-an-ios-style-switch-4maj
 */
+.icon {
+    z-index: 999;
+    position: relative;
+    left: 2px;
+}
+
+.icon--dark {
+    left: 22px;
+}
+
 .ios-switch {
     display: inline-block;
     cursor: pointer;
@@ -77,7 +79,6 @@ https://dev.to/urielbitton/how-to-design-an-ios-style-switch-4maj
         height: 15px;
         background-color: $primary;
         border-radius: 11px;
-        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24);
         transform: translate3d(2px, 1px, 0);
     }
 

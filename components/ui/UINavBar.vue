@@ -3,8 +3,6 @@ import { ref, onBeforeUnmount } from 'vue'
 import LogoSVGLight from '@/assets/svg/logo-light.svg'
 import LogoSVGDark from '@/assets/svg/logo-dark.svg'
 
-
-
 const colorSwitch = useTemplateRef('colorSwitch')
 const navlist = useTemplateRef('navlist')
 const isDown = ref(false)
@@ -100,31 +98,31 @@ checkScreenWidth()
                     </ClientOnly>
                 </template>
                 <template #mode>
-                    <UIAppleSwitch v-model="isLightMode" title1="DARK" title2="LIGHT" ref="colorSwitch" />
+                    <UIAppleSwitch v-model="isLightMode" ref="colorSwitch" />
                 </template>
             </UINavHeader>
 
             <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
 
                 <div class="nav__list" ref="navlist">
-                    <NuxtLink to="/" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                    <NuxtLink to="/" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
                         no-prefetch>
-                        WORK
+                        Work
                     </NuxtLink>
 
-                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                    <NuxtLink to="" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
                         no-prefetch>
-                        LAB
+                        Blog
                     </NuxtLink>
 
-                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                    <NuxtLink to="" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
                         no-prefetch>
-                        ABOUT
+                        About
                     </NuxtLink>
 
-                    <NuxtLink to="" data-name="menu" class="nav__item action" activeClass="nav--link-active"
+                    <NuxtLink to="" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
                         no-prefetch>
-                        CONTACT
+                        Contact
                     </NuxtLink>
                 </div>
 
@@ -133,9 +131,10 @@ checkScreenWidth()
 
                     </template>
                     <template #contact>
-                        <a data-name="menu" class="action"
+                        <a data-name="menu" class="action magnet"
                             href="mailto:someone@example.com">hello@thomasjt.com</a><br />
-                        <NuxtLink to="https://github.com/thorstensson" target="_blank" data-name="menu" class="action">
+                        <NuxtLink to="https://github.com/thorstensson" target="_blank" data-name="menu"
+                            class="action magnet">
                             GitHub
                         </NuxtLink>
                     </template>
@@ -159,7 +158,7 @@ checkScreenWidth()
 </template>
 
 <style lang="scss" scoped>
-.action {
+.magnet {
     transition: transform 0.1s linear;
 }
 
@@ -201,6 +200,7 @@ checkScreenWidth()
         background-color: unset;
         backdrop-filter: blur(10px);
     }
+
 }
 
 .nav-wrapper__inner {
@@ -209,16 +209,18 @@ checkScreenWidth()
     height: 100%;
     font-weight: 500;
     font-size: $fs-16;
-    margin: 0 $sm-spacer;
+    text-transform: uppercase;
+    margin: 0 $px-16-spacer;
 
-    @include this-and-above('sm') {
-        margin: 0 $md-spacer;
+    @include this-and-above('md') {
+        margin: 0 $px-64-spacer;
     }
 }
 
 .header-wrapper {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     flex: 1 1 auto;
     height: 100%;
 }
@@ -304,7 +306,7 @@ checkScreenWidth()
         transition: none;
         position: relative;
         width: initial;
-        height: 80px;
+
 
         &--closed {
             opacity: 1;
@@ -319,7 +321,7 @@ checkScreenWidth()
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            padding: 0;
+            padding: 0; 
             list-style: none;
             width: fit-content;
 
@@ -331,13 +333,13 @@ checkScreenWidth()
         &__item {
             display: inline-block;
             margin: 0;
-            /*position: relative;*/
-            font-size: $fs-18;
+            /*FONT SIZE OF NAVBAR ITEMS DESKTOP, RETURNED AS REM*/
+            font-size: clamped(14px, 18px, 480px, 1920px);
             line-height: unset;
             padding-right: 25px;
             color: $secondary;
             opacity: 1 !important;
-             transition: transform 0.1s linear;
+            transition: transform 0.1s linear;
 
             &:last-child {
                 padding-right: 0;
