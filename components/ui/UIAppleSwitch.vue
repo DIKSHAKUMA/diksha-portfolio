@@ -1,4 +1,8 @@
 <script setup lang="ts">
+const props = defineProps<{
+    isMobile: boolean
+}>()
+
 const title = ref("")
 const input = useTemplateRef<any>("myInput")
 const model = defineModel({ default: false })
@@ -6,10 +10,10 @@ const model = defineModel({ default: false })
 
 <template>
     <div>
-        <label class="ios-switch action" data-name="menu">
+        <label :class="{ 'mobile-mode': props.isMobile }" class="ios-switch action" data-name="menu">
             <div class="ios-switch__title">{{ title }}</div>
             <input type="checkbox" name="checkbox" v-model="model" ref="myInput">
-            <i>
+            <i :class="{ 'mobile-mode': props.isMobile }">
                 <Icon :class="{ 'icon--dark': model }" class="icon"
                     :name="model ? 'line-md:sun-rising-loop' : 'line-md:sunny-outline-to-moon-alt-loop-transition'"
                     size="15" />
@@ -22,6 +26,9 @@ const model = defineModel({ default: false })
 /*
 Adapted by me to Vue & Credit to the CSS creator @s
 https://dev.to/urielbitton/how-to-design-an-ios-style-switch-4maj
+
++ This gets a little tricky because in mobile when nav is expanded (isMobile), we set the opposite color of current colorMode, so we need to invert the color of the icon
++ I've incorporated a nice SVG animation to the icon, so it's not just a static icon (micro stuff)
 */
 .icon {
     z-index: 999;
@@ -34,8 +41,12 @@ https://dev.to/urielbitton/how-to-design-an-ios-style-switch-4maj
 }
 
 .ios-switch {
+    position: sticky;
     display: inline-block;
     cursor: pointer;
+    z-index: 99;
+
+
 
     &__title {
         margin-right: 5px;
@@ -53,10 +64,14 @@ https://dev.to/urielbitton/how-to-design-an-ios-style-switch-4maj
         display: inline-block;
         width: 39px;
         height: 18px;
-        background-color: $accent2;
+        background-color: $secondary;
         border-radius: 23px;
         vertical-align: middle;
         transition: all 0.3s;
+
+        &.mobile-mode {
+            background-color: $primary;
+        }
     }
 
     i::before {
@@ -82,6 +97,10 @@ https://dev.to/urielbitton/how-to-design-an-ios-style-switch-4maj
         transform: translate3d(2px, 1px, 0);
     }
 
+    i.mobile-mode::after {
+        background-color: red;
+    }
+
     :active i::after {
         width: 28px;
         transform: translate3d(1px, 1px, 0);
@@ -89,10 +108,18 @@ https://dev.to/urielbitton/how-to-design-an-ios-style-switch-4maj
 
     :active input:checked+i::after {
         transform: translate3d(16px, 1px, 0);
+
+        .mobile-mode & {
+            background-color: $primary;
+        }
     }
 
     input:checked+i {
-        background-color: $accent2;
+        background-color: $secondary;
+    }
+
+    input:checked+i.mobile-mode {
+        background-color: $primary;
     }
 
     input:checked+i::before {

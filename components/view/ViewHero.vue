@@ -64,12 +64,10 @@ onMounted(async () => {
             (colorMode.preference == "light") ? sprite.tint = 0x000000 : sprite.tint = 0xFFFFFF
         }, { flush: 'post', immediate: true })
 
-        setTimeout(() => {
-            sprite.position.set(pixiCtx.value.width / 2, pixiCtx.value.height / 2)
-            ripple.position.set(pixiCtx.value.width / 2, pixiCtx.value.height / 2)
-            imgFrames.value.style.width = pixiCtx.value.clientWidth + 'px'
-            imgFrames.value.style.height = pixiCtx.value.clientHeight + 'px'
-        }, 500)
+        sprite.position.set(pixiCtx.value.width / 2, pixiCtx.value.height / 2)
+        ripple.position.set(pixiCtx.value.width / 2, pixiCtx.value.height / 2)
+        imgFrames.value.style.width = pixiCtx.value.clientWidth + 'px'
+        imgFrames.value.style.height = pixiCtx.value.clientHeight + 'px'
 
         app.stage.layout = {
             objectFit: 'contain',
@@ -80,11 +78,12 @@ onMounted(async () => {
         // Context! The friendly GSAP garbage collector
         ctx = $gsap.context((self) => {
             // For the sprite animate a pixi displacement pulse
-            let pixiTl = $gsap.timeline({ repeat: 1 })
-            pixiTl.fromTo(sprite, { alpha: 0 }, { duration: 1, alpha: 1, delay: 1 })
-                .fromTo(imagesWrapper.value, { opacity: 1 }, { opacity: 1 }, "ripple")
+            let pixiTl = $gsap.timeline({ repeat: 0 })
+            pixiTl.fromTo(sprite, { alpha: 0 }, { duration: 1, alpha: 1, delay: 0 })
+                .fromTo(imagesWrapper.value, { opacity: 0 }, { opacity: 1 }, "<")
                 .to(ripple.scale, { duration: 1.5, x: 1.5, y: 1.5 }, "ripple")
                 .to(filter.scale, { duration: 1.5, x: 0, y: 0 }, "ripple")
+                .to(sprite, { duration: 1, alpha: 0 }, "+=1")
             $gsap.fromTo(imgFrames.value, { autoAlpha: 0 }, { autoAlpha: 1, delay: 3 })
 
             // Fade out author intro
@@ -99,8 +98,6 @@ onMounted(async () => {
                     toggleActions: "restart none reverse reset",
                 }
             })
-
-
             authorTl.addLabel('start')
                 .fromTo(".front-label", { duration: .1, opacity: 1 }, { duration: .1, y: -100, opacity: 0 })
         })
@@ -142,9 +139,10 @@ onBeforeUnmount(() => {
 
 }
 
-:deep(.label-header) {
+:deep(.abstract-header) {
     margin-top: 0px;
-    font-size: clamped(40px, 80px, 480px, 1920px);
+    font-size: clamped(40px, 90px, 480px, 1920px);
+    width: 100%;
 }
 
 .front-label {
@@ -171,5 +169,14 @@ img {
 
 .img-frames {
     position: relative;
+    border: $primary solid 1px;
+}
+
+canvas {
+    width: 300px;
+
+    @include this-and-above('sm') {
+        width: 400px;
+    }
 }
 </style>

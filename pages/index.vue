@@ -27,8 +27,9 @@ onMounted(() => {
             <ViewHero />
             <ViewAboutFront />
             <ViewProjectsFront />
+            <ViewCanFront />
         </div>
-        <UITextScroller :text="scrollConfig.text" :speed="scrollConfig.speed" />
+
     </div>
 </template>
 

@@ -41,7 +41,7 @@ onMounted(() => {
                     toggleActions: "restart none none reverse",
                     preventOverlaps: true,
                 },
-                duration: .6,
+                duration: .4,
 
                 ease: "power1.out"
             })
@@ -76,14 +76,16 @@ onUnmounted(() => {
     text-transform: uppercase;
     font-weight: 500;
     line-height: .9;
+    margin: 0;
+    overflow: hidden;
 
     @include this-and-above('lg') {
-        margin: 0 $px-64-spacer; 
+        margin: 0 $px-64-spacer;
     }
 }
 
 .abstract-header {
-    font-size: clamped(60px, 80px, 480px, 1920px);
+    font-size: clamped(40px, 90px, 480px, 1920px);
     flex-wrap: wrap;
     width: 60%;
     margin-bottom: $px-32-spacer;
@@ -91,7 +93,6 @@ onUnmounted(() => {
 }
 
 .abstract-desc {
-    color: $secondary;
     font-weight: 500;
     line-height: .9;
     line-height: 1.2;

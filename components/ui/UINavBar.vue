@@ -63,7 +63,7 @@ const onScroll = () => {
 onMounted(() => {
     onScroll()
     // cannot bind with css as colormode is client side, need light colour to reflect in mix blend mode so
-    if (colorMode.preference === 'light') navlist.value!.style.color = '#fffcf2';
+    /*if (colorMode.preference === 'light') navlist.value!.style.color = '#fffcf2';*/
     window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', checkScreenWidth)
 
@@ -86,7 +86,7 @@ checkScreenWidth()
     <div class="nav-wrapper" :class="{ 'nav-wrapper--moveup': isDown }">
         <div class="nav-wrapper__inner">
 
-            <UINavHeader class="header-wrapper">
+            <UINavHeader :is-mobile="isMobileActive" class="header-wrapper">
                 <template #logo>
                     <ClientOnly>
                         <div v-if="colorMode.preference == 'dark'">
@@ -98,7 +98,7 @@ checkScreenWidth()
                     </ClientOnly>
                 </template>
                 <template #mode>
-                    <UIAppleSwitch v-model="isLightMode" ref="colorSwitch" />
+                    <UIAppleSwitch :is-mobile="isMobileActive" v-model="isLightMode" ref="colorSwitch" />
                 </template>
             </UINavHeader>
 
@@ -254,7 +254,8 @@ checkScreenWidth()
         display: flex;
         justify-content: flex-end;
         padding-right: 60px;
-        background-color: $accent2;
+        background-color: $secondary;
+        color: $primary;
     }
 
     &--closed {
@@ -285,7 +286,7 @@ checkScreenWidth()
         line-height: 1.1;
         transition: color .3s;
         padding-right: 0px;
-        color: $secondary;
+        color: inherit;
         // for the magnet links for some reason need be here too
 
         &:hover {
@@ -294,10 +295,10 @@ checkScreenWidth()
     }
 
     &--link-active::before {
-        color: $secondary;
         content: "•";
         margin-left: -15px;
         font-size: 19px;
+        color: inherit;
     }
 
 
@@ -321,7 +322,7 @@ checkScreenWidth()
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            padding: 0; 
+            padding: 0;
             list-style: none;
             width: fit-content;
 
@@ -362,7 +363,7 @@ checkScreenWidth()
     height: 30px;
     position: relative;
     transition: .1s;
-    margin: 10px 10px;
+    /*margin: 10px 10px;*/
     cursor: pointer;
     display: inline-block;
 
@@ -431,6 +432,10 @@ checkScreenWidth()
         transform: rotate(180deg);
         cursor: pointer;
         transition: .2s cubic-bezier(.8, .5, .2, 1.4);
+
+        span {
+            background-color: $primary;
+        }
     }
 
     &--anim span {

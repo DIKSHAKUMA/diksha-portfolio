@@ -14,7 +14,7 @@ const trackIndex = ref<number>(0)
 const currentTrack = ref<string>("")
 const isPlaying = ref<boolean>(false)
 const panelTrack = useTemplateRef('panel-track')
-const isMounted = ref<boolean>(false)
+const isMounted = ref<boolean>(false);
 
 const doPlay = ref<boolean>(false)
 const title = ref<string>("Sound")

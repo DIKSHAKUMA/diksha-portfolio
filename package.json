@@ -20,7 +20,7 @@
     "@pixi/layout": "^3.0.2",
     "@types/three": "^0.172.0",
     "@vueuse/nuxt": "^12.4.0",
-    "gsap": "^3.12.7",
+    "gsap": "^3.13.0",
     "lenis": "^1.2.3",
     "nuxt": "^3.16.2",
     "nuxt-graphql-client": "^0.2.43",

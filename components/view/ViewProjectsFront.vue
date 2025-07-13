@@ -40,7 +40,6 @@ onMounted(() => {
                     //markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 }
                 },
                 duration: .4,
-                stagger: .2
             })
         })
 
@@ -74,7 +73,7 @@ onUnmounted(() => {
     <div class="projects-wrapper">
         <main class="projects">
             <div class="pin-header">
-                <CommonAbstract :label="store.data.intro.projIntroTitle" :desc="store.data.intro.projIntroDesc"
+                <CommonAbstract :label="store.data.intro?.projIntroTitle" :desc="store.data.intro?.projIntroDesc"
                     :className="'projects-intro'" />
             </div>
             <section class="projects__abstract">

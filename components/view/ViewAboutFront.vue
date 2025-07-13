@@ -33,30 +33,6 @@ onMounted(() => {
             ease: "none"
         })
 
-        /*
-        // Clip words Selected Works and reveal with polygon path, best done separate from above
-        let sectionsChar = $gsap.utils.toArray('.split-proj-w');
-        sectionsChar.forEach((sec: any) => {
-            const splitTxt = new SplitType(sec, { types: 'words' })
-            $gsap.set(splitTxt.words, { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', })
-            $gsap.to(splitTxt.words, {
-                autoAlpha: 1,
-                clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-                scrollTrigger: {
-                    trigger: sec,
-                    start: 'top 90%',
-                    scrub: false,
-                    end: 'top 50%',
-                    toggleActions: "restart none none reverse",
-                    preventOverlaps: true, // <- HERE
-                    //markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 }
-                },
-                duration: .4,
-                stagger: .2
-            })
-        })
-        */
-
     })
 })
 
@@ -70,7 +46,7 @@ onUnmounted(() => {
         <main class="about">
             <span class="parallax__bg" ref="parallaxBg"></span>
             <CommonAbstract class="about__label" :label="store.data.intro?.aboutIntroTitle"
-                :desc="store.data.intro.aboutIntroDesc" :className="'about-intro'" />
+                :desc="store.data.intro?.aboutIntroDesc" :className="'about-intro'" />
             <section class="about__abstract"></section>
             <CommonInfoLabel :label="'Photo by Thomas Thorstensson'" :className="'photo-label'" :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }" :link="'https://thomasthorstensson.photography'" />
         </main>
@@ -90,6 +66,7 @@ onUnmounted(() => {
 
 /* Because parallax image case requires different margins */
 :deep(.abstract-wrapper) {
+    color:white;
     @include this-and-above('lg') {
         margin: $px-64-spacer $px-256-spacer 0 $px-64-spacer;
     }
@@ -102,21 +79,7 @@ onUnmounted(() => {
         position: relative;
         z-index: 100;
         background-color: transparent;
-        color: white;
         /* or your desired color */
-    }
-
-    &__label::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: black;
-        mix-blend-mode: difference;
-        opacity: 0;
-        pointer-events: none;
     }
 }
 
