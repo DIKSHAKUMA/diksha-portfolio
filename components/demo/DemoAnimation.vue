@@ -48,13 +48,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-.anim-wrapper {
-    position: relative;
-    width: 60%;
-    min-width: 300px;
-    height: 500px;
-    background-color: $secondary;
-}
 
 .anim {
     display: flex;
@@ -75,8 +68,8 @@ onUnmounted(() => {
     position: absolute;
 
     @include this-and-above('md') {
-        width: 300px;
-        height: 300px;
+        width: 200px;
+        height: 200px;
     }
 }
 </style>

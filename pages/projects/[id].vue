@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SplitType from 'split-type';
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useFolioStore } from '~/store/useFolioStore'
 
 const store = useFolioStore()
@@ -8,7 +7,7 @@ const { $gsap } = useNuxtApp()
 const { $lenis } = useNuxtApp();
 const route = useRoute();
 
-const image2 = useTemplateRef<any>('image-2')
+const projectLine = useTemplateRef<any>('projectLine')
 
 definePageMeta({
     layout: 'default',
@@ -44,63 +43,39 @@ let ctx: gsap.Context
  */
 onMounted(() => {
 
-    console.log(proj.value.tags.toString())
     $lenis.scrollTo(0, { immediate: true, force: true })
 
     ctx = $gsap.context((self) => {
 
-        // For project__image--1, we halt pin .project when .st-wrapper is in center of browser, until ST revealed project__image--2
-        $gsap.utils.toArray(".st-wrapper").forEach((sec: any) => {
-            $gsap.set(".project__image--2", { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)' })
-            let tl = $gsap.timeline({
-                scrollTrigger: {
-                    trigger: '.st-wrapper',
-                    pin: '.project',
-                    pinSpacing: true,
-                    start: "clamp(center center)",
-                    end: () => {
-                        ScrollTrigger.refresh()
-                        return "+=" + image2.value.offsetHeight
-                    },
-                    scrub: true,
-                    toggleActions: "play none none reverse",
-                }
-            });
-            // polygon reveal
-            tl.fromTo(".project__image--2", { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)' },
-                { autoAlpha: 1, clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' })
-        })
+        // Vertical blind reveal effect for images
+        $gsap.utils.toArray('.project-image-reveal').forEach((imageContainer: any) => {
+            // Set initial state - completely masked
+            $gsap.set(imageContainer, {
+                '--position': '0%',
+                filter: 'blur(50px)',
+            })
 
-        // The project title
-        let sectionsChar = $gsap.utils.toArray('.split-title-w');
-        sectionsChar.forEach((sec: any) => {
-            const splitTxt = new SplitType(sec, { types: 'words' })
-            $gsap.set(splitTxt.words, { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', })
-            $gsap.to(splitTxt.words, { autoAlpha: 1, delay: 1, clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' })
-        })
+            // Check if this is the first image (data-image="0")
+            const isFirstImage = imageContainer.getAttribute('data-image') === '0'
+            const delay = isFirstImage ? 0.5 : 0
 
-        let images = $gsap.utils.toArray('.project__image');
-        // The project images
-        images.forEach((img: any) => {
-            $gsap.set(img, { filter: 'blur(20px)', clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', })
-            $gsap.to(img, {
-
+            // Animate the mask position on scroll
+            $gsap.to(imageContainer, {
+                '--position': '100%',
                 filter: 'blur(0px)',
-                clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                duration: .5,
+                delay: delay,
+                ease: 'power1.out',
                 scrollTrigger: {
-                    pinnedContainer: '.project',
-                    trigger: img,
-                    start: "top bottom",
-                    scrub: false,
-                    end: 'top top',
-                    pinSpacing: true,
-                    toggleActions: "play none none reverse",
-                },
-                duration: .8
+                    trigger: imageContainer,
+                    start: 'top 85%',
+                    end: 'top 35%',
+                    toggleActions: 'play none none reverse'
+                }
             })
         })
 
-        // Animate project words
+        // Animate project description words
         let sections = $gsap.utils.toArray('.split-proj-w');
         sections.forEach((sec: any) => {
             const splitTxt = new SplitType(sec, { types: 'words' })
@@ -116,12 +91,28 @@ onMounted(() => {
                     toggleActions: "play none none reset",
                 },
                 transformOrigin: 'top',
-                stagger: .04,
-                duration: .2
+                duration: .1
             })
         })
 
-    })
+        if (projectLine.value) {
+            $gsap.fromTo(
+                projectLine.value,
+                { width: '0%' },
+                {
+                    width: '90%',
+                    duration: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: projectLine.value,
+                        start: 'top bottom',
+                        toggleActions: 'play none none reverse',
+                    },
+                }
+            )
+        }
+
+    }, '.project');
 })
 
 onUnmounted(() => {
@@ -134,71 +125,78 @@ onUnmounted(() => {
         <UIMouseCursor />
         <div class="project-wrapper">
             <main class="project">
-                <header class="project__header">
-                    <div class="project__title split-title-w">Work / {{ proj!.client }}</div>
-                    <div class="project__subtitle split-title-w">{{ proj!.name }}</div>
-                </header>
+                <CommonAbstract class="project__abstract" :label="`Work / ${proj!.client}`" :desc="proj!.name"
+                    :className="'project__abstract'"></CommonAbstract>
+
                 <section class="project__content">
-                    <div class="project__image">
+                    <div class="project__image project-image-reveal" data-image="0">
                         <NuxtImg :src="proj!.image[0].handle" provider="hygraph" alt="Project image" format="webp"
                             sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                     </div>
+
                     <div class="project__text">
                         <div class="project__text-col-1">
                             <div class="project__desc split-proj-w">{{ proj!.description[0] }}</div>
                             <div class="project__desc split-proj-w">{{ proj!.description[1] }}</div>
                         </div>
                         <div class="project__text-col-2">
-                            <h4 class="split-proj-w">Client</h4>
+                            <h3 class="split-proj-w">Client</h3>
                             <div class="project__desc split-proj-w mb-1">{{ proj!.client }}</div>
                             <div v-if="proj!.endclient">
-                                <h4 class="split-proj-w">End Client</h4>
-                                <div class="project__desc split-proj-w mb-1">{{ proj!.endclient }}</div>
+                                <h3 class="split-proj-w">End Client</h3>
+                                <h4 class="project__desc split-proj-w mb-1">{{ proj!.endclient }}</h4>
                             </div>
-                            <h4 class="split-proj-w">Year</h4>
-                            <div class="project__desc split-proj-w mb-1">{{ proj!.date }}</div>
-                            <h4 class="split-proj-w">Scope</h4>
-                            <div class="project__desc split-proj-w mb-1">{{ proj!.tags.join(', ') }}</div>
+                            <h3 class="split-proj-w">Year</h3>
+                            <h4 class="project__desc split-proj-w mb-1">{{ proj!.date }}</h4>
+                            <h3 class="split-proj-w">Scope</h3>
+                            <h4 class="project__desc split-proj-w mb-1">{{ proj!.tags.join(', ') }}</h4>
                         </div>
                     </div>
-                    <div class="st-wrapper">
-                        <div class="project__image project__image--1">
+
+                    <div>
+                        <div class="project__image project__image--1 project-image-reveal" data-image="1">
                             <NuxtImg :src="proj!.image[1].handle" provider="hygraph" alt="Project image" format="webp"
                                 sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                         </div>
-                        <div class="project__image project__image--2" ref="image-2">
+                        <div class="project__image project__image--2 project-image-reveal" ref="image-2" data-image="2">
                             <NuxtImg :src="proj!.image[2].handle" provider="hygraph" alt="Project image" format="webp"
                                 sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                         </div>
                     </div>
 
-                    <!-- Another image description OR testimonial final description -->
+                    <!-- Another image description -->
                     <div class="project__text">
                         <div class="project__desc split-proj-w">{{ proj!.description[2] }}</div>
                     </div>
 
-                    <div class="project__image">
+                    <div class="project__image project-image-reveal" data-image="3">
                         <NuxtImg :src="proj!.image[3].handle" provider="hygraph" alt="Project image" format="webp"
                             sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                     </div>
 
                     <div class="project__flex-wrapper">
                         <div class="project__img-col-1">
-                            <div class="project__image">
+                            <div class="project__image project-image-reveal" data-image="4">
                                 <NuxtImg :src="proj!.image[4].handle" provider="hygraph" alt="Project image"
                                     format="webp" sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                             </div>
                         </div>
 
                         <div class="project__img-col-2">
-                            <div class="project__image">
+                            <div class="project__image project-image-reveal" data-image="5">
                                 <NuxtImg :src="proj!.image[5].handle" provider="hygraph" alt="Project image"
                                     format="webp" sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                             </div>
                         </div>
                     </div>
 
+                    <div v-if="proj!.testimonialName">
+                        <CommonTestimonial :name="proj!.testimonialName" :agency="proj!.testimonialAgency"
+                            :text="proj!.testimonialText" />
+                    </div>
+
                 </section>
+                <div class="project__line" ref="projectLine"></div>
             </main>
             <nav class="project__nav">
                 <NuxtLink v-if="getPrevProj" :to="`/projects/${getPrevProj.slug}`">Previous</NuxtLink>
@@ -209,7 +207,6 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-
 .mb-1 {
     margin-bottom: 1rem;
 }
@@ -220,8 +217,8 @@ img {
     height: auto;
 }
 
-.st-wrapper {
-    position: relative;
+.project-abstract:deep(.abstract-header) {
+    width: 100%;
 }
 
 .project-wrapper {
@@ -251,6 +248,17 @@ img {
 }
 
 /*shortening BEM here by focusing on main project tag as reference*/
+
+/* Vertical blind reveal effect */
+.project-image-reveal {
+    --position: 0%;
+    mask-image: linear-gradient(to right,
+            #000 var(--position),
+            #0000 0);
+    mask-size: 15% 100%;
+    mask-repeat: repeat-x;
+}
+
 .project {
     display: flex;
     flex-direction: column;
@@ -258,6 +266,17 @@ img {
     height: 100%;
     align-self: flex-start;
     margin-top: 128px;
+
+    &__line {
+        background-color: $secondary;
+        display: block;
+        height: 2px;
+        left: 50%;
+        position: relative;
+        transform: translate(-50%, 0);
+        width: 0%;
+        filter: invert(.9);
+    }
 
     &__header {
         display: flex;
@@ -284,19 +303,7 @@ img {
 
     &__image {
         margin: $px-64-spacer 0;
-        border-radius: 12px;
         overflow: hidden;
-
-        &--1 {
-            z-index: 10;
-        }
-
-        &--2 {
-            top: 0;
-            position: absolute;
-            width: 100%;
-            z-index: 5;
-        }
 
         @include this-and-above('md') {
             margin: $px-128-spacer 0;
@@ -307,7 +314,7 @@ img {
         display: flex;
         flex-direction: column-reverse;
         color: $secondary;
-        font-size: clamped(15px, 24px, 380px, 1920px);
+        font-size: clamped(16px, 20px, 380px, 1920px);
         line-height: 1.5;
         gap: 64px;
 
@@ -348,7 +355,8 @@ img {
 
     &__text-col-1 {
         flex: 1 1 70%;
-        & > *:first-child {
+
+        &>*:first-child {
             margin-bottom: 64px;
         }
     }
@@ -362,9 +370,8 @@ img {
     &__img-col-1 {
         flex: 1;
 
-
         .project__image {
-            margin: 0;
+            margin-top: 0;
         }
     }
 
@@ -372,7 +379,7 @@ img {
         flex: 1;
 
         .project__image {
-            margin: 0;
+            margin-top: 0;
         }
     }
 }

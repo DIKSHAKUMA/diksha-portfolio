@@ -47,8 +47,9 @@ onUnmounted(() => {
             <span class="parallax__bg" ref="parallaxBg"></span>
             <CommonAbstract class="about__label" :label="store.data.intro?.aboutIntroTitle"
                 :desc="store.data.intro?.aboutIntroDesc" :className="'about-intro'" />
-            <section class="about__abstract"></section>
-            <CommonInfoLabel :label="'Photo by Thomas Thorstensson'" :className="'photo-label'" :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }" :link="'https://thomasthorstensson.photography'" />
+            <CommonInfoLabel :label="'Photo by Bruno Kelzer'" :className="'photo-label'"
+                :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }"
+                :link="'https://unsplash.com/@bruno_kelzer'" />
         </main>
     </div>
 </template>
@@ -59,17 +60,7 @@ onUnmounted(() => {
 }
 
 .about__label {
-    :deep(.abstract-desc) {
-        font-size: clamped(20px, 34px, 480px, 1920px);
-    }
-}
-
-/* Because parallax image case requires different margins */
-:deep(.abstract-wrapper) {
-    color:white;
-    @include this-and-above('lg') {
-        margin: $px-64-spacer $px-256-spacer 0 $px-64-spacer;
-    }
+    color: #faf7ff;
 }
 
 .about {
@@ -87,13 +78,16 @@ onUnmounted(() => {
 .about-wrapper {
     position: relative;
     padding: 0 $px-16-spacer;
-    background-color: $accent3;
+    background-color: $primary;
     overflow: hidden;
     height: 100vh;
+    padding: $px-64-spacer $px-16-spacer;
 
-    padding: $px-128-spacer $px-16-spacer;
+    @include this-and-above('sm') {
+        padding: $px-128-spacer $px-32-spacer;
+    }
 
-    @include this-and-above('lg') {
+    @include this-and-above('md') {
         padding: $px-128-spacer $px-64-spacer;
     }
 
@@ -106,8 +100,21 @@ onUnmounted(() => {
     }
 }
 
+.parallax__bg {
+    position: relative;
+}
+
 .parallax__bg::before {
-    filter: grayscale(100%);
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #171717;
+    mix-blend-mode: overlay;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .parallax__bg {
@@ -115,24 +122,20 @@ onUnmounted(() => {
     display: inline-block;
     top: 0;
     right: 0;
-    height: 140vh;
-    width: 100vw;
-    background-image: url('/img/360-5-opt.jpg');
-    filter: brightness(70%);
+    height: 130vh;
+    width: 130vw;
+    background-image: url('/img/manet-3.jpg');
+    filter: grayscale(100%) brightness(1.7) contrast(1.1);
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: 70% bottom;
+    background-position: bottom center;
     z-index: 1;
     will-change: transform;
     overflow: hidden;
     object-fit: cover;
 
-    @include this-and-above('xxl') {
-        height: 80vw;
-    }
-
-    @supports (background-image: url('/img/360-5-opt.webp')) {
-        background-image: url('/img/360-5-opt.webp');
+    @supports (background-image: url('/img/manet-3.webp')) {
+        background-image: url('/img/manet-3.webp');
     }
 }
 </style>

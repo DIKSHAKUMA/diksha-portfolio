@@ -7,9 +7,11 @@ const { $gsap } = useNuxtApp()
 
 const shape = useTemplateRef<HTMLHtmlElement>("shape")
 const dataName = ref<string>("")
+const dataText = ref<string>("")
 const isOver = ref<boolean>(false)
 const dispStr = ref<string>("")
 const firstRun = ref<boolean>(true)
+const showCursor = ref(true)
 
 const loopStarted = ref<boolean>(false)
 const pos = { x: 0, y: 0 }
@@ -18,12 +20,16 @@ const vel = { x: 0, y: 0 }
 /**
  * As per usual we try to follow the order : refs, comp props, methods, watchers, hooks, returns, exposes
  */
-
 const classObject = computed(() => ({
     'cursor__shape': dataName.value === 'yo' || dataName.value === 'menu' || dataName.value === 'proj' || dataName.value === '',
     'cursor__shape--proj': isOver.value && dataName.value === 'proj',
     'cursor__shape--menu': isOver.value && dataName.value === 'menu',
     'cursor__shape--yo': isOver.value && dataName.value === 'yo'
+}))
+
+/* So we get mix-blend-mode on text if over project */
+const cursorClassObject = computed(() => ({
+    'cursor--proj': isOver.value && dataName.value === 'proj'
 }))
 
 const setFromEvent = () => {
@@ -35,6 +41,7 @@ const setFromEvent = () => {
         ease: "power4.out",
         duration: 0.2,
         onUpdate: () => {
+            /* we are tweening pos object, thus we can approximate towards mouse position */
             vel.x = x! - pos.x
             vel.y = y! - pos.y
         },
@@ -47,10 +54,9 @@ const setFromEvent = () => {
 
 const loop = () => {
     // Calculate angle and scale based on velocity
-    let rotation = getAngle(vel.x, vel.y)
     let scale = getScale(vel.x, vel.y)
 
-    // Set transform data to Jelly Blobr
+    // Set transform data to Jelly Blob
     if (shape.value?.getBoundingClientRect()) {
         $gsap.to(shape.value, {
             x: Math.round(pos.x - shape.value.getBoundingClientRect().width / 2),
@@ -65,13 +71,13 @@ const loop = () => {
 
 //The Blob! Thanks to https://codepen.io/GreenSock/pen/YzQabVQ
 const getScale = (diffX: number, diffY: number) => {
+    // Pow  static method returns the value of a base raised to a power. That is 2 in this case
+    // So we multiply itself by pow 2, then get out what the square root of that sum is (ex for 9 its 3)
     const distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2))
+    //The Math.min() static method returns the smallest of the numbers given as input parameters
     return Math.min(distance / 50, 0.2)
 }
 
-const getAngle = (diffX: number, diffY: number) => {
-    return (Math.atan2(diffY, diffX) * 180) / Math.PI
-}
 
 watch(
     () => [xpos.value, ypos.value],
@@ -95,8 +101,9 @@ onMounted(async () => {
     sections.forEach((sec: any) => {
         sec.addEventListener("mouseover", function overHandler() {
             isOver.value = true
-            dataName.value = sec.dataset.name
-            dispStr.value = sec.dataset.vis
+            dataName.value = sec.dataset.name || ""
+            dataText.value = sec.dataset.text || ""
+            dispStr.value = "block"
         })
 
         sec.addEventListener("mouseout", function outHandler() {
@@ -112,12 +119,17 @@ onMounted(async () => {
         })
     })
 
-    // Since we probably don't want the images to animate, we need something else than .action, .magnet
+    // Since we probably don't want the images to animate, we need something else than .action: .magnet
     let links = $gsap.utils.toArray(".magnet")
     links.forEach((link: any) => {
         link.addEventListener('mousemove', magnetMove)
         link.addEventListener('mouseleave', magnetMove)
     })
+
+    // Hide cursor on first touch (mobile/tablet)
+    window.addEventListener('touchstart', () => {
+        showCursor.value = false;
+    }, { once: true });
 })
 
 // Magnet effect on links on mouse over
@@ -142,18 +154,18 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="cursor" :style="{ display: dispStr }">
+    <div v-if="showCursor" :class="['cursor', cursorClassObject]" :style="{ display: dispStr }">
 
         <div :class="classObject" ref="shape">
             <div v-if="dataName === 'proj'" class="cursor__shape__text">
-                Explore
+                {{ dataText }}
                 <ChevronSVG class="arrow" />
             </div>
             <div v-if="dataName === 'menu'" class="cursor__shape__text">
 
             </div>
             <div v-if="dataName === 'yo'" class="cursor__shape__text">
-                <p>Yo!</p>
+                {{ dataText }}
             </div>
             <div class="media"></div>
         </div>
@@ -167,7 +179,7 @@ onBeforeUnmount(() => {
     height: auto;
     pointer-events: none;
     margin-left: 5px;
-    fill: $secondary;
+    fill: #faf7ff;
 }
 
 .cursor {
@@ -179,6 +191,10 @@ onBeforeUnmount(() => {
     z-index: 9000;
     width: 100%;
     visibility: hidden;
+
+    &--proj {
+        mix-blend-mode: difference;
+    }
 
     &__shape {
         display: flex;
@@ -193,14 +209,15 @@ onBeforeUnmount(() => {
         transform-origin: center center;
         will-change: width, height, transform, border;
         transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
-
         backdrop-filter: blur(10px);
+        opacity: .5;
 
         /* different hover states */
         &--proj {
             width: 100px;
             height: 100px;
             background-color: unset;
+            opacity: 1;
         }
 
         &--menu {
@@ -211,19 +228,18 @@ onBeforeUnmount(() => {
 
         /* Easter egg */
         &--yo {
-            width: 100px;
-            height: 100px;
-            opacity: .5;
-            font-size: $fs-18;
+            width: 80px;
+            height: 80px;
+            opacity: 1;
+            background-color: unset;
 
-            p {
+            .cursor__shape__text {
                 color: $secondary;
             }
         }
 
         &__text {
             display: flex;
-            color: $secondary;
             align-items: center;
             justify-content: center;
             backface-visibility: hidden;
@@ -233,6 +249,7 @@ onBeforeUnmount(() => {
             white-space: nowrap;
             opacity: 1 !important;
             font-weight: 600;
+            color: #faf7ff;
         }
     }
 }

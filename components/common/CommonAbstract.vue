@@ -78,24 +78,24 @@ onUnmounted(() => {
     line-height: .9;
     margin: 0;
     overflow: hidden;
-
-    @include this-and-above('lg') {
-        margin: 0 $px-64-spacer;
-    }
 }
 
 .abstract-header {
-    font-size: clamped(40px, 90px, 480px, 1920px);
+    font-size: clamped(50px, 90px, 480px, 1920px);
     flex-wrap: wrap;
     width: 60%;
     margin-bottom: $px-32-spacer;
     line-height: 1;
+
+    @include this-and-above('md') {
+        margin-bottom: $px-64-spacer;
+    }
 }
 
 .abstract-desc {
     font-weight: 500;
     line-height: .9;
     line-height: 1.2;
-    font-size: clamped(16px, 20px, 480px, 1920px);
+    font-size: clamped(20px, 34px, 480px, 1920px);
 }
 </style>

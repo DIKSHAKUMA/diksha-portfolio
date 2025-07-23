@@ -10,8 +10,14 @@ query folio {
     aboutIntroDesc
     projIntroTitle
     projIntroDesc
-    siteIntroTitle
-    siteIntroDesc
+    metaTechTitle
+    metaTechDesc
+    metaCreativeTitle
+    metaCreativeDesc
+    metaIdeTitle
+    metaIdeDesc
+    metaPublishTitle
+    metaPublishDesc
     techIntroTitle
     techIntroDesc
     techOneTitle
@@ -33,22 +39,13 @@ query folio {
     sourceCode
     slug
     tags
+    testimonialName
+    testimonialAgency
+    testimonialText
     image {
       id
       handle
+      fileName
     }
   }
-
-  haikus(first: 2, where: {}) {
-    id
-    haiku
-  }
-
-  contact(where: {slug: "contact"}) {
-    address
-    addressTitle
-    email
-    emailTitle
-  }
-  
 }

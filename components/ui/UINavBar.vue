@@ -7,7 +7,7 @@ const colorSwitch = useTemplateRef('colorSwitch')
 const navlist = useTemplateRef('navlist')
 const isDown = ref(false)
 const isMobileActive = ref(false)
-const isLightMode = ref<boolean>(false)
+const isLightMode = ref<boolean>(true)
 
 let screenWidth: any
 let currScrollPos: number
@@ -82,19 +82,15 @@ checkScreenWidth()
 </script>
 
 <template>
-
+    <div class="mobile-nav-overlay"
+        :class="[isMobileActive ? 'mobile-nav-overlay--open' : 'mobile-nav-overlay--closed']"></div>
     <div class="nav-wrapper" :class="{ 'nav-wrapper--moveup': isDown }">
         <div class="nav-wrapper__inner">
 
             <UINavHeader :is-mobile="isMobileActive" class="header-wrapper">
                 <template #logo>
                     <ClientOnly>
-                        <div v-if="colorMode.preference == 'dark'">
-                            <LogoSVGLight class="logo" />
-                        </div>
-                        <div v-if="colorMode.preference == 'light'">
-                            <LogoSVGDark class="logo" />
-                        </div>
+                        <NuxtLink to="/" data-name="yo" data-text="Home" class="action magnet">T.Thorstensson</NuxtLink>
                     </ClientOnly>
                 </template>
                 <template #mode>
@@ -107,7 +103,7 @@ checkScreenWidth()
                 <div class="nav__list" ref="navlist">
                     <NuxtLink to="/" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
                         no-prefetch>
-                        Work
+                        Archive
                     </NuxtLink>
 
                     <NuxtLink to="" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
@@ -158,6 +154,31 @@ checkScreenWidth()
 </template>
 
 <style lang="scss" scoped>
+.mobile-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 998; // Just below nav-wrapper (999)
+    transition: left .5s cubic-bezier(.075, .82, .165, 1);
+    background-color: #171717; // Dark background for both light and dark modes
+    &--open {
+        left: 0%;
+
+    }
+
+    &--closed {
+        transition-delay: .2s;
+        left: -100%;
+    }
+
+    // Hide on desktop
+    @include this-and-above('lg') {
+        display: none;
+    }
+}
+
 .magnet {
     transition: transform 0.1s linear;
 }
@@ -165,12 +186,6 @@ checkScreenWidth()
 .logo {
     width: 30px;
     height: auto;
-
-    svg {
-        -webkit-backface-visibility: hidden;
-        -webkit-transform: translateZ(0) scale(1.0, 1.0);
-        transform: translateZ(0);
-    }
 }
 
 .modal-open {
@@ -189,8 +204,8 @@ checkScreenWidth()
     transition: top .4s;
     font-family: $sans-ui;
     color: $secondary;
-    background-color: $primary;
-    height: 64px;
+    height: 56px;
+    mix-blend-mode: difference;
 
     &--moveup {
         top: -100px;
@@ -200,7 +215,6 @@ checkScreenWidth()
         background-color: unset;
         backdrop-filter: blur(10px);
     }
-
 }
 
 .nav-wrapper__inner {
@@ -212,7 +226,7 @@ checkScreenWidth()
     text-transform: uppercase;
     margin: 0 $px-16-spacer;
 
-    @include this-and-above('md') {
+    @include this-and-above('lg') {
         margin: 0 $px-64-spacer;
     }
 }
@@ -242,7 +256,7 @@ checkScreenWidth()
     right: 0;
     width: 100%;
     height: 100vh;
-    transition: all .4s cubic-bezier(.075, .82, .165, 1);
+    transition: left .5s cubic-bezier(.075, .82, .165, 1);
 
     &--open {
         font-weight: 600;
@@ -256,12 +270,17 @@ checkScreenWidth()
         padding-right: 60px;
         background-color: $secondary;
         color: $primary;
+        opacity: 1;
     }
 
     &--closed {
         transition-delay: .2s;
         left: -100%;
+        opacity: 1;
+        background-color: $secondary;
     }
+
+
 
     &__list {
         position: absolute;
@@ -281,12 +300,12 @@ checkScreenWidth()
     &__item {
         display: block;
         cursor: pointer;
-        font-size: clamped(30px, 150px, 480px, 1920px);
+        font-size: clamped(60px, 150px, 480px, 1920px);
         white-space: nowrap;
         line-height: 1.1;
         transition: color .3s;
         padding-right: 0px;
-        color: inherit;
+        color: $primary;
         // for the magnet links for some reason need be here too
 
         &:hover {
@@ -297,23 +316,28 @@ checkScreenWidth()
     &--link-active::before {
         content: "•";
         margin-left: -15px;
-        font-size: 19px;
+        font-size: 38px;
         color: inherit;
-    }
+        margin: 0;
+        padding: 0;
+        bottom: -5px;
+        position: relative;
 
+        @include this-and-above('lg') {
+            font-size: 20px;
+        }
+    }
 
     // Switch to desktop
     @include this-and-above('lg') {
+        background-color: unset;
         transition: none;
         position: relative;
         width: initial;
 
-
         &--closed {
-            opacity: 1;
             left: unset;
             right: 0;
-            background-color: transparent;
         }
 
         &__list {
@@ -335,10 +359,10 @@ checkScreenWidth()
             display: inline-block;
             margin: 0;
             /*FONT SIZE OF NAVBAR ITEMS DESKTOP, RETURNED AS REM*/
-            font-size: clamped(14px, 18px, 480px, 1920px);
+            font-size: clamped(16px, 18px, 480px, 1920px);
             line-height: unset;
             padding-right: 25px;
-            color: $secondary;
+            color: #faf7ff;
             opacity: 1 !important;
             transition: transform 0.1s linear;
 
@@ -370,7 +394,7 @@ checkScreenWidth()
     span {
         width: 5px;
         height: 5px;
-        background-color: $secondary;
+        background-color: #faf7ff;
         display: block;
         border-radius: 50%;
         position: absolute;

@@ -3,7 +3,6 @@ import SplitType from 'split-type';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useFolioStore } from '~/store/useFolioStore'
 
-
 // PINIA 🍍 
 const store = useFolioStore()
 const { $gsap } = useNuxtApp()
@@ -53,7 +52,7 @@ onMounted(() => {
                 clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
                 scrollTrigger: {
                     trigger: img,
-                    start: "bottom bottom",
+                    start: "top 80%",
                     scrub: false,
                     end: 'top 70%',
                     toggleActions: "play none none reverse",
@@ -72,19 +71,18 @@ onUnmounted(() => {
 <template>
     <div class="projects-wrapper">
         <main class="projects">
-            <div class="pin-header">
-                <CommonAbstract :label="store.data.intro?.projIntroTitle" :desc="store.data.intro?.projIntroDesc"
-                    :className="'projects-intro'" />
-            </div>
+            <CommonAbstract class="projects__header" :label="store.data.intro?.projIntroTitle"
+                :desc="store.data.intro?.projIntroDesc" :className="'projects-intro'" />
             <section class="projects__abstract">
                 <div v-for="proj in paginatedProjects" :key="proj.slug">
-                    <div class="projects__abstract__image action" data-name="proj" data-color="#FFF">
+                    <div class="projects__abstract__image action" data-name="proj" data-text="Explore"
+                        data-color="#FFF">
                         <NuxtLink :to="`/projects/${proj.slug}`">
                             <NuxtImg :src="proj.image[0].handle" provider="hygraph" alt="Project image" format="webp"
-                                sizes="sm:100vw md:40vw lg:35vw xl:30vw" densities="x1 x2"></NuxtImg>
+                                sizes="sm:100vw md:45vw lg:45vw xl:35vw" densities="x1 x2"></NuxtImg>
                         </NuxtLink>
                     </div>
-                    <div class="projects__abstract__name split-proj-w">{{ proj.name }}</div>
+                    <h3 class="projects__abstract__name split-proj-w">{{ proj.name }}</h3>
                 </div>
             </section>
         </main>
@@ -94,31 +92,65 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 img,
 .split-proj-w {
-    will-change: transform;
+    will-change: transform, filter;
 }
 
-img {
-    transition: transform .3s ease-in-out;
+.projects__abstract__image {
+    position: relative;
+    overflow: hidden;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
-img:hover {
-    transform: scale(1.1);
+.projects__abstract__image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(157, 157, 255, .4);
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: overlay;
 }
 
-.pin-header {
-    transform: initial;
-    scroll-snap-align: start;
-    z-index: 100;
-    margin-bottom: 100px;
+.projects__abstract__image:hover::before {
+    opacity: 1;
+}
+
+.projects__abstract__image img {
+    transition-property: transform, filter;
+    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.projects__abstract__image:hover img {
+    transform: scale(1.02);
+    filter: brightness(1.03) contrast(1.02);
 }
 
 /* same margins as project-wrapper in [id].vue */
 .projects-wrapper {
-    background-color: $primary;
+    padding: $px-64-spacer $px-16-spacer;
 
-    padding: $px-128-spacer $px-16-spacer;
+    @include this-and-above('sm') {
+        padding: $px-128-spacer $px-32-spacer;
+    }
 
-    @include this-and-above('lg') {
+    @include this-and-above('md') {
         padding: $px-128-spacer $px-64-spacer;
     }
 
@@ -133,27 +165,10 @@ img:hover {
 
 .projects {
 
-    .projects__header {
-        scroll-snap-align: start;
-        transform: initial;
-        display: flex;
-        flex-flow: column;
-        gap: 20px;
-        bottom: 20px;
-        margin: 0px 0 30px 0;
-        color: $secondary;
-
-        &__title {
-            font-size: clamped(32px, 70px, 380px, 1920px);
-            font-weight: 500;
-            line-height: .8;
-        }
-    }
-
     .projects__abstract {
         display: flex;
         flex-direction: column;
-        gap: $px-256-spacer;
+        row-gap: $px-64-spacer;
         width: 100%;
         align-self: flex-start;
 
@@ -163,14 +178,16 @@ img:hover {
             -moz-filter: grayscale(50%) sepia(10%) saturate(76%);
             overflow: hidden;
             clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-            border-radius: 12px;
         }
 
         &__name {
-            margin-top: 20px;
+            margin-top: $px-8-spacer;
             color: $secondary;
-            font-size: clamped(15px, 24px, 380px, 1920px);
             text-transform: uppercase;
+
+            @include this-and-above('sm') {
+                margin-top: $px-16-spacer;
+            }
         }
 
         &__tags {
@@ -178,6 +195,9 @@ img:hover {
         }
 
         @include this-and-above('md') {
+            /* now we give luft to rows */
+            row-gap: $px-256-spacer;
+
             :nth-child(odd) {
                 align-self: flex-end;
                 margin-bottom: -5px;
@@ -187,18 +207,6 @@ img:hover {
                 align-self: flex-start;
                 margin-bottom: -5px;
             }
-        }
-
-        @include this-and-above('md') {
-            padding: 0 $px-16-spacer;
-        }
-
-        @include this-and-above('lg') {
-            padding: 0 $px-32-spacer;
-        }
-
-        @include this-and-above('xl') {
-            padding: 0 $px-64-spacer;
         }
     }
 }

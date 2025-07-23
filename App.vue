@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useFolioStore } from '~/store/useFolioStore'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 // Pinia 🍍
 const store = useFolioStore()
@@ -21,10 +20,6 @@ const clearProps = () => {
     })
     $gsap.set('.venice', { autoAlpha: 0 })
 }
-
-const nuxtApp = useNuxtApp()
-const loading = ref(false)
-
 </script>
 
 <template>
@@ -71,6 +66,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     font-family: $sans-text;
     font-variation-settings: "slnt" 0, "wght" 500;
+    overscroll-behavior: none;
 }
 
 .html {
@@ -102,8 +98,7 @@ body {
         overflow: hidden;
         width: 5%;
         height: 100vh;
-
-        background-color: $secondary;
+        background-color: #ffff;
     }
 }
 </style>

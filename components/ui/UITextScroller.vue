@@ -141,7 +141,7 @@ onMounted(() => {
         font-variation-settings: "slnt" 0, "wght" 500;
         letter-spacing: .5rem;
         color: $secondary;
-        font-size: clamped(100px, 140px, 480px, 1920px);
+        font-size: clamped(100px, 240px, 480px, 1920px);
         will-change: transform;
     }
 }

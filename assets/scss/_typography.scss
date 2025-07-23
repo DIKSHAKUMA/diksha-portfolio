@@ -25,31 +25,29 @@ h4 {
     font-weight: 400;
 }
 
-
 /* Simply h tags are set globally with clamp*/
-
 h1 {
     font-size: functions.clamped(32px, 40px, 380px, 1920px);
-    margin-bottom: 1rem;
-    color: variables.$accent1
+    margin-bottom: .5rem;
+    color: variables.$secondary;
 }
 
 h2 {
     font-size: functions.clamped(24px, 32px, 380px, 1920px);
-    margin-bottom: 1rem;
-    color: variables.$accent1
+    margin-bottom: .5rem;
+    color: variables.$secondary;
 }
 
 h3 {
     font-size: functions.clamped(20px, 24px, 380px, 1920px);
-    margin-bottom: 1rem;
-    color: variables.$accent1
+    margin-bottom: .5rem;
+    color: variables.$secondary;
 }
 
 h4 {
     font-size: functions.clamped(16px, 20px, 380px, 1920px);
-    margin-bottom: 1rem;
-    color: variables.$accent1
+    margin-bottom: .5rem;
+    color: variables.$secondary;
 }
 
 p {

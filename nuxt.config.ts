@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     ],
 
     defaults: {
-      weights: [300, 400, 500, 600, 700, 900],
+      weights: [400, 500, 600, 700],
       styles: ['normal', 'italic'],
     },
   },
@@ -43,7 +43,7 @@ export default defineNuxtConfig({
   ],
 
   colorMode: {
-    preference: 'dark'
+    preference: 'light'
   },
 
   vite: {
@@ -119,4 +119,5 @@ export default defineNuxtConfig({
   },
 
   devtools: { enabled: false },
+
 })

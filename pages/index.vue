@@ -24,10 +24,12 @@ onMounted(() => {
     <div>
         <UIMouseCursor />
         <div class="home-wrapper">
-            <ViewHero />
-            <ViewAboutFront />
-            <ViewProjectsFront />
-            <ViewCanFront />
+            <ViewHeroFront />
+            <LazyViewAboutFront hydrate-on-visible />
+            <LazyViewProjectsFront hydrate-on-visible />
+            <LazyViewCanFront hydrate-on-visible />
+            <LazyViewMetaFront hydrate-on-visible />
+            <LazyViewArchiveFront hydrate-on-visible />
         </div>
 
     </div>
@@ -46,7 +48,6 @@ margins are instead effected in ViewProjectsFront.vue  */
     position: relative;
     overflow-x: visible;
     z-index: inherit;
-    /*this to push down UITextScroller.vue */
-    margin-bottom: 200px;
+    overflow: hidden;
 }
 </style>

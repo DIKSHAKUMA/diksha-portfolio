@@ -12,7 +12,7 @@ const props = defineProps({
 <template>
     <div :is-mobile="props.isMobile">
         <div v-if="slots.logo" class="logo">
-            T.Thorstensson
+            <slot name="logo"></slot>
         </div>
         <div v-if="slots.mode" class="mode">
             <slot name="mode"></slot>
@@ -22,10 +22,10 @@ const props = defineProps({
 </template>
 
 <style lang="scss" scoped>
-.logo{
+.logo {
+    color: #faf7ff;
     z-index: 100;
-    color: $secondary;
-    font-size: clamped(14px, 18px, 480px, 1920px);
+    font-size: clamped(16px, 18px, 480px, 1920px);
 
     [is-mobile="true"] & {
         color: $primary;
@@ -33,7 +33,9 @@ const props = defineProps({
     }
 }
 
-.mode{
+.mode {
     letter-spacing: .5px;
+    /* Even though align centre is set on container in NavBar, eagle eye says it's not enough */
+    margin-bottom: 2px;
 }
 </style>

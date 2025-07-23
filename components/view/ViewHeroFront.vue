@@ -3,10 +3,16 @@ import * as PIXI from 'pixi.js';
 import { Assets, DisplacementFilter } from 'pixi.js'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useFolioStore } from '~/store/useFolioStore'
-import { Layout } from '@pixi/layout'
+import { useHead } from '#imports' // Nuxt composable for managing head tags
 
 // PINIA 🍍 
 const store = useFolioStore()
+
+useHead({
+  link: [
+    { rel: 'preload', as: 'image', href: '/img/front.webp', type: 'image/webp' }
+  ]
+})
 const pixiCtx = useTemplateRef<any>('pixi')
 const imgFrames = useTemplateRef<any>('imgFrames')
 
@@ -16,15 +22,23 @@ const { $gsap } = useNuxtApp()
 const colorMode = useColorMode()
 const imagesWrapper = useTemplateRef<any>('imagesWrapper')
 
+
 let app: PIXI.Application
 let filter: DisplacementFilter
 let ripple: PIXI.Sprite
 let sprite: PIXI.Sprite
 let ctx: gsap.Context
 
-/**
- * Do we rock. We rock!
- */
+const checkScreenWidth = () => {
+    if (import.meta.client) {
+        const screenWidth = window.innerWidth
+        if (screenWidth < 768) {
+            isMobile.value = true
+        }else{
+            isMobile.value = false
+        }
+    }
+}
 onMounted(async () => {
     if (import.meta.client) {
 
@@ -47,6 +61,7 @@ onMounted(async () => {
         const displacer = await Assets.load('/img/displacemap.png')
 
         ripple = PIXI.Sprite.from(displacer)
+        ripple.alpha = 0
 
         app.stage.addChild(sprite)
         app.stage.addChild(ripple)
@@ -55,51 +70,50 @@ onMounted(async () => {
         app.stage.filters = [filter]
 
         sprite.anchor.set(0.5)
+        
+        // Scale sprite to cover canvas dimensions (like object-fit: cover)
+        const scaleX = pixiCtx.value.width / sprite.texture.width
+        const scaleY = pixiCtx.value.height / sprite.texture.height
+        const scale = Math.max(scaleX, scaleY)
+        sprite.scale.set(scale)
 
         ripple.anchor.set(0.5)
         ripple.scale.set(0.05)
-        filter.scale.set(100)
-
-        watch(() => colorMode.value, (newValue, oldValue) => {
-            (colorMode.preference == "light") ? sprite.tint = 0x000000 : sprite.tint = 0xFFFFFF
-        }, { flush: 'post', immediate: true })
+        filter.scale.set(0) // Start with no displacement effect
 
         sprite.position.set(pixiCtx.value.width / 2, pixiCtx.value.height / 2)
         ripple.position.set(pixiCtx.value.width / 2, pixiCtx.value.height / 2)
         imgFrames.value.style.width = pixiCtx.value.clientWidth + 'px'
         imgFrames.value.style.height = pixiCtx.value.clientHeight + 'px'
 
-        app.stage.layout = {
-            objectFit: 'contain',
-            width: pixiCtx.value.clientWidth,
-            height: pixiCtx.value.clientHeight,
-        }
-
         // Context! The friendly GSAP garbage collector
         ctx = $gsap.context((self) => {
             // For the sprite animate a pixi displacement pulse
             let pixiTl = $gsap.timeline({ repeat: 0 })
-            pixiTl.fromTo(sprite, { alpha: 0 }, { duration: 1, alpha: 1, delay: 0 })
+            pixiTl.fromTo(sprite, { alpha: 0 }, { duration: 1, alpha: 1 })
                 .fromTo(imagesWrapper.value, { opacity: 0 }, { opacity: 1 }, "<")
+                .fromTo(filter.scale, { x: 0, y: 0 }, { duration: 0.3, x: 100, y: 100 }, "ripple")
                 .to(ripple.scale, { duration: 1.5, x: 1.5, y: 1.5 }, "ripple")
-                .to(filter.scale, { duration: 1.5, x: 0, y: 0 }, "ripple")
+                .to(filter.scale, { duration: 1.2, x: 0, y: 0 }, "-=0.3")
                 .to(sprite, { duration: 1, alpha: 0 }, "+=1")
-            $gsap.fromTo(imgFrames.value, { autoAlpha: 0 }, { autoAlpha: 1, delay: 3 })
+                .fromTo(imgFrames.value, { autoAlpha: 0 }, { duration: 0.5, autoAlpha: 1 }, "<") // Start img-frames as sprite fades out
+                .to(pixiCtx.value, { duration: 0.1, alpha: 0 }, ">") // Hide canvas after sprite fades out
 
             // Fade out author intro
             let authorTl = $gsap.timeline({
                 // Pin intro is actually in ViewProjectsFront.vue; fade out author intro when pin intro moves above bottom of browser window
                 scrollTrigger: {
-                    trigger: '.about-intro',
+                    trigger: '.about-wrapper',
                     pinSpacing: true,
                     start: 'top bottom', // when the top of the trigger hits the bottom of the viewport
-                    end: '+=100',
-                    scrub: .5,
-                    toggleActions: "restart none reverse reset",
+                    end: '+=50',
+                    scrub: 5,
+                    toggleActions: "restart none none reverse",
+                    anticipatePin: 1
                 }
             })
             authorTl.addLabel('start')
-                .fromTo(".front-label", { duration: .1, opacity: 1 }, { duration: .1, y: -100, opacity: 0 })
+                .fromTo(".front-header", { opacity: 1 }, { duration: 2, y: -64, ease: "expo.inOut" })
         })
     }
 })
@@ -116,38 +130,44 @@ onBeforeUnmount(() => {
             <div class="images-wrapper" ref="imagesWrapper">
                 <div>
                     <canvas class="img-pixi" ref="pixi" id="pixi"></canvas>
-                    <img class="img-frames" src="/img/front.png" ref="imgFrames" />
+                    <img class="img-frames" src="/img/front.webp" ref="imgFrames" width="400" height="300" />
                 </div>
             </div>
         </div>
         <!--:className here is for gsap-->
-        <CommonAbstract class="front-label" :label="store.data.about?.intro" :desc="''" :className="'front-intro'" />
+        <CommonAbstract class="front-header" :label="store.data.about?.intro" :desc="''" :className="'front-intro'" />
     </main>
 </template>
 
 <style lang="scss" scoped>
-.pin {
-    height: 100vh;
-}
-
 .hero-wrapper {
+    position: relative;
+    height: 100vh;
     padding: 0 $px-16-spacer;
 
     @include this-and-above('lg') {
         padding: 0 $px-64-spacer;
     }
-
 }
 
 :deep(.abstract-header) {
-    margin-top: 0px;
-    font-size: clamped(40px, 90px, 480px, 1920px);
     width: 100%;
+    margin-bottom: $px-16-spacer;
+    font-size: clamped(40px, 90px, 480px, 1920px);
+    width:90%;
+
+    @include this-and-above('sm') {
+        width:80%;
+    }
+
+    @include this-and-above('md') {
+        padding-right: $px-32-spacer;
+    }
 }
 
-.front-label {
-    position: sticky;
-    bottom: 20px;
+.front-header {
+    position: absolute;
+    bottom: 0px; 
 }
 
 img {
@@ -156,20 +176,23 @@ img {
 
 .images-wrapper {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 80%;
-    overflow: hidden;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .img-pixi {
     position: absolute;
+    pointer-events: none;
 }
 
 .img-frames {
     position: relative;
     border: $primary solid 1px;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    height: auto;
 }
 
 canvas {

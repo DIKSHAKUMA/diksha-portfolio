@@ -23,13 +23,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-.ui-wrapper {
-    position: relative;
-    width: 60%;
-    min-width: 300px;
-    height: 500px;
-    background-color: $secondary;
-}
 
 .ui {
     display: flex;

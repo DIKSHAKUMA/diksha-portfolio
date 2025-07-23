@@ -2,16 +2,36 @@
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useFolioStore } from '~/store/useFolioStore'
 import SplitType from 'split-type';
-import { gsap } from 'gsap';
+import { ref, onMounted } from 'vue'
 
 // PINIA 🍍 
 const store = useFolioStore()
-let ctx: gsap.Context
 const { $gsap } = useNuxtApp()
+let ctx: gsap.Context
+
+const canLine = ref<HTMLElement | null>(null)
 
 onMounted(() => {
     $gsap.registerPlugin(ScrollTrigger)
+
     ctx = $gsap.context((self) => {
+
+        if (canLine.value) {
+            $gsap.fromTo(
+                canLine.value,
+                { width: '0%' },
+                {
+                    width: '90%',
+                    duration: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: canLine.value,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse',
+                    },
+                }
+            )
+        }
 
         let sectionsChar = $gsap.utils.toArray('.split-skills-w');
         sectionsChar.forEach((sec: any) => {
@@ -36,34 +56,33 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-    ctx.revert()
+    ctx.revert();
 })
 </script>
 
 <template>
     <div class="can-wrapper">
         <main class="can">
-            <CommonAbstract class="can__label" :label="store.data.intro?.techIntroTitle"
-                :className="'can-intro'" />
-            <section class="can__abstract"></section>
+            <div class="can__line" ref="canLine"></div>
+            <CommonAbstract class="can__label" :label="store.data.intro?.techIntroTitle" :className="'can-intro'" />
             <CommonInfoLabel :label="'FRONTEND DEVELOPER'" :className="'photo-label'"
-                :style="{ justifyContent: 'center', alignItems: 'flex-star' }" />
+                :style="{ justifyContent: 'center', alignItems: 'flex-start' }" />
 
             <section class="can__demo">
                 <div class="can__demo-block">
                     <h2 class="can__demo-title split-skills-w">{{ store.data.intro?.techOneTitle }}</h2>
                     <div class="can__demo-desc split-skills-w">{{ store.data.intro?.techOneDesc }}</div>
-                    <DemoSkills />
+                    <DemoSkills class="can__demo-comp" />
                 </div>
                 <div class="can__demo-block">
                     <h2 class="can__demo-title split-skills-w">{{ store.data.intro?.techTwoTitle }}</h2>
                     <div class="can__demo-desc split-skills-w">{{ store.data.intro?.techTwoDesc }}</div>
-                    <DemoAnimation />
+                    <DemoAnimation class="can__demo-comp" />
                 </div>
                 <div class="can__demo-block">
                     <h2 class="can__demo-title split-skills-w">{{ store.data.intro?.techThreeTitle }}</h2>
                     <div class="can__demo-desc split-skills-w">{{ store.data.intro?.techThreeDesc }}</div>
-                    <DemoUX />
+                    <DemoUX class="can__demo-comp" />
                 </div>
             </section>
         </main>
@@ -75,67 +94,17 @@ onUnmounted(() => {
     will-change: transform;
 }
 
-.can {
-    &__label {
-        position: relative;
-        margin-top: $px-128-spacer;
-
-        :deep(.abstract-desc) {
-            font-size: clamped(20px, 34px, 480px, 1920px);
-        }
-    }
-
-    &__demo {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        margin-top: 128px;
-        row-gap: 64px;
-    }
-
-    &__demo-block {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        min-width: 300px;
-
-        @include this-and-above('md') {
-            align-items: flex-end;
-        }
-    }
-
-    &__demo-title,
-    &__demo-desc {
-        width: 100%;
-        text-align: left;
-    }
-
-    &__demo-title {
-        width: 60%;
-        min-width: 300px;
-        color: $secondary;
-        text-transform: uppercase;
-    }
-
-    &__demo-desc {
-        width: 60%;
-        min-width: 300px;
-        font-size: 1rem;
-        color: $secondary;
-        margin-bottom: 1.5em;
-    }
-}
-
-/* same margins as project-wrapper in [id].vue */
+/* same margins as other home (front) components; ViewAboutFront varies slightly due to parallax */
 .can-wrapper {
     position: relative;
-    padding: 0 $px-16-spacer;
     background-color: $primary;
+    padding: $px-64-spacer $px-16-spacer;
 
-    padding: $px-128-spacer $px-16-spacer;
+    @include this-and-above('sm') {
+        padding: $px-128-spacer $px-32-spacer;
+    }
 
-    @include this-and-above('lg') {
+    @include this-and-above('md') {
         padding: $px-128-spacer $px-64-spacer;
     }
 
@@ -148,16 +117,88 @@ onUnmounted(() => {
     }
 }
 
-.can::before {
+.can {
+    &__label {
+        position: relative;
+
+        :deep(.abstract-desc) {
+            font-size: clamped(20px, 34px, 480px, 1920px);
+        }
+    }
+
+    &__demo {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        row-gap: 64px;
+    }
+
+    &__demo-block {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        width: 100%;
+        height: 100%;
+        min-width: 300px;
+    }
+
+    &__demo-title,
+    &__demo-desc {
+        width: 100%;
+        text-align: left;
+    }
+
+    &__demo-title {
+        width: 100%;
+        min-width: 300px;
+        color: $secondary;
+        text-transform: uppercase;
+
+        @include this-and-above('md') {
+            width: 60%;
+            min-width: 300px;
+        }
+    }
+
+    &__demo-desc {
+        width: 100%;
+        min-width: 300px;
+        color: $secondary;
+        margin-bottom: 1.5em;
+        font-size: clamped(16px, 20px, 380px, 1920px);
+
+        @include this-and-above('md') {
+            width: 60%;
+            min-width: 300px;
+        }
+    }
+
+    &__demo-comp {
+        height: 450px;
+        position: relative;
+        width: 100%;
+        min-width: 300px;
+        background-color: $secondary;
+        filter: invert(1);
+
+        @include this-and-above('md') {
+            width: 60%;
+            min-width: 300px;
+            height: 42vh;
+        }
+    }
+}
+
+.can__line {
     background-color: $secondary;
     top: 0;
-    content: '';
     display: block;
     height: 2px;
     left: 50%;
     position: absolute;
     transform: translate(-50%, 0);
-    width: 95%;
-    margin: $px-128-spacer 0;
+    width: 0%;
+    z-index: 2;
+    filter: invert(.9);
 }
 </style>

@@ -22,7 +22,7 @@ onMounted(() => {
     })
 
     // Create a master timeline for all animations
-    const masterTimeline = $gsap.timeline({ repeat: -1, repeatDelay: 1 })
+    const masterTimeline = $gsap.timeline({ repeat: -1, repeatDelay: 0 })
 
     // Add each quote to the timeline with proper delays
     quotes.forEach((quote, index) => {
@@ -40,8 +40,8 @@ onMounted(() => {
                 duration: 1,
                 scrambleText: { text: '', chars: scrambleChars },
                 opacity: 0,
-                ease: 'power2.in',
-            }, `+=2`) // Start 2 seconds after becoming visible
+                ease: 'none',
+            }, `+=1.2`) // Start 2 seconds after becoming visible
     })
 })
 
@@ -62,13 +62,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-.tech-wrapper {
-    position: relative;
-    width: 60%;
-    min-width: 300px;
-    height: 500px;
-    background-color: $secondary;
-}
 
 .text {
     display: flex;
