@@ -25,11 +25,11 @@ onMounted(() => {
         <UIMouseCursor />
         <div class="home-wrapper">
             <ViewHeroFront />
-            <LazyViewAboutFront hydrate-on-visible />
-            <LazyViewProjectsFront hydrate-on-visible />
-            <LazyViewCanFront hydrate-on-visible />
-            <LazyViewMetaFront hydrate-on-visible />
-            <LazyViewArchiveFront hydrate-on-visible />
+            <LazyViewAboutFront />
+            <LazyViewProjectsFront />
+            <LazyViewCanFront />
+            <LazyViewMetaFront />
+            <LazyViewArchiveFront />
         </div>
 
     </div>

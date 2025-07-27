@@ -90,6 +90,7 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
+
 img,
 .split-proj-w {
     will-change: transform, filter;
@@ -98,7 +99,7 @@ img,
 .projects__abstract__image {
     position: relative;
     overflow: hidden;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
@@ -108,38 +109,26 @@ img,
     -ms-transform: translateZ(0);
     -o-transform: translateZ(0);
     transform: translateZ(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.projects__abstract__image::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(157, 157, 255, .4);
-    opacity: 0;
-    z-index: 2;
-    pointer-events: none;
-    mix-blend-mode: overlay;
-}
-
-.projects__abstract__image:hover::before {
-    opacity: 1;
+.projects__abstract__image:hover {
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .projects__abstract__image img {
-    transition-property: transform, filter;
-    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform: scale(1);
     width: 100%;
     height: 100%;
     object-fit: cover;
+    opacity: 1;
 }
 
 .projects__abstract__image:hover img {
-    transform: scale(1.02);
-    filter: brightness(1.03) contrast(1.02);
+    transform: scale(1.01);
+    opacity: 0.92;
 }
 
 /* same margins as project-wrapper in [id].vue */
@@ -173,9 +162,6 @@ img,
         align-self: flex-start;
 
         &__image {
-            filter: grayscale(50%) sepia(10%) saturate(76%);
-            -webkit-filter: grayscale(50%) sepia(10%) saturate(76%);
-            -moz-filter: grayscale(50%) sepia(10%) saturate(76%);
             overflow: hidden;
             clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
         }

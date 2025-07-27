@@ -18,8 +18,13 @@ const metaLine = ref<HTMLElement | null>(null)
 let ctx: gsap.Context
 let app: PIXI.Application
 
+const classObject = computed(() => ({
+    'meta__img--darkhue': colorMode.preference === 'dark',
+    'meta__img--lighthue': colorMode.preference === 'light'
+}))
+
 /**
- * Do we rock. We rock!
+ * Rock on sista.
  */
 onMounted(async () => {
     if (import.meta.client) {
@@ -84,23 +89,6 @@ onMounted(async () => {
                 })
             })
 
-            if (metaLine.value) {
-                $gsap.fromTo(
-                    metaLine.value,
-                    { width: '0%' },
-                    {
-                        width: '90%',
-                        duration: 1,
-                        ease: 'power2.out',
-                        scrollTrigger: {
-                            trigger: metaLine.value,
-                            start: 'top 80%',
-                            toggleActions: 'play none none reverse',
-                        },
-                    }
-                )
-            }
-
             $gsap.ticker.add((delta: any) => {
                 displaceSprite.rotation += 0.001
             })
@@ -118,7 +106,7 @@ onBeforeUnmount(() => {
 
     <div class="meta-wrapper">
         <main class="meta">
-            <div class="meta__line" ref="metaLine"></div>
+            <CommonLine />
             <!--:className here is for gsap-->
             <CommonAbstract class="meta__header" :label="'META'" :desc="''" :className="'meta-intro'" />
             <CommonInfoLabel :label="'ABOUT THIS SITE'" :className="'meta-label'"
@@ -134,7 +122,7 @@ onBeforeUnmount(() => {
                     <h2 class="split-skills-w">{{ store.data.intro?.metaPublishTitle }}</h2>
                     <div class="meta__tech-item split-skills-w">{{ store.data.intro?.metaPublishDesc }}</div>
                 </div>
-                <div class="action" data-name="yo" data-text="Home"><canvas class="img-meta" ref="pixi"></canvas></div>
+                <div class="action" data-name="yo" data-text="Home"><canvas :class="classObject" class="meta__img" ref="pixi"></canvas></div>
             </div>
         </main>
     </div>
@@ -147,17 +135,8 @@ canvas {
     pointer-events: none; // Allow mouse events to pass through to parent
 }
 
-/*override h2 because we need white here*/
-h2 {
-    color: #faf7ff;
-}
-
 .meta-index {
     position: absolute;
-}
-
-.img-meta {
-    filter: hue-rotate(338deg) opacity(0.9);
 }
 
 .meta-wrapper {
@@ -188,22 +167,19 @@ h2 {
 
 .meta {
     overflow: hidden;
+    color: $secondary;
+
+    &__img--darkhue {
+        filter: hue-rotate(245deg) opacity(.7);
+    }
+
+    &__img--lighthue {
+        filter: hue-rotate(338deg) opacity(.7);
+    }
 
     &__header {
         position: relative;
         background-color: transparent;
-    }
-
-    &__line {
-        background-color: $secondary;
-        top: 0;
-        display: block;
-        height: 2px;
-        left: 50%;
-        position: absolute;
-        transform: translate(-50%, 0);
-        width: 0%;
-        filter: invert(.9);
     }
 
     &__canvas {
@@ -211,7 +187,6 @@ h2 {
         justify-content: center;
         margin: 0 auto;
         width: -moz-fit-content;
-
     }
 
     &__tech {
@@ -224,7 +199,6 @@ h2 {
 
         &-item {
             font-size: clamped(16px, 20px, 380px, 1920px);
-            color: #faf7ff;
         }
 
         &-item:nth-child(even) {

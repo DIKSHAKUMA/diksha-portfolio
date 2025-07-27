@@ -42,15 +42,23 @@ onUnmounted(() => {
         <header class="info-label-header" :class="className"
             :style="{ 'justify-content': props.hpos, 'align-items': props.vpos }">
             <span v-if="!link">{{ label }}</span>
-            <NuxtLink v-else :to="link" class="action" data-name="proj" target="_blank">{{ label }}</NuxtLink>
+            <NuxtLink v-else :to="link" class="action" data-name="menu" target="_blank">{{ label }}</NuxtLink>
         </header>
     </div>
 </template>
 
 <style lang="scss" scoped>
 .action {
-    text-underline-offset: 4px;
-    text-decoration: underline;
+    display: block;
+    text-decoration: none;
+
+    .light-mode &:hover {
+        color: $accent1;
+    }
+
+    .dark-mode &:hover {
+        color: $accent2;
+    }
 }
 
 .info-label-wrapper {
@@ -66,7 +74,7 @@ onUnmounted(() => {
 }
 
 .info-label-header {
-    font-size: clamped(14px, 16px, 480px, 1920px);
+    font-size: clamped(10px, 14px, 480px, 1920px);
     line-height: 1;
     margin: $px-16-spacer $px-16-spacer;
 }

@@ -50,15 +50,18 @@ onMounted(() => {
             text-underline-position: from-font;
             text-decoration-color: $secondary;
             position: relative;
-            background: linear-gradient(to right, $accent1, $accent1) $secondary no-repeat left center;
+            background: linear-gradient(to right, $accent2, $accent2) $secondary no-repeat left center;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             background-size: 0% 100%;
-            transition: background-size 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+
+            text-decoration-color: $secondary;
+            transition: background-size 0.2s cubic-bezier(.17,.67,.83,.67), text-decoration-color 0.2s cubic-bezier(.17,.67,.83,.67);
 
             &:hover {
                 background-size: 100% 100%;
+                text-decoration-color: $accent2;
             }
         }
     }

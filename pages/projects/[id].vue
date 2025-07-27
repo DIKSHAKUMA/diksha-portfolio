@@ -7,8 +7,6 @@ const { $gsap } = useNuxtApp()
 const { $lenis } = useNuxtApp();
 const route = useRoute();
 
-const projectLine = useTemplateRef<any>('projectLine')
-
 definePageMeta({
     layout: 'default',
     key: route => route.fullPath,
@@ -30,6 +28,7 @@ const getNextProj = computed(() => {
     return store.data.projects[index + 1]
 })
 
+
 const getPrevProj = computed(() => {
     const index = store.data.projects.findIndex((proj: any) => proj.slug === route.params.id)
     return store.data.projects[index - 1]
@@ -39,7 +38,7 @@ let ctx: gsap.Context
 
 /**
  * There could be a higher level of abstraction where I made the split type and gsap animation into helpers
- * but I'm not sure if it's worth the abstraction it brings. KISS.
+ * but I believe it could be hard to overview what's going on if I abstracted it too much.
  */
 onMounted(() => {
 
@@ -91,26 +90,9 @@ onMounted(() => {
                     toggleActions: "play none none reset",
                 },
                 transformOrigin: 'top',
-                duration: .1
+                duration: .4
             })
         })
-
-        if (projectLine.value) {
-            $gsap.fromTo(
-                projectLine.value,
-                { width: '0%' },
-                {
-                    width: '90%',
-                    duration: 1,
-                    ease: 'power2.out',
-                    scrollTrigger: {
-                        trigger: projectLine.value,
-                        start: 'top bottom',
-                        toggleActions: 'play none none reverse',
-                    },
-                }
-            )
-        }
 
     }, '.project');
 })
@@ -196,11 +178,10 @@ onUnmounted(() => {
                     </div>
 
                 </section>
-                <div class="project__line" ref="projectLine"></div>
+                <CommonLine :pos="'relative'" />
             </main>
             <nav class="project__nav">
-                <NuxtLink v-if="getPrevProj" :to="`/projects/${getPrevProj.slug}`">Previous</NuxtLink>
-                <NuxtLink v-if="getNextProj" :to="`/projects/${getNextProj.slug}`">Next</NuxtLink>
+                <UIProjectStepper :prevImg="getPrevProj!.image[0].handle" :nextImg="getNextProj!.image[0].handle" :prevName="getPrevProj!.name" :nextName="getNextProj!.name" :prev="getPrevProj!.slug" :next="getNextProj!.slug" />
             </nav>
         </div>
     </div>
@@ -251,13 +232,31 @@ img {
 
 /* Vertical blind reveal effect */
 .project-image-reveal {
+    position: relative;
+    overflow: hidden;
     --position: 0%;
-    mask-image: linear-gradient(to right,
-            #000 var(--position),
-            #0000 0);
-    mask-size: 15% 100%;
-    mask-repeat: repeat-x;
 }
+
+.project-image-reveal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent var(--position),
+            $primary calc(var(--position) + 1%),
+            $primary calc(var(--position) + 2%),
+            transparent calc(var(--position) + 3%));
+    z-index: 2;
+    pointer-events: none;
+}
+
+.project-image-reveal img {
+    transition: filter 0.5s ease;
+}
+
 
 .project {
     display: flex;
@@ -266,17 +265,6 @@ img {
     height: 100%;
     align-self: flex-start;
     margin-top: 128px;
-
-    &__line {
-        background-color: $secondary;
-        display: block;
-        height: 2px;
-        left: 50%;
-        position: relative;
-        transform: translate(-50%, 0);
-        width: 0%;
-        filter: invert(.9);
-    }
 
     &__header {
         display: flex;

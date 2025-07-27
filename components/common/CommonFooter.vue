@@ -32,7 +32,6 @@
   color: $secondary;
   font-size: clamped(12px, 18px, 380px, 1920px);
   row-gap: 30px;
-  mix-blend-mode: screen;
   margin: 0 $px-16-spacer;
 
 @include this-and-above('md') {

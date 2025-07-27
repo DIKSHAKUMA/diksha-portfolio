@@ -62,8 +62,6 @@ const onScroll = () => {
 
 onMounted(() => {
     onScroll()
-    // cannot bind with css as colormode is client side, need light colour to reflect in mix blend mode so
-    /*if (colorMode.preference === 'light') navlist.value!.style.color = '#fffcf2';*/
     window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', checkScreenWidth)
 
@@ -90,7 +88,8 @@ checkScreenWidth()
             <UINavHeader :is-mobile="isMobileActive" class="header-wrapper">
                 <template #logo>
                     <ClientOnly>
-                        <NuxtLink to="/" data-name="yo" data-text="Home" class="action magnet">T.Thorstensson</NuxtLink>
+                        <NuxtLink to="/" data-name="yo" data-text="Home" class="logo action magnet">T. Thorstensson
+                        </NuxtLink>
                     </ClientOnly>
                 </template>
                 <template #mode>
@@ -163,6 +162,7 @@ checkScreenWidth()
     z-index: 998; // Just below nav-wrapper (999)
     transition: left .5s cubic-bezier(.075, .82, .165, 1);
     background-color: #171717; // Dark background for both light and dark modes
+
     &--open {
         left: 0%;
 
@@ -181,11 +181,6 @@ checkScreenWidth()
 
 .magnet {
     transition: transform 0.1s linear;
-}
-
-.logo {
-    width: 30px;
-    height: auto;
 }
 
 .modal-open {
@@ -250,6 +245,19 @@ checkScreenWidth()
     right: 70px;
 }
 
+
+.logo {
+    display:block;
+    height: auto;
+    .light-mode &:hover {
+        color: #5d5a00
+    }
+
+    .dark-mode &:hover {
+        color: #6f6fd1;
+    }
+}
+
 .nav {
     position: fixed;
     top: 0;
@@ -280,8 +288,6 @@ checkScreenWidth()
         background-color: $secondary;
     }
 
-
-
     &__list {
         position: absolute;
         top: 200px;
@@ -308,8 +314,17 @@ checkScreenWidth()
         color: $primary;
         // for the magnet links for some reason need be here too
 
-        &:hover {
-            color: var(--accent1);
+        .light-mode &:hover {
+            color: #5d5a00;
+        }
+
+        .dark-mode &:hover {
+            color: #6f6fd1;
+        }
+
+        // Mobile menu should always use light-mode styling
+        .nav--open &:hover {
+            color: #6f6fd1;
         }
     }
 

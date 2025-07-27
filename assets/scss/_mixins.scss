@@ -8,6 +8,14 @@
     -webkit-background-clip: text;
 }
 
+// Mixin to darken any color by a percentage using CSS filter
+// Usage: @include darken-color($primary, 10);
+@mixin darken-color($color, $percentage: 10) {
+    background-color: $color;
+    $brightness: 100 - $percentage;
+    filter: brightness(#{$brightness}%);
+}
+
 $breakpoints: (
     "sm": 640px,
     "md": 768px,

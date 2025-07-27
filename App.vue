@@ -98,7 +98,7 @@ body {
         overflow: hidden;
         width: 5%;
         height: 100vh;
-        background-color: #ffff;
+        background-color: $secondary;
     }
 }
 </style>

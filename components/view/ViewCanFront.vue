@@ -16,23 +16,6 @@ onMounted(() => {
 
     ctx = $gsap.context((self) => {
 
-        if (canLine.value) {
-            $gsap.fromTo(
-                canLine.value,
-                { width: '0%' },
-                {
-                    width: '90%',
-                    duration: 1,
-                    ease: 'power2.out',
-                    scrollTrigger: {
-                        trigger: canLine.value,
-                        start: 'top 80%',
-                        toggleActions: 'play none none reverse',
-                    },
-                }
-            )
-        }
-
         let sectionsChar = $gsap.utils.toArray('.split-skills-w');
         sectionsChar.forEach((sec: any) => {
             const splitTxt = new SplitType(sec, { types: 'words' })
@@ -62,8 +45,8 @@ onUnmounted(() => {
 
 <template>
     <div class="can-wrapper">
+        <CommonLine />
         <main class="can">
-            <div class="can__line" ref="canLine"></div>
             <CommonAbstract class="can__label" :label="store.data.intro?.techIntroTitle" :className="'can-intro'" />
             <CommonInfoLabel :label="'FRONTEND DEVELOPER'" :className="'photo-label'"
                 :style="{ justifyContent: 'center', alignItems: 'flex-start' }" />
@@ -179,7 +162,6 @@ onUnmounted(() => {
         width: 100%;
         min-width: 300px;
         background-color: $secondary;
-        filter: invert(1);
 
         @include this-and-above('md') {
             width: 60%;
@@ -187,18 +169,5 @@ onUnmounted(() => {
             height: 42vh;
         }
     }
-}
-
-.can__line {
-    background-color: $secondary;
-    top: 0;
-    display: block;
-    height: 2px;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%, 0);
-    width: 0%;
-    z-index: 2;
-    filter: invert(.9);
 }
 </style>

@@ -27,7 +27,6 @@ const classObject = computed(() => ({
     'cursor__shape--yo': isOver.value && dataName.value === 'yo'
 }))
 
-/* So we get mix-blend-mode on text if over project */
 const cursorClassObject = computed(() => ({
     'cursor--proj': isOver.value && dataName.value === 'proj'
 }))
@@ -77,7 +76,6 @@ const getScale = (diffX: number, diffY: number) => {
     //The Math.min() static method returns the smallest of the numbers given as input parameters
     return Math.min(distance / 50, 0.2)
 }
-
 
 watch(
     () => [xpos.value, ypos.value],
@@ -154,7 +152,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div v-if="showCursor" :class="['cursor', cursorClassObject]" :style="{ display: dispStr }">
+    <div v-if="showCursor" class="cursor" :style="{ display: dispStr }">
 
         <div :class="classObject" ref="shape">
             <div v-if="dataName === 'proj'" class="cursor__shape__text">
@@ -192,10 +190,6 @@ onBeforeUnmount(() => {
     width: 100%;
     visibility: hidden;
 
-    &--proj {
-        mix-blend-mode: difference;
-    }
-
     &__shape {
         display: flex;
         align-items: center;
@@ -207,7 +201,7 @@ onBeforeUnmount(() => {
         border-radius: 50%;
         pointer-events: none;
         transform-origin: center center;
-        will-change: width, height, transform, border;
+        will-change: width, height, transform;
         transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
         backdrop-filter: blur(10px);
         opacity: .5;

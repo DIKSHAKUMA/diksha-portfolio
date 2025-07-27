@@ -5,31 +5,40 @@ import { useFolioStore } from '~/store/useFolioStore'
 // PINIA 🍍 
 const store = useFolioStore()
 const { $gsap } = useNuxtApp()
+const colorMode = useColorMode()
 const parallaxBg = useTemplateRef('parallaxBg')
 let ctx: gsap.Context
 
-
-const getRatio = computed(() => {
-    return window!.innerHeight / (window!.innerHeight + parallaxBg.value!.offsetHeight)
-})
+const classObject = computed(() => ({
+    'parallax__bg--dark': colorMode.preference === 'dark',
+    'parallax__bg--light': colorMode.preference === 'light'
+}))
 
 onMounted(() => {
 
     $gsap.registerPlugin(ScrollTrigger)
     ctx = $gsap.context((self) => {
 
-        // Parallax background animation
+        // Pre-calculate the parallax distance to avoid function calls during scroll
+        const parallaxDistance = -window.innerHeight * 0.25 // Reduced from 0.33 for better performance
+        
+        // Parallax background animation - optimized for performance
         $gsap.to('.parallax__bg', {
-            y: () => -window.innerHeight * .33, // Move background up by half the viewport height
+            y: parallaxDistance,
             scrollTrigger: {
                 trigger: parallaxBg.value,
                 start: "top bottom",
                 end: "bottom top",
-                scrub: 1, // Smoother scrubbing
+                scrub: 1, // Increased from 0.5 for less frequent updates
                 pinSpacing: false,
                 invalidateOnRefresh: true,
+                refreshPriority: -1,
+                // Add performance optimizations
+                anticipatePin: 1,
+                fastScrollEnd: true,
             },
             force3D: true,
+            transformOrigin: "center center",
             ease: "none"
         })
 
@@ -44,12 +53,20 @@ onUnmounted(() => {
 <template>
     <div class="about-wrapper">
         <main class="about">
-            <span class="parallax__bg" ref="parallaxBg"></span>
+            <span class="parallax__bg" :class="classObject" ref="parallaxBg"></span>
             <CommonAbstract class="about__label" :label="store.data.intro?.aboutIntroTitle"
                 :desc="store.data.intro?.aboutIntroDesc" :className="'about-intro'" />
-            <CommonInfoLabel :label="'Photo by Bruno Kelzer'" :className="'photo-label'"
-                :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }"
-                :link="'https://unsplash.com/@bruno_kelzer'" />
+
+            <div v-if="colorMode.preference === 'dark'">
+                <CommonInfoLabel :label="'Unsplash @ Cosmoh'" :className="'photo-label'"
+                    :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }"
+                    :link="'https://unsplash.com/@cosmoh'" />
+            </div>
+            <div v-else>
+                <CommonInfoLabel :label="'Unsplash @ Joyce G'" :className="'photo-label'"
+                    :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }"
+                    :link="'https://unsplash.com/@joyce_'" />
+            </div>
         </main>
     </div>
 </template>
@@ -60,7 +77,7 @@ onUnmounted(() => {
 }
 
 .about__label {
-    color: #faf7ff;
+    color: $secondary;
 }
 
 .about {
@@ -69,15 +86,12 @@ onUnmounted(() => {
     &__label {
         position: relative;
         z-index: 100;
-        background-color: transparent;
-        /* or your desired color */
     }
 }
 
 /* same margins as project-wrapper in [id].vue */
 .about-wrapper {
     position: relative;
-    padding: 0 $px-16-spacer;
     background-color: $primary;
     overflow: hidden;
     height: 100vh;
@@ -101,41 +115,48 @@ onUnmounted(() => {
 }
 
 .parallax__bg {
-    position: relative;
-}
-
-.parallax__bg::before {
-    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #171717;
-    mix-blend-mode: overlay;
-    z-index: 2;
-    pointer-events: none;
-}
-
-.parallax__bg {
-    position: absolute;
-    display: inline-block;
+    display: block; // Changed from inline-block for better performance
     top: 0;
     right: 0;
-    height: 130vh;
-    width: 130vw;
-    background-image: url('/img/manet-3.jpg');
-    filter: grayscale(100%) brightness(1.7) contrast(1.1);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: bottom center;
+    height: 120vh; // Reduced from 130vh
+    width: 120vw; // Reduced from 130vw
     z-index: 1;
     will-change: transform;
     overflow: hidden;
-    object-fit: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+    
+    // Performance optimizations
+    transform: translateZ(0); // Force hardware acceleration
+    backface-visibility: hidden;
+    perspective: 1000px;
+    contain: layout style paint; // CSS containment for better performance
+    
+    // Reduce repaints during animation
+    image-rendering: optimizeSpeed;
+    
+    // Firefox-specific optimizations
+    @-moz-document url-prefix() {
+        transform: translate3d(0, 0, 0);
+        image-rendering: optimizeSpeed;
+    }
 
-    @supports (background-image: url('/img/manet-3.webp')) {
-        background-image: url('/img/manet-3.webp');
+    &--dark {
+        background-image: url('/img/cosmoh-love-unsplash.jpg');
+
+        @supports (background-image: url('/img/cosmoh-love-unsplash.webp')) {
+            background-image: url('/img/cosmoh-love-unsplash.webp');
+        }
+    }
+
+    &--light {
+        background-image: url('/img/joyce-g-unsplash.jpg');
+
+        @supports (background-image: url('/img/joyce-g-unsplash.webp')) {
+            background-image: url('/img/joyce-g-unsplash.webp');
+        }
     }
 }
 </style>
