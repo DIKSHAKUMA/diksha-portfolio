@@ -69,15 +69,15 @@ onUnmounted(() => {
     }
 
     @include this-and-above('md') {
-        margin: 0 $px-64-spacer;
+        margin: 0 $px-64-spacer $px-128-spacer $px-64-spacer;
     }
 
     @include this-and-above('lg') {
-        margin: 0 $px-64-spacer;
+        margin: 0 $px-64-spacer $px-128-spacer $px-64-spacer;
     }
 
     @include this-and-above('xl') {
-        margin: 0 $px-128-spacer;
+        margin: 0 $px-128-spacer $px-128-spacer $px-128-spacer;
     }
 
     .testimonial {

@@ -17,18 +17,23 @@ const loopStarted = ref<boolean>(false)
 const pos = { x: 0, y: 0 }
 const vel = { x: 0, y: 0 }
 
+// Store event handlers for proper cleanup
+const eventHandlers = new Map<Element, {
+    overHandler: () => void,
+    outHandler: () => void,
+    clickHandler: () => void
+}>()
+const magnetHandlers = new Map<Element, (e: any) => void>()
+
 /**
  * As per usual we try to follow the order : refs, comp props, methods, watchers, hooks, returns, exposes
  */
 const classObject = computed(() => ({
-    'cursor__shape': dataName.value === 'yo' || dataName.value === 'menu' || dataName.value === 'proj' || dataName.value === '',
-    'cursor__shape--proj': isOver.value && dataName.value === 'proj',
+    'cursor__shape': dataName.value === 'yo' || dataName.value === 'menu' || dataName.value === 'proj' || dataName.value === 'reel' || dataName.value === '',
+    'cursor__shape--proj': isOver.value && (dataName.value === 'proj' || dataName.value === 'reel'),
     'cursor__shape--menu': isOver.value && dataName.value === 'menu',
+    'cursor__shape--reel': isOver.value && dataName.value === 'reel',
     'cursor__shape--yo': isOver.value && dataName.value === 'yo'
-}))
-
-const cursorClassObject = computed(() => ({
-    'cursor--proj': isOver.value && dataName.value === 'proj'
 }))
 
 const setFromEvent = () => {
@@ -97,29 +102,41 @@ onMounted(async () => {
 
     // Mouse over info states
     sections.forEach((sec: any) => {
-        sec.addEventListener("mouseover", function overHandler() {
+        const overHandler = () => {
             isOver.value = true
             dataName.value = sec.dataset.name || ""
             dataText.value = sec.dataset.text || ""
             dispStr.value = "block"
-        })
-
-        sec.addEventListener("mouseout", function outHandler() {
+        }
+        
+        const outHandler = () => {
             isOver.value = false
             dataName.value = ""
             dispStr.value = "block"
-        })
-
-        sec.addEventListener("click", function clickHandler() {
+        }
+        
+        const clickHandler = () => {
             isOver.value = false
             dataName.value = ""
             dispStr.value = "block"
-        })
+        }
+        
+        // Store handlers for cleanup, recall that anonymous functions create new references each time;
+        // this is how we keep track of them to avoid memory leak
+        eventHandlers.set(sec, { overHandler, outHandler, clickHandler })
+        
+        // Add event listeners
+        sec.addEventListener("mouseover", overHandler)
+        sec.addEventListener("mouseout", outHandler)
+        sec.addEventListener("click", clickHandler)
     })
 
     // Since we probably don't want the images to animate, we need something else than .action: .magnet
     let links = $gsap.utils.toArray(".magnet")
     links.forEach((link: any) => {
+        // Store handler reference for cleanup;
+        magnetHandlers.set(link, magnetMove)
+        
         link.addEventListener('mousemove', magnetMove)
         link.addEventListener('mouseleave', magnetMove)
     })
@@ -132,6 +149,8 @@ onMounted(async () => {
 
 // Magnet effect on links on mouse over
 const magnetMove = (e: any) => {
+
+    //deconstructing to X, recall that offsetX is the distance from the left of the element to the cursor
     const { offsetX: x, offsetY: y } = e,
         { offsetWidth: width, offsetHeight: height } = e.currentTarget,
         move = 10,
@@ -142,12 +161,26 @@ const magnetMove = (e: any) => {
 }
 
 onBeforeUnmount(() => {
-    let sections = $gsap.utils.toArray(".action")
-    sections.forEach((sec: any) => {
-        sec.removeEventListener("mouseover", sec.overHandler)
-        sec.removeEventListener("mouseout", sec.outHandler)
-        sec.removeEventListener("click", sec.clickHandler)
+    // Remove GSAP ticker
+    if (loopStarted.value) {
+        $gsap.ticker.remove(loop)
+        loopStarted.value = false
+    }
+    
+    // Clean up .action event listeners
+    eventHandlers.forEach((handlers, element) => {
+        element.removeEventListener("mouseover", handlers.overHandler)
+        element.removeEventListener("mouseout", handlers.outHandler)
+        element.removeEventListener("click", handlers.clickHandler)
     })
+    eventHandlers.clear()
+    
+    // Clean up .magnet event listeners
+    magnetHandlers.forEach((handler, element) => {
+        element.removeEventListener('mousemove', handler)
+        element.removeEventListener('mouseleave', handler)
+    })
+    magnetHandlers.clear()
 })
 </script>
 
@@ -156,11 +189,15 @@ onBeforeUnmount(() => {
 
         <div :class="classObject" ref="shape">
             <div v-if="dataName === 'proj'" class="cursor__shape__text">
+                <ChevronSVG v-if="dataText === 'Previous'" class="arrow arrow--reverse arrow--before" />
                 {{ dataText }}
-                <ChevronSVG class="arrow" />
+                <ChevronSVG v-if="dataText === 'Next'" class="arrow" />
+                <ChevronSVG v-if="dataText === 'Explore'" class="arrow" />
             </div>
-            <div v-if="dataName === 'menu'" class="cursor__shape__text">
-
+            <div v-if="dataName === 'menu'" class="cursor__shape__text"></div>
+            <div v-if="dataName === 'reel'" class="cursor__shape__text">
+                <ChevronSVG class="arrow arrow--before arrow--reverse" />{{ dataText }}
+                <ChevronSVG class="arrow" />
             </div>
             <div v-if="dataName === 'yo'" class="cursor__shape__text">
                 {{ dataText }}
@@ -178,6 +215,15 @@ onBeforeUnmount(() => {
     pointer-events: none;
     margin-left: 5px;
     fill: #faf7ff;
+
+    &--reverse {
+        transform: rotate(180deg);
+    }
+
+    &--before {
+        margin-left: 0;
+        margin-right: 5px;
+    }
 }
 
 .cursor {
@@ -212,6 +258,13 @@ onBeforeUnmount(() => {
             height: 100px;
             background-color: unset;
             opacity: 1;
+        }
+
+        &--reel {
+            width: 50px;
+            height: 50px;
+            background-color: unset;
+            opacity: .9;
         }
 
         &--menu {

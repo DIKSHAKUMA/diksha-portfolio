@@ -8,8 +8,8 @@ export const useFolioStore = defineStore('folio', {
         data: _data,
         error: _error,
     }),
-    
-    persist:true,
+
+    persist: true,
 
     actions: {
         async fetchData() {

@@ -24,14 +24,14 @@ onMounted(() => {
     <div>
         <UIMouseCursor />
         <div class="home-wrapper">
-            <ViewHeroFront />
-            <LazyViewAboutFront />
-            <LazyViewProjectsFront />
-            <LazyViewCanFront />
-            <LazyViewMetaFront />
-            <LazyViewArchiveFront />
+            <ViewHeroHome />
+            <ViewParallaxHome />
+            <ViewWorksHome />
+            <ViewCanSub />
+            <ViewMetaSub />
+            <ViewFooterSub />
+            <!--Components ending 'sub'can be reused in any view, might need to solve a few things to make it work-->
         </div>
-
     </div>
 </template>
 
@@ -40,8 +40,6 @@ onMounted(() => {
     height: 100vh;
 }
 
-/* I set no side margin here as I want to separate margins for author heading and intro (ViewHero.vue) in harmony with navbar width; 
-margins are instead effected in ViewProjectsFront.vue  */
 .home-wrapper {
     flex-flow: column;
     display: flex;

@@ -1,23 +1,32 @@
 query folio {
-  about(where: {slug: "thomas-thorstensson"}) {
+  about(where: { slug: "thomas-thorstensson" }) {
     name
+    bioTitle
     bio
-    intro
+    aboutHeroTitle
+    aboutHeroDesc
+    aboutTitle
+    aboutDesc
+    jobTitle
+    job
+    valueOneTitle
+    valueOneDesc
+    valueTwoTitle
+    valueTwoDesc
+    valueThreeTitle
+    valueThreeDesc
+    picture {
+      id
+    }
   }
 
-  intro(where: {slug: "intros"}) {
+  intro(where: { slug: "intros" }) {
+    heroIntroTitle
+    heroIntroDesc
     aboutIntroTitle
     aboutIntroDesc
     projIntroTitle
     projIntroDesc
-    metaTechTitle
-    metaTechDesc
-    metaCreativeTitle
-    metaCreativeDesc
-    metaIdeTitle
-    metaIdeDesc
-    metaPublishTitle
-    metaPublishDesc
     techIntroTitle
     techIntroDesc
     techOneTitle
@@ -26,6 +35,14 @@ query folio {
     techTwoDesc
     techThreeTitle
     techThreeDesc
+    metaTechTitle
+    metaTechDesc
+    metaCreativeTitle
+    metaCreativeDesc
+    metaIdeTitle
+    metaIdeDesc
+    metaPublishTitle
+    metaPublishDesc
   }
 
   projects {
@@ -39,6 +56,7 @@ query folio {
     sourceCode
     slug
     tags
+    synop
     testimonialName
     testimonialAgency
     testimonialText

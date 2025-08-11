@@ -17,6 +17,17 @@ const metaLine = ref<HTMLElement | null>(null)
 
 let ctx: gsap.Context
 let app: PIXI.Application
+const splitInstances: SplitType[] = []
+let displaceSprite: PIXI.Sprite
+let imageSprite: PIXI.Sprite
+let filter: DisplacementFilter
+
+// Store ticker function reference for cleanup
+const tickerFunction = (delta: any) => {
+    if (displaceSprite) {
+        displaceSprite.rotation += 0.001
+    }
+}
 
 const classObject = computed(() => ({
     'meta__img--darkhue': colorMode.preference === 'dark',
@@ -38,7 +49,7 @@ onMounted(async () => {
         app.init({ backgroundAlpha: 0, canvas: pixiCtx.value, width: 800, height: 600 })
 
         const image = await Assets.load('/img/commodore.jpg')
-        const imageSprite = PIXI.Sprite.from(image)
+        imageSprite = PIXI.Sprite.from(image)
 
         // Make imageSprite fill the 800x600 canvas
         imageSprite.width = 800
@@ -48,13 +59,13 @@ onMounted(async () => {
 
         const imageMap = await Assets.load('/img/displacemap-2.jpg')
 
-        const displaceSprite = PIXI.Sprite.from(imageMap)
+        displaceSprite = PIXI.Sprite.from(imageMap)
 
         app.stage.interactive = true;
         app.stage.addChild(imageSprite)
         app.stage.addChild(displaceSprite)
 
-        const filter = new DisplacementFilter(displaceSprite)
+        filter = new DisplacementFilter(displaceSprite)
 
         app.stage.filters = [filter]
         filter.scale.set(100)
@@ -73,6 +84,7 @@ onMounted(async () => {
             let sectionsChar = $gsap.utils.toArray('.split-skills-w');
             sectionsChar.forEach((sec: any) => {
                 const splitTxt = new SplitType(sec, { types: 'words' })
+                splitInstances.push(splitTxt)
                 $gsap.set(splitTxt.words, { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', })
                 $gsap.to(splitTxt.words, {
                     autoAlpha: 1,
@@ -89,16 +101,40 @@ onMounted(async () => {
                 })
             })
 
-            $gsap.ticker.add((delta: any) => {
-                displaceSprite.rotation += 0.001
-            })
+            $gsap.ticker.add(tickerFunction)
         })
     }
 })
 
 onBeforeUnmount(() => {
-    //ctx.revert()
-    app.destroy()
+    // Remove GSAP ticker
+    $gsap.ticker.remove(tickerFunction)
+    
+    // Clean up GSAP context
+    ctx?.revert()
+    
+    // Clean up SplitType instances
+    splitInstances.forEach(instance => {
+        instance.revert()
+    })
+    splitInstances.length = 0
+    
+    // Clean up PIXI resources
+    if (app) {
+        // Remove event listeners from stage
+        if (app.stage) {
+            app.stage.removeAllListeners()
+            app.stage.filters = []
+        }
+        
+        // Destroy individual PIXI objects
+        filter?.destroy()
+        imageSprite?.destroy()
+        displaceSprite?.destroy()
+        
+        // Destroy the application
+        app.destroy()
+    }
 })
 </script>
 
@@ -108,8 +144,8 @@ onBeforeUnmount(() => {
         <main class="meta">
             <CommonLine />
             <!--:className here is for gsap-->
-            <CommonAbstract class="meta__header" :label="'META'" :desc="''" :className="'meta-intro'" />
-            <CommonInfoLabel :label="'ABOUT THIS SITE'" :className="'meta-label'"
+            <CommonAbstract class="meta__header" :label="'Meta'" :desc="''" :className="'meta-intro'" />
+            <CommonInfoLabel :label="'About this folio'" :className="'meta-label'"
                 :style="{ justifyContent: 'center', alignItems: 'flex-start' }" />
             <div class="meta__canvas">
                 <div class="meta__tech">
@@ -135,6 +171,11 @@ canvas {
     pointer-events: none; // Allow mouse events to pass through to parent
 }
 
+h2 {
+    color: #171717;
+    font-weight: 600;
+}
+
 .meta-index {
     position: absolute;
 }
@@ -143,7 +184,6 @@ canvas {
     position: relative;
     padding: 0 $px-16-spacer;
     overflow: hidden;
-    height: 100vh;
     background-color: $primary;
 
     padding: $px-64-spacer $px-16-spacer;
@@ -167,19 +207,13 @@ canvas {
 
 .meta {
     overflow: hidden;
-    color: $secondary;
-
-    &__img--darkhue {
-        filter: hue-rotate(245deg) opacity(.7);
-    }
-
-    &__img--lighthue {
-        filter: hue-rotate(338deg) opacity(.7);
-    }
+    color: #171717;
 
     &__header {
         position: relative;
         background-color: transparent;
+        color:inherit;
+        color:$secondary;
     }
 
     &__canvas {

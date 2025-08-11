@@ -8,6 +8,7 @@ import { ref, onMounted } from 'vue'
 const store = useFolioStore()
 const { $gsap } = useNuxtApp()
 let ctx: gsap.Context
+const splitInstances: SplitType[] = []
 
 const canLine = ref<HTMLElement | null>(null)
 
@@ -19,6 +20,7 @@ onMounted(() => {
         let sectionsChar = $gsap.utils.toArray('.split-skills-w');
         sectionsChar.forEach((sec: any) => {
             const splitTxt = new SplitType(sec, { types: 'words' })
+            splitInstances.push(splitTxt)
             $gsap.set(splitTxt.words, { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', })
             $gsap.to(splitTxt.words, {
                 autoAlpha: 1,
@@ -39,7 +41,16 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-    ctx.revert();
+    // Clean up GSAP context
+    ctx?.revert()
+    
+    // Clean up SplitType instances
+    splitInstances.forEach(instance => {
+        instance.revert()
+    })
+    
+    // Clear the array
+    splitInstances.length = 0
 })
 </script>
 
@@ -55,17 +66,17 @@ onUnmounted(() => {
                 <div class="can__demo-block">
                     <h2 class="can__demo-title split-skills-w">{{ store.data.intro?.techOneTitle }}</h2>
                     <div class="can__demo-desc split-skills-w">{{ store.data.intro?.techOneDesc }}</div>
-                    <DemoSkills class="can__demo-comp" />
+                    <AnimSkills class="can__demo-comp" />
                 </div>
                 <div class="can__demo-block">
                     <h2 class="can__demo-title split-skills-w">{{ store.data.intro?.techTwoTitle }}</h2>
                     <div class="can__demo-desc split-skills-w">{{ store.data.intro?.techTwoDesc }}</div>
-                    <DemoAnimation class="can__demo-comp" />
+                    <AnimDemo class="can__demo-comp" />
                 </div>
                 <div class="can__demo-block">
                     <h2 class="can__demo-title split-skills-w">{{ store.data.intro?.techThreeTitle }}</h2>
                     <div class="can__demo-desc split-skills-w">{{ store.data.intro?.techThreeDesc }}</div>
-                    <DemoUX class="can__demo-comp" />
+                    <AnimUX class="can__demo-comp" />
                 </div>
             </section>
         </main>
@@ -77,7 +88,7 @@ onUnmounted(() => {
     will-change: transform;
 }
 
-/* same margins as other home (front) components; ViewAboutFront varies slightly due to parallax */
+/* same margins as other home (sub) components; ViewParallaxHome varies slightly due to parallax */
 .can-wrapper {
     position: relative;
     background-color: $primary;
@@ -103,10 +114,6 @@ onUnmounted(() => {
 .can {
     &__label {
         position: relative;
-
-        :deep(.abstract-desc) {
-            font-size: clamped(20px, 34px, 480px, 1920px);
-        }
     }
 
     &__demo {
@@ -135,8 +142,7 @@ onUnmounted(() => {
         width: 100%;
         min-width: 300px;
         color: $secondary;
-        text-transform: uppercase;
-
+ 
         @include this-and-above('md') {
             width: 60%;
             min-width: 300px;

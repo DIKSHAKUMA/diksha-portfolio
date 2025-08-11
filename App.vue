@@ -10,15 +10,29 @@ const { $gsap } = useNuxtApp()
 
 onMounted(() => {
     isLoaded.value = true;
-    $gsap.set(".venice__blind", { scaleX: 0 })
-    $gsap.fromTo('.venice__blind', { scaleX: 1, autoAlpha: 1 }, { duration: .2, autoAlpha: 0, scaleX: 0, stagger: .05, transformOrigin: "0% 50%", onComplete: clearProps })
+    const blinds = $gsap.utils.toArray('.venice__blind')
+    $gsap.set(blinds, { scaleX: 0, force3D: true })
+    $gsap.fromTo(blinds, 
+        { scaleX: 1, opacity: 1, force3D: true }, 
+        { 
+            duration: .2, 
+            opacity: 0, 
+            scaleX: 0, 
+            stagger: .05, 
+            transformOrigin: "0% 50%", 
+            force3D: true,
+            ease: "power2.out",
+            onComplete: clearProps 
+        }
+    )
 })
 
 const clearProps = () => {
-    $gsap.set('.venice__blind', {
-        clearProps: 'scaleX, autoAlpha'
+    const blinds = $gsap.utils.toArray('.venice__blind')
+    $gsap.set(blinds, {
+        clearProps: 'transform,opacity'
     })
-    $gsap.set('.venice', { autoAlpha: 0 })
+    $gsap.set('.venice', { visibility: 'hidden', opacity: 0 })
 }
 </script>
 
@@ -90,15 +104,28 @@ body {
     background-position: center center;
     visibility: visible;
     overflow: hidden;
+    display: flex;
+    contain: layout style paint;
+    will-change: opacity, visibility;
+    transform: translateZ(0); // Force hardware acceleration
+    backface-visibility: hidden;
 
     &__blind {
-        display: inline-block;
         position: relative;
         top: 0;
         overflow: hidden;
-        width: 5%;
+        flex: 1;
         height: 100vh;
         background-color: $secondary;
+        margin-left: -1px;
+        will-change: transform, opacity;
+        transform: translateZ(0); // Force hardware acceleration
+        backface-visibility: hidden;
+        contain: layout style paint;
+        
+        &:first-child {
+            margin-left: 0;
+        }
     }
 }
 </style>

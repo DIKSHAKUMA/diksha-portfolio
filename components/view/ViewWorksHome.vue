@@ -8,6 +8,7 @@ const store = useFolioStore()
 const { $gsap } = useNuxtApp()
 
 let ctx: gsap.Context
+const splitInstances: SplitType[] = []
 
 const paginatedProjects = computed(() => {
     const start = 0
@@ -18,53 +19,72 @@ const paginatedProjects = computed(() => {
 onMounted(() => {
 
     ctx = $gsap.context((self) => {
-
         $gsap.registerPlugin(ScrollTrigger)
 
-        // Clip words Selected Works and reveal with polygon path, best done separate from above
-        let sectionsChar = $gsap.utils.toArray('.split-proj-w');
+        // Batch DOM queries for better performance
+        const sectionsChar = $gsap.utils.toArray('.split-proj-w')
+        const images = $gsap.utils.toArray('.projects__abstract__image')
+
+        // Optimize text reveal animation
         sectionsChar.forEach((sec: any) => {
             const splitTxt = new SplitType(sec, { types: 'words' })
-            $gsap.set(splitTxt.words, { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', })
+            splitInstances.push(splitTxt)
+            $gsap.set(splitTxt.words, {
+                autoAlpha: 0,
+                clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)'
+            })
+
             $gsap.to(splitTxt.words, {
                 autoAlpha: 1,
                 clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                duration: 0.25, // Faster duration
+                ease: "power2.out",
                 scrollTrigger: {
                     trigger: sec,
-                    start: 'top 90%',
-                    scrub: false,
-                    end: 'top 50%',
-                    toggleActions: "restart none none reverse",
-                    preventOverlaps: true, // <- HERE
-                    //markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 }
-                },
-                duration: .4,
+                    start: 'top 80%', // Trigger slightly later
+                    end: 'top 60%',
+                    toggleActions: "play none none reverse",
+                    preventOverlaps: true,
+                    fastScrollEnd: true,
+                    anticipatePin: 1
+                }
             })
         })
 
-        // Reveal the project images 
-        let images = $gsap.utils.toArray('.projects__abstract__image');
+        // Optimize image reveal animation
         images.forEach((img: any) => {
             $gsap.to(img, {
                 yPercent: 0,
                 opacity: 1,
-
                 clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                duration: 0.5, // Faster duration
+                ease: "power1.out",
                 scrollTrigger: {
                     trigger: img,
-                    start: "top 80%",
-                    scrub: false,
-                    end: 'top 70%',
+                    start: "top 85%", // Consistent with text
+                    end: 'top 60%',
+                    //onEnter, onLeave, onEnterBack, and onLeaveBack, 
                     toggleActions: "play none none reverse",
-                },
-                duration: .3
+                    preventOverlaps: true,
+                    fastScrollEnd: true,
+                    anticipatePin: 1
+                }
             })
         })
     })
 })
 
 onUnmounted(() => {
-    ctx.revert()
+    // Clean up GSAP context
+    ctx?.revert()
+    
+    // Clean up SplitType instances
+    splitInstances.forEach(instance => {
+        instance.revert()
+    })
+    
+    // Clear the array
+    splitInstances.length = 0
 })
 </script>
 
@@ -77,12 +97,14 @@ onUnmounted(() => {
                 <div v-for="proj in paginatedProjects" :key="proj.slug">
                     <div class="projects__abstract__image action" data-name="proj" data-text="Explore"
                         data-color="#FFF">
-                        <NuxtLink :to="`/projects/${proj.slug}`">
+                        <NuxtLink :to="`/work/${proj.slug}`">
                             <NuxtImg :src="proj.image[0].handle" provider="hygraph" alt="Project image" format="webp"
                                 sizes="sm:100vw md:45vw lg:45vw xl:35vw" densities="x1 x2"></NuxtImg>
                         </NuxtLink>
+                        <div class="projects__abstract__name">
+                            <p class="split-proj-w">{{ proj.name }}</p>
+                        </div>
                     </div>
-                    <h3 class="projects__abstract__name split-proj-w">{{ proj.name }}</h3>
                 </div>
             </section>
         </main>
@@ -90,45 +112,9 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-
 img,
 .split-proj-w {
-    will-change: transform, filter;
-}
-
-.projects__abstract__image {
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    transform: translateZ(0);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.projects__abstract__image:hover {
-    transform: translateY(-2px) translateZ(0);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.projects__abstract__image img {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: scale(1);
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 1;
-}
-
-.projects__abstract__image:hover img {
-    transform: scale(1.01);
-    opacity: 0.92;
+    will-change: transform;
 }
 
 /* same margins as project-wrapper in [id].vue */
@@ -162,22 +148,53 @@ img,
         align-self: flex-start;
 
         &__image {
+            position: relative;
             overflow: hidden;
+            transition: transform 0.25s ease-out;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translateZ(0);
+            cursor: pointer;
             clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
         }
 
-        &__name {
-            margin-top: $px-8-spacer;
-            color: $secondary;
-            text-transform: uppercase;
-
-            @include this-and-above('sm') {
-                margin-top: $px-16-spacer;
-            }
+        &__image:hover {
+            transform: scale(0.98) translateZ(0);
         }
 
-        &__tags {
-            color: $secondary;
+        &__image img {
+            transition: filter 0.25s ease-out, transform 0.25s ease-out;
+            transform: scale(1);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(1);
+        }
+
+        &__image:hover img {
+            transform: scale(0.99);
+            filter: brightness(0.7);
+        }
+
+        &__name {
+            position: absolute;
+            height: 30px;
+            bottom: $px-16-spacer;
+            left: $px-16-spacer;
+            background: rgba(0, 0, 0, 0.7);
+            padding: $px-8-spacer $px-16-spacer;
+            border-radius: 4px;
+            pointer-events: none; // Don't interfere with link clicks
+
+            p {
+                position: relative;
+                margin: 0;
+                color: white;
+                font-size: $fs-14;
+                font-weight: 500;
+                top: 50%;
+                transform: translateY(-50%);
+            }
         }
 
         @include this-and-above('md') {

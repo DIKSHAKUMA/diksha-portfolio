@@ -9,9 +9,9 @@ import { useHead } from '#imports' // Nuxt composable for managing head tags
 const store = useFolioStore()
 
 useHead({
-  link: [
-    { rel: 'preload', as: 'image', href: '/img/front.webp', type: 'image/webp' }
-  ]
+    link: [
+        { rel: 'preload', as: 'image', href: '/img/front.webp', type: 'image/webp' }
+    ]
 })
 const pixiCtx = useTemplateRef<any>('pixi')
 const imgFrames = useTemplateRef<any>('imgFrames')
@@ -21,24 +21,45 @@ const { $gsap } = useNuxtApp()
 
 const colorMode = useColorMode()
 const imagesWrapper = useTemplateRef<any>('imagesWrapper')
-
+const route = useRoute()
 
 let app: PIXI.Application
 let filter: DisplacementFilter
 let ripple: PIXI.Sprite
 let sprite: PIXI.Sprite
 let ctx: gsap.Context
+let pixiReady = false
+let rafId = 0
+let stopWatching: (() => void) | null = null
 
-const checkScreenWidth = () => {
-    if (import.meta.client) {
-        const screenWidth = window.innerWidth
-        if (screenWidth < 768) {
-            isMobile.value = true
-        }else{
-            isMobile.value = false
+// Function to set image dimensions to make sure canvas is initialized if user returns using back button
+const setImageDimensions = () => {
+    if (imgFrames.value && pixiCtx.value && pixiReady) {
+        const canvasWidth = pixiCtx.value.clientWidth || 400
+        const canvasHeight = pixiCtx.value.clientHeight || 300
+        imgFrames.value.style.width = canvasWidth + 'px'
+        imgFrames.value.style.height = canvasHeight + 'px'
+    } else if (imgFrames.value && !pixiReady) {
+        // If PIXI isn't ready yet, wait for it; more solid than a setTimeout
+        const checkReady = () => {
+            if (pixiReady) {
+                setImageDimensions()
+                $gsap.to(imagesWrapper.value, { duration: 0.5, autoAlpha: 1 })
+            } else {
+                rafId = requestAnimationFrame(checkReady)
+            }
         }
+        checkReady()
     }
 }
+
+// Watch for route changes and reset dimensions
+stopWatching = watch(() => route.path, (newPath, oldPath) => {
+    nextTick(() => {
+        setImageDimensions();
+    })
+})
+
 onMounted(async () => {
     if (import.meta.client) {
 
@@ -49,10 +70,8 @@ onMounted(async () => {
         $gsap.registerPlugin(ScrollTrigger)
         app = new PIXI.Application()
 
-        $gsap.set(imagesWrapper.value, { alpha: 0 })
-
         // Initialize the application
-        app.init({ backgroundAlpha: 0, canvas: pixiCtx.value, width: 400, height: 300 })
+        await app.init({ backgroundAlpha: 0, canvas: pixiCtx.value, width: 400, height: 300 })
 
         const image = await Assets.load('/img/front.png')
         sprite = PIXI.Sprite.from(image)
@@ -70,7 +89,7 @@ onMounted(async () => {
         app.stage.filters = [filter]
 
         sprite.anchor.set(0.5)
-        
+
         // Scale sprite to cover canvas dimensions (like object-fit: cover)
         const scaleX = pixiCtx.value.width / sprite.texture.width
         const scaleY = pixiCtx.value.height / sprite.texture.height
@@ -83,14 +102,18 @@ onMounted(async () => {
 
         sprite.position.set(pixiCtx.value.width / 2, pixiCtx.value.height / 2)
         ripple.position.set(pixiCtx.value.width / 2, pixiCtx.value.height / 2)
-        imgFrames.value.style.width = pixiCtx.value.clientWidth + 'px'
-        imgFrames.value.style.height = pixiCtx.value.clientHeight + 'px'
+
+        // Mark PIXI as ready
+        pixiReady = true
+
+        // Set image dimensions using the shared function
+        setImageDimensions()
 
         // Context! The friendly GSAP garbage collector
         ctx = $gsap.context((self) => {
             // For the sprite animate a pixi displacement pulse
             let pixiTl = $gsap.timeline({ repeat: 0 })
-            pixiTl.fromTo(sprite, { alpha: 0 }, { duration: 1, alpha: 1 })
+            pixiTl.fromTo(sprite, { alpha: 0 }, { duration: 1, alpha: 1, delay: 1.5 })
                 .fromTo(imagesWrapper.value, { opacity: 0 }, { opacity: 1 }, "<")
                 .fromTo(filter.scale, { x: 0, y: 0 }, { duration: 0.3, x: 100, y: 100 }, "ripple")
                 .to(ripple.scale, { duration: 1.5, x: 1.5, y: 1.5 }, "ripple")
@@ -101,15 +124,13 @@ onMounted(async () => {
 
             // Fade out author intro
             let authorTl = $gsap.timeline({
-                // Pin intro is actually in ViewProjectsFront.vue; fade out author intro when pin intro moves above bottom of browser window
+                // Pin intro is actually in ViewWorks.vue; fade out author intro when pin intro moves above bottom of browser window
                 scrollTrigger: {
                     trigger: '.about-wrapper',
                     pinSpacing: true,
                     start: 'top bottom', // when the top of the trigger hits the bottom of the viewport
                     end: '+=50',
-                    scrub: 5,
-                    toggleActions: "restart none none reverse",
-                    anticipatePin: 1
+                    scrub: 3
                 }
             })
             authorTl.addLabel('start')
@@ -118,9 +139,35 @@ onMounted(async () => {
     }
 })
 
-onBeforeUnmount(() => {
-    ctx.revert()
-    app.destroy()
+onUnmounted(() => {
+    // Clean up animation frame if still pending
+    if (rafId) {
+        cancelAnimationFrame(rafId)
+    }
+
+    // Clean up route watcher
+    if (stopWatching) {
+        stopWatching()
+    }
+
+    // Clean up GSAP context
+    ctx?.revert()
+
+    // Clean up PIXI resources explicitly
+    if (app) {
+        // Remove filters
+        if (app.stage) {
+            app.stage.filters = []
+        }
+
+        // Destroy individual PIXI objects
+        filter?.destroy()
+        sprite?.destroy()
+        ripple?.destroy()
+
+        // Destroy the application
+        app.destroy()
+    }
 })
 </script>
 
@@ -134,12 +181,14 @@ onBeforeUnmount(() => {
                 </div>
             </div>
         </div>
-        <!--:className here is for gsap-->
-        <CommonAbstract class="front-header" :label="store.data.about?.intro" :desc="''" :className="'front-intro'" />
+        <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
+        <CommonAbstract class="front-header" :label="store.data.intro?.heroIntroTitle" :delay="1.5"
+            :desc="store.data.intro?.heroIntroDesc" :className="'front-intro'" :is-hero="true" />
     </main>
 </template>
 
 <style lang="scss" scoped>
+
 .hero-wrapper {
     position: relative;
     height: 100vh;
@@ -150,24 +199,9 @@ onBeforeUnmount(() => {
     }
 }
 
-:deep(.abstract-header) {
-    width: 100%;
-    margin-bottom: $px-16-spacer;
-    font-size: clamped(40px, 90px, 480px, 1920px);
-    width:90%;
-
-    @include this-and-above('sm') {
-        width:80%;
-    }
-
-    @include this-and-above('md') {
-        padding-right: $px-32-spacer;
-    }
-}
-
 .front-header {
     position: absolute;
-    bottom: 0px; 
+    bottom: 0px;
 }
 
 img {
@@ -177,9 +211,10 @@ img {
 .images-wrapper {
     display: flex;
     position: absolute;
-    top: 25%;
+    top: 30%;
     left: 50%;
     transform: translateX(-50%);
+    opacity: 0;
 }
 
 .img-pixi {
@@ -193,13 +228,12 @@ img {
     aspect-ratio: 4 / 3;
     width: 100%;
     height: auto;
+    border: none;
 }
 
 canvas {
-    width: 300px;
+    width: 400px;
 
-    @include this-and-above('sm') {
-        width: 400px;
-    }
+
 }
 </style>

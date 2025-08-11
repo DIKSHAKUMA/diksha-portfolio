@@ -62,10 +62,9 @@ onUnmounted(() => {
 }
 
 .info-label-wrapper {
-    position: absolute;
+    position:absolute;
     display: flex;
     color: var(--secondary);
-    text-transform: uppercase;
     z-index: 99;
     width: 100%;
     height: 100%;
@@ -76,7 +75,7 @@ onUnmounted(() => {
 .info-label-header {
     font-size: clamped(10px, 14px, 480px, 1920px);
     line-height: 1;
-    margin: $px-16-spacer $px-16-spacer;
+    margin: $px-32-spacer $px-32-spacer;
 }
 
 .info-label-header a {

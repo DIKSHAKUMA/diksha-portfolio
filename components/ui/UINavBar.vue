@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref, onBeforeUnmount } from 'vue'
-import LogoSVGLight from '@/assets/svg/logo-light.svg'
-import LogoSVGDark from '@/assets/svg/logo-dark.svg'
 
 const colorSwitch = useTemplateRef('colorSwitch')
 const navlist = useTemplateRef('navlist')
 const isDown = ref(false)
 const isMobileActive = ref(false)
-const isLightMode = ref<boolean>(true)
+const isLightMode = ref<boolean>(false)
 
 let screenWidth: any
 let currScrollPos: number
@@ -35,6 +33,8 @@ const toggleMenu = () => {
 
 const closeMenu = () => {
     if (screenWidth.value < 992) {
+
+        console.log("close menu")
         toggleMenu()
     }
 }
@@ -42,7 +42,7 @@ const closeMenu = () => {
 const checkScreenWidth = () => {
     if (import.meta.client) {
         screenWidth.value = window.innerWidth
-        if (screenWidth.value > 992) {
+        if (screenWidth.value > 768) {
             isMobileActive.value = false
         }
     }
@@ -80,15 +80,14 @@ checkScreenWidth()
 </script>
 
 <template>
-    <div class="mobile-nav-overlay"
-        :class="[isMobileActive ? 'mobile-nav-overlay--open' : 'mobile-nav-overlay--closed']"></div>
+
     <div class="nav-wrapper" :class="{ 'nav-wrapper--moveup': isDown }">
         <div class="nav-wrapper__inner">
 
-            <UINavHeader :is-mobile="isMobileActive" class="header-wrapper">
+            <UINavHeader :is-mobile="isMobileActive" @logo-click="closeMenu" class="header-wrapper">
                 <template #logo>
                     <ClientOnly>
-                        <NuxtLink to="/" data-name="yo" data-text="Home" class="logo action magnet">T. Thorstensson
+                        <NuxtLink to="/" data-name="yo" data-text="Home" class="logo action magnet">Thomas Thorstensson
                         </NuxtLink>
                     </ClientOnly>
                 </template>
@@ -100,23 +99,23 @@ checkScreenWidth()
             <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
 
                 <div class="nav__list" ref="navlist">
-                    <NuxtLink to="/" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
-                        no-prefetch>
-                        Archive
+                    <NuxtLink to="/works" data-name="menu" class="nav__item action magnet"
+                        activeClass="nav--link-active" no-prefetch @click="closeMenu">
+                        Works
                     </NuxtLink>
 
                     <NuxtLink to="" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
-                        no-prefetch>
+                        no-prefetch @click="closeMenu">
                         Blog
                     </NuxtLink>
 
-                    <NuxtLink to="" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
-                        no-prefetch>
+                    <NuxtLink to="/about" data-name="menu" class="nav__item action magnet"
+                        activeClass="nav--link-active" no-prefetch @click="closeMenu">
                         About
                     </NuxtLink>
 
                     <NuxtLink to="" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
-                        no-prefetch>
+                        no-prefetch @click="closeMenu">
                         Contact
                     </NuxtLink>
                 </div>
@@ -152,33 +151,11 @@ checkScreenWidth()
     </div>
 </template>
 
+/*
+This menu is a little overly complex and designy perhaps.
+I should probably just use a simple modal and be done with it.
+*/
 <style lang="scss" scoped>
-.mobile-nav-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 998; // Just below nav-wrapper (999)
-    transition: left .5s cubic-bezier(.075, .82, .165, 1);
-    background-color: #171717; // Dark background for both light and dark modes
-
-    &--open {
-        left: 0%;
-
-    }
-
-    &--closed {
-        transition-delay: .2s;
-        left: -100%;
-    }
-
-    // Hide on desktop
-    @include this-and-above('lg') {
-        display: none;
-    }
-}
-
 .magnet {
     transition: transform 0.1s linear;
 }
@@ -200,15 +177,21 @@ checkScreenWidth()
     font-family: $sans-ui;
     color: $secondary;
     height: 56px;
-    mix-blend-mode: difference;
+    z-index: 2000;
+    background-color: $primary;
 
     &--moveup {
         top: -100px;
     }
 
     @include this-and-above('lg') {
-        background-color: unset;
-        backdrop-filter: blur(10px);
+        background-color: rgba(23, 23, 23, 0.1); // Semi-transparent dark background
+        backdrop-filter: blur(15px); // Just blur, no saturation or background
+
+        .light-mode & {
+            background-color: rgba(250, 247, 255, 0.1); // Semi-transparent light background
+            backdrop-filter: blur(15px); // Just blur, no saturation or background
+        }
     }
 }
 
@@ -216,9 +199,8 @@ checkScreenWidth()
     display: flex;
     align-items: center;
     height: 100%;
-    font-weight: 500;
+    font-weight: 400;
     font-size: $fs-16;
-    text-transform: uppercase;
     margin: 0 $px-16-spacer;
 
     @include this-and-above('lg') {
@@ -245,17 +227,9 @@ checkScreenWidth()
     right: 70px;
 }
 
-
 .logo {
-    display:block;
+    display: block;
     height: auto;
-    .light-mode &:hover {
-        color: #5d5a00
-    }
-
-    .dark-mode &:hover {
-        color: #6f6fd1;
-    }
 }
 
 .nav {
@@ -265,9 +239,8 @@ checkScreenWidth()
     width: 100%;
     height: 100vh;
     transition: left .5s cubic-bezier(.075, .82, .165, 1);
-
     &--open {
-        font-weight: 600;
+        font-weight: 400;
         left: 0%;
         touch-action: none;
         -webkit-overflow-scrolling: none;
@@ -282,10 +255,10 @@ checkScreenWidth()
     }
 
     &--closed {
-        transition-delay: .2s;
         left: -100%;
         opacity: 1;
         background-color: $secondary;
+        transition: left 0s;
     }
 
     &__list {
@@ -312,19 +285,9 @@ checkScreenWidth()
         transition: color .3s;
         padding-right: 0px;
         color: $primary;
-        // for the magnet links for some reason need be here too
 
-        .light-mode &:hover {
-            color: #5d5a00;
-        }
-
-        .dark-mode &:hover {
-            color: #6f6fd1;
-        }
-
-        // Mobile menu should always use light-mode styling
-        .nav--open &:hover {
-            color: #6f6fd1;
+        &:hover {
+            color: $accent1;
         }
     }
 
@@ -338,13 +301,13 @@ checkScreenWidth()
         bottom: -5px;
         position: relative;
 
-        @include this-and-above('lg') {
+        @include this-and-above('md') {
             font-size: 20px;
         }
     }
 
     // Switch to desktop
-    @include this-and-above('lg') {
+    @include this-and-above('md') {
         background-color: unset;
         transition: none;
         position: relative;
@@ -377,7 +340,7 @@ checkScreenWidth()
             font-size: clamped(16px, 18px, 480px, 1920px);
             line-height: unset;
             padding-right: 25px;
-            color: #faf7ff;
+            color: $secondary;
             opacity: 1 !important;
             transition: transform 0.1s linear;
 
@@ -409,7 +372,7 @@ checkScreenWidth()
     span {
         width: 5px;
         height: 5px;
-        background-color: #faf7ff;
+        background-color: $secondary;
         display: block;
         border-radius: 50%;
         position: absolute;
@@ -504,7 +467,7 @@ checkScreenWidth()
     }
 
     // Bubbles
-    @include this-and-above('lg') {
+    @include this-and-above('md') {
         display: none;
     }
 }

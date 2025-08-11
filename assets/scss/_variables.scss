@@ -1,17 +1,16 @@
 .dark-mode {
     --primary: #171717;
     --secondary: #faf7ff;
-    --accent1: #9d9dff;
-    --accent2: #8783d1;
+    --accent1: #4a4453;
+    --accent2: #fff0e8;
     --color-scheme: dark;
 }
 
-// TODO: need an accent 4 to counter accent 3
 .light-mode {
     --primary: #faf7ff;
     --secondary: #171717;
-    --accent1: #8783d1;
-    --accent2: #9d9dff;
+    --accent1: #fff0e8;
+    --accent2: #4a4453;
     --color-scheme: light;
 }
 

@@ -5,7 +5,7 @@ const props = defineProps<{
 
 const title = ref("")
 const input = useTemplateRef<any>("myInput")
-const model = defineModel({ default: true })
+const model = defineModel({ default: false })
 </script>
 
 <template>
@@ -45,8 +45,6 @@ https://dev.to/urielbitton/how-to-design-an-ios-style-switch-4maj
     display: inline-block;
     cursor: pointer;
     z-index: 99;
-
-
 
     &__title {
         margin-right: 5px;

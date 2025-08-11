@@ -8,7 +8,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if (import.meta.server || useNuxtApp().isHydrating) return
 
     from.meta.pageTransition.onLeave = (el, done) => {
-        console.log('onLeave')
 
         store.isTransitionFinished = false
         store.isTransitionStarted = false
@@ -31,12 +30,12 @@ export default defineNuxtRouteMiddleware((to, from) => {
         })
 
         // simple test
-        tl.set('.venice', { autoAlpha: 1 })
-        tl.fromTo('.venice__blind', { scaleX: 0, autoAlpha: 0 }, { duration: .2, scaleX: 1.1, autoAlpha: 1, stagger: .05, transformOrigin: "0% 50%", roundProps: ["opacity"] })
+        tl.set('.venice', { autoAlpha: 1, force3D: true })
+        tl.fromTo('.venice__blind', { scaleX: 0, autoAlpha: 0 }, { duration: .2, scaleX: 1.1, autoAlpha: 1, stagger: .05, transformOrigin: "0% 50%", roundProps: ["opacity"], force3D: true })
     }
 
     to.meta.pageTransition.onBeforeEnter = (el, done) => {
-        $gsap.set(".venice__blind", { scaleX: 0, opacity: 0 })
+        $gsap.set(".venice__blind", { scaleX: 0, autoAlpha: 0, force3D: true })
     }
 
     to.meta.pageTransition.onEnter = (el, done) => {
@@ -57,6 +56,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
         })
 
         // simple test, for complex we need watchers for transitionState in relevant components
-        tl.fromTo('.venice__blind', { scaleX: 1.2, autoAlpha: 1 }, { duration: .2, scaleX: 0, autoAlpha: 0, stagger: .05, transformOrigin: "0% 50%" })
+        tl.fromTo('.venice__blind', { scaleX: 1.2, autoAlpha: 1 }, { duration: .2, scaleX: 0, autoAlpha: 0, stagger: .05, transformOrigin: "0% 50%", force3D: true })
     }
 })

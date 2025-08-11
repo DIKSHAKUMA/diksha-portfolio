@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSlots } from 'vue';
 const slots = useSlots();
+const emit = defineEmits(['logo-click'])
 const props = defineProps({
     isMobile: {
         type: Boolean,
@@ -11,7 +12,7 @@ const props = defineProps({
 
 <template>
     <div :is-mobile="props.isMobile">
-        <div v-if="slots.logo" class="logo">
+        <div v-if="slots.logo" class="logo" @click="$emit('logo-click')">
             <slot name="logo"></slot>
         </div>
         <div v-if="slots.mode" class="mode">
@@ -23,7 +24,7 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .logo {
-    color: #faf7ff;
+    color: $secondary;
     z-index: 100;
     font-size: clamped(16px, 18px, 480px, 1920px);
 

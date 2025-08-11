@@ -1,9 +1,11 @@
 <script setup lang="ts">
+
 import SplitType from 'split-type';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const { $gsap } = useNuxtApp()
 let ctx: gsap.Context
+const splitInstances: SplitType[] = []
 
 const props = defineProps({
     label: {
@@ -17,6 +19,14 @@ const props = defineProps({
     className: {
         type: String,
         default: ''
+    },
+    delay: {
+        type: Number,
+        default: 0
+    },
+    isHero: {
+        type: Boolean,
+        default: false
     }
 })
 
@@ -29,10 +39,12 @@ onMounted(() => {
         let secChar = $gsap.utils.toArray(`.${props.className}`);
         secChar.forEach((sec: any) => {
             const splitTxt = new SplitType(sec, { types: 'words' })
+            splitInstances.push(splitTxt)
             $gsap.set(splitTxt.words, { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', })
             $gsap.to(splitTxt.words, {
                 autoAlpha: 1,
                 clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                delay: props.delay,
                 scrollTrigger: {
                     trigger: sec,
                     start: 'top bottom',
@@ -40,9 +52,9 @@ onMounted(() => {
                     end: 'top top',
                     toggleActions: "restart none none reverse",
                     preventOverlaps: true,
+                    anticipatePin: 1
                 },
                 duration: .4,
-
                 ease: "power1.out"
             })
         })
@@ -50,18 +62,29 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-    ctx.revert()
+    // Clean up GSAP context
+    ctx?.revert()
+
+    // Clean up SplitType instances
+    splitInstances.forEach(instance => {
+        instance.revert()
+    })
+
+    // Clear the array
+    splitInstances.length = 0
 })
 
 </script>
 
 <template>
-    <div class="abstract-wrapper">
-        <header class="abstract-header" :class="className">
-            <span>{{ label }}</span>
-        </header>
-        <div v-if="desc">
-            <div class="abstract-desc" :class="className">{{ desc }}</div>
+    <div class="abstract-wrapper" :class="{ 'abstract-wrapper--hero': isHero }">
+        <div class="abstract">
+            <header class="abstract__header" :class="[className, { 'abstract__header--hero': isHero }]">
+                <div>{{ label }}</div>
+            </header>
+            <div v-if="desc && desc.trim()">
+                <div class="abstract__desc" :class="className">{{ desc }}</div>
+            </div>
         </div>
     </div>
 </template>
@@ -71,31 +94,52 @@ onUnmounted(() => {
     display: flex;
     flex-flow: column;
     align-items: flex-start;
-    margin: 0 0;
     color: $secondary;
-    text-transform: uppercase;
-    font-weight: 500;
-    line-height: .9;
     margin: 0;
-    overflow: hidden;
-}
+    height: fit-content;
 
-.abstract-header {
-    font-size: clamped(50px, 90px, 480px, 1920px);
-    flex-wrap: wrap;
-    width: 60%;
+    width: 80%;
     margin-bottom: $px-32-spacer;
-    line-height: 1;
+
+    &--hero {
+        margin-bottom: $px-16-spacer;
+    }
 
     @include this-and-above('md') {
         margin-bottom: $px-64-spacer;
+
+        &.abstract-wrapper--hero {
+            margin-bottom: $px-16-spacer;
+        }
     }
 }
 
-.abstract-desc {
-    font-weight: 500;
-    line-height: .9;
-    line-height: 1.2;
-    font-size: clamped(20px, 34px, 480px, 1920px);
+.abstract {
+    &__header {
+        position: relative;
+        font-size: clamped(56px, 110px, 480px, 1920px); // Increased from 44px to 56px for better mobile readability
+        flex-wrap: wrap;
+        line-height: 1.1;
+        height: max-content;
+        margin-bottom: $px-32-spacer;
+
+        &--hero {
+            margin-bottom: $px-16-spacer;
+        }
+
+        @include this-and-above('md') {
+            margin-bottom: $px-64-spacer;
+
+            &.abstract__header--hero {
+                margin-bottom: $px-16-spacer;
+            }
+        }
+    }
+
+    &__desc {
+        line-height: .9;
+        line-height: 1.2;
+        font-size: clamped(20px, 34px, 480px, 1920px); // Increased from 16px to 20px for better mobile readability
+    }
 }
 </style>

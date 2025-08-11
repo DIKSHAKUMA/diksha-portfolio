@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SplitType from 'split-type';
 import { useFolioStore } from '~/store/useFolioStore'
+import DoubleArrowSVG from '~/assets/svg/double-arrow.svg'
 
 const store = useFolioStore()
 const { $gsap } = useNuxtApp()
@@ -12,7 +13,7 @@ definePageMeta({
     key: route => route.fullPath,
 
     // DO NOT REMOVE THIS! APOLLO STICKER TAPED TO CONSOLE.
-    // EVEN GLOBAL ROUTE TRANSITIONS NEED A SAKI
+    // EVEN GLOBAL ROUTE TRANSITIONS NEED A SAKI. GOD DAMN IT I WROTE IT, NOW I'LL NEVER FORGET IT.
     pageTransition: {
         name: 'saki',
         mode: 'out-in'
@@ -23,23 +24,23 @@ const proj = computed(() => {
     return store.data.projects.find((proj: any) => proj.slug === route.params.id)
 })
 
+// Get next and previous projects and if we hit the first or last project, loop back to the other end
 const getNextProj = computed(() => {
     const index = store.data.projects.findIndex((proj: any) => proj.slug === route.params.id)
-    return store.data.projects[index + 1]
+    // If at last project, loop back to first (index 0)
+    const nextIndex = index === store.data.projects.length - 1 ? 0 : index + 1
+    return store.data.projects[nextIndex]
 })
-
 
 const getPrevProj = computed(() => {
     const index = store.data.projects.findIndex((proj: any) => proj.slug === route.params.id)
-    return store.data.projects[index - 1]
+    // If at first project, loop to last project
+    const prevIndex = index === 0 ? store.data.projects.length - 1 : index - 1
+    return store.data.projects[prevIndex]
 })
 
 let ctx: gsap.Context
 
-/**
- * There could be a higher level of abstraction where I made the split type and gsap animation into helpers
- * but I believe it could be hard to overview what's going on if I abstracted it too much.
- */
 onMounted(() => {
 
     $lenis.scrollTo(0, { immediate: true, force: true })
@@ -105,89 +106,125 @@ onUnmounted(() => {
 <template>
     <div>
         <UIMouseCursor />
-        <div class="project-wrapper">
+        <div class="project-wrapper" v-if="proj">
             <main class="project">
-                <CommonAbstract class="project__abstract" :label="`Work / ${proj!.client}`" :desc="proj!.name"
+                <CommonAbstract class="project__abstract" :label="`Work / ${proj.client}`" :desc="proj.name"
                     :className="'project__abstract'"></CommonAbstract>
 
                 <section class="project__content">
                     <div class="project__image project-image-reveal" data-image="0">
-                        <NuxtImg :src="proj!.image[0].handle" provider="hygraph" alt="Project image" format="webp"
+                        <NuxtImg :src="proj.image[0].handle" provider="hygraph" alt="Project image" format="webp"
                             sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                     </div>
 
                     <div class="project__text">
                         <div class="project__text-col-1">
-                            <div class="project__desc split-proj-w">{{ proj!.description[0] }}</div>
-                            <div class="project__desc split-proj-w">{{ proj!.description[1] }}</div>
+                            <div class="project__desc split-proj-w">{{ proj.description[0] }}</div>
+                            <div class="project__desc split-proj-w">{{ proj.description[1] }}</div>
                         </div>
                         <div class="project__text-col-2">
                             <h3 class="split-proj-w">Client</h3>
-                            <div class="project__desc split-proj-w mb-1">{{ proj!.client }}</div>
-                            <div v-if="proj!.endclient">
+                            <div class="project__desc split-proj-w mb-1">{{ proj.client }}</div>
+                            <div v-if="proj.endclient">
                                 <h3 class="split-proj-w">End Client</h3>
-                                <h4 class="project__desc split-proj-w mb-1">{{ proj!.endclient }}</h4>
+                                <h4 class="project__desc split-proj-w mb-1">{{ proj.endclient }}</h4>
                             </div>
                             <h3 class="split-proj-w">Year</h3>
-                            <h4 class="project__desc split-proj-w mb-1">{{ proj!.date }}</h4>
+                            <h4 class="project__desc split-proj-w mb-1">{{ proj.date }}</h4>
                             <h3 class="split-proj-w">Scope</h3>
-                            <h4 class="project__desc split-proj-w mb-1">{{ proj!.tags.join(', ') }}</h4>
+                            <h4 class="project__desc split-proj-w mb-1">{{ proj.tags.join(', ') }}</h4>
                         </div>
                     </div>
 
                     <div>
                         <div class="project__image project__image--1 project-image-reveal" data-image="1">
-                            <NuxtImg :src="proj!.image[1].handle" provider="hygraph" alt="Project image" format="webp"
+                            <NuxtImg :src="proj.image[1].handle" provider="hygraph" alt="Project image" format="webp"
                                 sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                         </div>
                         <div class="project__image project__image--2 project-image-reveal" ref="image-2" data-image="2">
-                            <NuxtImg :src="proj!.image[2].handle" provider="hygraph" alt="Project image" format="webp"
+                            <NuxtImg :src="proj.image[2].handle" provider="hygraph" alt="Project image" format="webp"
                                 sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                         </div>
                     </div>
 
                     <!-- Another image description -->
                     <div class="project__text">
-                        <div class="project__desc split-proj-w">{{ proj!.description[2] }}</div>
+                        <div class="project__desc split-proj-w">{{ proj.description[2] }}</div>
                     </div>
 
                     <div class="project__image project-image-reveal" data-image="3">
-                        <NuxtImg :src="proj!.image[3].handle" provider="hygraph" alt="Project image" format="webp"
+                        <NuxtImg :src="proj.image[3].handle" provider="hygraph" alt="Project image" format="webp"
                             sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                     </div>
 
                     <div class="project__flex-wrapper">
                         <div class="project__img-col-1">
                             <div class="project__image project-image-reveal" data-image="4">
-                                <NuxtImg :src="proj!.image[4].handle" provider="hygraph" alt="Project image"
+                                <NuxtImg :src="proj.image[4].handle" provider="hygraph" alt="Project image"
                                     format="webp" sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                             </div>
                         </div>
 
                         <div class="project__img-col-2">
                             <div class="project__image project-image-reveal" data-image="5">
-                                <NuxtImg :src="proj!.image[5].handle" provider="hygraph" alt="Project image"
+                                <NuxtImg :src="proj.image[5].handle" provider="hygraph" alt="Project image"
                                     format="webp" sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                             </div>
                         </div>
                     </div>
 
-                    <div v-if="proj!.testimonialName">
-                        <CommonTestimonial :name="proj!.testimonialName" :agency="proj!.testimonialAgency"
-                            :text="proj!.testimonialText" />
+                    <div v-if="proj.testimonialName">
+                        <CommonTestimonial :name="proj.testimonialName" :agency="proj.testimonialAgency"
+                            :text="proj.testimonialText" />
                     </div>
 
                 </section>
                 <CommonLine :pos="'relative'" />
+                <nav class="project__nav" v-if="getPrevProj && getNextProj">
+                    <UIProjectStepper :prevImg="getPrevProj.image[0].handle" :nextImg="getNextProj.image[0].handle"
+                        :prevName="getPrevProj.name" :nextName="getNextProj.name" :prev="getPrevProj.slug"
+                        :next="getNextProj.slug" :prevSynop="getPrevProj.synop" :nextSynop="getNextProj.synop" />
+                </nav>
+                <div class="project__action action" data-name="menu">
+                    <NuxtLink class="project__action-link" to="">
+                        <div class="project__action-line"><i>Fella, this site rocks, let's do work!</i></div>
+                        <DoubleArrowSVG class="project__action-arrow" />
+                    </NuxtLink>
+                </div>
             </main>
-            <nav class="project__nav">
-                <UIProjectStepper :prevImg="getPrevProj!.image[0].handle" :nextImg="getNextProj!.image[0].handle" :prevName="getPrevProj!.name" :nextName="getNextProj!.name" :prev="getPrevProj!.slug" :next="getNextProj!.slug" />
-            </nav>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
+.project__action {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    bottom: 0;
+    align-self: flex-end;
+    margin: $px-32-spacer 0;
+
+    &-line {
+        display: inline-flex;
+        font-size: clamped(16px, 20px, 380px, 1920px);
+        margin-right: $px-16-spacer;
+        color: $secondary;
+    }
+
+    &-arrow {
+        width: 50px;
+        height: auto;
+        fill: $secondary;
+        animation: arrowFloat 2.5s ease-in-out infinite;
+    }
+
+    .project__action-link {
+        display: inline-flex;
+        align-items: center;
+    }
+}
+
 .mb-1 {
     margin-bottom: 1rem;
 }
@@ -216,7 +253,7 @@ img {
     }
 
     @include this-and-above('lg') {
-        padding: 0 $px-128-spacer;
+        padding: 0 $px-64-spacer;
     }
 
     @include this-and-above('xl') {
@@ -257,7 +294,6 @@ img {
     transition: filter 0.5s ease;
 }
 
-
 .project {
     display: flex;
     flex-direction: column;
@@ -272,16 +308,6 @@ img {
         gap: 20px;
         padding-top: 20px;
         color: $secondary;
-    }
-
-    &__title {
-        font-size: clamped(32px, 60px, 380px, 1920px);
-        font-weight: 400;
-    }
-
-    &__subtitle {
-        font-size: clamped(15px, 24px, 380px, 1920px);
-        font-weight: 400;
     }
 
     &__content {
@@ -352,7 +378,6 @@ img {
     &__text-col-2 {
         flex: 1 1 30%;
         line-height: 1.2;
-
     }
 
     &__img-col-1 {
@@ -369,6 +394,18 @@ img {
         .project__image {
             margin-top: 0;
         }
+    }
+}
+
+@keyframes arrowFloat {
+
+    0%,
+    100% {
+        transform: translateX(0px);
+    }
+
+    50% {
+        transform: translateX(8px);
     }
 }
 </style>
