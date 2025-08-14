@@ -190,7 +190,7 @@ I should probably just use a simple modal and be done with it.
 
         .light-mode & {
             background-color: rgba(250, 247, 255, 0.1); // Semi-transparent light background
-            backdrop-filter: blur(15px); // Just blur, no saturation or background
+            backdrop-filter: blur(15px); // Firefox might scream at this; double context
         }
     }
 }
@@ -239,6 +239,7 @@ I should probably just use a simple modal and be done with it.
     width: 100%;
     height: 100vh;
     transition: left .5s cubic-bezier(.075, .82, .165, 1);
+
     &--open {
         font-weight: 400;
         left: 0%;
@@ -343,6 +344,10 @@ I should probably just use a simple modal and be done with it.
             color: $secondary;
             opacity: 1 !important;
             transition: transform 0.1s linear;
+
+            &:hover {
+                color: $accent2;
+            }
 
             &:last-child {
                 padding-right: 0;

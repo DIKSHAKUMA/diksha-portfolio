@@ -22,6 +22,7 @@
     "nuxt": "^3.16.2",
     "nuxt-graphql-client": "^0.2.43",
     "nuxt-svgo": "^4.0.12",
+    "p5": "^2.0.4",
     "pinia": "^3.0.1",
     "pinia-plugin-persistedstate": "^4.2.0",
     "pixi-filters": "^6.1.0",
@@ -33,6 +34,7 @@
   "devDependencies": {
     "@iconify-json/mdi": "^1.2.3",
     "@types/node": "^22.10.7",
+    "@types/p5": "^1.7.6",
     "sass": "^1.83.4"
   }
 }

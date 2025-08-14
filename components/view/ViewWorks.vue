@@ -57,7 +57,7 @@ const setupDraggable = () => {
 
     // Calculate how far we can drag (negative because we drag left)
     // Add extra padding to ensure last project can be fully centered
-    const maxDragDistance = totalContentWidth - viewportWidth + initialOffset + paddingLeft  
+    const maxDragDistance = totalContentWidth - viewportWidth + initialOffset + paddingLeft
 
     $gsap.context(self => {
 
@@ -192,8 +192,8 @@ onUnmounted(() => {
     <main ref="main" class="projects-wrapper">
         <!--:className here is for gsap-->
         <div class="abstract--center">
-            <CommonAbstract :label="'Works'" :delay="1" :desc="'Drag & click to open.'"
-                :className="'abstract__works'" :is-hero="true" />
+            <CommonAbstract :label="'Works'" :delay="1" :desc="'Drag & click to open.'" :className="'abstract__works'"
+                :is-hero="true" />
         </div>
 
         <div class="progress">
@@ -254,10 +254,10 @@ a:hover {
     position: absolute;
     margin: $px-16-spacer $px-16-spacer;
     right: 0;
-    bottom:0;
+    bottom: 0;
 
     &__text {
-        font-size: clamped(44px, 110px, 480px, 1920px);
+        font-size: clamped(44px, 84px, 480px, 1920px);
         font-variation-settings: "wght" 550;
         white-space: nowrap;
         color: $secondary;

@@ -41,7 +41,6 @@ onUnmounted(() => {
     ctx?.revert()
 })
 </script>
-<!--TODO These fields below need be added to the query-->
 <template>
     <div class="about-wrapper">
         <main class="about">
@@ -131,8 +130,6 @@ onUnmounted(() => {
     contain: layout style paint; // CSS containment for better performance
     image-rendering: optimizeSpeed;
     background-image: url('/img/bilali-esmir.jpg');
-    opacity: .9;
-
 
     // Firefox-specific optimizations
     @-moz-document url-prefix() {

@@ -35,13 +35,10 @@ onMounted(() => {
 <template>
     <div>
         <main ref="main" class="hero-wrapper">
-            <AnimWaves />
+            <AnimP5Rings />
             <CommonAbstract class="front-header" :label="store.data.about?.aboutHeroTitle" :delay="1.5" :desc="''"
                 :className="'front-intro'" :is-hero="true" />
         </main>
-        <div class="about-wrapper"> 
-            <!-- about content here -->
-        </div>
     </div>
 </template>
 
@@ -49,8 +46,7 @@ onMounted(() => {
 :deep(.abstract-wrapper) {
     position: absolute;
     bottom: 0;
-    color: $primary;
-    margin-bottom:0;
+    margin-bottom: 0;
 }
 
 .hero-wrapper {
@@ -63,12 +59,5 @@ onMounted(() => {
     @include this-and-above('lg') {
         padding: 0 $px-64-spacer;
     }
-}
-
-// Ensure the about content starts below the viewport
-.about-wrapper {
-    position: relative;
-    z-index: 2; // Ensure it appears above the hero when scrolling
-    background: white; // Or your desired background
 }
 </style>
