@@ -41,7 +41,7 @@ onUnmounted(() => {
     ctx?.revert()
 })
 </script>
-<!--TODO These fields below need be added to the query-->
+
 <template>
     <div class="about-wrapper">
         <main class="about">
@@ -49,10 +49,10 @@ onUnmounted(() => {
                 <span class="parallax__bg"></span>
             </div>
             <CommonAbstract class="about__label" :label="store.data.intro?.aboutIntroTitle"
-                :desc="store.data.intro?.aboutIntroDesc" :className="'about-intro'" />
-            <CommonInfoLabel :label="'Unsplash @ Joyce G'" :className="'photo-label'"
+                :desc="store.data.intro?.aboutIntroDesc" :className="'about-intro'" :is-secondary="true" />
+            <CommonInfoLabel :label="'Unsplash @ willianjusten'" :className="'photo-label'"
                 :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }"
-                :link="'https://unsplash.com/@joyce_'" />
+                :link="'https://unsplash.com/@willianjusten'" />
         </main>
     </div>
 </template>
@@ -63,12 +63,11 @@ onUnmounted(() => {
 }
 
 .about__label {
-    color: #faf7ff;
+    color: #171717;
 }
 
 .about {
     overflow: hidden;
-
 
     &__label {
         position: relative;
@@ -130,9 +129,7 @@ onUnmounted(() => {
     perspective: 1000px;
     contain: layout style paint; // CSS containment for better performance
     image-rendering: optimizeSpeed;
-    background-image: url('/img/bilali-esmir.jpg');
-    opacity: .9;
-
+    background-image: url('/img/willian-justen-de-vasconcellos.jpg');
 
     // Firefox-specific optimizations
     @-moz-document url-prefix() {
@@ -140,15 +137,13 @@ onUnmounted(() => {
         image-rendering: optimizeSpeed;
     }
 
-    @supports (background-image: url('/img/bilali-esmir.webp')) {
-        background-image: url('/img/bilali-esmir.webp');
+    @supports (background-image: url('/img/willian-justen-de-vasconcellos.webp')) {
+        background-image: url('/img/willian-justen-de-vasconcellos.webp');
         /* Create the parallax scrolling effect */
 
         @include this-and-above('sm') {
             background-position: center 0%;
-
         }
     }
-
 }
 </style>

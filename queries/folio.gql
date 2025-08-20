@@ -9,12 +9,14 @@ query folio {
     aboutDesc
     jobTitle
     job
-    valueOneTitle
-    valueOneDesc
-    valueTwoTitle
-    valueTwoDesc
-    valueThreeTitle
-    valueThreeDesc
+    timelineItem
+    codeTitle
+    codeOneTitle
+    codeOneDesc
+    codeTwoTitle
+    codeTwoDesc
+    codeThreeTitle
+    codeThreeDesc
     picture {
       id
     }
@@ -27,14 +29,16 @@ query folio {
     aboutIntroDesc
     projIntroTitle
     projIntroDesc
-    techIntroTitle
-    techIntroDesc
-    techOneTitle
-    techOneDesc
-    techTwoTitle
-    techTwoDesc
-    techThreeTitle
-    techThreeDesc
+    knowIntroTitle
+    knowIntroDesc
+    knowOneTitle
+    knowOneDesc
+    knowTwoTitle
+    knowTwoDesc
+    knowThreeTitle
+    knowThreeDesc
+    metaIntroTitle
+    metaIntroDesc
     metaTechTitle
     metaTechDesc
     metaCreativeTitle
@@ -65,5 +69,15 @@ query folio {
       handle
       fileName
     }
+  }
+
+  contact(where: { slug: "contact" }) {
+    id
+    viewHeroTitle
+    viewHeroCta
+    emailTitle
+    email
+    address
+    addressTitle
   }
 }

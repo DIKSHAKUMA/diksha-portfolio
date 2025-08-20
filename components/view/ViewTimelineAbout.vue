@@ -13,7 +13,7 @@ onMounted(() => {
     if (import.meta.client) {
         gsap.registerPlugin(ScrollTrigger)
 
-        // Animate the timeline line height on scroll
+        /* Animate the timeline line height on scroll */
         $gsap.to(timelineLine.value, {
             scrollTrigger: {
                 trigger: '.timeline-wrapper',
@@ -21,7 +21,7 @@ onMounted(() => {
                 end: 'bottom bottom',
                 scrub: 0.5,
                 onUpdate: (self) => {
-                    // Update the height based on scroll progress
+                    /* Update the height based on scroll progress */
                     if (timelineLine.value) {
                         timelineLine.value.style.height = `${self.progress * 100}%`
                     }
@@ -29,18 +29,18 @@ onMounted(() => {
             }
         })
 
-        // Animate timeline items individually
+        /* Animate timeline items individually */
         const timelineItems = document.querySelectorAll('.timeline__item')
-        
+
         timelineItems.forEach((item, index) => {
-            // Set initial state - hidden and offset
+            /* Set initial state - hidden and offset */
             $gsap.set(item, {
                 opacity: 0,
                 y: 50,
-                x: index % 2 === 0 ? -50 : 50 // Odd items come from left, even from right
+                x: index % 2 === 0 ? -50 : 50 /* Odd items come from left, even from right */
             })
 
-            // Animate in on scroll
+            /* Animate in on scroll */
             $gsap.to(item, {
                 opacity: 1,
                 y: 0,
@@ -60,67 +60,43 @@ onMounted(() => {
 </script>
 
 <template>
-    <main class="timeline-wrapper">
+    <div class="timeline-wrapper">
+        <CommonAbstract :label="''" :desc="'Past'" :className="'timeline-start'" />
+
         <main class="timeline">
-            <CommonAbstract class="front-header" :label="'Timeline'" :desc="''" :className="'timeline-intro'" />
             <div ref="timelineLine" class="timeline__line"></div>
 
             <!-- Timeline items container -->
             <div class="timeline__items">
-                <div class="timeline__item">
+                <div class="timeline__item" v-for="(item, index) in store.data.about?.timelineItem" :key="item.id">
                     <div class="timeline__item__content">
-                        <div class="timeline__item__title">
-                            <p>2022</p>
-                        </div>
                         <div class="timeline__item__desc">
-                            <p>Graduated from University of Applied Sciences</p>
+                            <p>{{ item }}</p>
                         </div>
                     </div>
                     <div class="timeline__item__dot"></div>
                 </div>
-
-                <!-- Add more timeline items here -->
-                <div class="timeline__item">
-                    <div class="timeline__item__content">
-                        <div class="timeline__item__title">
-                            <p>2023</p>
-                        </div>
-                        <div class="timeline__item__desc">
-                            <p>Started working as Frontend Developer</p>
-                        </div>
-                    </div>
-                    <div class="timeline__item__dot"></div>
-                </div>
-
-                <div class="timeline__item">
-                    <div class="timeline__item__content">
-                        <div class="timeline__item__title">
-                            <p>2023</p>
-                        </div>
-                        <div class="timeline__item__desc">
-                            <p>Started working as Frontend Developer</p>
-                        </div>
-                    </div>
-                    <div class="timeline__item__dot"></div>
-                </div>
-
             </div>
-
         </main>
-    </main>
+        <CommonInfoLabel :label="'Timeline'" :className="'timeline-info'" :link="''"
+            :style="{ justifyContent: 'center', alignItems: 'flex-start' }" />
+        <CommonAbstract :label="''" :desc="'Present'" :className="'timeline-end'" />
+    </div>
 </template>
 
 <style lang="scss" scoped>
 :deep(.abstract-wrapper) {
     align-items: center;
+    width: 100%;
+}
+
+:deep(.timeline-end){
+    margin-top: $px-64-spacer;
 }
 
 .timeline-wrapper {
     position: relative;
-    height: 100vh;
     overflow: hidden;
-    height: 400vh;
-
     padding: $px-64-spacer 0;
 
     .timeline {
@@ -128,8 +104,12 @@ onMounted(() => {
         flex-flow: column nowrap;
         align-items: center;
         height: 100%;
+        /* to get overflow to behave */
+        position: relative;
+        overflow: hidden;
 
         &__line {
+            position: absolute !important;
             width: 8px;
             height: 0%;
             background-color: $secondary;
@@ -139,7 +119,7 @@ onMounted(() => {
         }
 
         &__items {
-            position: absolute;
+            position: relative;
             width: 100%;
             max-width: 1200px;
         }
@@ -158,15 +138,8 @@ onMounted(() => {
                 transition: all 0.3s ease;
             }
 
-            &__title {
-                font-size: 1.5rem;
-                font-weight: bold;
-                margin-bottom: 1rem;
-                color: $secondary;
-            }
-
             &__desc {
-                font-size: 1.1rem;
+                font-size: clamped(16px, 20px, 380px, 1920px);
                 line-height: 1.6;
                 color: $secondary;
             }
@@ -181,7 +154,6 @@ onMounted(() => {
                 left: 50%;
                 top: 50%;
                 transform: translate(-50%, -50%);
-                z-index: 2;
                 transition: all 0.3s ease;
 
                 &:hover {
@@ -189,24 +161,22 @@ onMounted(() => {
                 }
             }
 
-            // Odd items (1st, 3rd, 5th...) - LEFT side
             &:nth-child(odd) {
                 justify-content: flex-start;
                 margin: $px-256-spacer 0;
                 text-align: right;
 
                 .timeline__item__content {
-                    margin-right: calc(50% + 30px); // 30px gap from timeline
+                    margin-right: calc(50% + 30px); 
                 }
             }
 
-            // Even items (2nd, 4th, 6th...) - RIGHT side  
             &:nth-child(even) {
                 justify-content: flex-end;
                 margin: $px-256-spacer 0;
 
                 .timeline__item__content {
-                    margin-left: calc(50% + 30px); // 30px gap from timeline
+                    margin-left: calc(50% + 30px); 
                 }
             }
         }

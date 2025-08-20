@@ -7,13 +7,9 @@ import SplitType from 'split-type'
 
 // PINIA 🍍 
 const store = useFolioStore()
-const { $lenis } = useNuxtApp()
 const { $gsap } = useNuxtApp()
-const colorMode = useColorMode()
-
 const pixiCtx = useTemplateRef<any>('pixi')
-const metaLine = ref<HTMLElement | null>(null)
-
+const isFirefox = ref(false)
 
 let ctx: gsap.Context
 let app: PIXI.Application
@@ -29,18 +25,13 @@ const tickerFunction = (delta: any) => {
     }
 }
 
-const classObject = computed(() => ({
-    'meta__img--darkhue': colorMode.preference === 'dark',
-    'meta__img--lighthue': colorMode.preference === 'light'
-}))
-
 /**
  * Rock on sista.
  */
 onMounted(async () => {
     if (import.meta.client) {
 
-        // $lenis.scrollTo(0, { force: true })
+        isFirefox.value = navigator.userAgent.toLowerCase().includes('firefox')
 
         $gsap.registerPlugin(ScrollTrigger)
         app = new PIXI.Application()
@@ -101,7 +92,9 @@ onMounted(async () => {
                 })
             })
 
-            $gsap.ticker.add(tickerFunction)
+            if (!isFirefox.value) {
+                $gsap.ticker.add(tickerFunction)
+            }
         })
     }
 })
@@ -109,16 +102,16 @@ onMounted(async () => {
 onBeforeUnmount(() => {
     // Remove GSAP ticker
     $gsap.ticker.remove(tickerFunction)
-    
+
     // Clean up GSAP context
     ctx?.revert()
-    
+
     // Clean up SplitType instances
     splitInstances.forEach(instance => {
         instance.revert()
     })
     splitInstances.length = 0
-    
+
     // Clean up PIXI resources
     if (app) {
         // Remove event listeners from stage
@@ -126,12 +119,12 @@ onBeforeUnmount(() => {
             app.stage.removeAllListeners()
             app.stage.filters = []
         }
-        
+
         // Destroy individual PIXI objects
         filter?.destroy()
         imageSprite?.destroy()
         displaceSprite?.destroy()
-        
+
         // Destroy the application
         app.destroy()
     }
@@ -144,11 +137,13 @@ onBeforeUnmount(() => {
         <main class="meta">
             <CommonLine />
             <!--:className here is for gsap-->
-            <CommonAbstract class="meta__header" :label="'Meta'" :desc="''" :className="'meta-intro'" />
+            <CommonAbstract class="meta__header" :label="store.data.intro?.metaIntroTitle" :desc="''"
+                :className="'meta-intro'" :is-secondary="true" />
             <CommonInfoLabel :label="'About this folio'" :className="'meta-label'"
                 :style="{ justifyContent: 'center', alignItems: 'flex-start' }" />
             <div class="meta__canvas">
                 <div class="meta__tech">
+                    <h3 class="split-skills-w">{{ store.data.intro?.metaIntroDesc }}</h3>
                     <h2 class="split-skills-w">{{ store.data.intro?.metaTechTitle }}</h2>
                     <div class="meta__tech-item split-skills-w">{{ store.data.intro?.metaTechDesc }}</div>
                     <h2 class="split-skills-w">{{ store.data.intro?.metaCreativeTitle }}</h2>
@@ -158,7 +153,7 @@ onBeforeUnmount(() => {
                     <h2 class="split-skills-w">{{ store.data.intro?.metaPublishTitle }}</h2>
                     <div class="meta__tech-item split-skills-w">{{ store.data.intro?.metaPublishDesc }}</div>
                 </div>
-                <div class="action" data-name="yo" data-text="Home"><canvas :class="classObject" class="meta__img" ref="pixi"></canvas></div>
+                <div class="action" data-name="yo" data-text="Home"><canvas class="meta__img" ref="pixi"></canvas></div>
             </div>
         </main>
     </div>
@@ -171,9 +166,14 @@ canvas {
     pointer-events: none; // Allow mouse events to pass through to parent
 }
 
-h2 {
+h2,
+h3 {
     color: #171717;
-    font-weight: 600;
+}
+
+h2+div,
+h3 {
+    margin-bottom: $px-32-spacer;
 }
 
 .meta-index {
@@ -185,7 +185,6 @@ h2 {
     padding: 0 $px-16-spacer;
     overflow: hidden;
     background-color: $primary;
-
     padding: $px-64-spacer $px-16-spacer;
 
     @include this-and-above('sm') {
@@ -212,8 +211,8 @@ h2 {
     &__header {
         position: relative;
         background-color: transparent;
-        color:inherit;
-        color:$secondary;
+        color: inherit;
+        color: $secondary;
     }
 
     &__canvas {

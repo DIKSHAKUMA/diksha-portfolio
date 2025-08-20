@@ -21,7 +21,7 @@ onUnmounted(() => {
     <div>
         <UIMouseCursor />
         <div class="projects-outer-wrapper">
-            <ViewWorks />
+            <ViewProjects />
         </div>
     </div>
 </template>

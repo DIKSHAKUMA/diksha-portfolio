@@ -12,8 +12,8 @@ definePageMeta({
     layout: 'default',
     key: route => route.fullPath,
 
-    // DO NOT REMOVE THIS! APOLLO STICKER TAPED TO CONSOLE.
-    // EVEN GLOBAL ROUTE TRANSITIONS NEED A SAKI. GOD DAMN IT I WROTE IT, NOW I'LL NEVER FORGET IT.
+    /* DO NOT REMOVE THIS! APOLLO STICKER TAPED TO CONSOLE. */
+    /* EVEN GLOBAL ROUTE TRANSITIONS NEED A SAKI. GOD DAMN IT I WROTE IT, NOW I'LL NEVER FORGET IT. */
     pageTransition: {
         name: 'saki',
         mode: 'out-in'
@@ -24,17 +24,17 @@ const proj = computed(() => {
     return store.data.projects.find((proj: any) => proj.slug === route.params.id)
 })
 
-// Get next and previous projects and if we hit the first or last project, loop back to the other end
+/* Get next and previous projects and if we hit the first or last project, loop back to the other end */
 const getNextProj = computed(() => {
     const index = store.data.projects.findIndex((proj: any) => proj.slug === route.params.id)
-    // If at last project, loop back to first (index 0)
+    /* If at last project, loop back to first (index 0) */
     const nextIndex = index === store.data.projects.length - 1 ? 0 : index + 1
     return store.data.projects[nextIndex]
 })
 
 const getPrevProj = computed(() => {
     const index = store.data.projects.findIndex((proj: any) => proj.slug === route.params.id)
-    // If at first project, loop to last project
+    /* If at first project, loop to last project */
     const prevIndex = index === 0 ? store.data.projects.length - 1 : index - 1
     return store.data.projects[prevIndex]
 })
@@ -47,19 +47,19 @@ onMounted(() => {
 
     ctx = $gsap.context((self) => {
 
-        // Vertical blind reveal effect for images
+        /* Vertical blind reveal effect for images */
         $gsap.utils.toArray('.project-image-reveal').forEach((imageContainer: any) => {
-            // Set initial state - completely masked
+            /* Set initial state - completely masked */
             $gsap.set(imageContainer, {
                 '--position': '0%',
                 filter: 'blur(50px)',
             })
 
-            // Check if this is the first image (data-image="0")
+            /* Check if this is the first image (data-image="0") */
             const isFirstImage = imageContainer.getAttribute('data-image') === '0'
             const delay = isFirstImage ? 0.5 : 0
 
-            // Animate the mask position on scroll
+            /* Animate the mask position on scroll */
             $gsap.to(imageContainer, {
                 '--position': '100%',
                 filter: 'blur(0px)',
@@ -75,7 +75,7 @@ onMounted(() => {
             })
         })
 
-        // Animate project description words
+        /* Animate project description words */
         let sections = $gsap.utils.toArray('.split-proj-w');
         sections.forEach((sec: any) => {
             const splitTxt = new SplitType(sec, { types: 'words' })
@@ -108,7 +108,7 @@ onUnmounted(() => {
         <UIMouseCursor />
         <div class="project-wrapper" v-if="proj">
             <main class="project">
-                <CommonAbstract class="project__abstract" :label="`Work / ${proj.client}`" :desc="proj.name"
+                <CommonAbstract class="project__abstract" :label="`Project / ${proj.client}`" :desc="proj.name"
                     :className="'project__abstract'"></CommonAbstract>
 
                 <section class="project__content">

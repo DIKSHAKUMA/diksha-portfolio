@@ -47,11 +47,11 @@ onUnmounted(() => {
             <div class="parallax__wrapper" ref="parallaxWrapper">
                 <span class="parallax__bg"></span>
             </div>
-            <CommonAbstract class="about__label" :label="store.data.intro?.aboutIntroTitle"
-                :desc="store.data.intro?.aboutIntroDesc" :className="'about-intro'" />
-            <CommonInfoLabel :label="'Unsplash @ Joyce G'" :className="'photo-label'"
+            <CommonAbstract class="about__label" :label="store.data.about?.aboutTitle"
+                :desc="store.data.about?.aboutDesc" :className="'about-intro'" :is-secondary="true" />
+            <CommonInfoLabel :label="'Unsplash @ fishinabarrel'" :className="'photo-label'"
                 :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }"
-                :link="'https://unsplash.com/@joyce_'" />
+                :link="'https://unsplash.com/@fishinabarrel'" />
         </main>
     </div>
 </template>
@@ -62,7 +62,7 @@ onUnmounted(() => {
 }
 
 .about__label {
-    color: #faf7ff;
+    color: #171717;
 }
 
 .about {
@@ -115,35 +115,34 @@ onUnmounted(() => {
 
 .parallax__bg {
     position: absolute;
-    display: block; // Changed from inline-block for better performance
+    display: block; /* Changed from inline-block for better performance */
     right: 0;
-    height: 130vh; // Reduced from 130vh
-    width: 100vw; // Reduced from 130vw
+    height: 130vh; /* Reduced from 130vh */
+    width: 100vw; /* Reduced from 130vw */
     z-index: 1;
     will-change: transform;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center top;
-    transform: translateZ(0); // Force hardware acceleration
+    transform: translateZ(0); /* Force hardware acceleration */
     backface-visibility: hidden;
     perspective: 1000px;
-    contain: layout style paint; // CSS containment for better performance
+    contain: layout style paint; /* CSS containment for better performance */
     image-rendering: optimizeSpeed;
-    background-image: url('/img/bilali-esmir.jpg');
+    background-image: url('/img/robert-reid.jpg');
 
-    // Firefox-specific optimizations
+    /* Firefox-specific optimizations */
     @-moz-document url-prefix() {
         transform: translate3d(0, 0, 0);
         image-rendering: optimizeSpeed;
     }
 
-    @supports (background-image: url('/img/bilali-esmir.webp')) {
-        background-image: url('/img/bilali-esmir.webp');
+    @supports (background-image: url('/img/robert-reid.webp')) {
+        background-image: url('/img/robert-reid.webp');
         /* Create the parallax scrolling effect */
 
         @include this-and-above('sm') {
             background-position: center 0%;
-
         }
     }
 

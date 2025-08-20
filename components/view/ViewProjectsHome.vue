@@ -3,7 +3,7 @@ import SplitType from 'split-type';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useFolioStore } from '~/store/useFolioStore'
 
-// PINIA 🍍 
+/* PINIA 🍍 */
 const store = useFolioStore()
 const { $gsap } = useNuxtApp()
 
@@ -21,11 +21,11 @@ onMounted(() => {
     ctx = $gsap.context((self) => {
         $gsap.registerPlugin(ScrollTrigger)
 
-        // Batch DOM queries for better performance
+        /* Batch DOM queries for better performance */
         const sectionsChar = $gsap.utils.toArray('.split-proj-w')
         const images = $gsap.utils.toArray('.projects__abstract__image')
 
-        // Optimize text reveal animation
+        /* Optimize text reveal animation */
         sectionsChar.forEach((sec: any) => {
             const splitTxt = new SplitType(sec, { types: 'words' })
             splitInstances.push(splitTxt)
@@ -37,11 +37,11 @@ onMounted(() => {
             $gsap.to(splitTxt.words, {
                 autoAlpha: 1,
                 clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-                duration: 0.25, // Faster duration
+                duration: 0.25, /* Faster duration */
                 ease: "power2.out",
                 scrollTrigger: {
                     trigger: sec,
-                    start: 'top 80%', // Trigger slightly later
+                    start: 'top 80%', /* Trigger slightly later */
                     end: 'top 60%',
                     toggleActions: "play none none reverse",
                     preventOverlaps: true,
@@ -51,19 +51,19 @@ onMounted(() => {
             })
         })
 
-        // Optimize image reveal animation
+        /* Optimize image reveal animation */
         images.forEach((img: any) => {
             $gsap.to(img, {
                 yPercent: 0,
                 opacity: 1,
                 clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-                duration: 0.5, // Faster duration
+                duration: 0.5, /* Faster duration */
                 ease: "power1.out",
                 scrollTrigger: {
                     trigger: img,
-                    start: "top 85%", // Consistent with text
+                    start: "top 85%", /* Consistent with text */
                     end: 'top 60%',
-                    //onEnter, onLeave, onEnterBack, and onLeaveBack, 
+                    /* onEnter, onLeave, onEnterBack, and onLeaveBack, */
                     toggleActions: "play none none reverse",
                     preventOverlaps: true,
                     fastScrollEnd: true,
@@ -75,15 +75,15 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-    // Clean up GSAP context
+    /* Clean up GSAP context */
     ctx?.revert()
     
-    // Clean up SplitType instances
+    /* Clean up SplitType instances */
     splitInstances.forEach(instance => {
         instance.revert()
     })
     
-    // Clear the array
+    /* Clear the array */
     splitInstances.length = 0
 })
 </script>
@@ -92,12 +92,12 @@ onUnmounted(() => {
     <div class="projects-wrapper">
         <main class="projects">
             <CommonAbstract class="projects__header" :label="store.data.intro?.projIntroTitle"
-                :desc="store.data.intro?.projIntroDesc" :className="'projects-intro'" />
+                :desc="''" :className="'projects-intro'" :is-secondary="true" />
             <section class="projects__abstract">
                 <div v-for="proj in paginatedProjects" :key="proj.slug">
                     <div class="projects__abstract__image action" data-name="proj" data-text="Explore"
                         data-color="#FFF">
-                        <NuxtLink :to="`/work/${proj.slug}`">
+                        <NuxtLink :to="`/project/${proj.slug}`">
                             <NuxtImg :src="proj.image[0].handle" provider="hygraph" alt="Project image" format="webp"
                                 sizes="sm:100vw md:45vw lg:45vw xl:35vw" densities="x1 x2"></NuxtImg>
                         </NuxtLink>
@@ -184,7 +184,7 @@ img,
             background: rgba(0, 0, 0, 0.7);
             padding: $px-8-spacer $px-16-spacer;
             border-radius: 4px;
-            pointer-events: none; // Don't interfere with link clicks
+            pointer-events: none; /* Don't interfere with link clicks */
 
             p {
                 position: relative;

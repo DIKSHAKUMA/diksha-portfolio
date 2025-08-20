@@ -33,8 +33,6 @@ const toggleMenu = () => {
 
 const closeMenu = () => {
     if (screenWidth.value < 992) {
-
-        console.log("close menu")
         toggleMenu()
     }
 }
@@ -99,9 +97,9 @@ checkScreenWidth()
             <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
 
                 <div class="nav__list" ref="navlist">
-                    <NuxtLink to="/works" data-name="menu" class="nav__item action magnet"
+                    <NuxtLink to="/projects" data-name="menu" class="nav__item action magnet"
                         activeClass="nav--link-active" no-prefetch @click="closeMenu">
-                        Works
+                        Projects
                     </NuxtLink>
 
                     <NuxtLink to="" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
@@ -114,7 +112,7 @@ checkScreenWidth()
                         About
                     </NuxtLink>
 
-                    <NuxtLink to="" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
+                    <NuxtLink to="/contact" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
                         no-prefetch @click="closeMenu">
                         Contact
                     </NuxtLink>
@@ -185,12 +183,11 @@ I should probably just use a simple modal and be done with it.
     }
 
     @include this-and-above('lg') {
-        background-color: rgba(23, 23, 23, 0.1); // Semi-transparent dark background
+        background-color: rgba(23, 23, 23, 0.3); // Semi-transparent dark background
         backdrop-filter: blur(15px); // Just blur, no saturation or background
 
         .light-mode & {
-            background-color: rgba(250, 247, 255, 0.1); // Semi-transparent light background
-            backdrop-filter: blur(15px); // Firefox might scream at this; double context
+            background-color: rgba(250, 247, 255, 0.3); // Semi-transparent light background
         }
     }
 }

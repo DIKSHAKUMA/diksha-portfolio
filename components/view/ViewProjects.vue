@@ -4,7 +4,7 @@ import { Draggable } from 'gsap/Draggable'
 import { InertiaPlugin } from 'gsap/InertiaPlugin'
 import { useFolioStore } from '~/store/useFolioStore'
 
-// PINIA 🍍 
+/* PINIA 🍍 */
 const store = useFolioStore()
 const { $lenis } = useNuxtApp()
 const { $gsap } = useNuxtApp()
@@ -12,7 +12,7 @@ const { $gsap } = useNuxtApp()
 const projectsReel = useTemplateRef<HTMLDivElement>('projectsReel')
 const projectItem = ref<HTMLDivElement[]>([])
 const clampedIndex = ref<number>(0)
-const isDragging = ref(false) // Track dragging state including inertia
+const isDragging = ref(false) /* Track dragging state including inertia */
 
 let ctx: gsap.Context
 let draggableInstance: Draggable[] | null = null
@@ -27,7 +27,7 @@ const progressIndex = computed(() => {
 })
 
 
-// Function to setup/update Draggable configuration
+/* Function to setup/update Draggable configuration */
 const setupDraggable = () => {
     const numProjects = (store.data?.projects.length || 0)
 
@@ -35,70 +35,70 @@ const setupDraggable = () => {
         return
     }
 
-    // Destroy existing draggable instance
+    /* Destroy existing draggable instance */
     if (draggableInstance) {
         draggableInstance[0].kill()
         draggableInstance = null
     }
 
-    // Calculate total width of all projects + gaps
+    /* Calculate total width of all projects + gaps */
     const projectWidth = projectItem.value[1].getBoundingClientRect().width || 0
     const gapWidth = parseFloat(getComputedStyle(projectsReel.value).getPropertyValue('column-gap')) || 0
     const paddingLeft = parseFloat(getComputedStyle(projectsReel.value).getPropertyValue('padding-left')) || 0
     const totalContentWidth = (projectWidth * numProjects) + (gapWidth * (numProjects - 1)) + paddingLeft
     const viewportWidth = window.innerWidth
 
-    // Calculate initial offset to center first project
-    // Account for the padding-left on the reel which equals the gap width
+    /* Calculate initial offset to center first project */
+    /* Account for the padding-left on the reel which equals the gap width */
     const initialOffset = (viewportWidth - projectWidth) / 2 - gapWidth
 
-    // Set initial position to center the first project
+    /* Set initial position to center the first project */
     $gsap.set(projectsReel.value, { x: initialOffset })
 
-    // Calculate how far we can drag (negative because we drag left)
-    // Add extra padding to ensure last project can be fully centered
+    /* Calculate how far we can drag (negative because we drag left) */
+    /* Add extra padding to ensure last project can be fully centered */
     const maxDragDistance = totalContentWidth - viewportWidth + initialOffset + paddingLeft
 
     $gsap.context(self => {
 
         draggableInstance = Draggable.create(".projects__reel", {
             cursor: "grab",
-            type: "x", // Horizontal dragging
+            type: "x", /* Horizontal dragging */
             bounds: {
                 minX: -maxDragDistance,
-                maxX: initialOffset // Start from centered position, not 0
+                maxX: initialOffset /* Start from centered position, not 0 */
             },
             inertia: true,
 
             minDuration: 0.1,
             maxDuration: 1,
 
-            edgeResistance: .5, // Smooth resistance at bounds
-            allowEventDefault: false, // Prevent default touch behaviors
+            edgeResistance: .5, /* Smooth resistance at bounds */
+            allowEventDefault: false, /* Prevent default touch behaviors */
 
             onDrag: function () {
                 isDragging.value = true
-                // Calculate velocity and direction for skew effect
+                /* Calculate velocity and direction for skew effect */
                 const velocity = InertiaPlugin.getVelocity(this.target, "x")
                 const skewAmount = Math.max(-40, Math.min(40, velocity * 0.01))
 
-                // Visual filter effects based on velocity (no positioning changes)
-                //const blurAmount = Math.min(Math.abs(velocity * 0.002), 3) // Subtle blur up to 3px
+                /* Visual filter effects based on velocity (no positioning changes) */
+                /* const blurAmount = Math.min(Math.abs(velocity * 0.002), 3) */ /* Subtle blur up to 3px */
 
-                // Apply skew for positioning and filters for visual effect
+                /* Apply skew for positioning and filters for visual effect */
                 $gsap.set(".projects__project__image", {
                     skewX: skewAmount,
-                    // filter: `blur(${blurAmount}px)`,
+                    /* filter: `blur(${blurAmount}px)`, */
                     duration: 0.4,
                     ease: "power2.out"
                 })
             },
 
             onDragEnd: function () {
-                // Reset skew and filters when drag ends
+                /* Reset skew and filters when drag ends */
                 $gsap.to(".projects__project__image", {
                     skewX: 0,
-                    // filter: "blur(0px)",
+                    /* filter: "blur(0px)", */
                     duration: 0.3,
                     ease: "power2.out"
                 })
@@ -106,7 +106,7 @@ const setupDraggable = () => {
 
             snap: {
                 x: (endValue) => {
-                    // Calculate snap points using fresh measurements to match onThrowComplete
+                    /* Calculate snap points using fresh measurements to match onThrowComplete */
                     const unscaledIndex = clampedIndex.value === 0 ? 1 : 0
                     const currentProjectWidth = projectItem.value[unscaledIndex]?.getBoundingClientRect().width || projectItem.value[0].getBoundingClientRect().width || 0
                     const currentGapWidth = projectsReel.value ? parseFloat(getComputedStyle(projectsReel.value).getPropertyValue('column-gap')) || 0 : 0
@@ -116,21 +116,21 @@ const setupDraggable = () => {
                 }
             },
             onThrowComplete: function () {
-                isDragging.value = false // Reset only when inertia completes
-                // Calculate which project is in the center when inertia stops
+                isDragging.value = false /* Reset only when inertia completes */
+                /* Calculate which project is in the center when inertia stops */
                 const currentX = this.x
 
-                // Recalculate projectWidth fresh to get current actual width
-                // Use a project that's NOT the centered one to get unscaled width
+                /* Recalculate projectWidth fresh to get current actual width */
+                /* Use a project that's NOT the centered one to get unscaled width */
                 const unscaledIndex = clampedIndex.value === 0 ? 1 : 0
                 const currentProjectWidth = projectItem.value[unscaledIndex]?.getBoundingClientRect().width || projectItem.value[0].getBoundingClientRect().width || 0
                 const currentGapWidth = projectsReel.value ? parseFloat(getComputedStyle(projectsReel.value).getPropertyValue('column-gap')) || 0 : 0
                 const snapDistance = currentProjectWidth + currentGapWidth
 
-                // Distance travelled / snap distance (proj width + gap) = index
+                /* Distance travelled / snap distance (proj width + gap) = index */
                 const centerIndex = Math.round((initialOffset - currentX) / snapDistance)
 
-                // Ensure index is within bounds
+                /* Ensure index is within bounds */
                 clampedIndex.value = Math.max(0, Math.min(centerIndex, numProjects - 1))
             },
 
@@ -138,13 +138,13 @@ const setupDraggable = () => {
     })
 }
 
-// Debounced resize handler
+/* Debounced resize handler */
 let resizeTimeout: NodeJS.Timeout
 const handleResize = () => {
     clearTimeout(resizeTimeout)
     resizeTimeout = setTimeout(() => {
         setupDraggable()
-    }, 150) // 150ms debounce
+    }, 150) /* 150ms debounce */
 }
 
 onMounted(async () => {
@@ -155,31 +155,31 @@ onMounted(async () => {
         $gsap.registerPlugin(Draggable, InertiaPlugin)
     })
 
-    // Wait a bit for DOM to be fully ready
+    /* Wait a bit for DOM to be fully ready */
 
-    // Simple fade-in animation for projects and progress
+    /* Simple fade-in animation for projects and progress */
     const tl = $gsap.timeline()
     tl.from(".projects__reel, .progress", { duration: .8, opacity: 0, ease: "power2.inOut" })
 
-    // Initial setup
+    /* Initial setup */
     setupDraggable()
 
-    // Add resize listener
+    /* Add resize listener */
     window.addEventListener('resize', handleResize)
 
 })
 
 onUnmounted(() => {
-    // Cleanup resize listener
+    /* Cleanup resize listener */
     window.removeEventListener('resize', handleResize)
 
-    // Cleanup draggable instance
+    /* Cleanup draggable instance */
     if (draggableInstance) {
         draggableInstance[0].kill()
         draggableInstance = null
     }
 
-    // Clear any pending resize timeout
+    /* Clear any pending resize timeout */
     if (resizeTimeout) {
         clearTimeout(resizeTimeout)
     }
@@ -192,7 +192,7 @@ onUnmounted(() => {
     <main ref="main" class="projects-wrapper">
         <!--:className here is for gsap-->
         <div class="abstract--center">
-            <CommonAbstract :label="'Works'" :delay="1" :desc="'Drag & click to open.'" :className="'abstract__works'"
+            <CommonAbstract :label="'Projects'" :delay="1" :desc="'Drag & click to open.'" :className="'abstract__works'"
                 :is-hero="true" />
         </div>
 
@@ -205,7 +205,7 @@ onUnmounted(() => {
                 <div v-for="(project, index) in store.data.projects" :key="project.id">
                     <div class="projects__project action" data-name="reel" ref="projectItem"
                         :class="{ 'projects__project--open': index === clampedIndex && !isDragging }">
-                        <NuxtLink :to="`/work/${project.slug}`">
+                        <NuxtLink :to="`/project/${project.slug}`">
                             <NuxtImg :src="project.image[0].handle" provider="hygraph" alt="Project image" format="webp"
                                 sizes="sm:100vw" densities="x1 x2" class="projects__project__image"></NuxtImg>
                         </NuxtLink>
@@ -227,7 +227,8 @@ img {
 }
 
 a:hover {
-    filter: blur(0px)
+    filter: blur(0px);
+    cursor:grab;
 }
 
 .projects-wrapper {
@@ -261,7 +262,7 @@ a:hover {
         font-variation-settings: "wght" 550;
         white-space: nowrap;
         color: $secondary;
-        font-variant-numeric: tabular-nums; // Monospace numbers for consistent width
+        font-variant-numeric: tabular-nums; /* Monospace numbers for consistent width */
     }
 }
 
@@ -279,7 +280,7 @@ a:hover {
         background: rgba(0, 0, 0, 0.7);
         padding: $px-8-spacer $px-16-spacer;
         border-radius: 4px;
-        pointer-events: none; // Don't interfere with dragging
+        pointer-events: none; /* Don't interfere with dragging */
         opacity: 0;
         will-change: opacity;
         transition: opacity .2s ease-in-out;
@@ -301,15 +302,16 @@ a:hover {
     &__reel {
         display: flex;
         flex-flow: row nowrap;
-        column-gap: $px-32-spacer; // Mobile: tight spacing
-        justify-content: flex-start; // Start from left instead of center
+        column-gap: $px-32-spacer; /* Mobile: tight spacing */
+        justify-content: flex-start; /* Start from left instead of center */
         align-items: center;
         position: absolute;
         left: 0;
-        width: max-content; // Allow width to expand based on content
-        padding-left: $px-32-spacer; // Mobile: minimal padding
+        width: max-content; /* Allow width to expand based on content */
+        padding-left: $px-32-spacer; /* Mobile: minimal padding */
+        cursor:grab;
 
-        // Progressive spacing increases
+        /* Progressive spacing increases */
         @include this-and-above('sm') {
             column-gap: $px-32-spacer;
             padding-left: $px-32-spacer;
@@ -322,35 +324,35 @@ a:hover {
     }
 
     &__project {
-        position: relative; // For absolute positioning of project name
-        flex-shrink: 0; // Prevent shrinking to maintain consistent layout
+        position: relative; /* For absolute positioning of project name */
+        flex-shrink: 0; /* Prevent shrinking to maintain consistent layout */
         transform-origin: center;
-        transition: transform 0.3s ease-out; // Smooth scale transitions
+        transition: transform 0.3s ease-out; /* Smooth scale transitions */
 
         &--open {
             transform: scale(1.1);
         }
 
         img {
-            width: 85vw; // Mobile-first: larger than viewport for immersive feel
+            width: 85vw; /* Mobile-first: larger than viewport for immersive feel */
             height: auto;
             object-fit: cover;
             transform-origin: center;
 
             @include this-and-above('sm') {
-                width: 75vw; // Slightly smaller on small tablets
+                width: 75vw; /* Slightly smaller on small tablets */
             }
 
             @include this-and-above('md') {
-                width: 60vw; // Medium screens
+                width: 60vw; /* Medium screens */
             }
 
             @include this-and-above('lg') {
-                width: 50vw; // Desktop - show more context
+                width: 50vw; /* Desktop - show more context */
             }
 
             @include this-and-above('xl') {
-                width: 45vw; // Large desktop - optimal viewing
+                width: 45vw; /* Large desktop - optimal viewing */
             }
         }
     }

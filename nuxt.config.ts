@@ -18,6 +18,7 @@ export default defineNuxtConfig({
 
     families: [
       { name: 'Inter', provider: 'google' },
+      { name: 'Switzer', provider: 'fontshare' },
       { name: 'PPNeueMontreal-Variable', provider: 'local' },
     ],
 
@@ -66,10 +67,9 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    openWeatherApiKey: '', // Will be populated from NUXT_OPEN_WEATHER_API_KEY env var
     public: {
-      FORM_API: '4fd08721-1c97-4a42-abbc-369421143454',
       GQL_HOST: 'https://eu-west-2.cdn.hygraph.com/content/cm4tetqve01n107umfec1iqbg/master',
-      s3Path: ''
     }
   },
 

@@ -10,14 +10,12 @@ const { $gsap } = useNuxtApp()
 let ctx: gsap.Context
 const splitInstances: SplitType[] = []
 
-const canLine = ref<HTMLElement | null>(null)
-
 onMounted(() => {
     $gsap.registerPlugin(ScrollTrigger)
 
     ctx = $gsap.context((self) => {
 
-        let sectionsChar = $gsap.utils.toArray('.split-skills-w');
+        let sectionsChar = $gsap.utils.toArray('.split-code-w');
         sectionsChar.forEach((sec: any) => {
             const splitTxt = new SplitType(sec, { types: 'words' })
             splitInstances.push(splitTxt)
@@ -43,40 +41,41 @@ onMounted(() => {
 onUnmounted(() => {
     // Clean up GSAP context
     ctx?.revert()
-    
-    // Clean up SplitType instances
+    // Clean up SplitType instancesza
     splitInstances.forEach(instance => {
         instance.revert()
     })
-    
     // Clear the array
     splitInstances.length = 0
 })
 </script>
 
 <template>
-    <div class="can-wrapper">
+    <div class="code-wrapper">
         <CommonLine />
-        <main class="can">
-            <CommonAbstract class="can__label" :label="store.data.intro?.techIntroTitle" :className="'can-intro'" />
-            <CommonInfoLabel :label="'FRONTEND DEVELOPER'" :className="'photo-label'"
+        <main class="code">
+            <CommonAbstract class="code__label" :desc="''" :label="store.data.about?.codeTitle"
+                :className="'code-intro'" :is-secondary="true" />
+            <CommonInfoLabel :label="'Values'" :className="'photo-label'"
                 :style="{ justifyContent: 'center', alignItems: 'flex-start' }" />
 
-            <section class="can__demo">
-                <div class="can__demo-block">
-                    <h2 class="can__demo-title split-skills-w">{{ store.data.intro?.techOneTitle }}</h2>
-                    <div class="can__demo-desc split-skills-w">{{ store.data.intro?.techOneDesc }}</div>
-                    <AnimSkills class="can__demo-comp" />
+            <section class="code__value">
+                <div class="code__value-block">
+                    <span class="code__value-arrow split-code-w">></span>
+                    <h2 class="code__value-title split-code-w">{{ store.data.about?.codeOneTitle }}</h2>
+                    <div class="code__value-desc split-code-w">{{ store.data.about?.codeOneDesc }}</div>
                 </div>
-                <div class="can__demo-block">
-                    <h2 class="can__demo-title split-skills-w">{{ store.data.intro?.techTwoTitle }}</h2>
-                    <div class="can__demo-desc split-skills-w">{{ store.data.intro?.techTwoDesc }}</div>
-                    <AnimDemo class="can__demo-comp" />
+
+                <div class="code__value-block">
+                    <span class="code__value-arrow split-code-w">></span>
+                    <h2 class="code__value-title split-code-w">{{ store.data.about?.codeTwoTitle }}</h2>
+                    <div class="code__value-desc split-code-w">{{ store.data.about?.codeTwoDesc }}</div>
                 </div>
-                <div class="can__demo-block">
-                    <h2 class="can__demo-title split-skills-w">{{ store.data.intro?.techThreeTitle }}</h2>
-                    <div class="can__demo-desc split-skills-w">{{ store.data.intro?.techThreeDesc }}</div>
-                    <AnimUX class="can__demo-comp" />
+
+                <div class="code__value-block">
+                    <span class="code__value-arrow split-code-w">></span>
+                    <h2 class="code__value-title split-code-w">{{ store.data.about?.codeThreeTitle }}</h2>
+                    <div class="code__value-desc split-code-w">{{ store.data.about?.codeThreeDesc }}</div>
                 </div>
             </section>
         </main>
@@ -84,12 +83,12 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.split-skills-w {
+.split-code-w {
     will-change: transform;
 }
 
 /* same margins as other home (sub) components; ViewParallaxHome varies slightly due to parallax */
-.can-wrapper {
+.code-wrapper {
     position: relative;
     background-color: $primary;
     padding: $px-64-spacer $px-16-spacer;
@@ -111,19 +110,20 @@ onUnmounted(() => {
     }
 }
 
-.can {
+.code {
     &__label {
         position: relative;
     }
 
-    &__demo {
+    &__value {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
         row-gap: 64px;
     }
 
-    &__demo-block {
+    &__value-block {
+        position: relative; // For absolute positioning context
         display: flex;
         flex-direction: column;
         align-items: flex-end;
@@ -132,24 +132,24 @@ onUnmounted(() => {
         min-width: 300px;
     }
 
-    &__demo-title,
-    &__demo-desc {
+    &__value-title,
+    &__value-desc {
         width: 100%;
         text-align: left;
     }
 
-    &__demo-title {
+    &__value-title {
         width: 100%;
         min-width: 300px;
         color: $secondary;
- 
+
         @include this-and-above('md') {
             width: 60%;
             min-width: 300px;
         }
     }
 
-    &__demo-desc {
+    &__value-desc {
         width: 100%;
         min-width: 300px;
         color: $secondary;
@@ -162,7 +162,7 @@ onUnmounted(() => {
         }
     }
 
-    &__demo-comp {
+    &__value-comp {
         height: 450px;
         position: relative;
         width: 100%;
@@ -175,5 +175,20 @@ onUnmounted(() => {
             height: 42vh;
         }
     }
+
+    &__value-arrow {
+
+
+        @include this-and-above('md') {
+            position: absolute;
+            top: 50%;
+            right: 65%;
+            transform: translateY(-50%);
+            color: var(--secondary);
+            font-size: 36px;
+            line-height: 1;
+        }
+    }
+
 }
 </style>

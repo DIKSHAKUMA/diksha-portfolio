@@ -139,6 +139,7 @@ onMounted(async () => {
         
         link.addEventListener('mousemove', magnetMove)
         link.addEventListener('mouseleave', magnetMove)
+        link.addEventListener('click', magnetReset) // Reset position on click
     })
 
     // Hide cursor on first touch (mobile/tablet)
@@ -160,6 +161,10 @@ const magnetMove = (e: any) => {
     if (e.type === 'mouseleave') e.currentTarget.style.transform = '';
 }
 
+const magnetReset = (e: any) => {
+    e.currentTarget.style.transform = '';
+}
+
 onBeforeUnmount(() => {
     // Remove GSAP ticker
     if (loopStarted.value) {
@@ -179,6 +184,7 @@ onBeforeUnmount(() => {
     magnetHandlers.forEach((handler, element) => {
         element.removeEventListener('mousemove', handler)
         element.removeEventListener('mouseleave', handler)
+        element.removeEventListener('click', magnetReset)
     })
     magnetHandlers.clear()
 })

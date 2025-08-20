@@ -19,7 +19,6 @@ const imgFrames = useTemplateRef<any>('imgFrames')
 const { $lenis } = useNuxtApp()
 const { $gsap } = useNuxtApp()
 
-const colorMode = useColorMode()
 const imagesWrapper = useTemplateRef<any>('imagesWrapper')
 const route = useRoute()
 
@@ -31,6 +30,20 @@ let ctx: gsap.Context
 let pixiReady = false
 let rafId = 0
 let stopWatching: (() => void) | null = null
+let pixiDestroyed = false
+
+// Helper function to safely destroy PIXI resources
+const destroyPixiResources = () => {
+    if (pixiDestroyed || !app) return
+    
+    pixiDestroyed = true
+    app.stage.filters = []
+    filter?.destroy()
+    sprite?.destroy()
+    ripple?.destroy()
+    app.destroy()
+    console.log('ViewHeroHome: PIXI resources destroyed')
+}
 
 // Function to set image dimensions to make sure canvas is initialized if user returns using back button
 const setImageDimensions = () => {
@@ -121,10 +134,14 @@ onMounted(async () => {
                 .to(sprite, { duration: 1, alpha: 0 }, "+=1")
                 .fromTo(imgFrames.value, { autoAlpha: 0 }, { duration: 0.5, autoAlpha: 1 }, "<") // Start img-frames as sprite fades out
                 .to(pixiCtx.value, { duration: 0.1, alpha: 0 }, ">") // Hide canvas after sprite fades out
+                .call(() => {
+                    // Destroy PIXI resources after animation completes
+                    destroyPixiResources()
+                })
 
             // Fade out author intro
             let authorTl = $gsap.timeline({
-                // Pin intro is actually in ViewWorks.vue; fade out author intro when pin intro moves above bottom of browser window
+                // Pin intro is actually in ViewProjects.vue; fade out author intro when pin intro moves above bottom of browser window
                 scrollTrigger: {
                     trigger: '.about-wrapper',
                     pinSpacing: true,
@@ -154,25 +171,12 @@ onUnmounted(() => {
     ctx?.revert()
 
     // Clean up PIXI resources explicitly
-    if (app) {
-        // Remove filters
-        if (app.stage) {
-            app.stage.filters = []
-        }
-
-        // Destroy individual PIXI objects
-        filter?.destroy()
-        sprite?.destroy()
-        ripple?.destroy()
-
-        // Destroy the application
-        app.destroy()
-    }
+    destroyPixiResources()
 })
 </script>
 
 <template>
-    <main ref="main" class="hero-wrapper">
+    <main class="hero-wrapper">
         <div class="pin">
             <div class="images-wrapper" ref="imagesWrapper">
                 <div>
@@ -189,6 +193,9 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 
+:deep(.abstract-wrapper) {
+    width: 53%;
+}
 .hero-wrapper {
     position: relative;
     height: 100vh;
@@ -233,7 +240,5 @@ img {
 
 canvas {
     width: 400px;
-
-
 }
 </style>

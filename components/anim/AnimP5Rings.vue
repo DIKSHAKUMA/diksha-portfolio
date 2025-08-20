@@ -20,7 +20,6 @@ const getRingColors = () => {
         if (colorMode.preference === 'light') {
             return [
                 [23, 23, 23],    // #171717 - your black
-                [50, 50, 50],    // lighter variation
                 [80, 80, 80],    // even lighter
                 [23, 23, 23],    // back to black for smooth cycling
             ]
@@ -35,19 +34,19 @@ const getRingColors = () => {
     }
     // Fallback to dark mode colors
     return [
-        [250, 247, 255],
-        [255, 240, 232],
-        [74, 68, 83],
-        [250, 247, 255],
+        [250, 247, 255], // secondary light (#faf7ff)
+        [255, 240, 232], // accent1 light (#fff0e8) 
+        [74, 68, 83],    // accent2 dark (#4a4453)
+        [250, 247, 255], // secondary light again for smooth cycling
     ]
 }
 
 onMounted(async () => {
     if (import.meta.client) {
-        const p5 = await import('p5')
 
+        const p5 = await import('p5')
         const rings = 20
-        const space = 12
+        const space = 15
         let frameCount = 0
 
         // Set up Intersection Observer to watch timeline section: Keep Firefox happy
@@ -66,20 +65,20 @@ onMounted(async () => {
                     isVisible = !shouldPause // Invert logic for draw function
                 })
             },
-            { 
+            {
                 threshold: 0,
                 rootMargin: '0px 0px -20% 0px' // Trigger when timeline is 20% above bottom of viewport
             }
         )
 
-        // Wait for DOM to be ready, then observe timeline section
+        // Wait for DOM to be ready, then observe parallax section
         nextTick(() => {
-            const timelineElement = document.querySelector('.parallax__wrapper')
-            if (timelineElement) {
-                observer.observe(timelineElement)
-                console.log(' Observing ViewTimeline parallax__wrapper for P5 rings optimization')
+            const parallaxElement = document.querySelector('.parallax__wrapper')
+            if (parallaxElement) {
+                observer.observe(parallaxElement)
+                console.log('✓ Observing ViewParallaxAbout .parallax__wrapper for P5 rings optimization')
             } else {
-                console.warn(' ViewTimeline parallax__wrapper not found - P5 rings will run continuously')
+                console.warn('⚠ ViewParallaxAbout .parallax__wrapper not found - P5 rings will run continuously')
             }
         })
 
@@ -98,7 +97,7 @@ onMounted(async () => {
             p.draw = () => {
                 // Only draw if visible - extra safety check
                 if (!isVisible) return
-                
+
                 p.background(getCurrentBgColor()) // Dynamic background from color mode
 
                 p.push()
@@ -106,7 +105,7 @@ onMounted(async () => {
 
                 const time = p.millis() * 0.001 // Use seconds for smoother animation
                 const speed = time * 0.5
-                
+
                 // Pre-calculate values to reduce Firefox math overhead
                 const timeForAlpha = time * 2
                 const timeForSize = time * 3
@@ -128,8 +127,8 @@ onMounted(async () => {
                     for (let j = 0; j < dotsPerRing; j++) {
                         const angle = (j / dotsPerRing) * p.TWO_PI
                         const radius = space * i
-                        // Simplified size calculation
-                        const size = 4 + (1.5 * p.sin(i * 0.3 + timeForSize)) // Reduced amplitude
+                        // Increased size for better visibility on white theme
+                        const size = 5 + (2 * p.sin(i * 0.3 + timeForSize)) // Larger dots: base 5px, pulse between 3-7px
 
                         p.ellipse(
                             radius * p.cos(angle),

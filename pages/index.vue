@@ -26,11 +26,10 @@ onMounted(() => {
         <div class="home-wrapper">
             <ViewHeroHome />
             <ViewParallaxHome />
-            <ViewWorksHome />
-            <ViewCanSub />
+            <ViewProjectsHome />
+            <ViewKnowSub />
             <ViewMetaSub />
-            <ViewFooterSub />
-            <!--Components ending 'sub'can be reused in any view, might need to solve a few things to make it work-->
+            <ViewFooterSub label="Projects" link="/projects" target="_self" />
         </div>
     </div>
 </template>

@@ -16,29 +16,22 @@ onUnmounted(() => {
 
 })
 </script>
-<!--Shows all projects, something in a horizontal style using draggable-->
 <template>
     <div>
         <UIMouseCursor />
-        <div class="about-outer-wrapper">
-            <ViewHeroAbout />
-            <ViewParallaxAbout />
-            <ViewTimelineAbout />
-            <ViewCodeSub />
-            <ViewKnowSub />
-            <ViewFooterSub label="Explore" link="https://thomasthorstensson.photography" target="_blank" />
+        <div class="contact-wrapper">
+            <ViewHeroContact />
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-.about-outer-wrapper {
+.contact-wrapper {
     flex-flow: column;
     display: flex;
     position: relative;
     overflow-x: visible;
     z-index: inherit;
     overflow: hidden;
-    /* Prevent SCSS parsing errors */
 }
 </style>

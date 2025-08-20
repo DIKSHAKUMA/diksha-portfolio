@@ -27,6 +27,10 @@ const props = defineProps({
     isHero: {
         type: Boolean,
         default: false
+    },
+    isSecondary: {
+        type: Boolean,
+        default: false
     }
 })
 
@@ -79,7 +83,8 @@ onUnmounted(() => {
 <template>
     <div class="abstract-wrapper" :class="{ 'abstract-wrapper--hero': isHero }">
         <div class="abstract">
-            <header class="abstract__header" :class="[className, { 'abstract__header--hero': isHero }]">
+            <header v-if="label && label.trim()" class="abstract__header"
+                :class="[className, { 'abstract__header--hero': isHero }, { 'abstract__header--secondary': isSecondary }]">
                 <div>{{ label }}</div>
             </header>
             <div v-if="desc && desc.trim()">
@@ -117,14 +122,18 @@ onUnmounted(() => {
 .abstract {
     &__header {
         position: relative;
-        font-size: clamped(56px, 110px, 480px, 1920px); // Increased from 44px to 56px for better mobile readability
+        font-size: clamped(56px, 110px, 480px, 1920px); 
         flex-wrap: wrap;
-        line-height: 1.1;
         height: max-content;
         margin-bottom: $px-32-spacer;
 
         &--hero {
             margin-bottom: $px-16-spacer;
+        }
+
+        /* When we need a sub header (smaller) */
+        &--secondary {
+            font-size: clamped(36px, 52px, 480px, 1920px);
         }
 
         @include this-and-above('md') {
@@ -139,7 +148,7 @@ onUnmounted(() => {
     &__desc {
         line-height: .9;
         line-height: 1.2;
-        font-size: clamped(20px, 34px, 480px, 1920px); // Increased from 16px to 20px for better mobile readability
+        font-size: clamped(20px, 36px, 480px, 1920px); // Increased from 16px to 20px for better mobile readability
     }
 }
 </style>
