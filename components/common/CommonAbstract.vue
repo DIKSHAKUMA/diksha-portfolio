@@ -31,6 +31,18 @@ const props = defineProps({
     isSecondary: {
         type: Boolean,
         default: false
+    },
+    author: {
+        type: String,
+        default: ''
+    },
+    date: {
+        type: String,
+        default: ''
+    },
+    length: {
+        type: String,
+        default: ''
     }
 })
 
@@ -90,6 +102,19 @@ onUnmounted(() => {
             <div v-if="desc && desc.trim()">
                 <div class="abstract__desc" :class="className">{{ desc }}</div>
             </div>
+
+            <!-- For blog posts -->
+            <div class="abstract__info">
+                <div v-if="author && author.trim()">
+                    <h4 class="abstract__author" :class="className">by: {{ author }}</h4>
+                </div>
+                <div v-if="date && date.trim()">
+                    <h4 class="abstract__date" :class="className">on: {{ date }}</h4>
+                </div>
+                <div v-if="length && length.trim()">
+                    <h4 class="abstract__length" :class="className">{{ length }}</h4>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -122,13 +147,13 @@ onUnmounted(() => {
 .abstract {
     &__header {
         position: relative;
-        font-size: clamped(56px, 110px, 480px, 1920px); 
+        font-size: clamped(56px, 110px, 480px, 1920px);
         flex-wrap: wrap;
         height: max-content;
         margin-bottom: $px-32-spacer;
 
         &--hero {
-            margin-bottom: $px-16-spacer;
+            margin-bottom: 0;
         }
 
         /* When we need a sub header (smaller) */
@@ -140,15 +165,31 @@ onUnmounted(() => {
             margin-bottom: $px-64-spacer;
 
             &.abstract__header--hero {
-                margin-bottom: $px-16-spacer;
+                margin-bottom: 0;
             }
         }
     }
 
     &__desc {
-        line-height: .9;
-        line-height: 1.2;
         font-size: clamped(20px, 36px, 480px, 1920px); // Increased from 16px to 20px for better mobile readability
     }
+
+    &__info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $px-16-spacer;
+    }
+
+    &__author,
+    &__date,
+    &__length {
+
+        position: relative;
+        display: inline-block;
+        // Increased from 16px to 20px for better mobile readability
+        font-style: italic;
+        font-variation-settings: "wght" 500, "ital" 900;
+    }
+
 }
 </style>

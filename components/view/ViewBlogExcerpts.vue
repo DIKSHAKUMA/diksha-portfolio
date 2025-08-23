@@ -1,0 +1,146 @@
+<script setup lang="ts">
+import { useBlogStore } from '~/store/useBlogStore';
+import { useFolioStore } from '~/store/useFolioStore';
+
+const blogStore = useBlogStore()
+const store = useFolioStore()
+
+onMounted(() => {
+
+})
+
+onUnmounted(() => {
+
+})
+</script>
+
+<template>
+    <div class="excerpts-wrapper">
+        <CommonLine class="excerpts__line" :width="''" />
+        <CommonInfoLabel :label="'Current Musings; Click to Read'" :className="'photo-label'"
+            :style="{ justifyContent: 'center', alignItems: 'flex-start' }" />
+
+        <main class="excerpts">
+            <CommonAbstract class="excerpts__label" :label="store.data.intro?.blogExcerptsTitle" :desc="''"
+                :className="'excerpts__intro'" :is-secondary="true" />
+            <div class="excerpts__info" v-for="post in blogStore.data.posts" :key="post.id">
+                <NuxtLink :to="`/blog-post/${post.slug}`">
+                    <div class="excerpts__item action" data-name="menu">
+                        <div class="excerpts__item__title">{{ post.date }}</div>
+                        <div class="excerpts__item__title">{{ post.title }}</div>
+                        <div class="excerpts__item__title">{{ post.subject }}</div>
+                        <div class="excerpts__item__title">{{ post.length }}</div>
+                    </div>
+                </NuxtLink>
+            </div>
+            <div class="excerpts__quote"><q>{{ store.data.intro?.blogExcerptsQuote.split('—')[0] }}</q><span>—</span> {{
+                store.data.intro?.blogExcerptsQuote.split('—')[1] }}</div>
+        </main>
+    </div>
+</template>
+
+<style lang="scss" scoped>
+.excerpts-wrapper {
+    position: relative;
+    background-color: $primary;
+    padding: $px-64-spacer $px-16-spacer;
+    height: 100vh;
+
+    @include this-and-above('lg') {
+        padding: $px-128-spacer $px-64-spacer;
+    }
+
+}
+
+.excerpts {
+    position: relative;
+    /* So its above the all seeing info label */
+    z-index: 200;
+    width: 100%;
+    height: 100%;
+
+    &__quote {
+        position: absolute;
+        bottom: $px-64-spacer;
+        width: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        color: $secondary;
+        font-size: clamped(20px, 36px, 480px, 1920px);
+        font-style: italic;
+        font-variation-settings: "ital" 900;
+    }
+
+    &__label {
+        position: relative;
+    }
+
+    &__item {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr 1fr;
+        height: 70px;
+        align-items: center;
+        width: 100%;
+        border-bottom: 2px solid $accent1;
+        gap: $px-16-spacer;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        /* Background fill effect */
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background-color: $accent2;
+            transition: height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1;
+        }
+
+        &:hover {
+            &::before {
+                height: 100%;
+            }
+
+            .excerpts__item__title {
+                color: $accent1;
+                transform: translateY(-2px);
+            }
+        }
+
+        &__title {
+            position: relative;
+            z-index: 2;
+            color: $secondary;
+            padding: 0 10px;
+            transition: all 0.3s ease;
+
+            /* Column-specific alignment */
+            &:first-child {
+                text-align: left;
+                /* Date */
+            }
+
+            &:nth-child(2) {
+                text-align: left;
+                /* Title */
+            }
+
+            &:nth-child(3) {
+                text-align: left;
+                /* Subject */
+            }
+
+            &:last-child {
+                text-align: right;
+                /* Length */
+            }
+        }
+    }
+}
+</style>

@@ -1,0 +1,19 @@
+query blog {
+  posts {
+    content
+    slug
+    title
+    subject
+    date
+    length
+    tags
+    authors {
+      name
+    }
+    coverImage {
+      id
+      handle
+      fileName
+    }
+  }
+}

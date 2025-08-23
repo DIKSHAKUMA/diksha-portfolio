@@ -32,7 +32,7 @@ const toggleMenu = () => {
 }
 
 const closeMenu = () => {
-    if (screenWidth.value < 992) {
+    if (screenWidth.value < 768) {
         toggleMenu()
     }
 }
@@ -58,6 +58,14 @@ const onScroll = () => {
 }
 
 
+const resetMagneticLinks = () => {
+    // Reset all magnetic links to their original position
+    const magneticElements = document.querySelectorAll('.magnet')
+    magneticElements.forEach(element => {
+        $gsap.set(element, { x: 0, y: 0 })
+    })
+}
+
 onMounted(() => {
     onScroll()
     window.addEventListener('scroll', onScroll)
@@ -68,6 +76,11 @@ onMounted(() => {
         (newValue == true) ? colorMode.preference = 'light' : colorMode.preference = 'dark';
     }, { immediate: true })
 
+    // Reset magnetic links on route change
+    const router = useRouter()
+    router.afterEach(() => {
+        resetMagneticLinks()
+    })
 })
 
 onBeforeUnmount(() => {
@@ -102,7 +115,7 @@ checkScreenWidth()
                         Projects
                     </NuxtLink>
 
-                    <NuxtLink to="" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
+                    <NuxtLink to="/blog" data-name="menu" class="nav__item action magnet" activeClass="nav--link-active"
                         no-prefetch @click="closeMenu">
                         Blog
                     </NuxtLink>
@@ -200,7 +213,7 @@ I should probably just use a simple modal and be done with it.
     font-size: $fs-16;
     margin: 0 $px-16-spacer;
 
-    @include this-and-above('lg') {
+    @include this-and-above('md') {
         margin: 0 $px-64-spacer;
     }
 }

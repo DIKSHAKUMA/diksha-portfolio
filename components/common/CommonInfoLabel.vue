@@ -73,7 +73,7 @@ onUnmounted(() => {
 }
 
 .info-label-header {
-    font-size: clamped(10px, 14px, 480px, 1920px);
+    font-size: clamped(12px, 14px, 480px, 1920px);
     line-height: 1;
     margin: $px-16-spacer $px-16-spacer;
 

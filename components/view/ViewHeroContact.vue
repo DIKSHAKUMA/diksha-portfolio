@@ -21,7 +21,7 @@ onMounted(() => {
             $gsap.set(splitTxt.words, { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', })
             $gsap.to(splitTxt.words, {
                 autoAlpha: 1,
-                delay:1.5,
+                delay: 1.5,
                 clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
                 scrollTrigger: {
                     trigger: sec,
@@ -51,15 +51,13 @@ onUnmounted(() => {
             :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }" />
         <div class="contact">
             <div class="contact__label split-label-w">{{ store.data.contact?.emailTitle }}</div>
-            <a class="contact__email action split-label-w" data-name="menu" :href="`mailto:${store.data.contact?.email}`">{{
-                store.data.contact?.email }}</a>
+            <a class="contact__email action split-label-w" data-name="menu"
+                :href="`mailto:${store.data.contact?.email}`">{{
+                    store.data.contact?.email }}</a>
         </div>
         <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
         <CommonAbstract class="front-header" :label="store.data.contact?.viewHeroTitle" :delay="1.5" :desc="''"
             :className="'front-intro'" :is-hero="true" />
-        <CommonInfoLabel :label="'Unsplash @ willianjusten'" :className="'photo-label'"
-            :style="{ justifyContent: 'flex-start', alignItems: 'flex-end' }"
-            :link="'https://unsplash.com/@willianjusten'" />
     </main>
 </template>
 
@@ -71,7 +69,7 @@ onUnmounted(() => {
     overflow: hidden;
     padding: 0 $px-16-spacer;
 
-    @include this-and-above('lg') {
+    @include this-and-above('md') {
         padding: 0 $px-64-spacer;
     }
 }

@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { useFolioStore } from '~/store/useFolioStore'
+import { useBlogStore } from '~/store/useBlogStore'
 
 // Pinia 🍍
 const store = useFolioStore()
 await callOnce('projects', () => store.fetchData())
+
+const blogStore = useBlogStore()
+await callOnce('blog', () => blogStore.fetchData())
 
 const isLoaded = ref(false)
 const { $gsap } = useNuxtApp()

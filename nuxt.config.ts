@@ -41,10 +41,25 @@ export default defineNuxtConfig({
     '@nuxtjs/seo',
     '@nuxt/fonts',
     '@nuxtjs/color-mode',
-  ],
-
+    '@nuxtjs/mdc',
+    '@stefanobartoletti/nuxt-social-share',
+  ], 
+  
   colorMode: {
-    preference: 'dark'
+    preference: 'light'
+  },
+
+  mdc: {
+    highlight: {
+      theme: 'kanagawa-dragon',
+      langs: ['js', 'javascript', 'ts', 'typescript', 'vue', 'html', 'css', 'scss', 'bash', 'json'],
+      wrapperStyle: true
+    }
+  },
+
+  socialShare: {
+    baseUrl: 'https://localhost:3000', // required!
+    // other optional module options
   },
 
   vite: {

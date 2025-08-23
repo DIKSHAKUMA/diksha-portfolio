@@ -47,6 +47,11 @@ query folio {
     metaIdeDesc
     metaPublishTitle
     metaPublishDesc
+    blogTitle
+    blogDesc
+    blogExcerptsTitle
+    blogExcerptsDesc
+    blogExcerptsQuote
   }
 
   projects {

@@ -2,9 +2,12 @@
 const metaLine = useTemplateRef('metaLine')
 const { $gsap } = useNuxtApp()
 
-const props = withDefaults(defineProps<{ pos?: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky' }>(), {
-    pos: 'absolute'
+const props = withDefaults(defineProps<{ pos?: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky', width?: string }>(), {
+    pos: 'absolute',
+    width: '80%'
 })
+
+const resolvedWidth = computed(() => (props.width && props.width.trim().length ? props.width : '80%'))
 
 onMounted(() => {
     if (metaLine.value) {
@@ -12,7 +15,7 @@ onMounted(() => {
             metaLine.value,
             { width: '0%' },
             {
-                width: '90%',
+                width: resolvedWidth.value,
                 duration: 1,
                 ease: 'power2.out',
                 scrollTrigger: {
@@ -27,13 +30,13 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="line" ref="metaLine" :style="{ position: props.pos }"></div>
+    <div class="line" ref="metaLine" :style="{ position: props.pos, width: resolvedWidth }"></div>
 </template>
 
 <style scoped lang="scss">
 .line {
     top: 0;
-    background-color: $secondary;
+    background-color: $accent2;
     display: block;
     height: 2px;
     left: 50%;

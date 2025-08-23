@@ -104,6 +104,9 @@ onUnmounted(() => {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    @include this-and-above('sm') {
+        justify-content:flex-end;
+    }
 }
 
 .window {
@@ -168,12 +171,15 @@ onUnmounted(() => {
 // Weather Widgets
 .weather-widgets {
     position: absolute;
-    align-self:center;
     display: flex;
     flex-direction: column;
     gap: 16px;
     z-index: 100;
-    justify-self: center;
+
+    @include this-and-above('sm') {
+        right: $px-16-spacer;
+        gap: $px-32-spacer; 
+    }
 
     @include this-and-above('md') {
         right: $px-64-spacer;
@@ -195,7 +201,7 @@ onUnmounted(() => {
         border-color: rgba(23, 23, 23, 0.2);
     }
 
-    @include this-and-above('md') {
+    @include this-and-above('sm') {
         padding: $px-16-spacer;
         min-width: 200px;
     }

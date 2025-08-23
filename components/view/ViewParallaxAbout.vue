@@ -61,15 +61,11 @@ onUnmounted(() => {
     will-change: transform;
 }
 
-.about__label {
-    color: #171717;
-}
-
 .about {
     overflow: hidden;
 
-
     &__label {
+        color: #171717;
         position: relative;
         z-index: 100;
     }
@@ -115,19 +111,24 @@ onUnmounted(() => {
 
 .parallax__bg {
     position: absolute;
-    display: block; /* Changed from inline-block for better performance */
+    display: block;
+    /* Changed from inline-block for better performance */
     right: 0;
-    height: 130vh; /* Reduced from 130vh */
-    width: 100vw; /* Reduced from 130vw */
+    height: 130vh;
+    /* Reduced from 130vh */
+    width: 100vw;
+    /* Reduced from 130vw */
     z-index: 1;
     will-change: transform;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center top;
-    transform: translateZ(0); /* Force hardware acceleration */
+    transform: translateZ(0);
+    /* Force hardware acceleration */
     backface-visibility: hidden;
     perspective: 1000px;
-    contain: layout style paint; /* CSS containment for better performance */
+    contain: layout style paint;
+    /* CSS containment for better performance */
     image-rendering: optimizeSpeed;
     background-image: url('/img/robert-reid.jpg');
 

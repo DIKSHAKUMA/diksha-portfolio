@@ -1,5 +1,5 @@
 .dark-mode {
-    --primary: #0D0D0D;
+    --primary: #171717;
     --secondary: #faf7ff;
     --accent1: #4a4453;
     --accent2: #fff0e8;
@@ -37,7 +37,7 @@ $sans-text-stl: normal;
 // The below values for I don't use Clamp but set direct
 
 //TODO: should probably mirror these in pixels for clamp function
-$fs-18: 1.125rem; //18
+$fs-18: 1.125rem; //
 $fs-16: 1rem; //16
 $fs-14: 0.875rem; //14
 $fs-10: 0.625rem; //10
