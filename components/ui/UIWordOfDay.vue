@@ -1,6 +1,7 @@
 <script setup lang="ts">
-const { data: wordData, pending, error } = await useFetch('/api/word-of-day', {
+const { data: wordData, pending, error } = useFetch('/api/word-of-day', {
     server: false,
+    lazy: true,
     default: () => ({
         word: 'Loading...',
         definition: '',
@@ -10,19 +11,21 @@ const { data: wordData, pending, error } = await useFetch('/api/word-of-day', {
 </script>
 
 <template>
-    <div class="word-of-day">
-        <div class="word-of-day__header">
-            <h3 class="word-of-day__title">Word of the Day</h3>
-            <p class="word-of-day__date">{{ wordData.date }}</p>
-        </div>
-        
-        <div class="word-of-day__content" v-if="!pending">
-            <h4 class="word-of-day__word">{{ wordData.word }}</h4>
-            <p class="word-of-day__definition">{{ wordData.definition }}</p>
-        </div>
-        
-        <div class="word-of-day__loading" v-else>
-            <div class="loading-spinner"></div>
+    <div v-if="wordData">
+        <div class="word-of-day">
+            <div class="word-of-day__header">
+                <h4 class="word-of-day__title">Word of the Day</h4>
+                <p class="word-of-day__date">{{ wordData.date }}</p>
+            </div>
+
+            <div class="word-of-day__content" v-if="!pending">
+                <h3 class="word-of-day__word">{{ wordData.word }}</h3>
+                <p class="word-of-day__definition">{{ wordData.definition }}</p>
+            </div>
+
+            <div class="word-of-day__loading" v-else>
+                <div class="loading-spinner"></div>
+            </div>
         </div>
     </div>
 </template>
@@ -34,6 +37,7 @@ const { data: wordData, pending, error } = await useFetch('/api/word-of-day', {
     padding: $px-32-spacer;
     position: sticky;
     top: $px-32-spacer;
+    min-width: 200px;
     max-height: calc(100vh - $px-64-spacer);
     overflow-y: auto;
 
@@ -44,7 +48,6 @@ const { data: wordData, pending, error } = await useFetch('/api/word-of-day', {
     }
 
     &__title {
-        font-size: clamped(16px, 18px, 480px, 1920px);
         font-variation-settings: "wght" 600;
         color: $secondary;
         margin: 0 0 $px-8-spacer 0;
@@ -58,7 +61,6 @@ const { data: wordData, pending, error } = await useFetch('/api/word-of-day', {
     }
 
     &__word {
-        font-size: clamped(20px, 24px, 480px, 1920px);
         font-variation-settings: "wght" 700;
         color: $secondary;
         margin: 0 0 $px-16-spacer 0;
@@ -90,7 +92,12 @@ const { data: wordData, pending, error } = await useFetch('/api/word-of-day', {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 </style>

@@ -60,15 +60,16 @@ const loop = () => {
     // Calculate angle and scale based on velocity
     let scale = getScale(vel.x, vel.y)
 
-    // Set transform data to Jelly Blob
-    if (shape.value?.getBoundingClientRect()) {
-        $gsap.to(shape.value, {
-            x: Math.round(pos.x - shape.value.getBoundingClientRect().width / 2),
-            y: Math.round(pos.y - shape.value.getBoundingClientRect().height / 2),
-            //rotation: rotation + "_short",
+    // Set transform data to Jelly Blob - optimized for Firefox
+    if (shape.value) {
+        // Cache getBoundingClientRect to avoid repeated calls
+        const rect = shape.value.getBoundingClientRect()
+        $gsap.set(shape.value, {
+            x: Math.round(pos.x - rect.width / 2),
+            y: Math.round(pos.y - rect.height / 2),
             scaleX: 1 + scale,
             scaleY: 1 - scale,
-            duration: 0.0,
+            force3D: true // Hardware acceleration
         })
     }
 }
@@ -200,7 +201,7 @@ onBeforeUnmount(() => {
                 <ChevronSVG v-if="dataText === 'Next'" class="arrow" />
                 <ChevronSVG v-if="dataText === 'Explore'" class="arrow" />
             </div>
-            <div v-if="dataName === 'menu'" class="cursor__shape__text"></div>
+            <div v-if="dataName === 'menu'" class="cursor__shape__text">{{ dataText }}</div>
             <div v-if="dataName === 'reel'" class="cursor__shape__text">
                 <ChevronSVG class="arrow arrow--before arrow--reverse" />{{ dataText }}
                 <ChevronSVG class="arrow" />
@@ -246,22 +247,28 @@ onBeforeUnmount(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: $accent2;
+        background: rgba(250, 247, 255, 0.1);
         width: 20px;
         height: 20px;
-        border: 1px solid $accent1;
+        border: 1px solid rgba(250, 247, 255, 0.3);
         border-radius: 50%;
         pointer-events: none;
         transform-origin: center center;
         will-change: width, height, transform;
         transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
-        backdrop-filter: blur(10px);
-        opacity: .5;
+        backdrop-filter: blur(15px);
+        opacity: 0.8;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        
+        .light-mode & {
+            background: rgba(23, 23, 23, 0.1);
+            border-color: rgba(23, 23, 23, 0.3);
+        }
 
         /* different hover states */
         &--proj {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             background-color: unset;
             opacity: 1;
         }
@@ -276,7 +283,7 @@ onBeforeUnmount(() => {
         &--menu {
             width: 80px;
             height: 80px;
-            opacity: .1;
+            opacity: .5;
         }
 
         /* Easter egg */

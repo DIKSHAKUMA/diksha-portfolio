@@ -18,13 +18,37 @@ let ctx: gsap.Context
 let draggableInstance: Draggable[] | null = null
 
 const centeredProject = computed(() => {
-    return store.data?.projects[clampedIndex.value]
+    return dateSorted.value[clampedIndex.value]
+})
+
+const dateSorted = computed(() => {
+    if (!store.data?.projects) return []
+
+    return [...store.data.projects].sort((a, b) => {
+        // Convert "Month YYYY" format to proper Date objects
+        const parseDate = (dateStr: string) => {
+            const [month, year] = dateStr.split(' ')
+            // Create date with month name and year
+            return new Date(`${month} 1, ${year}`)
+        }
+
+        // Sort by date descending (newest first)
+        return parseDate(b.date).getTime() - parseDate(a.date).getTime()
+    })
 })
 
 const progressIndex = computed(() => {
-    const totalProjects = store.data?.projects.length || 1
+    const totalProjects = dateSorted.value.length || 1
     return { current: clampedIndex.value + 1, total: totalProjects }
 })
+
+const handleProjectClick = (project: any) => {
+    if (project.labUrl) {
+        window.open(project.labUrl, '_blank')
+    } else {
+        navigateTo(`/project/${project.slug}`)
+    }
+}
 
 
 /* Function to setup/update Draggable configuration */
@@ -155,8 +179,6 @@ onMounted(async () => {
         $gsap.registerPlugin(Draggable, InertiaPlugin)
     })
 
-    /* Wait a bit for DOM to be fully ready */
-
     /* Simple fade-in animation for projects and progress */
     const tl = $gsap.timeline()
     tl.from(".projects__reel, .progress", { duration: .8, opacity: 0, ease: "power2.inOut" })
@@ -192,8 +214,8 @@ onUnmounted(() => {
     <main ref="main" class="projects-wrapper">
         <!--:className here is for gsap-->
         <div class="abstract--center">
-            <CommonAbstract :label="'Projects'" :delay="1" :desc="'Drag & click to open.'" :className="'abstract__works'"
-                :is-hero="true" />
+            <CommonAbstract :label="'Projects'" :delay="1" :desc="'Drag & click to open.'"
+                :className="'abstract__works'" :is-hero="true" />
         </div>
 
         <div class="progress">
@@ -202,16 +224,17 @@ onUnmounted(() => {
 
         <div class="projects">
             <div class="projects__reel" ref="projectsReel">
-                <div v-for="(project, index) in store.data.projects" :key="project.id">
+                <div v-for="(project, index) in dateSorted" :key="project.id">
                     <div class="projects__project action" data-name="reel" ref="projectItem"
                         :class="{ 'projects__project--open': index === clampedIndex && !isDragging }">
-                        <NuxtLink :to="`/project/${project.slug}`">
+                        <NuxtLink @click="handleProjectClick(project)">
                             <NuxtImg :src="project.image[0].handle" provider="hygraph" alt="Project image" format="webp"
                                 sizes="sm:100vw" densities="x1 x2" class="projects__project__image"></NuxtImg>
                         </NuxtLink>
                         <div class="projects__project-name"
                             :class="{ 'projects__project-name--open': index === clampedIndex }">
                             <p>{{ project.name }}</p>
+                            <span v-if="project.labUrl" class="projects__lab-indicator" title="Lab Project">🧪</span>
                         </div>
                     </div>
                 </div>
@@ -222,13 +245,13 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 img {
-    width: 100%;
+
     height: auto;
+    border-radius: 12px;
 }
 
 a:hover {
     filter: blur(0px);
-    cursor:grab;
 }
 
 .projects-wrapper {
@@ -262,7 +285,8 @@ a:hover {
         font-variation-settings: "wght" 550;
         white-space: nowrap;
         color: $secondary;
-        font-variant-numeric: tabular-nums; /* Monospace numbers for consistent width */
+        font-variant-numeric: tabular-nums;
+        /* Monospace numbers for consistent width */
     }
 }
 
@@ -280,7 +304,8 @@ a:hover {
         background: rgba(0, 0, 0, 0.7);
         padding: $px-8-spacer $px-16-spacer;
         border-radius: 4px;
-        pointer-events: none; /* Don't interfere with dragging */
+        pointer-events: none;
+        /* Don't interfere with dragging */
         opacity: 0;
         will-change: opacity;
         transition: opacity .2s ease-in-out;
@@ -302,14 +327,18 @@ a:hover {
     &__reel {
         display: flex;
         flex-flow: row nowrap;
-        column-gap: $px-32-spacer; /* Mobile: tight spacing */
-        justify-content: flex-start; /* Start from left instead of center */
+        column-gap: $px-32-spacer;
+        /* Mobile: tight spacing */
+        justify-content: flex-start;
+        /* Start from left instead of center */
         align-items: center;
         position: absolute;
         left: 0;
-        width: max-content; /* Allow width to expand based on content */
-        padding-left: $px-32-spacer; /* Mobile: minimal padding */
-        cursor:grab;
+        width: max-content;
+        /* Allow width to expand based on content */
+        padding-left: $px-32-spacer;
+        /* Mobile: minimal padding */
+        cursor: grab;
 
         /* Progressive spacing increases */
         @include this-and-above('sm') {
@@ -324,36 +353,69 @@ a:hover {
     }
 
     &__project {
-        position: relative; /* For absolute positioning of project name */
-        flex-shrink: 0; /* Prevent shrinking to maintain consistent layout */
+        position: relative;
+        /* For absolute positioning of project name */
+        flex-shrink: 0;
+        /* Prevent shrinking to maintain consistent layout */
         transform-origin: center;
-        transition: transform 0.3s ease-out; /* Smooth scale transitions */
+        transition: transform 0.3s ease-out;
+        /* Smooth scale transitions */
 
         &--open {
             transform: scale(1.1);
         }
 
         img {
-            width: 85vw; /* Mobile-first: larger than viewport for immersive feel */
+            width: 85vw;
+            /* Mobile-first: larger than viewport for immersive feel */
             height: auto;
+            aspect-ratio: 16/9;
             object-fit: cover;
             transform-origin: center;
 
             @include this-and-above('sm') {
-                width: 75vw; /* Slightly smaller on small tablets */
+                width: 75vw;
+                /* Slightly smaller on small tablets */
             }
 
             @include this-and-above('md') {
-                width: 60vw; /* Medium screens */
+                width: 60vw;
+                /* Medium screens */
             }
 
             @include this-and-above('lg') {
-                width: 50vw; /* Desktop - show more context */
+                width: 50vw;
+                /* Desktop - show more context */
             }
 
             @include this-and-above('xl') {
-                width: 45vw; /* Large desktop - optimal viewing */
+                width: 45vw;
+                /* Large desktop - optimal viewing */
             }
+        }
+    }
+
+    &__lab-indicator {
+        position: absolute;
+        top: -12px;
+        right: -12px;
+        font-size: 16px;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        @include this-and-above('md') {
+            font-size: 18px;
+            width: 28px;
+            height: 28px;
+            top: -14px;
+            right: -14px;
         }
     }
 }

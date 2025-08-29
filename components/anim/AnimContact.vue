@@ -1,6 +1,8 @@
 <script setup lang="ts">
 
 const colorMode = useColorMode()
+const isFirefox = ref(false)
+const showRaindrops = ref(false)
 
 // Fetch weather data client side only , openweather API
 const { data: weatherData, pending: weatherPending, error: weatherError } = useFetch('/api/weather', {
@@ -34,7 +36,14 @@ const getRaindrops = computed(() => {
 })
 
 onMounted(() => {
-
+    if (navigator.userAgent.toLowerCase().includes('firefox')) {
+        isFirefox.value = true
+    }
+    
+    // Delay raindrops to avoid Venice blind interference
+    setTimeout(() => {
+        showRaindrops.value = true
+    }, 1000) // Adjust timing as needed - 600ms should be after Venice blind completes
 })
 
 onUnmounted(() => {
@@ -47,7 +56,7 @@ onUnmounted(() => {
         <div class="window"></div>
 
         <ClientOnly>
-            <div class="raindrops">
+            <div class="raindrops" v-if="showRaindrops">
                 <div v-for="drop in getRaindrops" :key="drop.id" class="raindrop" :style="{
                     left: drop.left + 'px',
                     top: drop.top + 'px',
@@ -62,14 +71,14 @@ onUnmounted(() => {
         <!-- Weather Widgets -->
         <div v-if="weatherData && !weatherPending" class="weather-widgets">
             <!-- Local Time Widget -->
-            <div class="weather-widget weather-widget--time">
+            <div class="weather-widget weather-widget--time" :class="{ 'weather-widget--firefox': isFirefox }">
                 <div class="weather-widget__icon">🕐</div>
                 <div class="weather-widget__label">{{ weatherData.location }}</div>
                 <div class="weather-widget__value">{{ weatherData.localTime }}</div>
             </div>
 
             <!-- Temperature Widget -->
-            <div class="weather-widget weather-widget--temperature">
+            <div class="weather-widget weather-widget--temperature" :class="{ 'weather-widget--firefox': isFirefox }">
                 <div class="weather-widget__icon">🌡️</div>
                 <div class="weather-widget__label">Temperature</div>
                 <div class="weather-widget__value">{{ weatherData.temperature }}°C</div>
@@ -81,10 +90,10 @@ onUnmounted(() => {
             </div>
 
             <!-- Humidity Widget -->
-            <div class="weather-widget weather-widget--humidity">
+            <div class="weather-widget weather-widget--humidity weather-widget--hidden" :class="{ 'weather-widget--firefox': isFirefox }">
                 <div class="weather-widget__icon">💧</div>
                 <div class="weather-widget__label">Humidity</div>
-                <div class="weather-widget__value">{{ weatherData.humidity}}%</div>
+                <div class="weather-widget__value">{{ weatherData.humidity }}%</div>
                 <div class="weather-widget__bar">
                     <div class="weather-widget__progress weather-widget__progress--humidity"
                         :style="{ width: weatherData.humidity + '%' }"></div>
@@ -96,7 +105,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .rain-wrapper {
-    display:flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
@@ -104,8 +113,9 @@ onUnmounted(() => {
     width: 100%;
     height: 100%;
     overflow: hidden;
+
     @include this-and-above('sm') {
-        justify-content:flex-end;
+        justify-content: flex-end;
     }
 }
 
@@ -119,7 +129,6 @@ onUnmounted(() => {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: blur(4px);
 
     @supports (background-image: url('/img/zero-take.webp')) {
         background-image: url('/img/zero-take.webp');
@@ -178,7 +187,7 @@ onUnmounted(() => {
 
     @include this-and-above('sm') {
         right: $px-16-spacer;
-        gap: $px-32-spacer; 
+        gap: $px-32-spacer;
     }
 
     @include this-and-above('md') {
@@ -196,14 +205,13 @@ onUnmounted(() => {
     border: 1px solid rgba(250, 247, 255, 0.2);
     animation: float 6s ease-in-out infinite;
 
+    &--firefox {
+        animation: none;
+    }
+    
     .light-mode & {
         background: rgba(23, 23, 23, 0.1);
         border-color: rgba(23, 23, 23, 0.2);
-    }
-
-    @include this-and-above('sm') {
-        padding: $px-16-spacer;
-        min-width: 200px;
     }
 
     &__icon {
@@ -262,6 +270,18 @@ onUnmounted(() => {
 
     &--humidity {
         animation-delay: 3s;
+    }
+
+    &--hidden {
+        display: none;
+        @include this-and-above('sm') {
+            display: block;
+        }
+    }
+
+    @include this-and-above('sm') {
+        padding: $px-16-spacer;
+        min-width: 200px;
     }
 }
 

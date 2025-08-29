@@ -164,6 +164,7 @@ canvas {
     display: block;
     margin: 0 auto;
     pointer-events: none; // Allow mouse events to pass through to parent
+    border-radius:12px;
 }
 
 h2,

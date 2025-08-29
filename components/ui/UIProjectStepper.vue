@@ -15,6 +15,8 @@ let prevPixiApp: PIXI.Application
 let nextPixiApp: PIXI.Application
 let prevDisplaceSprite: PIXI.Sprite
 let nextDisplaceSprite: PIXI.Sprite
+let prevImageSprite: PIXI.Sprite
+let nextImageSprite: PIXI.Sprite
 
 // Setup PIXI displacement effect for stepper images
 const setupPixiEffect = async (canvasElement: HTMLCanvasElement, imageHandle: string, isNext: boolean = false) => {
@@ -80,12 +82,55 @@ const setupPixiEffect = async (canvasElement: HTMLCanvasElement, imageHandle: st
     if (isNext) {
         nextPixiApp = app
         nextDisplaceSprite = displaceSprite
+        nextImageSprite = imageSprite
     } else {
         prevPixiApp = app
         prevDisplaceSprite = displaceSprite
+        prevImageSprite = imageSprite
     }
 
     return { app, displaceSprite }
+}
+
+// Debounced resize handler
+const handleResize = () => {
+    if (prevPixiApp && prevImageSprite) {
+        const prevCanvas = document.querySelector('.prev-pixi-canvas') as HTMLCanvasElement
+        const prevParent = prevCanvas?.parentElement as HTMLElement
+        const prevImg = prevParent?.querySelector('img') as HTMLImageElement
+        
+        if (prevImg) {
+            const newWidth = prevImg.offsetWidth
+            const newHeight = prevImg.offsetHeight
+            
+            prevPixiApp.renderer.resize(newWidth, newHeight)
+            prevImageSprite.width = newWidth
+            prevImageSprite.height = newHeight
+            prevDisplaceSprite.setSize(newWidth, newHeight)
+        }
+    }
+    
+    if (nextPixiApp && nextImageSprite) {
+        const nextCanvas = document.querySelector('.next-pixi-canvas') as HTMLCanvasElement
+        const nextParent = nextCanvas?.parentElement as HTMLElement
+        const nextImg = nextParent?.querySelector('img') as HTMLImageElement
+        
+        if (nextImg) {
+            const newWidth = nextImg.offsetWidth
+            const newHeight = nextImg.offsetHeight
+            
+            nextPixiApp.renderer.resize(newWidth, newHeight)
+            nextImageSprite.width = newWidth
+            nextImageSprite.height = newHeight
+            nextDisplaceSprite.setSize(newWidth, newHeight)
+        }
+    }
+}
+
+let resizeTimeout: NodeJS.Timeout
+const debouncedResize = () => {
+    clearTimeout(resizeTimeout)
+    resizeTimeout = setTimeout(handleResize, 150)
 }
 
 onMounted(async () => {
@@ -131,18 +176,21 @@ onMounted(async () => {
             await setupPixiEffect(nextCanvas, props.nextImg, true)
         }
     }, 100)
+
+    window.addEventListener('resize', debouncedResize)
 })
 
 onUnmounted(() => {
     ctx.revert()
     if (prevPixiApp) prevPixiApp.destroy()
     if (nextPixiApp) nextPixiApp.destroy()
+    window.removeEventListener('resize', debouncedResize)
 })
 </script>
 
 <template>
     <div class="project-stepper-wrapper">
-        <CommonAbstract class="stepper__label" :label="'Explore  Archive'" :className="'stepper__intro'" />
+        <h1>Explore Archive</h1>
         <main class="project-stepper">
             <div class="project-stepper__prev">
                 <div class="project-stepper-image-reveal">
@@ -179,6 +227,7 @@ img {
     height: 100%;
     pointer-events: none;
     font-size: 0;
+    border-radius:12px;
 }
 
 /* Position canvas absolutely to prevent layout interference */
@@ -194,6 +243,7 @@ img {
     pointer-events: auto;
     padding: 0;
     margin: 0;
+    border-radius:12px;
 }
 
 /* Vertical blind reveal effect */
@@ -236,14 +286,14 @@ img {
 
 .project-stepper-wrapper {
     position: relative;
-    padding: $px-16-spacer;
+    padding: $px-64-spacer 0;
 
     @include this-and-above('sm') {
-        padding: $px-128-spacer 0;
+        padding: $px-64-spacer 0;
     }
 
     @include this-and-above('md') {
-        padding: $px-128-spacer 0;
+        padding: $px-64-spacer 0;
     }
 
     @include this-and-above('xl') {

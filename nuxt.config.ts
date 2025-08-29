@@ -51,9 +51,13 @@ export default defineNuxtConfig({
 
   mdc: {
     highlight: {
-      theme: 'kanagawa-dragon',
+      theme: 'github-dark', 
       langs: ['js', 'javascript', 'ts', 'typescript', 'vue', 'html', 'css', 'scss', 'bash', 'json'],
-      wrapperStyle: true
+      wrapperStyle: true,
+      preload: ['js', 'javascript', 'ts', 'typescript', 'vue'] 
+    },
+    headings: {
+      anchorLinks: false
     }
   },
 

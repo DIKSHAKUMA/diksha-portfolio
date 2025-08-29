@@ -169,6 +169,7 @@ onUnmounted(() => {
         width: 100%;
         min-width: 300px;
         background-color: $secondary;
+        border-radius:12px;
 
         @include this-and-above('md') {
             width: 60%;

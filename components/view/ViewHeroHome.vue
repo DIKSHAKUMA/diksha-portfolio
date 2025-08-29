@@ -193,15 +193,12 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 
-:deep(.abstract-wrapper) {
-    width: 53%;
-}
 .hero-wrapper {
     position: relative;
     height: 100vh;
     padding: 0 $px-16-spacer;
 
-    @include this-and-above('lg') {
+    @include this-and-above('md') {
         padding: 0 $px-64-spacer;
     }
 }
@@ -236,9 +233,11 @@ img {
     width: 100%;
     height: auto;
     border: none;
+    border-radius:12px;
 }
 
 canvas {
     width: 400px;
+    border-radius:12px;
 }
 </style>

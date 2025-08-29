@@ -61,24 +61,23 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .testimonial-wrapper {
     position: relative;
-    margin: 0 $px-16-spacer;
-
+    
     @include this-and-above('sm') {
-        flex-direction: row;
-        margin: 0 $px-32-spacer;
-    }
+            flex-direction: row;
+            margin: 0 $px-32-spacer;
+        }
 
-    @include this-and-above('md') {
-        margin: 0 $px-64-spacer $px-128-spacer $px-64-spacer;
-    }
+        @include this-and-above('md') {
+            margin: 0 $px-64-spacer;
+        }
 
-    @include this-and-above('lg') {
-        margin: 0 $px-64-spacer $px-128-spacer $px-64-spacer;
-    }
+        @include this-and-above('lg') {
+            margin: 0 $px-64-spacer;
+        }
 
-    @include this-and-above('xl') {
-        margin: 0 $px-128-spacer $px-128-spacer $px-128-spacer;
-    }
+        @include this-and-above('xl') {
+            margin: 0 $px-256-spacer;
+        }
 
     .testimonial {
         font-family: $sans-text;

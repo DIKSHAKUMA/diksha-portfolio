@@ -24,6 +24,10 @@ const props = defineProps({
         type: Number,
         default: 0
     },
+    isFullWidth: {
+        type: Boolean,
+        default: false
+    },
     isHero: {
         type: Boolean,
         default: false
@@ -46,6 +50,24 @@ const props = defineProps({
     }
 })
 
+const abstractClassObj = computed(() => {
+    return {
+        'abstract-wrapper': true,
+        'abstract-wrapper--hero': props.isHero,
+        'abstract-wrapper--secondary': props.isSecondary,
+        'abstract-wrapper--full-width': props.isFullWidth
+    }
+})
+
+const headerClassObj = computed(() => {
+    return {
+        'abstract__header': true,
+        'abstract__header--hero': props.isHero,
+        'abstract__header--secondary': props.isSecondary,
+        'abstract__header--full-width': props.isFullWidth
+    }
+})
+
 onMounted(() => {
 
     $gsap.registerPlugin(ScrollTrigger)
@@ -59,7 +81,7 @@ onMounted(() => {
             $gsap.set(splitTxt.words, { autoAlpha: 0, clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', })
             $gsap.to(splitTxt.words, {
                 autoAlpha: 1,
-                clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                clipPath: 'polygon(0% 0%, 110% 0%, 100% 100%, 0% 100%)',
                 delay: props.delay,
                 scrollTrigger: {
                     trigger: sec,
@@ -93,10 +115,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="abstract-wrapper" :class="{ 'abstract-wrapper--hero': isHero }">
+    <div class="abstract-wrapper" :class="abstractClassObj">
         <div class="abstract">
-            <header v-if="label && label.trim()" class="abstract__header"
-                :class="[className, { 'abstract__header--hero': isHero }, { 'abstract__header--secondary': isSecondary }]">
+            <header v-if="label && label.trim()" class="abstract__header" :class="[className, headerClassObj]">
                 <div>{{ label }}</div>
             </header>
             <div v-if="desc && desc.trim()">
@@ -132,7 +153,33 @@ onUnmounted(() => {
     margin-bottom: $px-32-spacer;
 
     &--hero {
+        width: 80%;
         margin-bottom: $px-16-spacer;
+
+        @include this-and-above('lg') {
+            width: 70%;
+        }
+
+        @include this-and-above('xl') {
+            width: 58%;
+        }
+    }
+
+    &--secondary {
+        width: 100%;
+
+        @include this-and-above('sm') {
+            width: 90%;
+        }
+
+        @include this-and-above('md') {
+            width: 80%;
+        }
+    }
+
+    &--full-width {
+        margin-bottom: $px-64-spacer;
+        width: 100%;
     }
 
     @include this-and-above('md') {
@@ -161,10 +208,18 @@ onUnmounted(() => {
             font-size: clamped(36px, 52px, 480px, 1920px);
         }
 
+        &--full-width {
+            margin-bottom: 0;
+        }
+
         @include this-and-above('md') {
             margin-bottom: $px-64-spacer;
 
             &.abstract__header--hero {
+                margin-bottom: 0;
+            }
+
+            &--full-width {
                 margin-bottom: 0;
             }
         }
@@ -188,7 +243,7 @@ onUnmounted(() => {
         display: inline-block;
         // Increased from 16px to 20px for better mobile readability
         font-style: italic;
-        font-variation-settings: "wght" 500, "ital" 900;
+        width: 100%;
     }
 
 }

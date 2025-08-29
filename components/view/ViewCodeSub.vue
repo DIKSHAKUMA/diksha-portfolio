@@ -63,19 +63,19 @@ onUnmounted(() => {
                 <div class="code__value-block">
                     <span class="code__value-arrow split-code-w">></span>
                     <h2 class="code__value-title split-code-w">{{ store.data.about?.codeOneTitle }}</h2>
-                    <div class="code__value-desc split-code-w">{{ store.data.about?.codeOneDesc }}</div>
+                    <p class="code__value-desc split-code-w">{{ store.data.about?.codeOneDesc }}</p>
                 </div>
 
                 <div class="code__value-block">
                     <span class="code__value-arrow split-code-w">></span>
                     <h2 class="code__value-title split-code-w">{{ store.data.about?.codeTwoTitle }}</h2>
-                    <div class="code__value-desc split-code-w">{{ store.data.about?.codeTwoDesc }}</div>
+                    <p class="code__value-desc split-code-w">{{ store.data.about?.codeTwoDesc }}</p>
                 </div>
 
                 <div class="code__value-block">
                     <span class="code__value-arrow split-code-w">></span>
                     <h2 class="code__value-title split-code-w">{{ store.data.about?.codeThreeTitle }}</h2>
-                    <div class="code__value-desc split-code-w">{{ store.data.about?.codeThreeDesc }}</div>
+                    <p class="code__value-desc split-code-w">{{ store.data.about?.codeThreeDesc }}</p>
                 </div>
             </section>
         </main>

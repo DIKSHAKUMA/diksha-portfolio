@@ -1,8 +1,13 @@
 <script setup lang="ts">
-
+import SplitType from 'split-type';
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useBlogStore } from '~/store/useBlogStore'
+
+const mdcContentReady = ref(false)
 const store = useBlogStore()
 const route = useRoute();
+const { $gsap } = useNuxtApp()
+const showSidebar = ref(false)
 
 definePageMeta({
     layout: 'default',
@@ -21,59 +26,141 @@ const post = computed(() => {
 })
 
 const relatedPosts = computed(() => {
-    if (!post.value || !post.value.tags || !store.data?.posts) return []
+    // Stricter early returns to prevent unnecessary computation
+    if (!post.value?.tags?.length || !store.data?.posts?.length) return []
 
     const currentTags = post.value.tags
     const currentSlug = post.value.slug
 
+    // Early return if no current tags to match against
+    if (!Array.isArray(currentTags) || currentTags.length === 0) return []
+
     return store.data.posts
-        .filter((p: any) => p.slug !== currentSlug && p.tags?.some((tag: string) => currentTags.includes(tag)))
+        .filter((p: any) => {
+            // Stricter checks to prevent errors
+            if (!p || p.slug === currentSlug || !p.tags?.length) return false
+            return p.tags.some((tag: string) => currentTags.includes(tag))
+        })
         .slice(0, 3) // Limit to 3 related posts
 })
 
+const runTrigger = () => {
+    $gsap.context(() => {
+
+        // And for images
+        const images = $gsap.utils.toArray('.blog__post-cover img')
+        images.forEach((img: any) => {
+            $gsap.to(img, {
+                opacity: 1,
+                ease: "power1.out",
+                scrollTrigger: {
+                    trigger: img,
+                    start: "top 85%", /* Consistent with text */
+                    end: 'top 60%',
+                    /* onEnter, onLeave, onEnterBack, and onLeaveBack, */
+                    toggleActions: "play none none reverse",
+                    preventOverlaps: true,
+                    fastScrollEnd: true,
+                    anticipatePin: 1
+                }
+            })
+        })
+
+    })
+}
+
 onMounted(() => {
+    $gsap.registerPlugin(ScrollTrigger)
+    $gsap.set('.blog__post-cover img', { opacity: 0 })
+    $gsap.delayedCall(1, runTrigger)
+
+    // Show sidebar after page transition completes
+    $gsap.delayedCall(2, () => {
+        showSidebar.value = true
+    })
 
 })
 
-onUnmounted(() => {
+// Function to add classes to MDC links after content loads
+const setupMDCLinks = () => {
+    // Use a longer delay to ensure MDC content is fully rendered
+    setTimeout(() => {
+        // Find the blog content container first
+        const contentContainer = document.querySelector('.blog__post-content')
+        if (!contentContainer) return
 
+        const links = contentContainer.querySelectorAll('a')
+        const allElements = contentContainer.querySelectorAll('*')
+
+        // Check if there are any anchor tags at all in the page
+        const allPageLinks = document.querySelectorAll('a')
+
+        links.forEach((link: Element) => {
+            link.setAttribute('target', '_blank')
+            link.setAttribute('data-name', 'menu')
+            link.classList.add('action')
+        })
+
+        // Set flag when MDC content and links are ready
+        mdcContentReady.value = true
+    }, 2000) // Increased to 2000ms delay
+}
+
+onUnmounted(() => {
+    try {
+        $gsap.context().kill()
+    } catch (error) {
+        // Silently handle cleanup errors
+        console.log('GSAP context cleanup completed')
+    }
 })
 </script>
 
 <template>
     <div>
-        <UIMouseCursor />
+        <div v-if="mdcContentReady">
+            <UIMouseCursor />
+        </div>
         <div class="blog-post-wrapper">
             <div class="blog">
 
                 <main class="blog__post">
                     <div v-if="post">
-                        <CommonAbstract :label="post.title" :desc="post.subject" :delay="1.5" :className="'blog-intro'"
-                            :is-hero="true" :author="post.authors[0].name" :date="post.date" />
+                        <CommonAbstract :label="post.title" :desc="post.subject" :delay="1" :className="'blog-intro'"
+                            :isFullWidth="true" :author="post.authors[0].name" :date="post.date" />
 
                         <div class="blog__post-cover">
                             <NuxtImg :src="post.coverImage?.handle" provider="hygraph" alt="Project image" format="webp"
                                 sizes=" sm:100vw md:65vw lg:65vw xl:45vw" densities="x1 x2"></NuxtImg>
                         </div>
                         <div class="blog__post-content">
-                            <MDC :value="post.content" />
+                            <ClientOnly>
+                                <MDC :value="post.content" ref="mdc" @vue:mounted="setupMDCLinks" />
+                                <template #fallback>
+                                    <div class="mdc-loading">
+                                        <div class="mdc-skeleton"></div>
+                                        <div class="mdc-skeleton"></div>
+                                        <div class="mdc-skeleton short"></div>
+                                        <div class="mdc-skeleton"></div>
+                                    </div>
+                                </template>
+                            </ClientOnly>
                         </div>
                     </div>
                 </main>
 
-
                 <div class="share-buttons">
-                    <SocialShare v-for="network in ['bluesky', 'pocket', 'linkedin', 'pinterest']" :key="network"
+                    <SocialShare class="action" data-name="menu"
+                        v-for="network in ['bluesky', 'pocket', 'linkedin', 'pinterest']" :key="network"
                         :network="network" :styled="true" :label="false" />
                 </div>
 
                 <div class="blog__related-posts" v-if="relatedPosts.length > 0">
-                    <CommonAbstract :label="'Related Posts'" :desc="''" :className="'related-posts-title'"
-                        :is-secondary="true" />
+                    <h1>Related Posts</h1>
                     <div class="related-posts-list">
                         <NuxtLink v-for="relatedPost in relatedPosts" :key="relatedPost.slug"
                             :to="`/blog-post/${relatedPost.slug}`" class="related-post">
-                            <div class="related-post__content">
+                            <div class="related-post__content action" data-name="menu">
                                 <h3 class="related-post__title">{{ relatedPost.title }}</h3>
                                 <p class="related-post__subject">{{ relatedPost.subject }}</p>
                                 <div class="related-post__meta">
@@ -88,7 +175,8 @@ onUnmounted(() => {
 
             <!-- Word of the Day Sidebar - Desktop Only -->
             <aside class="word-sidebar">
-                <UIWordOfDay />
+                <UIWordOfDay v-if="showSidebar" />
+                <div v-else class="word-sidebar-placeholder"></div>
             </aside>
 
         </div>
@@ -96,12 +184,31 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-:deep(.abstract-wrapper.abstract-wrapper--hero) {
-    margin-bottom: $px-64-spacer;
+/* Deep to reach into MDC Markdown */
+:deep(figure) {
+    margin: $px-32-spacer 0;
+
+    img {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+
+        @include this-and-above('md') {
+            /* Slightly larger on tablets */
+            width: 60%;
+        }
+
+        @include this-and-above('lg') {
+            /* Even larger on desktop - break out of content width */
+            width: 60%;
+        }
+    }
 }
 
-:deep(.abstract-wrapper) {
-    margin-bottom: 0;
+:deep(figure figcaption),
+:deep(em) {
+    font-size: 14px;
 }
 
 .blog-post-wrapper {
@@ -153,6 +260,7 @@ onUnmounted(() => {
         margin-top: $px-64-spacer;
         color: $secondary;
         font-size: clamped(16px, 20px, 380px, 1920px);
+        max-width: 100vw;
 
         // Fix Shiki code block overflow on mobile
         :deep(pre.shiki) {
@@ -179,8 +287,6 @@ onUnmounted(() => {
             }
         }
 
-        max-width: 100vw;
-
         @include this-and-above('xl') {
             max-width: 55vw;
         }
@@ -188,13 +294,31 @@ onUnmounted(() => {
 }
 
 .word-sidebar {
-
     margin-top: 0px;
-    flex:1;
+    flex: 1;
 
     @include this-and-above('xl') {
         display: block;
-        margin-top: $px-128-spacer;
+        margin-top: $px-256-spacer;
+    }
+}
+
+.word-sidebar-placeholder {
+    background-color: $primary;
+    border: 2px solid $accent2;
+    padding: $px-32-spacer;
+    position: sticky;
+    top: $px-32-spacer;
+    min-width: 200px;
+    min-height: 200px;
+    opacity: 0.3;
+
+    @include this-and-above('xl') {
+        display: block;
+    }
+
+    @media (max-width: 1279px) {
+        display: none;
     }
 }
 
@@ -244,6 +368,8 @@ onUnmounted(() => {
     }
 
     &:hover {
+        filter: blur(0px);
+
         &::before {
             height: 100%;
         }
@@ -252,7 +378,8 @@ onUnmounted(() => {
         .related-post__subject,
         .related-post__meta {
             color: $primary;
-            transform: translateY(-2px);
+            backface-visibility: hidden;
+            transform: translateZ(0);
         }
     }
 
@@ -288,6 +415,47 @@ onUnmounted(() => {
     &__date,
     &__length {
         font-variation-settings: "wght" 500;
+    }
+}
+
+/* MDC Loading Skeleton */
+.mdc-loading {
+    margin-top: $px-64-spacer;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.mdc-skeleton {
+    height: 1.2em;
+    background: linear-gradient(90deg, $accent2 25%, rgba(250, 247, 255, 0.1) 50%, $accent2 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    margin-bottom: $px-16-spacer;
+    border-radius: 4px;
+
+    &.short {
+        width: 60%;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
     }
 }
 </style>

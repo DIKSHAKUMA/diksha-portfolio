@@ -40,13 +40,6 @@ let hue: number
 let position: number
 let wordObjects: any[] = []
 
-const getCurrentFontColor = computed(() => {
-    if (colorMode.preference === 'light') {
-        return [74, 68, 83] // accent1 in light mode: #4a4453
-    }
-    return [255, 240, 232] // accent2 in dark mode: #fff0e8
-})
-
 const getCurrentBgColor = () => {
     if (colorMode.preference === 'light') {
         return [250, 247, 255] // #faf7ff in RGB
@@ -54,8 +47,61 @@ const getCurrentBgColor = () => {
     return [23, 23, 23] // #171717 in RGB
 }
 
+// Animation control
+const isAnimationPaused = ref(false)
+
+// Intersection Observer setup
+const setupIntersectionObserver = () => {
+    const options = {
+        root: null,
+        rootMargin: "0px", // Trigger when 20% of element is visible
+        threshold: 0
+    }
+
+    const callback = (entries: IntersectionObserverEntry[]) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                console.log("Excerpts in view - pausing animation")
+                isAnimationPaused.value = true
+            } else {
+                console.log("Excerpts out of view - resuming animation")
+                isAnimationPaused.value = false
+            }
+        })
+    }
+
+    const observer = new IntersectionObserver(callback, options)
+    
+    // Wait for DOM to be ready and try multiple times if needed
+    const observeElement = () => {
+        const elem = document.querySelector('.excerpts-wrapper')
+        if (elem) {
+            observer.observe(elem)
+            console.log("Successfully observing .excerpts-wrapper")
+            return true
+        }
+        return false
+    }
+
+    // Try immediately, then retry with delays if needed
+    if (!observeElement()) {
+        setTimeout(() => {
+            if (!observeElement()) {
+                setTimeout(observeElement, 1000) // Final attempt after 1s
+            }
+        }, 500)
+    }
+
+    return observer
+}
+
+let observerInstance: IntersectionObserver | null = null
+
 onMounted(async () => {
     if (import.meta.client) {
+        // Setup intersection observer
+        observerInstance = setupIntersectionObserver()
+        
         const p5 = await import('p5')
 
         p5Instance = new p5.default((p: any) => {
@@ -99,6 +145,11 @@ onMounted(async () => {
             }
 
             p.draw = () => {
+                // Skip drawing if animation is paused
+                if (isAnimationPaused.value) {
+                    return
+                }
+
                 // Set background based on color mode
                 const bgColor = getCurrentBgColor()
                 p.background(bgColor[0], bgColor[1], bgColor[2])
@@ -153,6 +204,10 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+    if (observerInstance) {
+        observerInstance.disconnect()
+        observerInstance = null
+    }
     if (p5Instance) {
         p5Instance.remove()
         p5Instance = null

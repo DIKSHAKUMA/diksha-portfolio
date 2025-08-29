@@ -5,6 +5,16 @@ import { useFolioStore } from '~/store/useFolioStore';
 const blogStore = useBlogStore()
 const store = useFolioStore()
 
+const dateSorted = computed(() => {
+    if (!blogStore.data?.posts) return []
+
+    return [...blogStore.data.posts].sort((a, b) => {
+        // Sort by date descending (newest first), pos number = a after b, neg number = a before b
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+    })
+})
+
+
 onMounted(() => {
 
 })
@@ -23,7 +33,7 @@ onUnmounted(() => {
         <main class="excerpts">
             <CommonAbstract class="excerpts__label" :label="store.data.intro?.blogExcerptsTitle" :desc="''"
                 :className="'excerpts__intro'" :is-secondary="true" />
-            <div class="excerpts__info" v-for="post in blogStore.data.posts" :key="post.id">
+            <div class="excerpts__info" v-for="post in dateSorted" :key="post.id">
                 <NuxtLink :to="`/blog-post/${post.slug}`">
                     <div class="excerpts__item action" data-name="menu">
                         <div class="excerpts__item__title">{{ post.date }}</div>
@@ -40,6 +50,11 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
+
+a {
+    filter:blur(0px) !important;
+}
+
 .excerpts-wrapper {
     position: relative;
     background-color: $primary;
@@ -49,7 +64,6 @@ onUnmounted(() => {
     @include this-and-above('lg') {
         padding: $px-128-spacer $px-64-spacer;
     }
-
 }
 
 .excerpts {
@@ -61,7 +75,7 @@ onUnmounted(() => {
 
     &__quote {
         position: absolute;
-        bottom: $px-64-spacer;
+        margin-top: $px-128-spacer;
         width: 100%;
         left: 50%;
         transform: translateX(-50%);
@@ -69,7 +83,10 @@ onUnmounted(() => {
         color: $secondary;
         font-size: clamped(20px, 36px, 480px, 1920px);
         font-style: italic;
-        font-variation-settings: "ital" 900;
+
+        @include this-and-above('sm') {
+            margin-top: $px-256-spacer;
+        }
     }
 
     &__label {
@@ -83,10 +100,9 @@ onUnmounted(() => {
         height: 70px;
         align-items: center;
         width: 100%;
-        border-bottom: 2px solid $accent1;
+        border-bottom: 2px solid $accent2;
         gap: $px-16-spacer;
         overflow: hidden;
-        transition: all 0.3s ease;
         cursor: pointer;
 
         /* Background fill effect */
@@ -109,7 +125,6 @@ onUnmounted(() => {
 
             .excerpts__item__title {
                 color: $accent1;
-                transform: translateY(-2px);
             }
         }
 
@@ -119,6 +134,9 @@ onUnmounted(() => {
             color: $secondary;
             padding: 0 10px;
             transition: all 0.3s ease;
+            font-size: clamped(12px, 20px, 480px, 1920px);
+            backface-visibility: hidden;
+            transform: translateZ(0);
 
             /* Column-specific alignment */
             &:first-child {

@@ -4,8 +4,7 @@ const props = defineProps<{
 }>()
 
 const title = ref("")
-const input = useTemplateRef<any>("myInput")
-const model = defineModel({ default: false })
+const model = defineModel({ default: true })
 </script>
 
 <template>
@@ -14,7 +13,7 @@ const model = defineModel({ default: false })
             <div class="ios-switch__title">{{ title }}</div>
             <input type="checkbox" name="checkbox" v-model="model" ref="myInput">
             <i :class="{ 'mobile-mode': props.isMobile }">
-                <Icon  :class="{ 'icon--dark': model }" class="icon" 
+                <Icon :class="{ 'icon--dark': model }" class="icon"
                     :name="model ? 'line-md:sun-rising-loop' : 'line-md:sunny-outline-to-moon-alt-loop-transition'"
                     size="15" />
             </i>
@@ -26,9 +25,7 @@ const model = defineModel({ default: false })
 /*
 Adapted by me to Vue & Credit to the CSS creator @s
 https://dev.to/urielbitton/how-to-design-an-ios-style-switch-4maj
-
-+ This gets a little tricky because in mobile when nav is expanded (isMobile), we set the opposite color of current colorMode, so we need to invert the color of the icon
-+ I've incorporated a nice SVG animation to the icon, so it's not just a static icon (micro stuff)
+Added some fancy stuff of course.
 */
 .icon {
     z-index: 999;

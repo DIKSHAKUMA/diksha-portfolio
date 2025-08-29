@@ -51,7 +51,7 @@ onUnmounted(() => {
             :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }" />
         <div class="contact">
             <div class="contact__label split-label-w">{{ store.data.contact?.emailTitle }}</div>
-            <a class="contact__email action split-label-w" data-name="menu"
+            <a class="contact__email action split-label-w" data-name="menu" data-text="Tell me!"
                 :href="`mailto:${store.data.contact?.email}`">{{
                     store.data.contact?.email }}</a>
         </div>
@@ -86,7 +86,7 @@ onUnmounted(() => {
 
 .contact {
     position: absolute;
-    top: $px-128-spacer;
+    top: $px-64-spacer;
     color: #faf7ff;
     z-index: 200;
 
@@ -108,6 +108,10 @@ onUnmounted(() => {
             color: $accent2;
             text-decoration-color: $accent2;
         }
+    }
+
+    @include this-and-above('sm') {
+        top: $px-128-spacer;
     }
 }
 </style>

@@ -5,7 +5,7 @@ const colorSwitch = useTemplateRef('colorSwitch')
 const navlist = useTemplateRef('navlist')
 const isDown = ref(false)
 const isMobileActive = ref(false)
-const isLightMode = ref<boolean>(false)
+const isLightMode = ref<boolean>(true)
 
 let screenWidth: any
 let currScrollPos: number

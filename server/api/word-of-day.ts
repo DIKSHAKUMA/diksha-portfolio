@@ -3,19 +3,54 @@ export default defineEventHandler(async (event) => {
     // Merriam-Webster Word of the Day RSS feed (free, no API key needed)
     const response = await $fetch('https://www.merriam-webster.com/wotd/feed/rss2', {
       parseResponse: txt => txt
-    })
+    }) as string
     
     // Parse the RSS XML to extract word data
-    const wordMatch = response.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>/)
-    const descriptionMatch = response.match(/<description><!\[CDATA\[(.+?)\]\]><\/description>/)
+    // Look for the first item's title and description (skip channel title)
+    const itemMatch = response.match(/<item>.*?<\/item>/s)
+    if (!itemMatch) {
+      console.log('RSS response preview:', response.substring(0, 500))
+      throw new Error('No item found in RSS feed')
+    }
+    
+    const item = itemMatch[0]
+    console.log('Item found:', item.substring(0, 200))
+    
+    const wordMatch = item.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>/)
+    const descriptionMatch = item.match(/<description><!\[CDATA\[([\s\S]+?)\]\]><\/description>/)
+    
+    console.log('Word match:', wordMatch)
+    console.log('Description match:', descriptionMatch)
     
     if (wordMatch && descriptionMatch) {
       const fullTitle = wordMatch[1]
       const word = fullTitle.split(':')[0].trim()
-      const definition = descriptionMatch[1]
-        .replace(/<[^>]*>/g, '') // Remove HTML tags
+      
+      // Extract the main definition from the complex HTML structure
+      let definition = descriptionMatch[1]
+      
+      // Look for the main definition paragraph after the word and pronunciation
+      const defMatch = definition.match(/<p>([^<]*(?:is to|means to|refers to)[^<]*)<\/p>/)
+      if (defMatch) {
+        definition = defMatch[1]
+      } else {
+        // Fallback: get first meaningful paragraph
+        const paragraphMatch = definition.match(/<p>([^<]{20,})<\/p>/)
+        if (paragraphMatch) {
+          definition = paragraphMatch[1]
+        } else {
+          // Last resort: clean all HTML and take first sentence
+          definition = definition
+            .replace(/<[^>]*>/g, '') // Remove HTML tags
+            .replace(/&[^;]+;/g, '') // Remove HTML entities
+            .split('.')[0] + '.'
+        }
+      }
+      
+      definition = definition
         .replace(/&quot;/g, '"')
         .replace(/&amp;/g, '&')
+        .replace(/&#149;/g, '•')
         .trim()
       
       return {

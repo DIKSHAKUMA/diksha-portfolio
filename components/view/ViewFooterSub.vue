@@ -58,7 +58,7 @@ onUnmounted(() => {
     height: 100vh;
 
     &__label {
-        font-size: clamped(24px, 48px, 480px, 1920px);
+        font-size: clamped(36px, 52px, 480px, 1920px);
         position: relative;
         display: inline-block;
         z-index: 200;
