@@ -72,11 +72,18 @@ query folio {
     testimonialAgency
     testimonialText
     labUrl
+    video
     image {
       id
       handle
       fileName
     }
+    coverImage {
+      id
+      handle
+      fileName
+    }
+    clientHistory
   }
 
   contact(where: { slug: "contact" }) {

@@ -1,19 +1,43 @@
 <script setup lang="ts">
-import SplitType from 'split-type';
 import { useFolioStore } from '~/store/useFolioStore'
-import DoubleArrowSVG from '~/assets/svg/double-arrow.svg'
-
+import "@mux/mux-player"
+/* Might not need this */
+import { createBlurUp } from '@mux/blurup'
+const blurDataURL = ref<string>('')
+const aspectRatio = ref<any>('')
 const store = useFolioStore()
-const { $gsap } = useNuxtApp()
-const { $lenis } = useNuxtApp();
 const route = useRoute();
+let ctx: gsap.Context
+/* Optimize performance a litttle */
+let videoObserver: IntersectionObserver | null = null
+let videoObserver2: IntersectionObserver | null = null
+const options = {};
+
+// Template refs
+const infoSection = useTemplateRef<HTMLElement>('infoSection')
+const textSection = useTemplateRef<HTMLElement>('textSection')
+const muxPlayer = useTemplateRef<any>('muxPlayer')
+const muxPlayer2 = useTemplateRef<any>('muxPlayer2')
+
+/* Suppress Annoying Mux Player shadow DOM warnings */
+if (process.client) {
+    const originalWarn = console.warn
+    // Drop any warnings into a spread array
+    console.warn = (...args) => {
+        const message = String(args[0] || '')
+        if (message.includes('No style sheet found') ||
+            message.includes('shadow-root') ||
+            message.includes('#shadow-root')) {
+            return // Suppress shadow DOM warnings
+        }
+        originalWarn.apply(console, args)
+    }
+}
 
 definePageMeta({
     layout: 'default',
     key: route => route.fullPath,
-
     /* DO NOT REMOVE THIS! APOLLO STICKER TAPED TO CONSOLE. */
-    /* EVEN GLOBAL ROUTE TRANSITIONS NEED A SAKI. GOD DAMN IT I WROTE IT, NOW I'LL NEVER FORGET IT. */
     pageTransition: {
         name: 'saki',
         mode: 'out-in'
@@ -30,8 +54,6 @@ const proj = computed(() => {
     return store.data.projects.find((proj: any) => proj.slug === route.params.id)
 })
 
-console.log("project images length ", proj.value.image?.length)
-
 /* Get next and previous projects and if we hit the first or last project, loop back to the other end */
 const getNextProj = computed(() => {
     const index = store.data.projects.findIndex((proj: any) => proj.slug === route.params.id)
@@ -47,101 +69,181 @@ const getPrevProj = computed(() => {
     return store.data.projects[prevIndex]
 })
 
-let ctx: gsap.Context
+/* Get video placeholder */
+if (import.meta.server && proj.value?.video && proj.value.video.length > 0 && proj.value.video[0].playbackId) {
+    const getPlaceholder = async () => {
+        const { blurDataURL: newBlurDataURL, aspectRatio: newAspectRatio } = await createBlurUp(proj.value.video[0].playbackId, options);
+        blurDataURL.value = newBlurDataURL
+        aspectRatio.value = newAspectRatio
+    }
+    getPlaceholder()
+}
 
 onMounted(() => {
-
+    const { $lenis, $gsap } = useNuxtApp()
     $lenis.scrollTo(0, { immediate: true, force: true })
 
-    ctx = $gsap.context((self) => {
+    ctx = $gsap.context((self: any) => {
 
-        /* Vertical blind reveal effect for images */
-        $gsap.utils.toArray('.project-image-reveal').forEach((imageContainer: any) => {
-            /* Set initial state - completely masked */
-            $gsap.set(imageContainer, {
+        $gsap.utils.toArray('.project__media').forEach((mediaContainer: any) => {
+            // Set initial state - hidden with scale
+            $gsap.set(mediaContainer, {
                 '--position': '0%',
-                filter: 'blur(20px)',
-                force3D: true
+                opacity: 0,
+                scale: 1.05,
             })
 
-            /* Check if this is the first image (data-image="0") */
-            const isFirstImage = imageContainer.getAttribute('data-image')?.trim() === '0'
-            const delay = isFirstImage ? 1 : 0
+            /* Check if this is the first media (data-media="0") or video (data-video="0") */
+            const isFirstMedia = mediaContainer.getAttribute('data-media')?.trim() === '0'
+            const isFirstVideo = mediaContainer.getAttribute('data-video')?.trim() === '0'
 
-            /* Animate the mask position on scroll */
-            $gsap.to(imageContainer, {
-                '--position': '100%',
-                filter: 'blur(0px)',
-                duration: .8,
+            let delay = 0;
+            // Only the very first element should have delay:
+            // - If we have video, only video gets delay (not the first image)
+            // - If no video, first image gets delay
+            if (proj.value?.video && proj.value.video.length > 0 && proj.value.video[0].playbackId) {
+                // We have video - only video gets delay
+                delay = isFirstVideo ? 1 : 0
+            } else {
+                // No video - first image gets delay
+                delay = isFirstMedia ? 1 : 0
+            }
+
+            // Animate the mask position on scroll
+            $gsap.to(mediaContainer, {
+                opacity: 1,
                 delay: delay,
-                ease: 'power2.out',
+                scale: 1,
+                duration: .4,
                 force3D: true,
                 scrollTrigger: {
-                    trigger: imageContainer,
+                    trigger: mediaContainer,
                     start: 'top 85%',
+                    end: 'top 35%',
                     toggleActions: 'play none none reverse',
-                    fastScrollEnd: true
+                    preventOverlaps: true
                 }
             })
         })
 
         /* Animate project sections */
-        let infoSection = document.querySelector('.project__info');
-        let textSection = document.querySelector('.project__text');
-
-        if (infoSection) {
-            $gsap.from(infoSection.children, {
+        if (infoSection.value) {
+            $gsap.from(infoSection.value.children, {
                 y: 30,
                 opacity: 0,
-                duration: 0.6,
-                stagger: 0.1,
-                ease: "power2.out",
+                duration: 0.4,
+                force3D: true,
                 scrollTrigger: {
-                    trigger: infoSection,
+                    trigger: infoSection.value,
                     start: "top 80%",
-                    toggleActions: "play none none reverse"
+                    toggleActions: "play none none reverse",
+                    preventOverlaps: true
                 }
             })
         }
 
-        if (textSection) {
-            $gsap.from(textSection.children, {
+        if (textSection.value) {
+            $gsap.from(textSection.value.children, {
                 y: 30,
                 opacity: 0,
                 duration: 0.6,
-                ease: "power2.out",
+                force3D: true,
                 scrollTrigger: {
-                    trigger: textSection,
+                    trigger: textSection.value,
                     start: "top 80%",
-                    toggleActions: "play none none reverse"
+                    toggleActions: "play none none reverse",
+                    preventOverlaps: true
                 }
             })
         }
 
     }, '.project');
+
+    // Add video intersection observer only if project has video
+    if (process.client && proj.value?.video?.[0]?.playbackId) {
+        nextTick(() => {
+            if (muxPlayer.value) {
+                videoObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            muxPlayer.value.play?.()
+                        } else {
+                            muxPlayer.value.pause?.()
+                        }
+                    })
+                }, { threshold: 0.1 })
+
+                videoObserver.observe(muxPlayer.value)
+            }
+        })
+    }
+
+    // Add second video intersection observer if project has second video
+    if (process.client && proj.value?.video?.[1]?.playbackId) {
+        nextTick(() => {
+            if (muxPlayer2.value) {
+                videoObserver2 = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            muxPlayer2.value.play?.()
+                        } else {
+                            muxPlayer2.value.pause?.()
+                        }
+                    })
+                }, { threshold: 0.1 })
+
+                videoObserver2.observe(muxPlayer2.value)
+            }
+        })
+    }
+
 })
 
 onUnmounted(() => {
-    ctx.revert()
+    ctx?.revert()
+    videoObserver?.disconnect()
+    videoObserver2?.disconnect()
 })
 </script>
 
 <template>
     <div>
         <UIMouseCursor />
+
         <div class="project-wrapper" v-if="proj">
             <main class="project">
-                <CommonAbstract :label="proj.name" :desc="proj.synop?.[0] || proj.client || ''" :isFullWidth="true"
-                    :className="'project__abstract'" :delay="1">
+                <UIBackButton />
+                <CommonAbstract :isPageTitle="true" :label="proj.name" :desc="proj.synop?.[0] || proj.client || ''"
+                    :isFullWidth="true" :className="'project__abstract'" :delay="1">
                 </CommonAbstract>
 
                 <section class="project__content">
-                    <div class="project__image project-image-reveal project__image--first" data-image="0">
+
+                    <!-- Video first if exists -->
+                    <div style="border-radius:16px;overflow:hidden; display:flex; background:transparent;"
+                        v-if="proj.video?.[0]?.playbackId" class="project__media project__media--video" data-video="0">
+                        <ClientOnly>
+                            <mux-player ref="muxPlayer" class="video" :playback-id="proj.video[0].playbackId"
+                                :asset-id="proj.video[0].assetId" :autoplay="true" :muted="true" :controls="false"
+                                :loop="true" :placeholder="blurDataURL"
+                                :style="{ 'aspect-ratio': aspectRatio || '2048/1150' }" no-hotkeys disable-cookies
+                                rendition-order="desc" max-resolution="2160p" accent-color="#fff"
+                                primary-color="#FFFFFFF" secondary-color="#FFFFFFF" />
+                            <template #fallback>
+                                <div class="video-skeleton" :style="{ 'aspect-ratio': aspectRatio || '16/9' }"></div>
+                            </template>
+                        </ClientOnly>
+                    </div>
+
+                    <!-- First image if NO video -->
+                    <div v-if="!proj.video?.[0]?.playbackId" class="project__media  project__media--first"
+                        data-media="0">
                         <NuxtImg :src="proj.image[0].handle" provider="hygraph" alt="Project image" format="webp"
                             sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                     </div>
 
-                    <div class="project__info">
+                    <!-- Info text always after first media item -->
+                    <div class="project__info" ref="infoSection">
                         <div class="project__info-col-1">
                             <h5>Challenge</h5>
                             <p class="split-proj-w">{{ proj.description[0] }}</p>
@@ -174,29 +276,49 @@ onUnmounted(() => {
                         </div>
                     </div>
 
-                    <div>
-                        <template v-for="(image, index) in proj.image" :key="image.id">
-                            <div class="project__image project-image-reveal"
-                                v-if="(index as number) > 0 && (index as number) < middleIndex">
-                                <NuxtImg :src="image.handle" provider="hygraph" alt="Project image" format="webp"
-                                    sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
-                            </div>
-                        </template>
+                    <!-- First image if video exists (comes after info) -->
+                    <div v-if="proj.video?.[0]?.playbackId" class="project__media  project__media--first"
+                        data-media="0">
+                        <NuxtImg :src="proj.image[0].handle" provider="hygraph" alt="Project image" format="webp"
+                            sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                     </div>
 
+                    <!-- Video first if second exists -->
+                    <div style="border-radius:16px;overflow:hidden; background:transparent;"
+                        v-if="proj.video?.[1]?.playbackId" class="project__media project__media--video" data-video="1">
+                        <ClientOnly>
+                            <mux-player ref="muxPlayer2" class="video" :playback-id="proj.video[1].playbackId"
+                                :asset-id="proj.video[1].assetId" :autoplay="true" :muted="true" :controls="false"
+                                :loop="true" :placeholder="blurDataURL"
+                                :style="{ 'aspect-ratio': aspectRatio || '2048/1150' }" no-hotkeys disable-cookies
+                                rendition-order="desc" max-resolution="2160p" />
+                            <template #fallback>
+                                <div class="video-skeleton" :style="{ 'aspect-ratio': aspectRatio || '16/9' }"></div>
+                            </template>
+                        </ClientOnly>
+                    </div>
+
+                    <!-- Templat here or index will be undefined in comparison -->
+                    <template v-for="(image, index) in proj.image" :key="image.id">
+                        <div class="project__media" v-if="(index as number) > 0 && (index as number) < middleIndex">
+                            <NuxtImg :src="image.handle" provider="hygraph" alt="Project image" format="webp"
+                                sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
+                        </div>
+                    </template>
+
                     <!-- Another image description -->
-                    <div class="project__text">
+                    <div class="project__text" ref="textSection">
                         <div class="split-proj-w">{{ proj.description[2] }}</div>
                     </div>
 
-                    <div class="project__image project-image-reveal">
+                    <div class="project__media">
                         <NuxtImg :src="proj.image[middleIndex].handle" provider="hygraph" alt="Project image"
                             format="webp" sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
                     </div>
 
                     <div class="project__flex-wrapper">
                         <div class="project__img-col-1">
-                            <div class="project__image project-image-reveal">
+                            <div class="project__media">
                                 <NuxtImg :src="proj.image[middleIndex + 1].handle" provider="hygraph"
                                     alt="Project image" format="webp" sizes="sm:100vw md:40vw lg:35vw xl:80vw"
                                     densities="x1 x2" />
@@ -204,10 +326,10 @@ onUnmounted(() => {
                         </div>
 
                         <div class="project__img-col-2">
-                            <div class="project__image project-image-reveal">
+                            <div class="project__media">
                                 <NuxtImg :src="proj.image[middleIndex + 2].handle" provider="hygraph"
                                     alt="Project image" format="webp" sizes="sm:100vw md:40vw lg:35vw xl:80vw"
-                                    densities="x1 x2" />
+                                    densities="x1 x2" :modifiers="{ animated: true }" />
                             </div>
                         </div>
                     </div>
@@ -216,6 +338,10 @@ onUnmounted(() => {
                         <CommonTestimonial :name="proj.testimonialName" :agency="proj.testimonialAgency"
                             :text="proj.testimonialText" />
                     </div>
+
+                    <!-- Client Work History -->
+                    <ViewClientHistory v-if="proj.clientHistory && proj.clientHistory.length > 0"
+                        :clientName="proj.client" :history="proj.clientHistory" />
 
                 </section>
                 <CommonLine class="project__line" :pos="'relative'" />
@@ -234,9 +360,8 @@ img {
     display: block;
     width: 100%;
     height: auto;
+    max-width: 2048px;
 }
-
-/* To harminoze with h1 tag in MDC for blog posts */
 
 .project-wrapper {
     flex-flow: column;
@@ -264,35 +389,6 @@ img {
     }
 }
 
-/*shortening BEM here by focusing on main project tag as reference*/
-
-/* Vertical blind reveal effect */
-.project-image-reveal {
-    position: relative;
-    overflow: hidden;
-    --position: 0%;
-}
-
-.project-image-reveal::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg,
-            transparent var(--position),
-            $primary calc(var(--position) + 1%),
-            $primary calc(var(--position) + 2%),
-            transparent calc(var(--position) + 3%));
-    z-index: 2;
-    pointer-events: none;
-}
-
-.project-image-reveal img {
-    transition: filter 0.5s ease;
-}
-
 .project {
     display: flex;
     flex-direction: column;
@@ -316,25 +412,29 @@ img {
     &__content {
         display: flex;
         flex-direction: column;
-    }
-
-    &__image {
-        margin: $px-64-spacer 0;
-        overflow: hidden;
-        border-radius: 12px;
-
-        &--first {
-            margin-top: $px-16-spacer;
-        }
+        row-gap: $px-64-spacer;
 
         @include this-and-above('md') {
-            margin: $px-128-spacer 0;
+            row-gap: $px-128-spacer;
+        }
+    }
 
-            &--first {
-                margin-top: $px-32-spacer;
+    &__media {
+        overflow: hidden;
+        border-radius: 16px;
+
+        &--video {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            margin: $px-32-spacer 0;
+
+            /* Ensure no background bleed during scale animation */
+            &::before,
+            &::after {
+                display: none;
             }
         }
-
     }
 
     &__info {
@@ -397,6 +497,10 @@ img {
 
     &__info-col-1 {
         flex: 1 1 70%;
+
+        & :nth-child(2) {
+            margin-bottom: $px-64-spacer;
+        }
     }
 
     &__info-col-2 {
@@ -408,6 +512,7 @@ img {
         padding: $px-32-spacer;
         max-height: fit-content;
         overflow-y: auto;
+        font-size: clamped(14px, 16px, 380px, 1920px);
 
         &__a,
         &__b {
@@ -428,7 +533,7 @@ img {
     &__img-col-1 {
         flex: 1;
 
-        .project__image {
+        .project__media {
             margin-top: 0;
         }
     }
@@ -436,11 +541,11 @@ img {
     &__img-col-2 {
         flex: 1;
 
-        .project__image {
+        .project__media {
             margin-top: 0;
         }
-    }
 
+    }
 
     &__flex-wrapper {
         display: flex;
@@ -452,10 +557,9 @@ img {
         }
 
         @include this-and-above('lg') {
-            column-gap: $px-64-spacer;
+            column-gap: $px-32-spacer;
         }
     }
-
 }
 
 @keyframes arrowFloat {
@@ -467,6 +571,90 @@ img {
 
     50% {
         transform: translateX(8px);
+    }
+}
+
+.vid {
+    border-radius: 16px;
+}
+
+.video-skeleton {
+    background: $primary;
+    border-radius: 16px;
+    width: 100%;
+    height: auto;
+}
+
+
+mux-player {
+    --media-object-fit: cover;
+    --media-object-position: center;
+    --media-width: 100%;
+    --media-height: auto;
+
+    /* Prevent scaling beyond optimal quality size */
+    max-width: 1920px;
+    max-height: 1080px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    /* Center when at max size */
+
+    /* Hide all controls at once */
+    --controls: none;
+    /* Hide the error dialog */
+    --dialog: none;
+    /* Hide the loading indicator */
+    --loading-indicator: none;
+
+    /* Target all sections by excluding the section prefix */
+    --play-button: none;
+    --live-button: none;
+    --seek-backward-button: none;
+    --seek-forward-button: none;
+    --mute-button: none;
+    --captions-button: none;
+    --airplay-button: none;
+    --pip-button: none;
+    --fullscreen-button: none;
+    --cast-button: none;
+    --playback-rate-button: none;
+    --volume-range: none;
+    --time-range: none;
+    --time-display: none;
+    --duration-display: none;
+    --rendition-menu-button: none;
+
+    /* Target a specific section by prefixing the CSS var with (top|center|bottom) */
+    --center-controls: none;
+    --bottom-play-button: none;
+
+    /* Mux-specific CSS variables to control media styling */
+    --media-border-radius: 16px;
+    --media-background-color: transparent;
+
+    /* Force border-radius and remove any borders */
+    border-radius: 16px !important;
+    overflow: hidden;
+    border: none !important;
+    outline: none !important;
+    background: transparent;
+    box-shadow: none !important;
+
+    /* Ensure the video element inside respects border-radius and has no borders */
+    video {
+        border-radius: 16px !important;
+        border: none !important;
+        outline: none !important;
+        background: transparent;
+        box-shadow: none !important;
+    }
+
+    /* Remove any potential shadow DOM borders */
+    * {
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
     }
 }
 </style>

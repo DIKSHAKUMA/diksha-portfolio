@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-const { $gsap } = useNuxtApp()
-let ctx: gsap.Context
 const archiveWrapper = ref<HTMLElement>()
-const isFirefox = ref(false)
 
 const props = defineProps({
     label: {
@@ -22,23 +17,15 @@ const props = defineProps({
 })
 
 onMounted(() => {
-    $gsap.registerPlugin(ScrollTrigger)
-    
-    // Detect Firefox browser
-    isFirefox.value = navigator.userAgent.toLowerCase().includes('firefox')
-    
-    ctx = $gsap.context((self) => {
-        // GSAP context setup (currently empty)
-    })
+
 })
 
 onUnmounted(() => {
-    ctx?.revert()
 })
 </script>
 
 <template>
-    <div class="archive-wrapper" ref="archiveWrapper" :class="{ 'no-firefox': isFirefox }">
+    <div class="archive-wrapper" ref="archiveWrapper">
         <footer class="archive">
             <div class="archive__label action magnet" data-name="menu">
                 <NuxtLink :to="props.link" :target="props.target">{{ props.label }}</NuxtLink>
@@ -106,33 +93,9 @@ onUnmounted(() => {
         linear-gradient(90deg, $primary calc(var(--dot-space) - var(--dot-size)), transparent 98%) center / var(--dot-space) var(--dot-space),
         linear-gradient($primary calc(var(--dot-space) - var(--dot-size)), transparent 98%) center / var(--dot-space) var(--dot-space),
         $secondary;
+
     @include this-and-above('sm') {
         --dot-space: 128px;
-    }
-
-    // Only animate if not Firefox
-    &:not(.no-firefox) {
-        animation: dotFloat 8s ease-in-out infinite;
-    }
-}
-
-@keyframes dotFloat {
-
-    0%,
-    100% {
-        background-position: 50% 50%, 50% 50%;
-    }
-
-    25% {
-        background-position: 52% 51%, 49% 52%;
-    }
-
-    50% {
-        background-position: 51% 48%, 52% 49%;
-    }
-
-    75% {
-        background-position: 48% 49%, 51% 48%;
     }
 }
 </style>

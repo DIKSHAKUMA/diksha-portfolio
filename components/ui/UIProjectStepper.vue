@@ -6,7 +6,7 @@ import { useHygraphParser } from '~/composable/useHygraphParser'
 
 const { $gsap } = useNuxtApp()
 
-const { hygraphLoader } = useHygraphParser()
+const { hygraphLDR } = useHygraphParser()
 
 const props = defineProps<{ prevImg: string, nextImg: string, prev: string, next: string, prevName: string, nextName: string, prevSynop: string[], nextSynop: string[] }>()
 
@@ -17,6 +17,10 @@ let prevDisplaceSprite: PIXI.Sprite
 let nextDisplaceSprite: PIXI.Sprite
 let prevImageSprite: PIXI.Sprite
 let nextImageSprite: PIXI.Sprite
+
+// Template refs
+const prevCanvas = useTemplateRef<HTMLCanvasElement>('prevCanvas')
+const nextCanvas = useTemplateRef<HTMLCanvasElement>('nextCanvas')
 
 // Setup PIXI displacement effect for stepper images
 const setupPixiEffect = async (canvasElement: HTMLCanvasElement, imageHandle: string, isNext: boolean = false) => {
@@ -74,9 +78,21 @@ const setupPixiEffect = async (canvasElement: HTMLCanvasElement, imageHandle: st
         displaceSprite.position.set(e.data.global.x - 25, e.data.global.y);
     }
 
+    const resetDisplacement = () => {
+        // Reset displacement when mouse leaves
+        if (hasMouseMoved) {
+            filter.scale.set(0)
+            hasMouseMoved = false
+        }
+    }
+
     app.stage.on('mousemove', activateDisplacement)
         .on('touchmove', activateDisplacement)
-        .on('pointermove', activateDisplacement);
+        .on('pointermove', activateDisplacement)
+        .on('mouseout', resetDisplacement)
+        .on('mouseleave', resetDisplacement)
+        .on('pointerout', resetDisplacement)
+        .on('pointerleave', resetDisplacement);
 
     // Store references
     if (isNext) {
@@ -94,31 +110,29 @@ const setupPixiEffect = async (canvasElement: HTMLCanvasElement, imageHandle: st
 
 // Debounced resize handler
 const handleResize = () => {
-    if (prevPixiApp && prevImageSprite) {
-        const prevCanvas = document.querySelector('.prev-pixi-canvas') as HTMLCanvasElement
-        const prevParent = prevCanvas?.parentElement as HTMLElement
+    if (prevPixiApp && prevImageSprite && prevCanvas.value) {
+        const prevParent = prevCanvas.value.parentElement as HTMLElement
         const prevImg = prevParent?.querySelector('img') as HTMLImageElement
-        
+
         if (prevImg) {
             const newWidth = prevImg.offsetWidth
             const newHeight = prevImg.offsetHeight
-            
+
             prevPixiApp.renderer.resize(newWidth, newHeight)
             prevImageSprite.width = newWidth
             prevImageSprite.height = newHeight
             prevDisplaceSprite.setSize(newWidth, newHeight)
         }
     }
-    
-    if (nextPixiApp && nextImageSprite) {
-        const nextCanvas = document.querySelector('.next-pixi-canvas') as HTMLCanvasElement
-        const nextParent = nextCanvas?.parentElement as HTMLElement
+
+    if (nextPixiApp && nextImageSprite && nextCanvas.value) {
+        const nextParent = nextCanvas.value.parentElement as HTMLElement
         const nextImg = nextParent?.querySelector('img') as HTMLImageElement
-        
+
         if (nextImg) {
             const newWidth = nextImg.offsetWidth
             const newHeight = nextImg.offsetHeight
-            
+
             nextPixiApp.renderer.resize(newWidth, newHeight)
             nextImageSprite.width = newWidth
             nextImageSprite.height = newHeight
@@ -135,7 +149,7 @@ const debouncedResize = () => {
 
 onMounted(async () => {
     // Register the custom Hygraph loader
-    Assets.loader.parsers.push(hygraphLoader)
+    Assets.loader.parsers.push(hygraphLDR)
 
     ctx = $gsap.context(() => {
         $gsap.registerPlugin(ScrollTrigger)
@@ -168,12 +182,9 @@ onMounted(async () => {
 
     // Setup PIXI effects after a short delay to ensure DOM is ready
     setTimeout(async () => {
-        const prevCanvas = document.querySelector('.prev-pixi-canvas') as HTMLCanvasElement
-        const nextCanvas = document.querySelector('.next-pixi-canvas') as HTMLCanvasElement
-
-        if (prevCanvas && nextCanvas) {
-            await setupPixiEffect(prevCanvas, props.prevImg, false)
-            await setupPixiEffect(nextCanvas, props.nextImg, true)
+        if (prevCanvas.value && nextCanvas.value) {
+            await setupPixiEffect(prevCanvas.value, props.prevImg, false)
+            await setupPixiEffect(nextCanvas.value, props.nextImg, true)
         }
     }, 100)
 
@@ -181,7 +192,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-    ctx.revert()
+    ctx?.revert()
     if (prevPixiApp) prevPixiApp.destroy()
     if (nextPixiApp) nextPixiApp.destroy()
     window.removeEventListener('resize', debouncedResize)
@@ -197,7 +208,7 @@ onUnmounted(() => {
                     <NuxtLink :to="prev" class="action" data-name="proj" data-text="Previous">
                         <NuxtImg :src="prevImg" provider="hygraph" alt="Project image" format="png"
                             sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
-                        <canvas class="prev-pixi-canvas pixi-overlay"></canvas>
+                        <canvas ref="prevCanvas" class="prev-pixi-canvas pixi-overlay"></canvas>
                     </NuxtLink>
                 </div>
                 <h3 class="project-stepper__name split-proj-w">{{ prevName }}</h3>
@@ -207,8 +218,8 @@ onUnmounted(() => {
                 <div class="project-stepper-image-reveal">
                     <NuxtLink :to="next" class="action" data-name="proj" data-text="Next">
                         <NuxtImg :src="nextImg" provider="hygraph" alt="Project image" format="png"
-                            sizes="sm:100vw md:70vw lg:35vw xl:80vw" densities="x1 x2" />
-                        <canvas class="next-pixi-canvas pixi-overlay"></canvas>
+                            sizes="sm:100vw md:40vw lg:35vw xl:80vw" densities="x1 x2" />
+                        <canvas ref="nextCanvas" class="next-pixi-canvas pixi-overlay"></canvas>
                     </NuxtLink>
                 </div>
                 <h3 class="project-stepper__name split-proj-w ">{{ nextName }}</h3>
@@ -221,13 +232,19 @@ onUnmounted(() => {
 <style scoped lang="scss">
 /* Eliminate any baseline gaps */
 
+h3 {
+    margin-bottom: 0;
+}
+
 img {
     display: block;
     width: 100%;
-    height: 100%;
+    height: auto;
+    aspect-ratio: 2048/1150;
+    object-fit: cover;
     pointer-events: none;
     font-size: 0;
-    border-radius:12px;
+    border-radius: 12px;
 }
 
 /* Position canvas absolutely to prevent layout interference */
@@ -243,45 +260,7 @@ img {
     pointer-events: auto;
     padding: 0;
     margin: 0;
-    border-radius:12px;
-}
-
-/* Vertical blind reveal effect */
-.project-stepper-image-reveal {
-    position: relative;
-    overflow: hidden;
-    --position: 0%;
-    /* Eliminate any font-related spacing */
-    font-size: 0;
-    line-height: 0;
-}
-
-/* Ensure NuxtLink containers don't expand beyond image size */
-.project-stepper-image-reveal .action {
-    display: inline-block;
-    position: relative;
-    vertical-align: top;
-}
-
-.project-stepper-image-reveal::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg,
-            transparent var(--position),
-            $primary calc(var(--position) + 1%),
-            $primary calc(var(--position) + 2%),
-            transparent calc(var(--position) + 3%));
-    z-index: 2;
-    pointer-events: none;
-    contain: layout style;
-}
-
-.project-stepper-image-reveal img {
-    transition: opacity 0.5s ease;
+    border-radius: 12px;
 }
 
 .project-stepper-wrapper {

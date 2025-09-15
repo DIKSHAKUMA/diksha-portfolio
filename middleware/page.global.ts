@@ -7,6 +7,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
     if (import.meta.server || useNuxtApp().isHydrating) return
 
+    // Cache DOM queries for performance
+    const blinds = $gsap.utils.toArray('.venice__blind')
+    const veniceEl = document.querySelector('.venice')
+
     from.meta.pageTransition.onLeave = (el, done) => {
 
         store.isTransitionFinished = false
@@ -29,24 +33,24 @@ export default defineNuxtRouteMiddleware((to, from) => {
             }
         })
 
-        // simple test
-        tl.set('.venice', { autoAlpha: 1, force3D: true })
-        tl.fromTo('.venice__blind', { scaleX: 0, autoAlpha: 0 }, { duration: .2, scaleX: 1.1, autoAlpha: 1, stagger: .05, transformOrigin: "0% 50%", roundProps: ["opacity"], force3D: true })
+        // Optimized with cached elements
+        tl.set(veniceEl, { opacity: 1, visibility: 'visible', force3D: true })
+        tl.fromTo(blinds, { scaleX: 0, opacity: 0 }, { duration: .2, scaleX: 1.1, opacity: 1, stagger: .05, transformOrigin: "0% 50%", force3D: true, ease: "power2.out" })
     }
 
     to.meta.pageTransition.onBeforeEnter = (el, done) => {
-        $gsap.set(".venice__blind", { scaleX: 0, autoAlpha: 0, force3D: true })
+        $gsap.set(blinds, { scaleX: 0, opacity: 0, force3D: true })
     }
 
     to.meta.pageTransition.onEnter = (el, done) => {
 
         let tl = $gsap.timeline({
             onComplete() {
-                $gsap.set('.venice__blind', {
-                    clearProps: 'all'
+                $gsap.set(blinds, {
+                    clearProps: 'transform,opacity'
                 })
 
-                $gsap.set('.venice', { autoAlpha: 0 })
+                $gsap.set(veniceEl, { opacity: 0, visibility: 'hidden' })
 
                 store.isTransitionFinished = true
                 store.isTransitionStarted = false
@@ -55,7 +59,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
             }
         })
 
-        // simple test, for complex we need watchers for transitionState in relevant components
-        tl.fromTo('.venice__blind', { scaleX: 1.2, autoAlpha: 1 }, { duration: .2, scaleX: 0, autoAlpha: 0, stagger: .05, transformOrigin: "0% 50%", force3D: true })
+        tl.fromTo(blinds, { scaleX: 1.1, opacity: 1 }, { duration: .2, scaleX: 0, opacity: 0, stagger: .05, transformOrigin: "0% 50%", force3D: true, ease: "power2.out" })
     }
 })

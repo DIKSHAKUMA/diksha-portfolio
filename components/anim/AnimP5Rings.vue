@@ -76,7 +76,6 @@ onMounted(async () => {
             const parallaxElement = document.querySelector('.parallax__wrapper')
             if (parallaxElement) {
                 observer.observe(parallaxElement)
-                console.log('✓ Observing ViewParallaxAbout .parallax__wrapper for P5 rings optimization')
             } else {
                 console.warn('⚠ ViewParallaxAbout .parallax__wrapper not found - P5 rings will run continuously')
             }

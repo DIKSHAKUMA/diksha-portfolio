@@ -20,7 +20,7 @@ const dateSorted = computed(() => {
             // Create date with month name and year
             return new Date(`${month} 1, ${year}`)
         }
-        
+
         // Sort by date descending (newest first)
         return parseDate(b.date).getTime() - parseDate(a.date).getTime()
     })
@@ -37,6 +37,7 @@ const handleProjectClick = (project: any) => {
     if (project.labUrl) {
         window.open(project.labUrl, '_blank')
     } else {
+        console.log(project.slug)
         navigateTo(`/project/${project.slug}`)
     }
 }
@@ -66,11 +67,10 @@ onMounted(() => {
                 ease: "power2.out",
                 scrollTrigger: {
                     trigger: sec,
-                    start: 'top 85%', /* Trigger slightly later */
+                    start: 'top 90%', /* Trigger slightly later */
                     end: 'top 60%',
                     toggleActions: "play none none reverse",
                     preventOverlaps: true,
-                    fastScrollEnd: true,
                     anticipatePin: 1
                 }
             })
@@ -86,14 +86,22 @@ onMounted(() => {
                 ease: "power1.out",
                 scrollTrigger: {
                     trigger: img,
-                    start: "top 85%", /* Consistent with text */
+                    start: "top 90%", /* Consistent with text */
                     end: 'top 60%',
                     /* onEnter, onLeave, onEnterBack, and onLeaveBack, */
                     toggleActions: "play none none reverse",
                     preventOverlaps: true,
-                    fastScrollEnd: true,
                     anticipatePin: 1
                 }
+            })
+
+            /* GSAP hover animation to avoid CSS transform conflicts */
+            img.parentElement.addEventListener('mouseenter', () => {
+                $gsap.to(img, { scale: 0.98, duration: 0.25, ease: "power2.out", force3D: false, autoRound: true })
+            })
+
+            img.parentElement.addEventListener('mouseleave', () => {
+                $gsap.to(img, { scale: 1, duration: 0.25, ease: "power2.out", force3D: false, autoRound: true })
             })
         })
     })
@@ -121,11 +129,9 @@ onUnmounted(() => {
             <section class="projects__abstract">
                 <div v-for="proj in dateSorted" :key="proj.slug">
                     <div class="projects__abstract__image action" data-name="proj" data-text="Explore"
-                        data-color="#FFF">
-                        <NuxtLink @click="handleProjectClick(proj)">
-                            <NuxtImg :src="proj.image[0].handle" provider="hygraph" alt="Project image" format="webp"
-                                sizes="sm:100vw md:45vw lg:45vw xl:35vw" densities="x1 x2"></NuxtImg>
-                        </NuxtLink>
+                        data-color="#FFF" @click="handleProjectClick(proj)">
+                        <NuxtImg :src="proj.coverImage?.handle" provider="hygraph" alt="Project image" format="webp"
+                            sizes="sm:100vw md:45vw lg:45vw xl:35vw" densities="x1 x2"></NuxtImg>
                         <div class="projects__abstract__name">
                             <p class="split-proj-w">{{ proj.name }}</p>
                             <span v-if="proj.labUrl" class="projects__lab-indicator" title="Lab Project">🧪</span>
@@ -141,6 +147,22 @@ onUnmounted(() => {
 img,
 .split-proj-w {
     will-change: transform;
+}
+
+img {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    /* Image sharpness optimizations */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: bicubic;
+    /* Prevent subpixel rendering issues */
+    -webkit-font-smoothing: subpixel-antialiased;
+    /* Performance optimizations */
+    contain: layout style paint;
 }
 
 /* same margins as project-wrapper in [id].vue */
@@ -176,29 +198,27 @@ img,
         &__image {
             position: relative;
             overflow: hidden;
-            transition: transform 0.25s ease-out;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            transform: translateZ(0);
             cursor: pointer;
             clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
             border-radius: 12px;
+            aspect-ratio: 16/9;
+            /* Match exact image dimensions (1.78:1) */
         }
 
-        &__image:hover {
-            transform: scale(0.98) translateZ(0);
-        }
-
-        &__image img {
-            transition: scale 0.25s ease-out, transform 0.25s ease-out;
-            transform: scale(1);
+        &__image:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            background: #000;
+            opacity: 0;
+            transition: opacity .4s ease;
         }
 
-        &__image:hover img {
-            transform: scale(0.99);
+        &__image:hover:after {
+            opacity: .3;
         }
 
         &__name {
@@ -206,7 +226,7 @@ img,
             height: 30px;
             bottom: $px-16-spacer;
             left: $px-16-spacer;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.4);
             padding: $px-8-spacer $px-16-spacer;
             border-radius: 4px;
             pointer-events: none;
@@ -216,8 +236,9 @@ img,
                 position: relative;
                 margin: 0;
                 color: white;
-                font-size: $fs-14;
-                font-weight: 500;
+                font-family: $sans-ui;
+                font-variation-settings: "slnt" 0, "wght" 400;
+                font-size: clamped(16px, 20px, 380px, 1920px);
                 top: 50%;
                 transform: translateY(-50%);
             }
@@ -251,9 +272,9 @@ img,
         display: flex;
         align-items: center;
         justify-content: center;
-        backdrop-filter: blur(4px);
+
         border: 1px solid rgba(255, 255, 255, 0.2);
-        
+
         @include this-and-above('md') {
             font-size: 18px;
             width: 28px;

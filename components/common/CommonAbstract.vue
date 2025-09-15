@@ -47,12 +47,15 @@ const props = defineProps({
     length: {
         type: String,
         default: ''
+    },
+    isPageTitle: {
+        type: Boolean,
+        default: false
     }
 })
 
 const abstractClassObj = computed(() => {
     return {
-        'abstract-wrapper': true,
         'abstract-wrapper--hero': props.isHero,
         'abstract-wrapper--secondary': props.isSecondary,
         'abstract-wrapper--full-width': props.isFullWidth
@@ -61,7 +64,7 @@ const abstractClassObj = computed(() => {
 
 const headerClassObj = computed(() => {
     return {
-        'abstract__header': true,
+        'abstract__header--page-title': props.isPageTitle,
         'abstract__header--hero': props.isHero,
         'abstract__header--secondary': props.isSecondary,
         'abstract__header--full-width': props.isFullWidth
@@ -118,10 +121,12 @@ onUnmounted(() => {
     <div class="abstract-wrapper" :class="abstractClassObj">
         <div class="abstract">
             <header v-if="label && label.trim()" class="abstract__header" :class="[className, headerClassObj]">
-                <div>{{ label }}</div>
+                <span>{{ label }}</span>
             </header>
             <div v-if="desc && desc.trim()">
-                <div class="abstract__desc" :class="className">{{ desc }}</div>
+                <div class="abstract__desc" :class="className">{{ desc.split('.')[0] + '.' }}</div>
+                <div v-if="desc.split('.')[1] && desc.split('.')[1].trim()" class="abstract__desc" :class="className">{{
+                    desc.split('.')[1].trim() + '.' }}</div>
             </div>
 
             <!-- For blog posts -->
@@ -209,6 +214,11 @@ onUnmounted(() => {
         }
 
         &--full-width {
+            margin-bottom: 0;
+        }
+
+        &--page-title {
+            font-size: clamped(36px, 68px, 480px, 1920px);
             margin-bottom: 0;
         }
 

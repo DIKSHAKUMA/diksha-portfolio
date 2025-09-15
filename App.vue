@@ -12,11 +12,13 @@ await callOnce('blog', () => blogStore.fetchData())
 const isLoaded = ref(false)
 const { $gsap } = useNuxtApp()
 
+let cachedBlinds: any[] = []
+
 onMounted(() => {
     isLoaded.value = true;
-    const blinds = $gsap.utils.toArray('.venice__blind')
-    $gsap.set(blinds, { scaleX: 0, force3D: true })
-    $gsap.fromTo(blinds, 
+    cachedBlinds = $gsap.utils.toArray('.venice__blind')
+    $gsap.set(cachedBlinds, { scaleX: 0, force3D: true })
+    $gsap.fromTo(cachedBlinds, 
         { scaleX: 1, opacity: 1, force3D: true }, 
         { 
             duration: .2, 
@@ -32,8 +34,7 @@ onMounted(() => {
 })
 
 const clearProps = () => {
-    const blinds = $gsap.utils.toArray('.venice__blind')
-    $gsap.set(blinds, {
+    $gsap.set(cachedBlinds, {
         clearProps: 'transform,opacity'
     })
     $gsap.set('.venice', { visibility: 'hidden', opacity: 0 })

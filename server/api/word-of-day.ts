@@ -9,19 +9,14 @@ export default defineEventHandler(async (event) => {
     // Look for the first item's title and description (skip channel title)
     const itemMatch = response.match(/<item>.*?<\/item>/s)
     if (!itemMatch) {
-      console.log('RSS response preview:', response.substring(0, 500))
       throw new Error('No item found in RSS feed')
     }
     
     const item = itemMatch[0]
-    console.log('Item found:', item.substring(0, 200))
-    
+
     const wordMatch = item.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>/)
     const descriptionMatch = item.match(/<description><!\[CDATA\[([\s\S]+?)\]\]><\/description>/)
-    
-    console.log('Word match:', wordMatch)
-    console.log('Description match:', descriptionMatch)
-    
+
     if (wordMatch && descriptionMatch) {
       const fullTitle = wordMatch[1]
       const word = fullTitle.split(':')[0].trim()

@@ -217,7 +217,7 @@ onBeforeUnmount(() => {
 
 <style scoped lang="scss">
 .arrow {
-    width: 14px;
+    width: 12px;
     height: auto;
     pointer-events: none;
     margin-left: 5px;
@@ -261,8 +261,8 @@ onBeforeUnmount(() => {
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         
         .light-mode & {
-            background: rgba(23, 23, 23, 0.1);
-            border-color: rgba(23, 23, 23, 0.3);
+            background: rgba(23, 23, 23, 0.2);
+            border-color: rgba(23, 23, 23, 0.2);
         }
 
         /* different hover states */
@@ -308,7 +308,7 @@ onBeforeUnmount(() => {
             text-rendering: optimizeLegibility;
             white-space: nowrap;
             opacity: 1 !important;
-            font-weight: 600;
+            font-weight: 400;
             color: #faf7ff;
         }
     }

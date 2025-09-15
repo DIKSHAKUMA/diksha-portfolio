@@ -10,11 +10,6 @@ definePageMeta({
 
 const { $lenis } = useNuxtApp();
 
-const scrollConfig = reactive({
-    text: '                       Swedish frontend developer & photographer. UI/UX / this / *  Based: Barcelona / London ...',
-    speed: "1.5"
-})
-
 onMounted(() => {
     $lenis.scrollTo(0, { immediate: true, force: true })
 })

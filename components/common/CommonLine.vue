@@ -28,7 +28,7 @@ onMounted(() => {
     }
 })
 </script>
-
+//ghfgh
 <template>
     <div class="line" ref="metaLine" :style="{ position: props.pos, width: resolvedWidth }"></div>
 </template>

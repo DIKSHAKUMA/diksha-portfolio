@@ -2,9 +2,9 @@ import { ExtensionType, Texture } from "pixi.js"
 
 export function useHygraphParser() {
     
-    const hygraphLoader = {
+    const hygraphLDR = {
         extension: ExtensionType.LoadParser,
-        name: 'hygraphLoader',
+        name: 'hygraphLDR',
         test: (url: string) => url.startsWith('https://eu-west-2.graphassets.com'),
         async load(src: string) {
             return new Promise((resolve, reject) => {
@@ -25,5 +25,5 @@ export function useHygraphParser() {
         },
     }
 
-    return { hygraphLoader }
+    return { hygraphLDR }
 }

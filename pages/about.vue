@@ -39,6 +39,5 @@ onUnmounted(() => {
     overflow-x: visible;
     z-index: inherit;
     overflow: hidden;
-    /* Prevent SCSS parsing errors */
 }
 </style>

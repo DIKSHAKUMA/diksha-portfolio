@@ -215,7 +215,7 @@ onUnmounted(() => {
         <!--:className here is for gsap-->
         <div class="abstract--center">
             <CommonAbstract :label="'Projects'" :delay="1" :desc="'Drag & click to open.'"
-                :className="'abstract__works'" :is-hero="true" />
+                :className="'abstract__projects'" :is-hero="true" />
         </div>
 
         <div class="progress">
@@ -228,7 +228,7 @@ onUnmounted(() => {
                     <div class="projects__project action" data-name="reel" ref="projectItem"
                         :class="{ 'projects__project--open': index === clampedIndex && !isDragging }">
                         <NuxtLink @click="handleProjectClick(project)">
-                            <NuxtImg :src="project.image[0].handle" provider="hygraph" alt="Project image" format="webp"
+                            <NuxtImg :src="project.coverImage?.handle" provider="hygraph" alt="Project image" format="webp"
                                 sizes="sm:100vw" densities="x1 x2" class="projects__project__image"></NuxtImg>
                         </NuxtLink>
                         <div class="projects__project-name"

@@ -38,7 +38,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-    ctx?.revert()
+
 })
 </script>
 
@@ -50,9 +50,6 @@ onUnmounted(() => {
             </div>
             <CommonAbstract class="about__label" :label="store.data.intro?.aboutIntroTitle"
                 :desc="store.data.intro?.aboutIntroDesc" :className="'about-intro'" :is-secondary="true" />
-            <CommonInfoLabel :label="'Unsplash @ willianjusten'" :className="'photo-label'"
-                :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }"
-                :link="'https://unsplash.com/@willianjusten'" />
         </main>
     </div>
 </template>
@@ -63,7 +60,7 @@ onUnmounted(() => {
 }
 
 .about__label {
-    color: #171717;
+    color: #faf7ff;
 }
 
 .about {
@@ -75,7 +72,6 @@ onUnmounted(() => {
     }
 }
 
-/* same margins as project-wrapper in [id].vue */
 .about-wrapper {
     display: flex;
     align-items: center;
@@ -113,6 +109,7 @@ onUnmounted(() => {
     z-index: 1;
 }
 
+
 .parallax__bg {
     position: absolute;
     display: block; // Changed from inline-block for better performance
@@ -128,8 +125,8 @@ onUnmounted(() => {
     backface-visibility: hidden;
     perspective: 1000px;
     contain: layout style paint; // CSS containment for better performance
-    image-rendering: optimizeSpeed;
-    background-image: url('/img/willian-justen-de-vasconcellos.jpg');
+    image-rendering: optimizeQuality;
+    background-image: url('/img/vinyl-parallax.jpg');
 
     // Firefox-specific optimizations
     @-moz-document url-prefix() {
@@ -137,8 +134,8 @@ onUnmounted(() => {
         image-rendering: optimizeSpeed;
     }
 
-    @supports (background-image: url('/img/willian-justen-de-vasconcellos.webp')) {
-        background-image: url('/img/willian-justen-de-vasconcellos.webp');
+    @supports (background-image: url('/img/vinyl-parallax.webp')) {
+        background-image: url('/img/vinyl-parallax.webp');
         /* Create the parallax scrolling effect */
 
         @include this-and-above('sm') {

@@ -61,10 +61,8 @@ const setupIntersectionObserver = () => {
     const callback = (entries: IntersectionObserverEntry[]) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                console.log("Excerpts in view - pausing animation")
                 isAnimationPaused.value = true
             } else {
-                console.log("Excerpts out of view - resuming animation")
                 isAnimationPaused.value = false
             }
         })
@@ -77,7 +75,6 @@ const setupIntersectionObserver = () => {
         const elem = document.querySelector('.excerpts-wrapper')
         if (elem) {
             observer.observe(elem)
-            console.log("Successfully observing .excerpts-wrapper")
             return true
         }
         return false

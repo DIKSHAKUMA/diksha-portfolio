@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import SplitType from 'split-type';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useBlogStore } from '~/store/useBlogStore'
 
@@ -111,7 +110,6 @@ onUnmounted(() => {
         $gsap.context().kill()
     } catch (error) {
         // Silently handle cleanup errors
-        console.log('GSAP context cleanup completed')
     }
 })
 </script>
@@ -126,8 +124,9 @@ onUnmounted(() => {
 
                 <main class="blog__post">
                     <div v-if="post">
-                        <CommonAbstract :label="post.title" :desc="post.subject" :delay="1" :className="'blog-intro'"
-                            :isFullWidth="true" :author="post.authors[0].name" :date="post.date" />
+                        <CommonAbstract :isPageTitle="true" :label="post.title" :desc="post.subject" :delay="1"
+                            :className="'blog-intro'" :isFullWidth="true" :author="post.authors[0].name"
+                            :date="post.date" />
 
                         <div class="blog__post-cover">
                             <NuxtImg :src="post.coverImage?.handle" provider="hygraph" alt="Project image" format="webp"
@@ -457,5 +456,14 @@ onUnmounted(() => {
     100% {
         background-position: 200% 0;
     }
+}
+
+/* Fix superscript line height issues */
+:deep(sup) {
+    position: relative;
+    top: -0.5em;
+    font-size: 0.75em;
+    line-height: 0;
+    vertical-align: baseline;
 }
 </style>

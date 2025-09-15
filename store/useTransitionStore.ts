@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 export const useTransitionStore = defineStore('anim', {
     state: () => {
         return {
-            isTransitionFinished: false,
+            isTransitionFinished: true,  // Default to true for direct page visits
             isTransitionStarted: false
         }
     },

@@ -11,23 +11,13 @@ export default defineEventHandler(async (event) => {
             humidity: (weather as any).main.humidity,
             condition: (weather as any).weather[0].main.toLowerCase(),
             location: (weather as any).name,
-            timezone: (weather as any).timezone, 
+            timezone: (weather as any).timezone,
             // Format as en GB, dt is Unix timestamp
             localTime: new Date((weather as any).dt * 1000).toLocaleTimeString('en-GB', {
                 hour: '2-digit',
                 minute: '2-digit',
                 hour12: false,
                 timeZone: 'Europe/Madrid' // Barcelona timezone
-            }),
-            sunrise: new Date((weather as any).sys.sunrise * 1000).toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZone: 'Europe/Madrid'
-            }),
-            sunset: new Date((weather as any).sys.sunset * 1000).toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZone: 'Europe/Madrid'
             })
         }
     } catch (error: any) {
@@ -38,3 +28,5 @@ export default defineEventHandler(async (event) => {
         })
     }
 })
+
+

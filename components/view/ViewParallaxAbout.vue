@@ -49,9 +49,6 @@ onUnmounted(() => {
             </div>
             <CommonAbstract class="about__label" :label="store.data.about?.aboutTitle"
                 :desc="store.data.about?.aboutDesc" :className="'about-intro'" :is-secondary="true" />
-            <CommonInfoLabel :label="'Unsplash @ fishinabarrel'" :className="'photo-label'"
-                :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }"
-                :link="'https://unsplash.com/@fishinabarrel'" />
         </main>
     </div>
 </template>
@@ -63,9 +60,10 @@ onUnmounted(() => {
 
 .about {
     overflow: hidden;
+    width: 100%;
 
     &__label {
-        color: #171717;
+        color: #faf7ff;
         position: relative;
         z-index: 100;
     }
@@ -130,7 +128,7 @@ onUnmounted(() => {
     contain: layout style paint;
     /* CSS containment for better performance */
     image-rendering: optimizeSpeed;
-    background-image: url('/img/robert-reid.jpg');
+    background-image: url('/img/camera-parallax.jpg');
 
     /* Firefox-specific optimizations */
     @-moz-document url-prefix() {
@@ -138,8 +136,8 @@ onUnmounted(() => {
         image-rendering: optimizeSpeed;
     }
 
-    @supports (background-image: url('/img/robert-reid.webp')) {
-        background-image: url('/img/robert-reid.webp');
+    @supports (background-image: url('/img/camera-parallax.webp')) {
+        background-image: url('/img/camera-parallax.webp');
         /* Create the parallax scrolling effect */
 
         @include this-and-above('sm') {

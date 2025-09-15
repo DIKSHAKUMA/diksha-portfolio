@@ -68,7 +68,7 @@ onUnmounted(() => {
             </div>
         </ClientOnly>
 
-        <!-- Weather Widgets -->
+        <!-- Weather Widgets TODO: Could be refactored into component and reside in ViewHeroContact -->
         <div v-if="weatherData && !weatherPending" class="weather-widgets">
             <!-- Local Time Widget -->
             <div class="weather-widget weather-widget--time" :class="{ 'weather-widget--firefox': isFirefox }">
@@ -130,8 +130,8 @@ onUnmounted(() => {
     background-position: center;
     background-repeat: no-repeat;
 
-    @supports (background-image: url('/img/zero-take.webp')) {
-        background-image: url('/img/zero-take.webp');
+    @supports (background-image: url('/img/window-contact.webp')) {
+        background-image: url('/img/window-contact.webp');
     }
 }
 
@@ -158,7 +158,7 @@ onUnmounted(() => {
 /* Refraction. Inspired by https://codepen.io/lbebber/pen/kvVKGK */
 .raindrop {
     position: absolute;
-    background-image: url('/img/zero-take.jpg');
+    background-image: url('/img/window-contact.jpg');
     background-size: 1000%;
     border-radius: 100%;
     transform: rotate(180deg);
@@ -168,8 +168,8 @@ onUnmounted(() => {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
     transition: background-size 1s;
 
-    @supports (background-image: url('/img/zero-take.webp')) {
-        background-image: url('/img/zero-take.webp');
+    @supports (background-image: url('/img/window-contact.webp')) {
+        background-image: url('/img/window-contact.webp');
     }
 
     &:hover {

@@ -42,7 +42,6 @@ const destroyPixiResources = () => {
     sprite?.destroy()
     ripple?.destroy()
     app.destroy()
-    console.log('ViewHeroHome: PIXI resources destroyed')
 }
 
 // Function to set image dimensions to make sure canvas is initialized if user returns using back button

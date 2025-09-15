@@ -76,6 +76,12 @@ export default defineNuxtConfig({
     },
   },
 
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => tag === 'mux-player'
+    }
+  },
+
   build: {
     transpile: ['gsap'],
   },

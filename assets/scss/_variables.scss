@@ -22,12 +22,12 @@ $accent2: var(--accent2);
 $color-scheme: var(--color-scheme);
 
 // Fonts
-$sans-ui: "Inter";
+$sans-ui: "Inter", monospace;
 $sans-ui-opt: auto;
 $sans-ui-wgt: 600;
 $sans-ui-stl: normal;
 
-$sans-text: "PPNeueMontreal-Variable", sans-serif;
+$sans-text: "Be Vietnam", sans-serif;
 $sans-text-opt: auto;
 $sans-text-wgt: 400;
 $sans-text-stl: normal;
@@ -44,6 +44,7 @@ $fs-10: 0.625rem; //10
 
 // We need some spacers to control folio margins
 // Baptized spacer cuz can be padding (footer)
+$px-4-spacer: 4px;
 $px-8-spacer: 8px;
 $px-16-spacer: 16px;
 $px-32-spacer: 32px;
