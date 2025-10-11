@@ -1,52 +1,29 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
-    <div>
-        <hr class="modal-hr">
-        <div class="social">
-            <slot name="social"></slot>
-        </div>
-        <div class="contact">
-            <slot name="contact"></slot>
-        </div>
+  <div>
+    <div class="social">
+      <slot name="social"></slot>
     </div>
+    <div class="contact">
+      <slot name="contact"></slot>
+    </div>
+  </div>
 </template>
 
-
 <style lang="scss" scoped>
-.contact,
-.social {
-    font-size: clamped(14px, 28px, 480px, 1920px);
+  .contact,
+  .social {
+    font-size: clamp(0.88rem, 0.97vw + 0.58rem, 1.75rem);
     line-height: 1.2;
     text-decoration: none;
     z-index: 100;
-    position: absolute;
-    top: 40px;
     line-height: 1.5;
     cursor: pointer;
+    width: fit-content;
 
     @include this-and-above('lg') {
-        display: none;
+      display: none;
     }
-}
-
-.social {
-    align-self: flex-start;
-}
-
-.contact {
-    align-self: flex-end;
-}
-
-.modal-hr {
-width: 85%;
-    border: none;
-    height: 2px;
-    align-self: center;
-    background-color: $secondary;
-    margin-bottom: 40px;
-    position: absolute;
-    right: 0px;
-}
+  }
 </style>

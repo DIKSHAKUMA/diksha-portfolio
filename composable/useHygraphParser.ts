@@ -11,7 +11,7 @@ export function useHygraphParser() {
                 const img = new Image()
                 img.crossOrigin = 'anonymous'
                 img.onload = () => {
-                    // Create canvas to avoid PIXI warning
+                    /* Create canvas to avoid PIXI warning */
                     const canvas = document.createElement('canvas')
                     const ctx = canvas.getContext('2d')
                     canvas.width = img.width

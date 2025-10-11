@@ -1,37 +1,32 @@
 <script setup lang="ts">
-
-definePageMeta({
+  definePageMeta({
     layout: 'default',
     pageTransition: {
-        name: 'saki',
-        mode: 'out-in'
-    }
-})
+      name: 'saki',
+      mode: 'out-in',
+    },
+  })
 
-onMounted(() => {
+  onMounted(() => {})
 
-})
-
-onUnmounted(() => {
-
-})
+  onUnmounted(() => {})
 </script>
 <template>
-    <div>
-        <UIMouseCursor />
-        <div class="contact-wrapper">
-            <ViewHeroContact />
-        </div>
+  <div>
+    <UIMouseCursor />
+    <div class="contact-wrapper">
+      <ViewHeroContact />
     </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.contact-wrapper {
+  .contact-wrapper {
     flex-flow: column;
     display: flex;
     position: relative;
     overflow-x: visible;
     z-index: inherit;
     overflow: hidden;
-}
+  }
 </style>

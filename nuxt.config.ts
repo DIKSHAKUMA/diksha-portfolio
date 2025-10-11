@@ -1,25 +1,25 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+/* https://nuxt.com/docs/api/configuration/nuxt-config */
 import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
 
   app: {
-    baseURL: '/'
+    baseURL: '/',
   },
 
   site: {
-    url: 'https://thomasjt.com',
-    name: 'Thomas J Thorstensson / Frontend Dev.',
-    // ...etc
+    url: 'https://thomasthorstensson.com',
+    name: 'Folio v1 • Thomas Thorstensson',
+    /* ...etc */
   },
 
   fonts: {
     processCSSVariables: true,
 
     families: [
-      { name: 'Inter', provider: 'google' },
-      { name: 'Switzer', provider: 'fontshare' },
-      { name: 'PPNeueMontreal-Variable', provider: 'local' },
+      { name: 'Sora', provider: 'google' },
+      { name: 'Geist', provider: 'google' },
+      { name: 'Geist Mono', provider: 'google' },
     ],
 
     defaults: {
@@ -43,27 +43,38 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxtjs/mdc',
     '@stefanobartoletti/nuxt-social-share',
-  ], 
-  
+  ],
+
   colorMode: {
-    preference: 'light'
+    preference: 'dark',
   },
 
   mdc: {
     highlight: {
-      theme: 'github-dark', 
-      langs: ['js', 'javascript', 'ts', 'typescript', 'vue', 'html', 'css', 'scss', 'bash', 'json'],
+      theme: 'github-dark',
+      langs: [
+        'js',
+        'javascript',
+        'ts',
+        'typescript',
+        'vue',
+        'html',
+        'css',
+        'scss',
+        'bash',
+        'json',
+      ],
       wrapperStyle: true,
-      preload: ['js', 'javascript', 'ts', 'typescript', 'vue'] 
+      preload: ['js', 'javascript', 'ts', 'typescript', 'vue'],
     },
     headings: {
-      anchorLinks: false
-    }
+      anchorLinks: false,
+    },
   },
 
   socialShare: {
-    baseUrl: 'https://localhost:3000', // required!
-    // other optional module options
+    baseUrl: 'https://thomasthorstensson.com' /* required! */,
+    /* other optional module options */
   },
 
   vite: {
@@ -78,8 +89,8 @@ export default defineNuxtConfig({
 
   vue: {
     compilerOptions: {
-      isCustomElement: (tag) => tag === 'mux-player'
-    }
+      isCustomElement: (tag) => tag === 'mux-player',
+    },
   },
 
   build: {
@@ -92,10 +103,12 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    openWeatherApiKey: '', // Will be populated from NUXT_OPEN_WEATHER_API_KEY env var
+    openWeatherApiKey:
+      '' /* Will be populated from NUXT_OPEN_WEATHER_API_KEY env var */,
     public: {
-      GQL_HOST: 'https://eu-west-2.cdn.hygraph.com/content/cm4tetqve01n107umfec1iqbg/master',
-    }
+      GQL_HOST:
+        'https://eu-west-2.cdn.hygraph.com/content/cm4tetqve01n107umfec1iqbg/master',
+    },
   },
 
   'graphql-client': {
@@ -108,19 +121,19 @@ export default defineNuxtConfig({
       avoidOptionals: false,
       disableOnBuild: false,
       maybeValue: 'T | null',
-      scalars: {}
-    }
+      scalars: {},
+    },
   },
 
-  // Hygraph base URL for assets
+  /* Hygraph base URL for assets */
   image: {
     hygraph: {
       baseURL: 'https://eu-west-2.graphassets.com/cm4tev3k1008n01uo6egngvzu',
-      format: ['webp']
-    }
+      format: ['webp'],
+    },
   },
 
-  // Hygraph fix rate limit when testing
+  /* Hygraph fix rate limit when testing */
   generate: {
     concurrency: 250,
     interval: 200,
@@ -128,10 +141,10 @@ export default defineNuxtConfig({
 
   plugins: [
     { src: '@/plugins/gsap.client.ts', mode: 'client' },
-    { src: '@/plugins/lenis.client.ts', mode: 'client' }
+    { src: '@/plugins/lenis.client.ts', mode: 'client' },
   ],
 
-  //@ts-ignore
+  /* @ts-ignore */
   security: {
     headers: {
       crossOriginEmbedderPolicy: 'credentialless',
@@ -140,9 +153,8 @@ export default defineNuxtConfig({
   },
 
   robots: {
-    blockNonSeoBots: true
+    blockNonSeoBots: true,
   },
 
   devtools: { enabled: false },
-
 })

@@ -16,6 +16,9 @@ ul.reset ul li {
 a, button /* &c... */ {
   all: unset;
   cursor: pointer;
+  /* Prevent focus outline on touch devices */
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 div,

@@ -47,6 +47,8 @@ query folio {
     metaIdeDesc
     metaPublishTitle
     metaPublishDesc
+    metaRepoTitle
+    metaRepoUrl
     blogTitle
     blogDesc
     blogExcerptsTitle

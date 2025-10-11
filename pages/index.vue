@@ -1,45 +1,44 @@
 <script setup lang="ts">
-
-definePageMeta({
+  definePageMeta({
     layout: 'default',
     pageTransition: {
-        name: 'saki',
-        mode: 'out-in'
-    }
-})
+      name: 'saki',
+      mode: 'out-in',
+    },
+  })
 
-const { $lenis } = useNuxtApp();
+  const { $lenis } = useNuxtApp()
 
-onMounted(() => {
+  onMounted(() => {
     $lenis.scrollTo(0, { immediate: true, force: true })
-})
+  })
 </script>
 
 <template>
-    <div>
-        <UIMouseCursor />
-        <div class="home-wrapper">
-            <ViewHeroHome />
-            <ViewParallaxHome />
-            <ViewProjectsHome />
-            <ViewKnowSub />
-            <ViewMetaSub />
-            <ViewFooterSub label="Projects" link="/projects" target="_self" />
-        </div>
+  <div>
+    <UIMouseCursor />
+    <div class="home-wrapper">
+      <ViewHeroHome />
+      <ViewParallaxHome />
+      <ViewProjectsHome />
+      <ViewKnowSub />
+      <ViewMetaSub />
+      <ViewFooterSub label="Projects" link="/projects" target="_self" linkLabel="View" />
     </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.pin {
+  .pin {
     height: 100vh;
-}
+  }
 
-.home-wrapper {
+  .home-wrapper {
     flex-flow: column;
     display: flex;
     position: relative;
     overflow-x: visible;
     z-index: inherit;
     overflow: hidden;
-}
+  }
 </style>

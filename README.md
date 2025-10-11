@@ -1,89 +1,47 @@
-![Static Badge](https://img.shields.io/badge/Nuxt3-green)
 
-# Portfolio, first push
+![Image](https://github.com/user-attachments/assets/c4596ec8-d2cc-4493-a11b-a396abc15e7a)
+![Image](https://github.com/user-attachments/assets/03fe24fa-a629-4fcf-b9b5-b2cbd94dcd53)
 
-Repo for my upcoming portfolio. This is early work in progress; a 'full' folio arrives early April. For the early April release, expect to see sections: Home, Work, Photography, and Contact. Later on in April, there will also come a blog session, where I will write about just about anything: code, life, art.
+<br />
+<br />
 
-Toolbox: VSCode, GraphQL, Hygraph, Nuxt, Pixi 8, Lenis, GSAP.
+# Folio - Thomas Thorstensson
 
-To fork this, please remix and redesign.
+This project has been a labor of love in a blazing Barcelona summer. Here is V1 of my new Folio.
 
-I will be back. :penguin:
+From the outset, I wanted to pull together many creative ideas and libraries. Motion is key, and so I am making use of P5js, Pixi, and GSAP. The motion parts are there to enhance the content parts. Halfway through the project, I decided to add a blog. I will be posting more about the integration between Hygraph and Nuxt MDC later on, on the blog.
+
+For now, I am taking a little break. But expect regular updates to fix any glaring errors; the same goes for content. I will be adding more posts to the blog and refactoring as the year moves on. Potentially, one of two new sections as well. And towards the end of the year, V2 will come, ported to Nuxt 4.
+
+During my "break" I will be searching for a good permanent and remote job. And after the break, get going on anotheer project I have in mind.
+
+Have a coffee and a slow visit. :penguin: .T
 
 ## Setup
 
-Make sure to install dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
+Note: this is a GraphQL driven project. So forgive me if I skip the usual setup instructions. 
+However, feel free to reuse any part of this codebase.
 
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
-## More on Nuxt 3
+## Mayor exploración
+
+[Nuxt](https://nuxt.com/)
+
+[Hygraph](https://hygraph.com/)
+
+[GSAP](https://greensock.com/)
+
+[Pinia](https://pinia.vuejs.org/)
+
+[Pixi](https://pixijs.com/)
+
+[Lenis](https://lenis.io/)
+
+[VueUse](https://vueuse.org/)
+
+[P5.js](https://p5js.org/)
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information :penguin:

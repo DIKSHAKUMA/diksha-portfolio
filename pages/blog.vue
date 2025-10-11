@@ -1,35 +1,29 @@
 <script setup lang="ts">
-
-definePageMeta({
+  definePageMeta({
     layout: 'default',
     pageTransition: {
-        name: 'saki',
-        mode: 'out-in'
-    }
-})
+      name: 'saki',
+      mode: 'out-in',
+    },
+  })
 
-onMounted(() => {
+  onMounted(() => {})
 
-})
-
-onUnmounted(() => {
-
-})
-
+  onUnmounted(() => {})
 </script>
 <!--Shows all projects, something in a horizontal style using draggable-->
 <template>
-    <div>
-        <UIMouseCursor />
-        <div class="blog-outer-wrapper">
-            <ViewHeroBlog />
-            <ViewBlogExcerpts />
-        </div>
+  <div>
+    <UIMouseCursor />
+    <div class="blog-outer-wrapper">
+      <ViewHeroBlog />
+      <ViewBlogExcerpts />
     </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.blog-outer-wrapper {
+  .blog-outer-wrapper {
     flex-flow: column;
     display: flex;
     position: relative;
@@ -37,5 +31,5 @@ onUnmounted(() => {
     z-index: inherit;
     overflow: hidden;
     /* Prevent SCSS parsing errors */
-}
+  }
 </style>

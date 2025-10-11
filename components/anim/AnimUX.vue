@@ -1,92 +1,88 @@
 <script setup lang="ts">
-
-onMounted(() => {
-
-})
-onUnmounted(() => {
-
-})
+  onMounted(() => {})
+  onUnmounted(() => {})
 </script>
 <template>
-    <div class="ui-wrapper">
-        <div class="ui">
-            <div class="arrow-next-row">
-                <div class="next-text">NEXT</div>
-                <div class="arrows">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
+  <div class="ui-wrapper">
+    <div class="ui">
+      <div class="arrow-next-row">
+        <div class="next-text">NEXT</div>
+        <div class="arrows">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
-
-.ui {
+  .ui {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
-}
+    background-color: $accent1;
+  }
 
-.arrow-next-row {
+  .arrow-next-row {
     display: flex;
     align-items: center;
-}
+  }
 
-.arrows {
+  .arrows {
     position: relative;
     width: 32px;
     height: 30px;
     display: flex;
     align-items: center;
-}
+  }
 
-.arrows span {
+  .arrows span {
     display: block;
     position: absolute;
     left: 0;
     top: 0;
     width: 30px;
     height: 30px;
-    border-right: 2px solid $primary;
-    border-bottom: 2px solid $primary;
+    border-right: 2px solid $secondary;
+    border-bottom: 2px solid $secondary;
     transform: rotate(-45deg);
     animation: animate 2s infinite;
-}
+  }
 
-.arrows span:nth-child(2) {
+  .arrows span:nth-child(2) {
     animation-delay: -0.2s;
-}
+  }
 
-.arrows span:nth-child(3) {
+  .arrows span:nth-child(3) {
     animation-delay: -0.4s;
-}
+  }
 
-.next-text {
+  .next-text {
     display: flex;
     align-items: center;
     height: 20px;
     font-size: 50px;
-    color: $primary;
     letter-spacing: 2px;
-}
+    color: $secondary;
+    background-color: $accent1;
+  }
 
-@keyframes animate {
+  @keyframes animate {
     0% {
-        opacity: 0;
+      opacity: 0;
     }
 
     50% {
-        opacity: 1;
-        left: 20px
+      opacity: 1;
+      left: 20px;
     }
 
     100% {
-        opacity: 0;
+      opacity: 0;
     }
-}
+  }
 </style>

@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div>
@@ -10,8 +9,8 @@
 </template>
 
 <style scoped lang="scss">
-.folio-wrapper {
-  /*overflow-y: hidden;*/
-  position: relative;
-}
+  .folio-wrapper {
+    /*overflow-y: hidden;*/
+    position: relative;
+  }
 </style>

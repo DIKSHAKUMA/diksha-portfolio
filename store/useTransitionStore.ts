@@ -3,13 +3,13 @@ import { defineStore } from 'pinia'
 export const useTransitionStore = defineStore('anim', {
     state: () => {
         return {
-            isTransitionFinished: true,  // Default to true for direct page visits
+            isTransitionFinished: true,  /* Default to true for direct page visits */
             isTransitionStarted: false
         }
     },
 
     actions: {
-        // since we rely on `this`, we cannot use an arrow function
+        /* since we rely on `this`, we cannot use an arrow function */
         stopLenis() {
             const { $lenis } = useNuxtApp();
             $lenis.stop()

@@ -1,12 +1,12 @@
 export default defineEventHandler(async (event) => {
   try {
-    // Merriam-Webster Word of the Day RSS feed (free, no API key needed)
+    /* Merriam-Webster Word of the Day RSS feed (free, no API key needed) */
     const response = await $fetch('https://www.merriam-webster.com/wotd/feed/rss2', {
       parseResponse: txt => txt
     }) as string
     
-    // Parse the RSS XML to extract word data
-    // Look for the first item's title and description (skip channel title)
+    /* Parse the RSS XML to extract word data
+     * Look for the first item's title and description (skip channel title) */
     const itemMatch = response.match(/<item>.*?<\/item>/s)
     if (!itemMatch) {
       throw new Error('No item found in RSS feed')
@@ -21,23 +21,23 @@ export default defineEventHandler(async (event) => {
       const fullTitle = wordMatch[1]
       const word = fullTitle.split(':')[0].trim()
       
-      // Extract the main definition from the complex HTML structure
+      /* Extract the main definition from the complex HTML structure */
       let definition = descriptionMatch[1]
       
-      // Look for the main definition paragraph after the word and pronunciation
+      /* Look for the main definition paragraph after the word and pronunciation */
       const defMatch = definition.match(/<p>([^<]*(?:is to|means to|refers to)[^<]*)<\/p>/)
       if (defMatch) {
         definition = defMatch[1]
       } else {
-        // Fallback: get first meaningful paragraph
+        /* Fallback: get first meaningful paragraph */
         const paragraphMatch = definition.match(/<p>([^<]{20,})<\/p>/)
         if (paragraphMatch) {
           definition = paragraphMatch[1]
         } else {
-          // Last resort: clean all HTML and take first sentence
+          /* Last resort: clean all HTML and take first sentence */
           definition = definition
-            .replace(/<[^>]*>/g, '') // Remove HTML tags
-            .replace(/&[^;]+;/g, '') // Remove HTML entities
+            .replace(/<[^>]*>/g, '') /* Remove HTML tags */
+            .replace(/&[^;]+;/g, '') /* Remove HTML entities */
             .split('.')[0] + '.'
         }
       }
@@ -65,7 +65,7 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     console.error('Word of day API error:', error)
     
-    // Fallback word if API fails
+    /* Fallback word if API fails */
     return {
       word: 'Serendipity',
       definition: 'The occurrence and development of events by chance in a happy or beneficial way.',

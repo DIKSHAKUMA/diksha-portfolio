@@ -12,12 +12,12 @@ export default defineEventHandler(async (event) => {
             condition: (weather as any).weather[0].main.toLowerCase(),
             location: (weather as any).name,
             timezone: (weather as any).timezone,
-            // Format as en GB, dt is Unix timestamp
+            /* Format as en GB, dt is Unix timestamp */
             localTime: new Date((weather as any).dt * 1000).toLocaleTimeString('en-GB', {
                 hour: '2-digit',
                 minute: '2-digit',
                 hour12: false,
-                timeZone: 'Europe/Madrid' // Barcelona timezone
+                timeZone: 'Europe/Madrid' /* Barcelona timezone */
             })
         }
     } catch (error: any) {

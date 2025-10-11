@@ -6,7 +6,7 @@ export default defineNuxtPlugin(() => {
                 typeof args[0] === "string" &&
                 args[0].includes("<Suspense> is an experimental feature")
             ) {
-                return; // terminate msg
+                return; /* terminate msg */
             }
             originalInfo(...args);
         };

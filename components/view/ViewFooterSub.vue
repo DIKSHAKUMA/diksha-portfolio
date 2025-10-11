@@ -1,43 +1,52 @@
 <script setup lang="ts">
-const archiveWrapper = ref<HTMLElement>()
+  const archiveWrapper = ref<HTMLElement>()
 
-const props = defineProps({
-    label: {
-        type: String,
-        required: true
-    },
-    link: {
-        type: String,
-        required: true
-    },
-    target: {
-        type: String,
-        default: '_self'
-    }
-})
+  interface Props {
+    label: string
+    link: string
+    linkLabel: string
+    target?: string
+  }
 
-onMounted(() => {
+  const props = withDefaults(defineProps<Props>(), {
+    label: '',
+    link: '',
+    linkLabel: '',
+    target: '_self',
+  })
 
-})
+  onMounted(() => {})
 
-onUnmounted(() => {
-})
+  onUnmounted(() => {})
 </script>
 
 <template>
-    <div class="archive-wrapper" ref="archiveWrapper">
-        <footer class="archive">
-            <div class="archive__label action magnet" data-name="menu">
-                <NuxtLink :to="props.link" :target="props.target">{{ props.label }}</NuxtLink>
-            </div>
-        </footer>
-        <CommonInfoLabel class="archive__ilabel" :label="'CC-BY. 2025. MADE BY THOMAS'" :className="'photo-label'"
-            :style="{ justifyContent: 'flex-end', alignItems: 'flex-end' }" />
-    </div>
+  <div class="archive-wrapper" ref="archiveWrapper">
+    <footer class="archive">
+      <div
+        class="archive__label action magnet"
+        data-name="proj"
+        :data-text="props.linkLabel"
+        data-color="#FFF"
+      >
+        <NuxtLink :to="props.link" :target="props.target">{{
+          props.label
+        }}</NuxtLink>
+      </div>
+    </footer>
+    <CommonInfoLabel
+      :label="'—Made by Thomas'"
+      :class-name="'photo-label'"
+      :hpos="'flex-end'"
+      :vpos="'flex-end'"
+      :link="'https://github.com/thorstensson'"
+      :force-white="false"
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.archive {
+  .archive {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -45,42 +54,44 @@ onUnmounted(() => {
     height: 100vh;
 
     &__label {
-        font-size: clamped(36px, 52px, 480px, 1920px);
+      font-size: clamped(36px, 52px, 480px, 1920px);
+      position: relative;
+      display: inline-block;
+      z-index: 200;
+
+      a {
+        color: $secondary;
         position: relative;
-        display: inline-block;
-        z-index: 200;
+        background: linear-gradient(to right, $accent2, $accent2) $secondary
+          no-repeat left center;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 0% 100%;
+        text-decoration: underline;
+        text-underline-offset: 15px;
+        text-decoration-thickness: 2px;
+        text-decoration-color: $secondary;
+        transition: background-size 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67),
+          text-decoration-color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 
-        a {
-            color: $secondary;
-            position: relative;
-            background: linear-gradient(to right, $accent2, $accent2) $secondary no-repeat left center;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 0% 100%;
-            text-decoration: underline;
-            text-underline-offset: 15px;
-            text-decoration-thickness: 2px;
-            text-decoration-color: $secondary;
-            transition: background-size 0.2s cubic-bezier(.17, .67, .83, .67), text-decoration-color 0.2s cubic-bezier(.17, .67, .83, .67);
-
-            &:hover {
-                background-size: 100% 100%;
-                text-decoration-color: $accent2;
-            }
+        &:hover {
+          background-size: 100% 100%;
+          text-decoration-color: $accent2;
         }
+      }
     }
 
     &__ilabel :deep(.info-label-header) {
-        text-transform: none;
-        font-weight: 400;
-        font-size: .8rem;
-        letter-spacing: .5px
+      text-transform: none;
+      font-weight: 400;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
     }
-}
+  }
 
-/* same margins as project-wrapper in [id].vue */
-.archive-wrapper {
+  /* same margins as project-wrapper in [id].vue */
+  .archive-wrapper {
     position: relative;
     padding: 0 $px-16-spacer;
     overflow: hidden;
@@ -89,13 +100,21 @@ onUnmounted(() => {
     --dot-size: 2px;
     --dot-space: 50px;
     /* dont ask me how linear backgrounds function, but google provides, it is complex*/
-    background:
-        linear-gradient(90deg, $primary calc(var(--dot-space) - var(--dot-size)), transparent 98%) center / var(--dot-space) var(--dot-space),
-        linear-gradient($primary calc(var(--dot-space) - var(--dot-size)), transparent 98%) center / var(--dot-space) var(--dot-space),
-        $secondary;
+    background: linear-gradient(
+          90deg,
+          $primary calc(var(--dot-space) - var(--dot-size)),
+          transparent 99%
+        )
+        center / var(--dot-space) var(--dot-space),
+      linear-gradient(
+          $primary calc(var(--dot-space) - var(--dot-size)),
+          transparent 99%
+        )
+        center / var(--dot-space) var(--dot-space),
+      $secondary;
 
     @include this-and-above('sm') {
-        --dot-space: 128px;
+      --dot-space: 128px;
     }
-}
+  }
 </style>

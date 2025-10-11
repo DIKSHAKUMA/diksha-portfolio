@@ -1,4 +1,4 @@
-// mouse.js
+/* mouse.js */
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const xpos = ref<number>()
@@ -16,6 +16,6 @@ export function useMousePos() {
     onBeforeUnmount(() => window.removeEventListener('mousemove', update))
   }
 
-  // expose managed state as return value
+  /* expose managed state as return value */
   return { xpos, ypos }
 }
