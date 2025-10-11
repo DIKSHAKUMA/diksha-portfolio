@@ -6,7 +6,7 @@
 <br />
 
 ## V1
-[www.thomasthorstensson.com](https://www.thomasthorstensson.com)
+[www.thomasthorstensson.com](https://www.thomasthorstensson.com){:target="_blank"}
 
 # Folio - Thomas Thorstensson
 
