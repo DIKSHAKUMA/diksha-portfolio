@@ -13,7 +13,7 @@ From the outset, I wanted to pull together many creative ideas and libraries. Mo
 
 For now, I am taking a little break. But expect regular updates to fix any glaring errors; the same goes for content. I will be adding more posts to the blog and refactoring as the year moves on. Potentially, one of two new sections as well. And towards the end of the year, V2 will come, ported to Nuxt 4.
 
-During my "break" I will be searching for a good permanent and remote job. And after the break, get going on anotheer project I have in mind.
+During my "break" I will be searching for a good permanent and remote job. And after the break, get going on another project I have in mind.
 
 Have a coffee and a slow visit. :penguin: .T
 
@@ -30,7 +30,9 @@ However, feel free to reuse any part of this codebase.
 
 [Nuxt](https://nuxt.com/)
 
-[Hygraph](https://hygraph.com/)
+[Nuxt MDC](https://github.com/nuxt-mdc/nuxt-mdc)
+
+[Mux](https://mux.com/)
 
 [GSAP](https://greensock.com/)
 
