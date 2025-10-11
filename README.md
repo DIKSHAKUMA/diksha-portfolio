@@ -6,7 +6,7 @@
 <br />
 
 ## V1
-[www.thomasthorstensson.com](https://www.thomasthorstensson.com){:target="_blank"}
+[www.thomasthorstensson.com](https://www.thomasthorstensson.com)
 
 # Folio - Thomas Thorstensson
 
@@ -24,8 +24,6 @@ Have a coffee and a slow visit. :penguin: .T
 
 Note: this is a GraphQL driven project. So forgive me if I skip the usual setup instructions. 
 However, feel free to reuse any part of this codebase.
-
-## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
