@@ -126,16 +126,25 @@ export default defineNuxtConfig({
 
   /* Hygraph base URL for assets */
   image: {
-    hygraph: {
-      baseURL: 'https://eu-west-2.graphassets.com/cm4tev3k1008n01uo6egngvzu',
-      format: ['webp'],
+    providers: {
+      hygraph: {
+        name: 'hygraph',
+        provider: 'hygraph',
+        options: {
+          baseURL: 'https://eu-west-2.graphassets.com/cm4tev3k1008n01uo6egngvzu',
+        },
+      },
     },
+    domains: ['eu-west-2.graphassets.com'],
+    // Don't optimize external images in production
+    provider: process.env.NODE_ENV === 'production' ? 'none' : 'ipx',
   },
 
   /* Hygraph fix rate limit when testing */
-  generate: {
-    concurrency: 250,
-    interval: 200,
+  nitro: {
+    experimental: {
+      wasm: true,
+    },
   },
 
   plugins: [
