@@ -240,6 +240,8 @@
     overflow: hidden;
     background-color: $primary;
     padding: $px-64-spacer $px-16-spacer;
+    /* Prevent iOS bounce in this container */
+    overscroll-behavior-y: none;
 
     @include this-and-above('sm') {
       padding: $px-128-spacer $px-32-spacer;
@@ -261,6 +263,8 @@
   .meta {
     overflow: hidden;
     color: #171717;
+    /* Prevent iOS bounce in this container */
+    overscroll-behavior-y: none;
 
     &__header {
       position: relative;

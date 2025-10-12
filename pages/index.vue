@@ -37,8 +37,9 @@
     flex-flow: column;
     display: flex;
     position: relative;
-    overflow-x: visible;
+    overflow-x: hidden;
     z-index: inherit;
-    overflow: hidden;
+    /* Remove overflow: hidden to prevent scroll context conflicts */
+    /* Remove overscroll-behavior-y: none - blog post works without it! */
   }
 </style>

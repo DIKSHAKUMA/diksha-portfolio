@@ -18,6 +18,10 @@
   const pos = { x: 0, y: 0 }
   const vel = { x: 0, y: 0 }
 
+  /**
+   * I am Jelly Blob. I eat potato and coffee.
+   */
+
   /* Store event handlers for proper cleanup */
   const eventHandlers = new Map<
     Element,
@@ -27,6 +31,8 @@
       clickHandler: () => void
     }
   >()
+
+  /* Store event handlers for proper cleanup */
   const magnetHandlers = new Map<Element, (e: any) => void>()
 
   /**
@@ -297,7 +303,7 @@
         width: 90px;
         height: 90px;
         background-color: unset;
-        opacity: .5;
+        opacity: .9;
       }
 
       &--reel {

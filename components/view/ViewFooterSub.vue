@@ -95,7 +95,6 @@
     position: relative;
     padding: 0 $px-16-spacer;
     overflow: hidden;
-    height: 100vh;
 
     --dot-size: 2px;
     --dot-space: 50px;

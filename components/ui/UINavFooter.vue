@@ -21,10 +21,15 @@
     line-height: 1.5;
     cursor: pointer;
     width: fit-content;
-    margin-top:$px-16-spacer;
+    margin-top: $px-16-spacer;
 
     @include this-and-above('lg') {
       display: none;
     }
+  }
+
+  /* Contact email hover in mobile nav (inverted background) */
+  :deep(div.contact a.contact:hover) {
+    color: $accent1 !important;
   }
 </style>

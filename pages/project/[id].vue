@@ -251,15 +251,6 @@
         >
         </CommonAbstract>
 
-        <CommonInfoLabel
-          :label="'—Made by Thomas'"
-          :class-name="'photo-label'"
-          :hpos="'flex-end'"
-          :force-white="false"
-          :vpos="'flex-end'"
-          :link="'https://github.com/thorstensson'"
-        />
-
         <section class="project__content">
           <!-- Video first if exists -->
           <div
@@ -505,6 +496,15 @@
             :nextSynop="getNextProj.synop"
           />
         </nav>
+
+        <CommonInfoLabel
+          :label="'—Made by Thomas'"
+          :class-name="'photo-label'"
+          :hpos="'flex-end'"
+          :force-white="false"
+          :vpos="'flex-end'"
+          :link="'https://github.com/thorstensson'"
+        />
       </main>
     </div>
   </div>
@@ -603,7 +603,6 @@
       margin: 0 $px-16-spacer;
 
       @include this-and-above('md') {
-
         margin: 0 $px-32-spacer;
       }
 
@@ -612,7 +611,7 @@
       }
 
       @include this-and-above('lg') {
-        flex-direction:row;
+        flex-direction: row;
         margin: 0 $px-64-spacer;
       }
 
@@ -682,7 +681,7 @@
           font-weight: 500;
           text-decoration: underline;
         }
-        
+
         &--tags {
           font-size: clamped(12px, 14px, 380px, 1920px);
           line-height: 1.4;

@@ -84,6 +84,8 @@
     line-height: 1;
     margin: $px-16-spacer $px-16-spacer;
     pointer-events: auto; /* Re-enable mouse events only on the actual label */
+    /* Add bottom padding for iOS browser UI */
+    padding-bottom: env(safe-area-inset-bottom, 20px);
 
     @include this-and-above('md') {
       margin: $px-16-spacer $px-64-spacer;

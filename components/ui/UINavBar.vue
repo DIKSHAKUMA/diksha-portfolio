@@ -71,12 +71,16 @@
   const onScroll = () => {
     currScrollPos = window.scrollY
 
-    if (prevScrollPos && prevScrollPos >= currScrollPos) {
+    // Clamp scroll position to prevent iOS bounce from affecting navbar
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+    const clampedScrollPos = Math.max(0, Math.min(currScrollPos, maxScroll))
+
+    if (prevScrollPos && prevScrollPos >= clampedScrollPos) {
       isDown.value = false
-    } else if (prevScrollPos && prevScrollPos <= currScrollPos) {
+    } else if (prevScrollPos && prevScrollPos <= clampedScrollPos) {
       isDown.value = true
     }
-    prevScrollPos = currScrollPos
+    prevScrollPos = clampedScrollPos
   }
 
   const resetMagneticLinks = () => {
@@ -215,7 +219,7 @@
           <template #contact>
             <a
               data-name="menu"
-              class="action magnet"
+              class="contact action magnet"
               href="mailto:someone@example.com"
               >thomas.thorstensson@gmail.com</a
             >
@@ -356,15 +360,15 @@ just use a simple modal and be done with it. */
     -ms-user-select: none;
     user-select: none;
     outline: none !important;
-    
+
     &:focus,
     &:active,
     &:hover {
       outline: none !important;
       -webkit-tap-highlight-color: transparent !important;
-         filter:blur(0px) !important;
+      filter: blur(0px) !important;
     }
-    
+
     /* Force blur on touch end for mobile */
     &:focus-visible {
       outline: none !important;
@@ -426,7 +430,7 @@ just use a simple modal and be done with it. */
       padding-right: 0px;
       color: $primary;
       font-weight: 400;
-      
+
       /* Lighter font weight in dark mode */
       .dark-mode & {
         font-weight: 300;
@@ -490,7 +494,7 @@ just use a simple modal and be done with it. */
         opacity: 1 !important;
         transition: transform 0.1s linear;
         font-weight: 400;
-        
+
         /* Lighter font weight in dark mode */
         .dark-mode & {
           font-weight: 300;
@@ -504,6 +508,7 @@ just use a simple modal and be done with it. */
           padding-right: 0;
         }
       }
+
 
       &--link-active::before {
         margin-left: -11px;
