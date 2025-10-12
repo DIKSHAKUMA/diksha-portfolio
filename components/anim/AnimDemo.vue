@@ -69,6 +69,7 @@
 </template>
 
 <style scoped lang="scss">
+
   .anim {
     display: flex;
     position: absolute;
@@ -76,17 +77,19 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color:$accent1;
+    background-color:$secondary;
+      border-radius:16px;
   }
 
   .circle {
     opacity: 0.9;
     border-radius: 50%;
-    background: $secondary;
+    background: $primary;
     width: 100px;
     height: 100px;
     place-self: center;
     position: absolute;
+
     
     @include this-and-above('md') {
       width: 200px;

@@ -274,7 +274,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.3);
       width: 20px;
       height: 20px;
       border: 1px solid rgba(250, 247, 255, 0.3);
@@ -284,12 +284,12 @@
       will-change: width, height, transform;
       transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
       backdrop-filter: blur(15px);
-      opacity: 0.8;
+      opacity: 0.5;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 
       .light-mode & {
-        background: rgba(23, 23, 23, 0.4);
-        border-color: rgba(23, 23, 23, 0.4);
+        background: rgba(23, 23, 23, 0.1);
+        border-color: rgba(23, 23, 23, 0.1);
       }
 
       /* different hover states */
@@ -297,7 +297,7 @@
         width: 90px;
         height: 90px;
         background-color: unset;
-        opacity: 1;
+        opacity: .5;
       }
 
       &--reel {
@@ -310,14 +310,14 @@
       &--menu {
         width: 80px;
         height: 80px;
-        opacity: 0.9;
+        opacity: 0.5;
       }
 
       /* Easter egg */
       &--yo {
         width: 80px;
         height: 80px;
-        opacity: 1;
+        opacity: .8;
         background-color: unset;
 
         .cursor__shape__text {

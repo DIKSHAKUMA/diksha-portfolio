@@ -29,6 +29,12 @@
     color: $secondary;
     z-index: 100;
     font-size: clamped(16px, 18px, 480px, 1920px);
+    font-weight: 400;
+    
+    /* Lighter font weight in dark mode */
+    .dark-mode & {
+      font-weight: 300;
+    }
 
     [is-mobile='true'] & {
       color: $primary;

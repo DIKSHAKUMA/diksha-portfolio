@@ -78,7 +78,7 @@
   }
 
   .info-label-header {
-    font-size: clamped(11px, 14px, 480px, 1920px);
+    font-size: clamped(12px, 14px, 480px, 1920px);
     opacity: 0.8;
     font-family: $sans-ui;
     line-height: 1;

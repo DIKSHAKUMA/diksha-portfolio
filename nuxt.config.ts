@@ -31,7 +31,6 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
-    'nuxt-graphql-client',
     '@vueuse/nuxt',
     'nuxt-svgo',
     '@nuxt/icon',
@@ -46,7 +45,7 @@ export default defineNuxtConfig({
   ],
 
   colorMode: {
-    preference: 'dark',
+    preference: 'light',
   },
 
   mdc: {
@@ -105,9 +104,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     openWeatherApiKey:
       '' /* Will be populated from NUXT_OPEN_WEATHER_API_KEY env var */,
+    gqlHost: '' /* Will be populated from NUXT_GQL_HOST env var */,
     public: {
-      GQL_HOST:
-        'https://eu-west-2.cdn.hygraph.com/content/cm4tetqve01n107umfec1iqbg/master',
+      // Public runtime config - exposed to client-side
     },
   },
 

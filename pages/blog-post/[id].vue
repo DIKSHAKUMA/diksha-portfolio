@@ -138,7 +138,6 @@
 
   /* Function to add classes to MDC links after content loads */
   const setupMDCLinks = () => {
-    console.log('MDC mounted, setting up links...')
 
     setTimeout(() => {
       const contentContainer = document.querySelector('.blog__post-content')
@@ -156,7 +155,7 @@
       })
 
       mdcContentReady.value = true
-      console.log('MDC content ready set to:', mdcContentReady.value)
+
     }, 500) 
   }
 

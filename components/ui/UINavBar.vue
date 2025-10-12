@@ -5,7 +5,18 @@
   const navlist = useTemplateRef('navlist')
   const isDown = ref(false)
   const isMobileActive = ref(false)
-  const isLightMode = ref<boolean>(false)
+  const isLightMode = ref<boolean>(true)
+  const route = useRoute()
+
+  /* Check if current route is in blog section */
+  const isBlogActive = computed(() => {
+    return route.path === '/blog' || route.path.startsWith('/blog-post/')
+  })
+
+  /* Check if current route is in projects section */
+  const isProjectsActive = computed(() => {
+    return route.path === '/projects' || route.path.startsWith('/project/')
+  })
 
   let screenWidth: any
   let currScrollPos: number
@@ -43,7 +54,7 @@
   }
 
   const closeMenu = () => {
-    if (screenWidth.value < 768) {
+    if (screenWidth.value < 768 && isMobileActive.value) {
       toggleMenu()
     }
   }
@@ -118,7 +129,7 @@
               data-text="Home"
               class="logo action magnet"
               @click="closeMenu"
-              >Thomas Thorstensson
+              >THOMAS
             </NuxtLink>
           </ClientOnly>
         </template>
@@ -137,7 +148,7 @@
             to="/projects"
             data-name="menu"
             class="nav__item action magnet"
-            activeClass="nav--link-active"
+            :class="{ 'nav--link-active': isProjectsActive }"
             no-prefetch
             @click="closeMenu"
           >
@@ -148,7 +159,7 @@
             to="/blog"
             data-name="menu"
             class="nav__item action magnet"
-            activeClass="nav--link-active"
+            :class="{ 'nav--link-active': isBlogActive }"
             no-prefetch
             @click="closeMenu"
           >
@@ -336,6 +347,28 @@ just use a simple modal and be done with it. */
   .logo {
     display: block;
     height: auto;
+    /* Enhanced mobile focus/blur prevention */
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none !important;
+    
+    &:focus,
+    &:active,
+    &:hover {
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+         filter:blur(0px) !important;
+    }
+    
+    /* Force blur on touch end for mobile */
+    &:focus-visible {
+      outline: none !important;
+    }
   }
 
   .nav {
@@ -392,6 +425,12 @@ just use a simple modal and be done with it. */
       transition: color 0.3s;
       padding-right: 0px;
       color: $primary;
+      font-weight: 400;
+      
+      /* Lighter font weight in dark mode */
+      .dark-mode & {
+        font-weight: 300;
+      }
 
       &:hover {
         color: $accent1;
@@ -450,6 +489,12 @@ just use a simple modal and be done with it. */
         color: $secondary;
         opacity: 1 !important;
         transition: transform 0.1s linear;
+        font-weight: 400;
+        
+        /* Lighter font weight in dark mode */
+        .dark-mode & {
+          font-weight: 300;
+        }
 
         &:hover {
           color: $accent2;

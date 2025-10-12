@@ -77,14 +77,15 @@
 
 <style scoped lang="scss">
   .text {
+          border-radius:16px;
     display: flex;
     position: absolute;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
-    color: $secondary;
-    background-color:$accent1;
+    color: $primary;
+    background-color:$secondary;
   }
 
   .quote {

@@ -21,6 +21,7 @@
     line-height: 1.5;
     cursor: pointer;
     width: fit-content;
+    margin-top:$px-16-spacer;
 
     @include this-and-above('lg') {
       display: none;

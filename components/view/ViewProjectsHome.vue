@@ -37,7 +37,6 @@
     if (project.labUrl) {
       window.open(project.labUrl, '_blank')
     } else {
-      console.log(project.slug)
       navigateTo(`/project/${project.slug}`)
     }
   }

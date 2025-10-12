@@ -5,6 +5,8 @@
   const blogStore = useBlogStore()
   const store = useFolioStore()
 
+  const isDesktop = ref(false)
+
   const dateSorted = computed(() => {
     if (!blogStore.data?.posts) return []
 
@@ -12,6 +14,23 @@
       /* Sort by date descending (newest first), pos number = a after b, neg number = a before b */
       return new Date(b.date).getTime() - new Date(a.date).getTime()
     })
+  })
+
+  const checkScreenSize = () => {
+    if (import.meta.client) {
+      isDesktop.value = window.innerWidth >= 768
+    }
+  }
+
+  onMounted(() => {
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+  })
+
+  onBeforeUnmount(() => {
+    if (import.meta.client) {
+      window.removeEventListener('resize', checkScreenSize)
+    }
   })
 
   onMounted(() => {})
@@ -51,7 +70,7 @@
           <div class="excerpts__item action" data-name="menu">
             <div class="excerpts__item__title">{{ post.date }}</div>
             <div class="excerpts__item__title">{{ post.title }}</div>
-            <div class="excerpts__item__title">{{ post.subject }}</div>
+            <div class="excerpts__item__title excerpts__item__title-subject" v-if="isDesktop">{{ post.subject }}</div>
             <div class="excerpts__item__title">{{ post.length }}</div>
           </div>
         </NuxtLink>
@@ -110,13 +129,17 @@
     &__item {
       position: relative;
       display: grid;
-      grid-template-columns: 1fr 2fr 1fr 1fr;
+      grid-template-columns: 1fr 2fr 1fr;
       height: 70px;
       align-items: center;
       width: 100%;
       border-bottom: 2px solid $accent2;
       overflow: hidden;
       cursor: pointer;
+
+      @include this-and-above('md') {
+        grid-template-columns: 1fr 2fr 1fr 1fr;
+      }
 
       /* Background fill effect */
       &::before {
@@ -147,10 +170,11 @@
         color: $secondary;
         padding: 0 10px;
         transition: all 0.3s ease;
-        font-size: clamped(13px, 20px, 480px, 1920px);
+        font-size: clamped(14px, 20px, 480px, 1920px);
         backface-visibility: hidden;
         transform: translateZ(0);
         font-family: $sans-ui;
+
 
         /* Column-specific alignment */
         &:first-child {

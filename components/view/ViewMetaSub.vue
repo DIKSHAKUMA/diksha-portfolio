@@ -196,8 +196,10 @@
             <NuxtLink :to="store.data.intro?.metaRepoUrl">Folio</NuxtLink>
           </p>
         </div>
-        <div class="action" data-name="yo" data-text="Home">
-          <canvas class="meta__img" ref="pixi"></canvas>
+        <div>
+          <div class="canvas-wrapper">
+            <canvas class="meta__img" ref="pixi"></canvas>
+          </div>
         </div>
       </div>
     </main>
@@ -205,11 +207,15 @@
 </template>
 
 <style lang="scss" scoped>
+  .canvas-wrapper {
+    overflow: hidden;
+    display: inline-block;
+  }
+
   canvas {
     display: block;
     margin: 0 auto;
-    pointer-events: none; 
-    border-radius: 12px;
+    pointer-events: none;
   }
 
   h2,

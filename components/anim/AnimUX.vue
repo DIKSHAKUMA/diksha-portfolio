@@ -24,7 +24,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: $accent1;
+    background-color: $secondary;
+          border-radius:16px;
   }
 
   .arrow-next-row {
@@ -47,8 +48,8 @@
     top: 0;
     width: 30px;
     height: 30px;
-    border-right: 2px solid $secondary;
-    border-bottom: 2px solid $secondary;
+    border-right: 2px solid $primary;
+    border-bottom: 2px solid $primary;
     transform: rotate(-45deg);
     animation: animate 2s infinite;
   }
@@ -67,8 +68,8 @@
     height: 20px;
     font-size: 50px;
     letter-spacing: 2px;
-    color: $secondary;
-    background-color: $accent1;
+    color: $primary;
+    background-color: $secondary;
   }
 
   @keyframes animate {
