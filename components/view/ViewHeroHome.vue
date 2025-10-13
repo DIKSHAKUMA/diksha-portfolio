@@ -20,7 +20,6 @@
     ],
   })
 
-  const { $lenis } = useNuxtApp()
   const { $gsap } = useNuxtApp()
   // Real coffe
   const { isSafariIOS } = useSafariIOSDetection()
@@ -85,7 +84,7 @@
 
   onMounted(async () => {
     if (import.meta.client) {
-      $lenis.scrollTo(0, { force: true })
+      // Note: Page-level component handles scrollTo(0) - don't duplicate here
 
       pixiCtx.value.fillStyle = '#1E201E'
 

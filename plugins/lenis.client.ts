@@ -11,6 +11,17 @@ export default defineNuxtPlugin((nuxtApp) => {
         wheelMultiplier: 1,
     });
 
+    // Add refresh method to recalculate scroll bounds
+    const refreshLenis = () => {
+        // Wait for DOM to settle, then refresh
+        requestAnimationFrame(() => {
+            lenis.resize()
+        })
+    }
+
+    // Extend lenis with refresh method
+    ;(lenis as any).refresh = refreshLenis
+
     return {
         provide: {
             lenis

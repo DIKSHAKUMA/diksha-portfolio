@@ -17,7 +17,14 @@ export const useTransitionStore = defineStore('anim', {
 
         startLenis() {
             const { $lenis } = useNuxtApp();
-            $lenis.start()
+            // Ensure DOM is ready before starting and refresh scroll bounds
+            nextTick(() => {
+                $lenis.start()
+                // Refresh Lenis to recalculate scroll bounds after DOM changes
+                if (($lenis as any).refresh) {
+                    ($lenis as any).refresh()
+                }
+            })
         }
     }
 

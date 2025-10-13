@@ -7,7 +7,6 @@
 
   /* PINIA 🍍 */
   const store = useFolioStore()
-  const { $lenis } = useNuxtApp()
   const { $gsap } = useNuxtApp()
 
   const projectsReel = useTemplateRef<HTMLDivElement>('projectsReel')
@@ -198,7 +197,7 @@
   }
 
   onMounted(async () => {
-    $lenis.scrollTo(0, { force: true })
+    // Note: Page-level component handles scrollTo(0) - don't duplicate here
 
     ctx = $gsap.context((self) => {
       $gsap.registerPlugin(ScrollTrigger)

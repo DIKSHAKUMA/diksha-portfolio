@@ -126,6 +126,10 @@
   }
 
   onMounted(() => {
+    const { $lenis } = useNuxtApp()
+    // Ensure we start at top of page
+    $lenis.scrollTo(0, { immediate: true, force: true })
+    
     $gsap.registerPlugin(ScrollTrigger)
     $gsap.set('.blog__post-cover img', { opacity: 0 })
     $gsap.delayedCall(1, runTrigger)
@@ -138,6 +142,7 @@
 
   /* Function to add classes to MDC links after content loads */
   const setupMDCLinks = () => {
+    const { $lenis } = useNuxtApp()
 
     setTimeout(() => {
       const contentContainer = document.querySelector('.blog__post-content')
@@ -155,6 +160,11 @@
       })
 
       mdcContentReady.value = true
+      
+      // Refresh Lenis after content is loaded to recalculate scroll bounds
+      if (($lenis as any).refresh) {
+        ($lenis as any).refresh()
+      }
 
     }, 500) 
   }
