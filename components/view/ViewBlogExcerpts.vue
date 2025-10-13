@@ -42,35 +42,40 @@
   <div class="excerpts-wrapper">
     <CommonLine class="excerpts__line" :width="''" :pos="'absolute'" />
     <CommonInfoLabel
-      :label="'Current Musings; Click to Read'"
+      :label="'Current Musings'"
       :class-name="'photo-label'"
       :hpos="'center'"
       :force-white="false"
       :vpos="'flex-start'"
       :link="''"
     />
+    <CommonAbstract
+      class="blog__header"
+      :label="store.data.intro?.blogDesc"
+      :desc="''"
+      :class-name="'blog-intro'"
+      :is-secondary="true"
+      :delay="0"
+      :is-full-width="false"
+      :is-hero="false"
+      :author="''"
+      :date="''"
+      :is-page-title="false"
+      :is-two-lines="false"
+    />
 
     <main class="excerpts">
-      <CommonAbstract
-        class="blog__header"
-        :label="store.data.intro?.blogDesc"
-        :desc="''"
-        :class-name="'blog-intro'"
-        :is-secondary="true"
-        :delay="0"
-        :is-full-width="false"
-        :is-hero="false"
-        :author="''"
-        :date="''"
-        :is-page-title="false"
-        :is-two-lines="false"
-      />
       <div class="excerpts__info" v-for="post in dateSorted" :key="post.id">
         <NuxtLink :to="`/blog-post/${post.slug}`">
           <div class="excerpts__item action" data-name="menu">
             <div class="excerpts__item__title">{{ post.date }}</div>
             <div class="excerpts__item__title">{{ post.title }}</div>
-            <div class="excerpts__item__title excerpts__item__title-subject" v-if="isDesktop">{{ post.subject }}</div>
+            <div
+              class="excerpts__item__title excerpts__item__title-subject"
+              v-if="isDesktop"
+            >
+              {{ post.subject }}
+            </div>
             <div class="excerpts__item__title">{{ post.length }}</div>
           </div>
         </NuxtLink>
@@ -104,7 +109,6 @@
     /* So its above the all seeing info label */
     z-index: 200;
     width: 100%;
-    height: 100%;
 
     &__quote {
       position: absolute;
@@ -174,7 +178,6 @@
         backface-visibility: hidden;
         transform: translateZ(0);
         font-family: $sans-ui;
-
 
         /* Column-specific alignment */
         &:first-child {

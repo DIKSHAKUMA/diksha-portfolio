@@ -1,8 +1,10 @@
 <script setup lang="ts">
   import { useFolioStore } from '~/store/useFolioStore'
+  import { useSafariIOSDetection } from '~/composable/useSafariIOSDetection'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
+  const { isSafariIOS } = useSafariIOSDetection()
 
   /* Computed to ensure proper typing */
   const blogTitle = computed(
@@ -21,6 +23,7 @@
       <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
       <CommonAbstract
         class="front-header"
+        :class="{ 'front-header--ios-safari': isSafariIOS }"
         :label="store.data.intro?.blogTitle"
         :desc="''"
         :delay="0"
@@ -55,5 +58,8 @@
   .front-header {
     position: absolute;
     bottom: 0px;
+    &--ios-safari {
+      bottom: 80px;
+    }
   }
 </style>

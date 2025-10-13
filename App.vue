@@ -54,7 +54,7 @@
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
-    <!-- Mobile: Hide every other blind for cleaner look -->
+    <!-- Mobile: Hide every other blind for cleaner look --> 
     <div class="venice__blind venice__blind--desktop"></div>
     <div class="venice__blind"></div>
     <div class="venice__blind venice__blind--desktop"></div>
@@ -70,7 +70,6 @@
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
-  <CommonFooter />
 </template>
 
 <style lang="scss">
@@ -92,7 +91,7 @@
     overscroll-behavior: none;
   }
 
-  .html {
+  html {
     -webkit-text-size-adjust: none;
     height: 100%;
     overflow-y: auto;

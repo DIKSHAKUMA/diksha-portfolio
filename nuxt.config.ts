@@ -5,6 +5,14 @@ export default defineNuxtConfig({
 
   app: {
     baseURL: '/',
+    head: {
+      meta: [
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1.0, viewport-fit=cover'
+        }
+      ]
+    }
   },
 
   site: {
@@ -107,20 +115,6 @@ export default defineNuxtConfig({
     gqlHost: '' /* Will be populated from NUXT_GQL_HOST env var */,
     public: {
       // Public runtime config - exposed to client-side
-    },
-  },
-
-  'graphql-client': {
-    codegen: {
-      silent: true,
-      skipTypename: true,
-      useTypeImports: true,
-      dedupeFragments: true,
-      onlyOperationTypes: true,
-      avoidOptionals: false,
-      disableOnBuild: false,
-      maybeValue: 'T | null',
-      scalars: {},
     },
   },
 

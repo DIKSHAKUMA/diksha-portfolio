@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  import { useSafariIOSDetection } from '~/composable/useSafariIOSDetection'
+
+  const { isSafariIOS } = useSafariIOSDetection()
   const colorMode = useColorMode()
   const isFirefox = ref(false)
   const showRaindrops = ref(false)
@@ -22,7 +25,9 @@
       const x = Math.random()
       const y = Math.random()
       /* Make raindrops 5px smaller on mobile */
-      const baseSize = isMobile ? -1 : 4 /* Mobile: -1 to 12, Desktop: 4 to 17 */
+      const baseSize = isMobile
+        ? -1
+        : 4 /* Mobile: -1 to 12, Desktop: 4 to 17 */
       const size = baseSize + Math.random() * 13
       const stretch = Math.random() * 0.2
       const dropHeight = size * (1 + stretch)
@@ -56,7 +61,10 @@
 </script>
 
 <template>
-  <div class="rain-wrapper">
+  <div
+    class="rain-wrapper"
+    :class="{'ios-safari': isSafariIOS }"
+  >
     <div class="window"></div>
 
     <ClientOnly>
@@ -212,6 +220,10 @@
     gap: 16px;
     z-index: 100;
 
+    .rain-wrapper.ios-safari & {
+      margin-bottom: 120px;
+    }
+
     @include this-and-above('sm') {
       right: $px-16-spacer;
       gap: $px-32-spacer;
@@ -231,7 +243,7 @@
     min-width: 180px;
     border: 1px solid rgba(250, 247, 255, 0.2);
     animation: float 6s ease-in-out infinite;
-    font-family:$sans-ui-mono;
+    font-family: $sans-ui-mono;
 
     &--firefox {
       animation: none;

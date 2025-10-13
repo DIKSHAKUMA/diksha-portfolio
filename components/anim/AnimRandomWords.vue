@@ -195,58 +195,9 @@
     return [23, 23, 23] /* #171717 in RGB */
   }
 
-  /* Animation control */
-  const isAnimationPaused = ref(false)
-
-  /* Intersection Observer setup */
-  const setupIntersectionObserver = () => {
-    const options = {
-      root: null,
-      rootMargin: '0px', /* Trigger when 20% of element is visible */
-      threshold: 0,
-    }
-
-    const callback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          isAnimationPaused.value = true
-        } else {
-          isAnimationPaused.value = false
-        }
-      })
-    }
-
-    const observer = new IntersectionObserver(callback, options)
-
-    /* Wait for DOM to be ready and try multiple times if needed */
-    const observeElement = () => {
-      const elem = document.querySelector('.excerpts-wrapper')
-      if (elem) {
-        observer.observe(elem)
-        return true
-      }
-      return false
-    }
-
-    /* Try immediately, then retry with delays if needed */
-    if (!observeElement()) {
-      setTimeout(() => {
-        if (!observeElement()) {
-          setTimeout(observeElement, 1000) /* Final attempt after 1s */
-        }
-      }, 500)
-    }
-
-    return observer
-  }
-
-  let observerInstance: IntersectionObserver | null = null
 
   onMounted(async () => {
     if (import.meta.client) {
-      /* Setup intersection observer */
-      observerInstance = setupIntersectionObserver()
-
       const p5 = await import('p5')
 
       p5Instance = new p5.default((p: any) => {
@@ -263,7 +214,7 @@
           /* Set color mode and text properties */
           p.colorMode(p.RGB, 255)
           p.textAlign(p.CENTER)
-          p.textFont('Inter')
+          p.textFont('Geist')
 
           /* Define hue as a random value */
           hue = p.random(180, 360)
@@ -272,8 +223,8 @@
           position = p.floor(p.random(0, words.length - wordCount))
 
           /* Create word objects with floating properties
-           * Reserve space for CommonAbstract in lower left (about 200px from bottom) */
-          const reservedBottomSpace = 200
+           * Reserve minimal space for CommonAbstract (about 120px from bottom) */
+          const reservedBottomSpace = 120
           wordObjects = []
           for (let i = 0; i < wordCount; i++) {
             const randomWord = words[position + i] || words[i % words.length]
@@ -290,11 +241,6 @@
         }
 
         p.draw = () => {
-          /* Skip drawing if animation is paused */
-          if (isAnimationPaused.value) {
-            return
-          }
-
           /* Set background based on color mode */
           const bgColor = getCurrentBgColor()
           p.background(bgColor[0], bgColor[1], bgColor[2])
@@ -314,18 +260,20 @@
             const colorShift = p.sin(time + word.offsetX) * 30
 
             if (colorMode.preference === 'light') {
-              /* Light mode: variations of accent1 (#4a4453) */
+              /* Light mode: variations of accent1 (#4a4453) with opacity */
               p.fill(
                 74 + colorShift,
                 68 + colorShift * 0.8,
-                83 + colorShift * 1.2
+                83 + colorShift * 1.2,
+                145  /* Add opacity (0-255, 145 = ~57% opacity) */
               )
             } else {
-              /* Dark mode: variations of accent2 (#fff0e8) */
+              /* Dark mode: variations of accent2 (#fff0e8) with opacity */
               p.fill(
                 255 - colorShift * 0.3,
                 240 + colorShift * 0.2,
-                232 + colorShift * 0.5
+                232 + colorShift * 0.5,
+                125  /* Add opacity (0-255, 125 = ~49% opacity) */
               )
             }
 
@@ -338,8 +286,8 @@
           p.resizeCanvas(window.innerWidth, window.innerHeight)
 
           /* Recreate word objects with new canvas dimensions
-           * Reserve space for CommonAbstract in lower left (about 200px from bottom) */
-          const reservedBottomSpace = 200
+           * Reserve minimal space for CommonAbstract (about 120px from bottom) */
+          const reservedBottomSpace = 120
           wordObjects = []
           for (let i = 0; i < wordCount; i++) {
             const randomWord = words[position + i] || words[i % words.length]
@@ -359,10 +307,6 @@
   })
 
   onUnmounted(() => {
-    if (observerInstance) {
-      observerInstance.disconnect()
-      observerInstance = null
-    }
     if (p5Instance) {
       p5Instance.remove()
       p5Instance = null
@@ -381,6 +325,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile browsers */
     pointer-events: none;
   }
 </style>

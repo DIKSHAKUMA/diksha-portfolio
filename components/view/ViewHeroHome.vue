@@ -4,6 +4,7 @@
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '~/store/useFolioStore'
   import { useHead } from '#imports' /* Nuxt composable for managing head tags */
+  import { useSafariIOSDetection } from '~/composable/useSafariIOSDetection'
 
   /* PINIA */
   const store = useFolioStore()
@@ -18,12 +19,14 @@
       },
     ],
   })
-  const pixiCtx = useTemplateRef<any>('pixi')
-  const imgFrames = useTemplateRef<any>('imgFrames')
 
   const { $lenis } = useNuxtApp()
   const { $gsap } = useNuxtApp()
+  // Real coffe
+  const { isSafariIOS } = useSafariIOSDetection()
 
+  const pixiCtx = useTemplateRef<any>('pixi')
+  const imgFrames = useTemplateRef<any>('imgFrames')
   const imagesWrapper = useTemplateRef<any>('imagesWrapper')
   const route = useRoute()
 
@@ -155,7 +158,11 @@
             { duration: 0.5, autoAlpha: 1 },
             '<'
           ) /* Start img-frames as sprite fades out */
-          .to(pixiCtx.value, { duration: 0.1, alpha: 0 }, '>') /* Hide canvas after sprite fades out */
+          .to(
+            pixiCtx.value,
+            { duration: 0.1, alpha: 0 },
+            '>'
+          ) /* Hide canvas after sprite fades out */
           .call(() => {
             /* Destroy PIXI resources after animation completes */
             destroyPixiResources()
@@ -167,7 +174,8 @@
           scrollTrigger: {
             trigger: '.about-wrapper',
             pinSpacing: true,
-            start: 'top bottom', /* when the top of the trigger hits the bottom of the viewport */
+            start:
+              'top bottom' /* when the top of the trigger hits the bottom of the viewport */,
             end: '+=50',
             scrub: 3,
           },
@@ -214,6 +222,7 @@
     <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
     <CommonAbstract
       class="front-header"
+      :class="{ 'front-header--ios-safari': isSafariIOS }"
       :label="store.data.intro?.heroIntroTitle"
       :delay="1"
       :desc="store.data.intro?.heroIntroDesc"
@@ -243,10 +252,9 @@
   .front-header {
     position: absolute;
     bottom: 0px;
-  }
-
-  img {
-    object-fit: cover;
+    &--ios-safari {
+      bottom: 80px;
+    }
   }
 
   .images-wrapper {

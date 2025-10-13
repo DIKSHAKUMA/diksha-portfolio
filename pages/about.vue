@@ -39,6 +39,5 @@
     overflow-x: visible;
     z-index: inherit;
     overflow: hidden;
-    overscroll-behavior-y: none;
   }
 </style>

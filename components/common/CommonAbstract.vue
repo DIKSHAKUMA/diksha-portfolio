@@ -167,7 +167,7 @@
     height: fit-content;
 
     width: 80%;
-    margin-bottom: $px-32-spacer;
+    margin-bottom: $px-64-spacer;
 
     &--hero {
       width: 80%;

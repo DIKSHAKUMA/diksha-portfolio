@@ -2,10 +2,12 @@
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '~/store/useFolioStore'
   import SplitType from 'split-type'
+  import { useSafariIOSDetection } from '~/composable/useSafariIOSDetection'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
   const { $gsap } = useNuxtApp()
+  const { isSafariIOS } = useSafariIOSDetection()
   let ctx: gsap.Context
 
   onMounted(() => {
@@ -44,7 +46,7 @@
 </script>
 
 <template>
-  <main ref="main" class="hero-wrapper">
+  <main class="hero-wrapper" :class="{ 'ios-safari': isSafariIOS }">
     <AnimContact />
     <CommonInfoLabel
       class="ilabel"
@@ -70,6 +72,7 @@
     <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
     <CommonAbstract
       class="front-header"
+      :class="{ 'front-header--ios-safari': isSafariIOS }"
       :label="store.data.contact?.viewHeroTitle"
       :delay="1"
       :desc="''"
@@ -108,43 +111,47 @@
     position: absolute;
     bottom: 0px;
     color: #faf7ff;
+    &--ios-safari {
+      bottom: 80px;
+    }
   }
 
   .contact {
     position: absolute;
     bottom: 100px;
-    left:50%;
+    left: 50%;
     transform: translateX(-50%);
     color: #faf7ff;
     z-index: 200;
+
+    .hero-wrapper.ios-safari & {
+      bottom: 180px;
+    }
 
     &__label {
       font-size: clamped(16px, 32px, 480px, 1920px);
     }
 
     &__email {
-      font-size: clamped(30px, 72px, 480px, 1920px);
+      font-size: clamped(20px, 42px, 480px, 1920px);
       color: #faf7ff;
 
-      text-decoration: underline;
-      text-underline-offset: 15px;
-      text-decoration-thickness: 4px;
-      text-decoration-color: #faf7ff;
+      text-decoration: none;
+      border-bottom: 4px solid #faf7ff;
+      padding-bottom: 5px;
       transition: color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67),
-        text-decoration-color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        border-bottom-color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 
       &:hover {
         color: $accent2;
-        text-decoration-color: $accent2;
+        border-bottom-color: $accent2;
       }
     }
 
-    
     @include this-and-above('sm') {
-      position:relative;
+      position: relative;
       top: $px-128-spacer;
-      bottom:unset;
+      bottom: unset;
     }
-
   }
 </style>

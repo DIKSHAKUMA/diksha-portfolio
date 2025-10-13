@@ -46,7 +46,7 @@
 
 <style scoped lang="scss">
   .line {
-    top: 0;
+    top: 5px;
     background-color: $accent2;
     display: block;
     height: 2px;

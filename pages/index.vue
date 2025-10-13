@@ -23,23 +23,22 @@
       <ViewProjectsHome />
       <ViewKnowSub />
       <ViewMetaSub />
-      <ViewFooterSub label="Projects" link="/projects" target="_self" linkLabel="View" />
+      <ViewFooterSub
+        label="Projects"
+        link="/projects"
+        target="_self"
+        linkLabel="View"
+      />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-  .pin {
-    height: 100vh;
-  }
-
   .home-wrapper {
     flex-flow: column;
     display: flex;
     position: relative;
     overflow-x: hidden;
     z-index: inherit;
-    /* Remove overflow: hidden to prevent scroll context conflicts */
-    /* Remove overscroll-behavior-y: none - blog post works without it! */
   }
 </style>
