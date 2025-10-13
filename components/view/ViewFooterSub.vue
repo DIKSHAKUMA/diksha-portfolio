@@ -52,6 +52,7 @@
     align-items: center;
     overflow: hidden;
     height: 100vh;
+    height:100dvh;
 
     &__label {
       font-size: clamped(36px, 52px, 480px, 1920px);

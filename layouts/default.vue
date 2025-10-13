@@ -10,7 +10,6 @@
 
 <style scoped lang="scss">
   .folio-wrapper {
-    /*overflow-y: hidden;*/
     position: relative;
   }
 </style>

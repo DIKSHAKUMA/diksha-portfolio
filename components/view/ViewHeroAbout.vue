@@ -1,13 +1,11 @@
 <script setup lang="ts">
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '~/store/useFolioStore'
-  import { useSafariIOSDetection } from '~/composable/useSafariIOSDetection'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
   const { $gsap } = useNuxtApp()
   const colorMode = useColorMode()
-  const { isSafariIOS } = useSafariIOSDetection()
 
   let ctx: gsap.Context
 
@@ -35,7 +33,6 @@
       <AnimP5Rings />
       <CommonAbstract
         class="front-header"
-        :class="{ 'front-header--ios-safari': isSafariIOS }"
         :label="store.data.about?.aboutHeroTitle"
         :delay="1"
         :desc="''"
@@ -57,6 +54,7 @@
     position: relative;
     width: 100%;
     height: 100vh;
+    height:100dvh;
     overflow: hidden;
     padding: 0 $px-16-spacer;
 
@@ -68,8 +66,5 @@
   .front-header {
     position: absolute;
     bottom: 0px;
-    &--ios-safari {
-      bottom: 80px;
-    }
   }
 </style>

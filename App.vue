@@ -54,7 +54,7 @@
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
-    <!-- Mobile: Hide every other blind for cleaner look --> 
+    <!-- Mobile: Hide every other blind for cleaner look -->
     <div class="venice__blind venice__blind--desktop"></div>
     <div class="venice__blind"></div>
     <div class="venice__blind venice__blind--desktop"></div>
@@ -78,6 +78,7 @@
     margin: 0;
     padding: 0;
     min-height: 100vh;
+    min-height: 100dvh;
     transition: background-color 1s;
     background-color: $primary;
     -webkit-font-smoothing: antialiased;
@@ -85,22 +86,13 @@
     -o-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: $sans-text;
-    font-variation-settings:
-      'slnt' 0,
-      'wght' 500;
-    overscroll-behavior: none;
+    font-variation-settings: 'slnt' 0, 'wght' 500;
+    overscroll-behavior-y: none;
+    overflow-x: hidden;
   }
 
-  html {
-    -webkit-text-size-adjust: none;
-    height: 100%;
-    overflow-y: auto;
-    scrollbar-gutter:stable;
-  }
-
-  body {
-    display: flex;
-    flex-direction: column;
+  body{
+      scrollbar-gutter: stable;
   }
 
   .venice {
@@ -140,7 +132,7 @@
       /* Mobile-first: Hide desktop blinds by default, show on md+ */
       &--desktop {
         display: none;
-        
+
         @include this-and-above('md') {
           display: block;
         }

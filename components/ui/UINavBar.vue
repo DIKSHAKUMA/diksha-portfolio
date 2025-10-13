@@ -431,9 +431,13 @@ just use a simple modal and be done with it. */
       color: $primary;
       font-weight: 400;
 
-      /* Lighter font weight in dark mode */
+      /* Mobile overlay has inverted colors, so invert font weight logic */
+      /* Light mode: overlay is white bg + black text = thin font (300) */
+      /* Dark mode: overlay is black bg + white text = normal font (400) */
+      font-weight: 300;
+      
       .dark-mode & {
-        font-weight: 300;
+        font-weight: 400;
       }
 
       &:hover {
@@ -508,7 +512,6 @@ just use a simple modal and be done with it. */
           padding-right: 0;
         }
       }
-
 
       &--link-active::before {
         margin-left: -11px;

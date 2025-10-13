@@ -5,6 +5,18 @@
   const colorMode = useColorMode()
   const isFirefox = ref(false)
   const showRaindrops = ref(false)
+  
+  /* Local Barcelona time that updates every minute */
+  const localTime = ref('')
+  
+  const updateLocalTime = () => {
+    localTime.value = new Date().toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'Europe/Madrid' // Barcelona timezone
+    })
+  }
 
   /* Fetch weather data client side only , openweather API */
   const {
@@ -46,10 +58,16 @@
     return drops
   })
 
+  let timeInterval: NodeJS.Timeout | null = null
+
   onMounted(() => {
     if (navigator.userAgent.toLowerCase().includes('firefox')) {
       isFirefox.value = true
     }
+
+    /* Initialize and start local time updates */
+    updateLocalTime() // Set initial time
+    timeInterval = setInterval(updateLocalTime, 60000) // Update every minute
 
     /* Delay raindrops to avoid Venice blind interference */
     setTimeout(() => {
@@ -57,7 +75,12 @@
     }, 1000) /* Adjust timing as needed - 600ms should be after Venice blind completes */
   })
 
-  onUnmounted(() => {})
+  onUnmounted(() => {
+    /* Clean up time interval */
+    if (timeInterval) {
+      clearInterval(timeInterval)
+    }
+  })
 </script>
 
 <template>
@@ -94,7 +117,7 @@
       >
         <div class="weather-widget__icon">🕐</div>
         <div class="weather-widget__label">{{ weatherData.location }}</div>
-        <div class="weather-widget__value">{{ weatherData.localTime }}</div>
+        <div class="weather-widget__value">{{ localTime }}</div>
       </div>
 
       <!-- Temperature Widget -->

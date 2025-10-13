@@ -10,6 +10,7 @@
   const { $lenis } = useNuxtApp()
 
   onMounted(() => {
+    
     $lenis.scrollTo(0, { immediate: true, force: true })
     
     // Multiple refresh attempts to handle async content loading
@@ -56,8 +57,6 @@
 
 <style lang="scss" scoped>
   .home-wrapper {
-    flex-flow: column;
-    display: flex;
     position: relative;
     overflow-x: hidden;
     z-index: inherit;

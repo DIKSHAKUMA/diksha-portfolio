@@ -316,7 +316,7 @@
       &--menu {
         width: 80px;
         height: 80px;
-        opacity: 0.5;
+        opacity: 0.9;
       }
 
       /* Easter egg */

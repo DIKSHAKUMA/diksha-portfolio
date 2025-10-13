@@ -2,12 +2,10 @@
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '~/store/useFolioStore'
   import SplitType from 'split-type'
-  import { useSafariIOSDetection } from '~/composable/useSafariIOSDetection'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
   const { $gsap } = useNuxtApp()
-  const { isSafariIOS } = useSafariIOSDetection()
   let ctx: gsap.Context
 
   onMounted(() => {
@@ -46,7 +44,7 @@
 </script>
 
 <template>
-  <main class="hero-wrapper" :class="{ 'ios-safari': isSafariIOS }">
+  <main class="hero-wrapper">
     <AnimContact />
     <CommonInfoLabel
       class="ilabel"
@@ -93,6 +91,7 @@
     position: relative;
     width: 100%;
     height: 100vh;
+    height:100dvh;
     overflow: hidden;
     padding: 0 $px-16-spacer;
 

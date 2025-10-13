@@ -88,6 +88,7 @@
     background-color: $primary;
     overflow: hidden;
     height: 100vh;
+    height: 100dvh;
     padding: $px-64-spacer $px-16-spacer;
 
     @include this-and-above('sm') {

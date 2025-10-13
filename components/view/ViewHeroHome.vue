@@ -4,7 +4,6 @@
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '~/store/useFolioStore'
   import { useHead } from '#imports' /* Nuxt composable for managing head tags */
-  import { useSafariIOSDetection } from '~/composable/useSafariIOSDetection'
 
   /* PINIA */
   const store = useFolioStore()
@@ -21,9 +20,6 @@
   })
 
   const { $gsap } = useNuxtApp()
-  // Real coffe
-  const { isSafariIOS } = useSafariIOSDetection()
-
   const pixiCtx = useTemplateRef<any>('pixi')
   const imgFrames = useTemplateRef<any>('imgFrames')
   const imagesWrapper = useTemplateRef<any>('imagesWrapper')
@@ -55,9 +51,12 @@
   const setImageDimensions = () => {
     if (imgFrames.value && pixiCtx.value && pixiReady) {
       const canvasWidth = pixiCtx.value.clientWidth || 400
-      const canvasHeight = pixiCtx.value.clientHeight || 300
+      // Maintain 4:3 aspect ratio to match 1600x1200 images
+      const aspectRatio = 4 / 3
+      const calculatedHeight = canvasWidth / aspectRatio
+
       imgFrames.value.style.width = canvasWidth + 'px'
-      imgFrames.value.style.height = canvasHeight + 'px'
+      imgFrames.value.style.height = calculatedHeight + 'px'
     } else if (imgFrames.value && !pixiReady) {
       /* If PIXI isn't ready yet, wait for it; more solid than a setTimeout */
       const checkReady = () => {
@@ -221,7 +220,6 @@
     <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
     <CommonAbstract
       class="front-header"
-      :class="{ 'front-header--ios-safari': isSafariIOS }"
       :label="store.data.intro?.heroIntroTitle"
       :delay="1"
       :desc="store.data.intro?.heroIntroDesc"
@@ -241,6 +239,7 @@
   .hero-wrapper {
     position: relative;
     height: 100vh;
+    height: 100dvh;
     padding: 0 $px-16-spacer;
 
     @include this-and-above('md') {
@@ -252,7 +251,7 @@
     position: absolute;
     bottom: 0px;
     &--ios-safari {
-      bottom: 80px;
+      bottom: 0px;
     }
   }
 
@@ -282,6 +281,8 @@
 
   canvas {
     width: 400px;
+    height: 300px; /* 4:3 aspect ratio (400 ÷ 4 × 3 = 300) */
+    aspect-ratio: 4 / 3;
     border-radius: 12px;
   }
 </style>
