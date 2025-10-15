@@ -51,6 +51,7 @@
       :label="'—Made by Thomas'"
       :class-name="'contact-label'"
       :hpos="'flex-end'"
+      :hover-label="''"
       :vpos="'flex-end'"
       :link="'https://github.com/thorstensson'"
       :force-white="true"
@@ -70,7 +71,6 @@
     <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
     <CommonAbstract
       class="front-header"
-      :class="{ 'front-header--ios-safari': isSafariIOS }"
       :label="store.data.contact?.viewHeroTitle"
       :delay="1"
       :desc="''"

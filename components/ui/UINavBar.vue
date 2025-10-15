@@ -221,7 +221,7 @@
               data-name="menu"
               class="contact action magnet"
               href="mailto:someone@example.com"
-              >thomas.thorstensson@gmail.com</a
+              >hello@thomasthorstensson.com</a
             >
           </template>
         </UINavFooter>
@@ -422,6 +422,7 @@ just use a simple modal and be done with it. */
 
     &__item {
       display: block;
+      position: relative;
       cursor: pointer;
       font-size: clamped(50px, 150px, 480px, 1920px);
       white-space: nowrap;
@@ -435,7 +436,7 @@ just use a simple modal and be done with it. */
       /* Light mode: overlay is white bg + black text = thin font (300) */
       /* Dark mode: overlay is black bg + white text = normal font (400) */
       font-weight: 300;
-      
+
       .dark-mode & {
         font-weight: 400;
       }
@@ -445,19 +446,23 @@ just use a simple modal and be done with it. */
       }
     }
 
-    &--link-active::before {
+    &__item::before {
       content: '•';
       margin-left: -15px;
       font-size: 38px;
       color: inherit;
-      margin: 0;
-      padding: 0;
       bottom: -5px;
       position: relative;
+      opacity: 0;
+      transition: opacity 0.2s ease;
 
       @include this-and-above('md') {
         font-size: 20px;
       }
+    }
+
+    &--link-active::before {
+      opacity: 1;
     }
 
     /* Switch to desktop */
@@ -489,13 +494,14 @@ just use a simple modal and be done with it. */
 
       &__item {
         display: inline-block;
+        position: relative;
         margin: 0;
         /*FONT SIZE OF NAVBAR ITEMS DESKTOP, RETURNED AS REM*/
         font-size: clamped(16px, 18px, 480px, 1920px);
         line-height: unset;
         padding-right: 25px;
         color: $secondary;
-        opacity: 1 !important;
+        opacity: 1;
         transition: transform 0.1s linear;
         font-weight: 400;
 
@@ -511,22 +517,28 @@ just use a simple modal and be done with it. */
         &:last-child {
           padding-right: 0;
         }
-      }
 
-      &--link-active::before {
-        margin-left: -11px;
-        font-size: 12px;
-        vertical-align: text-bottom;
-        position: relative;
-        right: -3px;
-        top: 1px;
+        &::before {
+          content: '•';
+          position: absolute;
+          left: -8px;
+          font-size: 12px;
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          margin-left: 0;
+          bottom: 0;
+        }
+
+        &.nav--link-active::before {
+          opacity: 1;
+        }
       }
     }
   }
 
   .burger {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     position: relative;
     transition: 0.1s;
     /*margin: 10px 10px;*/
@@ -534,8 +546,8 @@ just use a simple modal and be done with it. */
     display: inline-block;
 
     span {
-      width: 5px;
-      height: 5px;
+      width: 4px;
+      height: 4px;
       background-color: $secondary;
       display: block;
       border-radius: 50%;
@@ -553,7 +565,7 @@ just use a simple modal and be done with it. */
     }
 
     span:nth-child(2) {
-      left: 12px;
+      left: 10px;
       top: 0;
     }
 
@@ -564,18 +576,18 @@ just use a simple modal and be done with it. */
 
     span:nth-child(4) {
       left: 0;
-      top: 12px;
+      top: 10px;
     }
 
     span:nth-child(5) {
       position: absolute;
-      left: 12px;
-      top: 12px;
+      left: 10px;
+      top: 10px;
     }
 
     span:nth-child(6) {
       right: 0px;
-      top: 12px;
+      top: 10px;
     }
 
     span:nth-child(7) {
@@ -585,7 +597,7 @@ just use a simple modal and be done with it. */
 
     span:nth-child(8) {
       position: absolute;
-      left: 12px;
+      left: 10px;
       bottom: 0px;
     }
 
@@ -611,23 +623,23 @@ just use a simple modal and be done with it. */
     }
 
     &--anim span:nth-child(2) {
-      left: 6px;
-      top: 6px;
+      left: 5px;
+      top: 5px;
     }
 
     &--anim span:nth-child(4) {
-      left: 6px;
-      top: 18px;
+      left: 5px;
+      top: 15px;
     }
 
     &--anim span:nth-child(6) {
-      right: 6px;
-      top: 6px;
+      right: 5px;
+      top: 5px;
     }
 
     &--anim span:nth-child(8) {
-      left: 18px;
-      bottom: 6px;
+      left: 15px;
+      bottom: 5px;
     }
 
     /* Bubbles */

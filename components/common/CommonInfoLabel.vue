@@ -4,6 +4,7 @@
 
   interface Props {
     label: string
+    hoverLabel: string
     className: string
     hpos: string
     vpos: string
@@ -13,6 +14,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     label: '',
+    hoverLabel: '',
     className: '',
     hpos: 'flex-start',
     vpos: 'flex-start',
@@ -40,8 +42,8 @@
         v-else
         :to="link"
         class="action"
-        data-name="menu"
-        data-text="Moi"
+        data-name="yo"
+        :data-text="props.hoverLabel"
         target="_blank"
         >{{ label }}</NuxtLink
       >

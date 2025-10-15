@@ -501,6 +501,7 @@
           :label="'—Made by Thomas'"
           :class-name="'photo-label'"
           :hpos="'flex-end'"
+          :hover-label="''"
           :force-white="false"
           :vpos="'flex-end'"
           :link="'https://github.com/thorstensson'"

@@ -41,6 +41,7 @@
       :vpos="'flex-end'"
       :link="'https://github.com/thorstensson'"
       :force-white="false"
+      :hover-label="'Moi'"
     />
   </div>
 </template>

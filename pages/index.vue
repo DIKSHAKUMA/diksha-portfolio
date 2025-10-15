@@ -7,6 +7,51 @@
     },
   })
 
+  /* SEO Meta Tags for Home Page */
+  useSeoMeta({
+    title: 'Thomas Thorstensson • Creative Developer & Designer',
+    description: 'Creative developer and designer crafting digital experiences with modern web technologies. Specializing in Vue.js, Nuxt.js, and interactive code.',
+    keywords: 'Thomas Thorstensson, creative developer, web designer, Vue.js, Nuxt.js, Svelte, APIs, frontend developer, portfolio, interactive design',
+    author: 'Thomas Thorstensson',
+    robots: 'index, follow',
+    
+    /* Open Graph */
+    ogTitle: 'Thomas Thorstensson • Creative Developer & Designer',
+    ogDescription: 'Creative developer and designer crafting digital experiences with modern web technologies.',
+    ogImage: '/og-image.jpg',
+    ogImageAlt: 'Thomas Thorstensson Portfolio',
+    ogType: 'website',
+    ogUrl: 'https://thomasthorstensson.com',
+    ogSiteName: 'Thomas Thorstensson Portfolio',
+  })
+
+  /* Structured Data*/
+  useSchemaOrg([
+    {
+      '@type': 'Person',
+      name: 'Thomas Thorstensson',
+      jobTitle: 'Creative Developer & Designer',
+      url: 'https://thomasthorstensson.com',
+      sameAs: [
+        // Add your social media profiles
+        'https://https://github.com/thorstensson',
+        'https://linkedin.com/in/thomasthorstensson',
+        'https://bsky.app/profile/thorstensson.bsky.social'
+      ],
+      knowsAbout: ['Web Development', 'Vue.js', 'Nuxt.js', 'Creative Coding', 'UI/UX Design', 'APIs', 'Svelte'],
+    },
+    {
+      '@type': 'WebSite',
+      name: 'Thomas Thorstensson Portfolio',
+      url: 'https://thomasthorstensson.com',
+      description: 'Creative developer. I express content through motion and interactivity.',
+      author: {
+        '@type': 'Person',
+        name: 'Thomas Thorstensson'
+      }
+    }
+  ])
+
   const { $lenis } = useNuxtApp()
 
   onMounted(() => {

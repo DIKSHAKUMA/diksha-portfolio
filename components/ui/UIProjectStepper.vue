@@ -211,13 +211,16 @@
         })
     })
 
-    /* Setup PIXI effects after a short delay to ensure DOM is ready */
-    setTimeout(async () => {
+    /* Setup PIXI effects immediately - DOM should be ready by onMounted */
+    nextTick(async () => {
       if (prevCanvas.value && nextCanvas.value) {
-        await setupPixiEffect(prevCanvas.value, props.prevImg, false)
-        await setupPixiEffect(nextCanvas.value, props.nextImg, true)
+        /* Run both PIXI setups in parallel instead of sequential */
+        await Promise.all([
+          setupPixiEffect(prevCanvas.value, props.prevImg, false),
+          setupPixiEffect(nextCanvas.value, props.nextImg, true)
+        ])
       }
-    }, 100)
+    })
 
     window.addEventListener('resize', debouncedResize)
   })

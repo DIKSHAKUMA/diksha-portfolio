@@ -30,7 +30,7 @@
     z-index: 100;
     font-size: clamped(16px, 18px, 480px, 1920px);
     font-weight: 400;
-    
+
     /* Lighter font weight in dark mode */
     .dark-mode & {
       font-weight: 300;
@@ -43,8 +43,6 @@
   }
 
   .mode {
-    letter-spacing: 0.5px;
-    /* Even though align centre is set on container in NavBar, eagle eye says it's not enough */
-    margin-bottom: 2px;
+    margin-right: 3px;
   }
 </style>

@@ -12,21 +12,22 @@
     $gsap.registerPlugin(ScrollTrigger)
     ctx = $gsap.context((self) => {
       /* Pre-calculate the parallax distance to avoid function calls during scroll */
-      const parallaxDistance = -window.innerHeight * 0.25 /* Reduced from 0.33 for better performance */
+      const parallaxDistance =
+        -window.innerHeight *
+        0.25 /* Reduced from 0.33 for better performance */
 
       /* Parallax background animation - optimized for performance */
       $gsap.to('.parallax__bg', {
         y: parallaxDistance,
         scrollTrigger: {
-          trigger: parallaxWrapper.value, /* This now references the wrapper */
+          trigger: parallaxWrapper.value /* This now references the wrapper */,
           start: 'top bottom',
           end: 'bottom top',
           scrub: 1,
           pinSpacing: false,
-          invalidateOnRefresh: true,
-          refreshPriority: -1,
-          anticipatePin: 1,
-          fastScrollEnd: true,
+          fastScrollEnd: true, // ← Helps with fast scrolling
+          refreshPriority: -1, // ← Lower priority
+          invalidateOnRefresh: false, // ← Skip expensive r
         },
         force3D: true,
         transformOrigin: 'center center',

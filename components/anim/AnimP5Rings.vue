@@ -1,7 +1,7 @@
 <script setup lang="ts">
   const colorMode = useColorMode()
   let p5Instance: any = null
-  let isVisible = true /* Track visibility state */
+  let observer: IntersectionObserver | null = null
 
   /* We used Pixi and GSAP, now lets use P5 library, but stay on theme! */
 
@@ -45,40 +45,9 @@
       const p5 = await import('p5')
       const rings = 20
       let frameCount = 0
-
-      /* Set up Intersection Observer to watch timeline section: Keep Firefox happy */
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            /* When timeline section is visible, pause rings animation */
-            const shouldPause = entry.isIntersecting
-            if (p5Instance) {
-              if (shouldPause) {
-                p5Instance.noLoop() /* Pause animation when timeline is visible */
-              } else {
-                p5Instance.loop() /* Resume animation when timeline not visible */
-              }
-            }
-            isVisible = !shouldPause /* Invert logic for draw function */
-          })
-        },
-        {
-          threshold: 0,
-          rootMargin: '0px 0px -20% 0px', /* Trigger when timeline is 20% above bottom of viewport */
-        }
-      )
-
-      /* Wait for DOM to be ready, then observe parallax section */
-      nextTick(() => {
-        const parallaxElement = document.querySelector('.parallax__wrapper')
-        if (parallaxElement) {
-          observer.observe(parallaxElement)
-        } else {
-          console.warn(
-            '⚠ ViewParallaxAbout .parallax__wrapper not found - P5 rings will run continuously'
-          )
-        }
-      })
+      
+      /* Detect Firefox for performance optimization */
+      const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
 
       p5Instance = new p5.default((p: any) => {
         p.setup = () => {
@@ -95,9 +64,6 @@
         }
 
         p.draw = () => {
-          /* Only draw if visible - extra safety check */
-          if (!isVisible) return
-
           p.background(getCurrentBgColor()) /* Dynamic background from color mode */
 
           p.push()
@@ -160,18 +126,54 @@
           p.resizeCanvas(window.innerWidth, canvasHeight)
         }
       })
+      
+      /* Firefox-only Intersection Observer for performance */
+      if (isFirefox) {
+        observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              console.log('Parallax intersection:', entry.isIntersecting, entry.intersectionRatio)
+              if (entry.isIntersecting) {
+                /* Pause animation when parallax enters viewport */
+                console.log('Pausing P5 rings animation')
+                if (p5Instance) p5Instance.noLoop()
+              } else {
+                /* Resume animation when parallax leaves viewport */
+                console.log('Resuming P5 rings animation')
+                if (p5Instance) p5Instance.loop()
+              }
+            })
+          },
+          {
+            threshold: 0.05, /* Trigger when parallax is 5% visible */
+            rootMargin: '0px 0px 0px 0px', /* No margin - detect exact entry */
+          }
+        )
+        
+        /* Wait for DOM to be ready, then observe the parallax section */
+        nextTick(() => {
+          const parallaxSection = document.querySelector('.parallax__wrapper')
+          if (parallaxSection && observer) {
+            console.log('Observing parallax section for P5 rings')
+            observer.observe(parallaxSection)
+          } else {
+            console.warn('Parallax section not found for P5 rings observer')
+          }
+        })
+      }
 
-      /* Store observer reference for cleanup */
-      p5Instance._observer = observer
     }
   })
 
   onUnmounted(() => {
+    /* Clean up Intersection Observer */
+    if (observer) {
+      observer.disconnect()
+      observer = null
+    }
+    
+    /* Clean up P5 instance */
     if (p5Instance) {
-      /* Clean up intersection observer */
-      if (p5Instance._observer) {
-        p5Instance._observer.disconnect()
-      }
       p5Instance.remove()
       p5Instance = null
     }

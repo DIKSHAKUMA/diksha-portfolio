@@ -108,6 +108,7 @@
       :label="'Timeline'"
       :class-name="'timeline-info'"
       :hpos="'center'"
+      :hover-label="''"
       :force-white="false"
       :vpos="'flex-start'"
       :link="''"
@@ -149,6 +150,7 @@
       flex-flow: column nowrap;
       align-items: center;
       height: 100%;
+      height:100dvh;
       /* to get overflow to behave */
       position: relative;
       overflow: hidden;

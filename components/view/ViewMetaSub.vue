@@ -162,6 +162,7 @@
         :label="'About this folio'"
         :class-name="'meta-label'"
         :hpos="'center'"
+        :hover-label="''"
         :force-white="false"
         :vpos="'flex-start'"
         :link="''"

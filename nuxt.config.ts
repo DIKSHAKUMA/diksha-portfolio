@@ -9,24 +9,47 @@ export default defineNuxtConfig({
       meta: [
         {
           name: 'viewport',
-          content: 'width=device-width, initial-scale=1.0, viewport-fit=cover'
-        }
-      ]
-    }
+          content: 'width=device-width, initial-scale=1.0, viewport-fit=cover',
+        },
+      ],
+    },
   },
 
   site: {
     url: 'https://thomasthorstensson.com',
-    name: 'Folio v1 • Thomas Thorstensson',
-    /* ...etc */
+    name: 'Thomas Thorstensson • Creative Developer & Designer',
+    description:
+      'Creative developer and designer crafting digital experiences with modern web technologies.',
+    defaultLocale: 'en',
+  },
+
+  /* Enhanced SEO Configuration */
+  seo: {
+    redirectToCanonicalSiteUrl: true,
+  },
+
+  /* Sitemap Configuration */
+  sitemap: {
+    sources: [
+      '/api/__sitemap__/urls', // Auto-discover routes
+    ],
   },
 
   fonts: {
     processCSSVariables: true,
 
+    experimental: {
+      /* Defines whether to enable adding local fallbacks. Default is `false`. Might add some CLS but want to avoid font on font if user installed locally. */
+      disableLocalFallbacks: true,
+    },
+
     families: [
       { name: 'Sora', provider: 'google' },
-      { name: 'Geist', provider: 'google' },
+      {
+        name: 'Geist',
+        provider: 'google',
+        fallbacks: ['sans-serif']
+      },
       { name: 'Geist Mono', provider: 'google' },
     ],
 
@@ -46,6 +69,7 @@ export default defineNuxtConfig({
     '@nuxtjs/robots',
     'nuxt-site-config',
     '@nuxtjs/seo',
+    '@nuxtjs/sitemap', // Add sitemap module
     '@nuxt/fonts',
     '@nuxtjs/color-mode',
     '@nuxtjs/mdc',
@@ -125,7 +149,8 @@ export default defineNuxtConfig({
         name: 'hygraph',
         provider: 'hygraph',
         options: {
-          baseURL: 'https://eu-west-2.graphassets.com/cm4tev3k1008n01uo6egngvzu',
+          baseURL:
+            'https://eu-west-2.graphassets.com/cm4tev3k1008n01uo6egngvzu',
         },
       },
     },

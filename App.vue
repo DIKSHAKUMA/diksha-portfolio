@@ -93,6 +93,7 @@
 
   body{
       scrollbar-gutter: stable;
+      overscroll-behavior-y: none;
   }
 
   .venice {

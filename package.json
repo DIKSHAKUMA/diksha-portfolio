@@ -18,6 +18,7 @@
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/mdc": "^0.17.2",
     "@nuxtjs/seo": "^3.0.0-beta.3",
+    "@nuxtjs/sitemap": "^7.4.7",
     "@pinia/nuxt": "^0.10.1",
     "@stefanobartoletti/nuxt-social-share": "^1.2.3",
     "@vueuse/nuxt": "^12.4.0",

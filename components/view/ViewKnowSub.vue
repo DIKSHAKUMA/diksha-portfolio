@@ -78,6 +78,7 @@
         :label="'Creative Developer'"
         :class-name="'photo-label'"
         :hpos="'center'"
+        :hover-label="''"
         :force-white="false"
         :vpos="'flex-start'"
         :link="''"

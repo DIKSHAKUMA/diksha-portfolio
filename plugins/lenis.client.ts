@@ -1,4 +1,6 @@
 import Lenis from 'lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default defineNuxtPlugin((nuxtApp) => {
     // Detect iOS for ScrollTrigger compatibility
@@ -10,6 +12,9 @@ export default defineNuxtPlugin((nuxtApp) => {
         touchMultiplier: 2,
         wheelMultiplier: 1,
     });
+
+    // Synchronize Lenis scrolling with GSAP's ScrollTrigger plugin
+    lenis.on('scroll', ScrollTrigger.update);
 
     // Add refresh method to recalculate scroll bounds
     const refreshLenis = () => {

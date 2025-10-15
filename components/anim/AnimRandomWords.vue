@@ -245,18 +245,20 @@
           const bgColor = getCurrentBgColor()
           p.background(bgColor[0], bgColor[1], bgColor[2])
 
+          /* Cache time calculations once per frame for performance */
+          const frameTime = p.millis()
+          const time = frameTime * 0.001
+
           /* Draw floating words with dynamic colors */
-          for (let word of wordObjects) {
+          for (let i = 0; i < wordObjects.length; i++) {
+            const word = wordObjects[i]
             p.textSize(word.size)
 
-            /* Calculate floating position */
-            const floatX =
-              word.x + p.sin(p.millis() * word.speed + word.offsetX) * 20
-            const floatY =
-              word.y + p.cos(p.millis() * word.speed + word.offsetY) * 15
+            /* Calculate floating position - cached time */
+            const floatX = word.x + p.sin(frameTime * word.speed + word.offsetX) * 20
+            const floatY = word.y + p.cos(frameTime * word.speed + word.offsetY) * 15
 
-            /* Dynamic color based on position and time - no opacity! */
-            const time = p.millis() * 0.001
+            /* Simplified color calculation for performance */
             const colorShift = p.sin(time + word.offsetX) * 30
 
             if (colorMode.preference === 'light') {
@@ -281,25 +283,16 @@
           }
         }
 
-        /* Handle window resize */
+        /* Handle window resize - optimized to just update positions */
         p.windowResized = () => {
           p.resizeCanvas(window.innerWidth, window.innerHeight)
 
-          /* Recreate word objects with new canvas dimensions
-           * Reserve minimal space for CommonAbstract (about 120px from bottom) */
+          /* Update existing word positions instead of recreating objects */
           const reservedBottomSpace = 120
-          wordObjects = []
-          for (let i = 0; i < wordCount; i++) {
-            const randomWord = words[position + i] || words[i % words.length]
-            wordObjects.push({
-              text: randomWord,
-              x: p.random(p.width),
-              y: p.random(0, p.height - reservedBottomSpace), /* Avoid bottom 200px */
-              size: p.random(16, 48),
-              offsetX: p.random(0, p.TWO_PI),
-              offsetY: p.random(0, p.TWO_PI),
-              speed: p.random(0.001, 0.003),
-            })
+          for (let i = 0; i < wordObjects.length; i++) {
+            /* Keep existing properties, just update positions */
+            wordObjects[i].x = p.random(p.width)
+            wordObjects[i].y = p.random(0, p.height - reservedBottomSpace)
           }
         }
       })

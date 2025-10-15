@@ -1,40 +1,41 @@
 <script setup lang="ts">
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '~/store/useFolioStore'
-  import SplitType from 'split-type'
   import { ref, onMounted } from 'vue'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
   const { $gsap } = useNuxtApp()
   let ctx: gsap.Context
-  const splitInstances: SplitType[] = []
 
   onMounted(() => {
     $gsap.registerPlugin(ScrollTrigger)
 
     ctx = $gsap.context((self) => {
-      let sectionsChar = $gsap.utils.toArray('.split-code-w')
-      sectionsChar.forEach((sec: any) => {
-        const splitTxt = new SplitType(sec, { types: 'words' })
-        splitInstances.push(splitTxt)
-        $gsap.set(splitTxt.words, {
-          autoAlpha: 0,
-          clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
+      /* Animate entire sections instead of individual words */
+      const sections = $gsap.utils.toArray('.code__value-block')
+      
+      sections.forEach((section: any) => {
+        /* Set initial state */
+        $gsap.set(section, {
+          opacity: 0,
+          y: 30,
         })
-        $gsap.to(splitTxt.words, {
-          autoAlpha: 1,
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+        
+        /* Animate section on scroll */
+        $gsap.to(section, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power2.out',
           scrollTrigger: {
-            trigger: sec,
-            start: 'top 90%',
-            scrub: false,
-            end: 'top 50%',
-            toggleActions: 'restart none none reverse',
-            preventOverlaps: true, /* <- HERE */
-            /* markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 } */
+            trigger: section,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+            fastScrollEnd: true,
+            refreshPriority: -1,
+            invalidateOnRefresh: false,
           },
-          duration: 0.4,
         })
       })
     })
@@ -43,12 +44,6 @@
   onUnmounted(() => {
     /* Clean up GSAP context */
     ctx?.revert()
-    /* Clean up SplitType instancesza */
-    splitInstances.forEach((instance) => {
-      instance.revert()
-    })
-    /* Clear the array */
-    splitInstances.length = 0
   })
 </script>
 
@@ -74,6 +69,7 @@
         :label="'Values'"
         :class-name="'photo-label'"
         :hpos="'center'"
+        :hover-label="''"
         :force-white="false"
         :vpos="'flex-start'"
         :link="''"

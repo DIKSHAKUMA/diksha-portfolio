@@ -45,27 +45,49 @@
     ctx = $gsap.context((self) => {
       $gsap.registerPlugin(ScrollTrigger)
 
+      /* Detect Firefox for performance optimization */
+      const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
+
       /* Batch DOM queries for better performance */
       const images = $gsap.utils.toArray('.projects__abstract__image')
 
-      /* Optimize image reveal animation */
+      /* Firefox gets simple fade, others get full clipPath reveal */
       images.forEach((img: any) => {
-        $gsap.to(img, {
-          yPercent: 0,
-          opacity: 1,
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          duration: 0.5 /* Faster duration */,
-          ease: 'power1.out',
-          scrollTrigger: {
-            trigger: img,
-            start: 'top 90%' /* Consistent with text */,
-            end: 'top 60%',
-            /* onEnter, onLeave, onEnterBack, and onLeaveBack, */
-            toggleActions: 'play none none reverse',
-            preventOverlaps: true,
-            anticipatePin: 1,
-          },
-        })
+        if (isFirefox) {
+          /* Simple opacity fade for Firefox - no clipPath */
+          $gsap.to(img, {
+            opacity: 1,
+            clipPath: 'none',
+            duration: 0.4,
+            ease: 'power1.out',
+            scrollTrigger: {
+              trigger: img,
+              start: 'top 90%',
+              toggleActions: 'play none none reverse',
+              fastScrollEnd: true, // ← Helps with fast scrolling
+              refreshPriority: -1, // ← Lower priority
+              invalidateOnRefresh: false, // ← Skip expensive r
+            },
+          })
+        } else {
+          /* Full clipPath reveal for Chrome/Safari/Edge */
+          $gsap.to(img, {
+            yPercent: 0,
+            opacity: 1,
+            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+            duration: 0.5,
+            ease: 'power1.out',
+            scrollTrigger: {
+              trigger: img,
+              start: 'top 90%',
+              end: 'top 60%',
+              toggleActions: 'play none none reverse',
+              refreshPriority: -1, // ← Lower priority
+              invalidateOnRefresh: false, // ← Skip expensive r
+              preventOverlaps: true,
+            },
+          })
+        }
 
         /* GSAP hover animation to avoid CSS transform conflicts */
         img.parentElement.addEventListener('mouseenter', () => {
@@ -157,6 +179,7 @@
       :label="'Projects—more to come'"
       :class-name="'project-label'"
       :hpos="'center'"
+      :hover-label="''"
       :force-white="false"
       :vpos="'flex-start'"
       :link="''"
@@ -252,6 +275,7 @@
         position: relative;
         overflow: hidden;
         cursor: pointer;
+        opacity: 0;
         clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
         border-radius: 12px;
         aspect-ratio: 16/9;

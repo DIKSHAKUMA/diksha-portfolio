@@ -85,7 +85,7 @@
         y: Math.round(pos.y - rect.height / 2),
         scaleX: 1 + scale,
         scaleY: 1 - scale,
-        force3D: true, /* Hardware acceleration */
+        force3D: true /* Hardware acceleration */,
       })
     }
   }
@@ -242,7 +242,7 @@
 
 <style scoped lang="scss">
   .up-arrow {
-    width: 24px;
+    width: 20px;
     height: auto;
     pointer-events: none;
     margin-left: 5px;
@@ -280,7 +280,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.5);
       width: 20px;
       height: 20px;
       border: 1px solid rgba(250, 247, 255, 0.3);
@@ -300,10 +300,10 @@
 
       /* different hover states */
       &--proj {
-        width: 90px;
-        height: 90px;
+        width: 80px;
+        height: 80px;
         background-color: unset;
-        opacity: .9;
+        opacity: 0.9;
       }
 
       &--reel {
@@ -314,8 +314,8 @@
       }
 
       &--menu {
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 70px;
         opacity: 0.9;
       }
 
@@ -323,7 +323,7 @@
       &--yo {
         width: 80px;
         height: 80px;
-        opacity: .8;
+        opacity: 0.9;
         background-color: unset;
 
         .cursor__shape__text {
