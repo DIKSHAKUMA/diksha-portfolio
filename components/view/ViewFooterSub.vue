@@ -98,7 +98,7 @@
     padding: 0 $px-16-spacer;
     overflow: hidden;
 
-    --dot-size: 2px;
+    --dot-size: 3px;
     --dot-space: 50px;
     /* dont ask me how linear backgrounds function, but google provides, it is complex*/
     background: linear-gradient(
