@@ -280,10 +280,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.5);
       width: 20px;
       height: 20px;
-      border: 1px solid rgba(250, 247, 255, 0.3);
+      border: 1px solid rgba(250, 247, 255, 0.1);
       border-radius: 50%;
       pointer-events: none;
       transform-origin: center center;
@@ -302,14 +301,12 @@
       &--proj {
         width: 80px;
         height: 80px;
-        background-color: unset;
         opacity: 0.9;
       }
 
       &--reel {
         width: 50px;
         height: 50px;
-        background-color: unset;
         opacity: 0.9;
       }
 
@@ -321,10 +318,9 @@
 
       /* Easter egg */
       &--yo {
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 70px;
         opacity: 0.9;
-        background-color: unset;
 
         .cursor__shape__text {
           color: $secondary;

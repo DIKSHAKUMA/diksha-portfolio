@@ -51,7 +51,7 @@
       :label="'—Made by Thomas'"
       :class-name="'contact-label'"
       :hpos="'flex-end'"
-      :hover-label="''"
+      :hover-label="'Moi'"
       :vpos="'flex-end'"
       :link="'https://github.com/thorstensson'"
       :force-white="true"
