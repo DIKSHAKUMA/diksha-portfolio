@@ -12,6 +12,11 @@ export const useFolioStore = defineStore('folio', {
     persist: true,
 
     actions: {
+        clearCache() {
+            _data.value = null
+            _error.value = null
+        },
+        
         async fetchData() {
             try {
                 const response = await $fetch('/api/graphql', {

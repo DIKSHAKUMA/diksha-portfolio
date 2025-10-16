@@ -150,7 +150,6 @@
       flex-flow: column nowrap;
       align-items: center;
       height: 100%;
-      height:100dvh;
       /* to get overflow to behave */
       position: relative;
       overflow: hidden;

@@ -31,7 +31,6 @@ export default defineNuxtConfig({
   /* Sitemap Configuration */
   sitemap: {
     urls: async () => {
-      const urls = []
       
       /* Static pages with SEO optimization - use actual last modified dates */
       const staticPages = [
@@ -67,75 +66,7 @@ export default defineNuxtConfig({
         }
       ]
       
-
-      /* Fetch pages from endpoint for SEO */
-      urls.push(...staticPages)
-      
-      try {
-        /* Dynamically fetch project pages if GraphQL is available */
-        const { $fetch } = await import('ofetch')
-        const projectsQuery = `
-          query GetProjects {
-            projects {
-              id
-              updatedAt
-            }
-          }
-        `
-        
-        const response = await $fetch('https://thomasthorstensson.com/api/graphql', {
-          method: 'POST',
-          body: {
-            query: projectsQuery
-          }
-        }).catch(() => null)
-        
-        if (response?.data?.projects) {
-          const projectUrls = response.data.projects.map((project: any) => ({
-            loc: `/project/${project.id}`,
-            lastmod: project.updatedAt || new Date().toISOString(),
-            changefreq: 'monthly',
-            priority: 0.7
-          }))
-          urls.push(...projectUrls)
-        }
-      } catch (error) {
-        console.warn('Failed to fetch projects for sitemap:', error)
-      }
-      
-      try {
-        /* Dynamically fetch blog post pages if GraphQL is available */
-        const { $fetch } = await import('ofetch')
-        const blogQuery = `
-          query GetBlogPosts {
-            blogPosts {
-              id
-              updatedAt
-            }
-          }
-        `
-        
-        const response = await $fetch('https://thomasthorstensson.com/api/graphql', {
-          method: 'POST',
-          body: {
-            query: blogQuery
-          }
-        }).catch(() => null)
-        
-        if (response?.data?.blogPosts) {
-          const blogUrls = response.data.blogPosts.map((post: any) => ({
-            loc: `/blog-post/${post.id}`,
-            lastmod: post.updatedAt || new Date().toISOString(),
-            changefreq: 'monthly',
-            priority: 0.6
-          }))
-          urls.push(...blogUrls)
-        }
-      } catch (error) {
-        console.warn('Failed to fetch blog posts for sitemap:', error)
-      }
-      
-      return urls
+      return staticPages
     },
     /* Additional sitemap configuration for better SEO */
     defaults: {
