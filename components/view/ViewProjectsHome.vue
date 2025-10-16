@@ -280,6 +280,7 @@
         border-radius: 12px;
         aspect-ratio: 16/9;
         /* Match exact image dimensions (1.78:1) */
+        filter: brightness(1.01);
       }
 
       &__image:after {

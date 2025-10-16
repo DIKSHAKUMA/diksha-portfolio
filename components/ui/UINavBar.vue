@@ -5,7 +5,7 @@
   const navlist = useTemplateRef('navlist')
   const isDown = ref(false)
   const isMobileActive = ref(false)
-  const isLightMode = ref<boolean>(true)
+  const isLightMode = ref<boolean>(false)
   const route = useRoute()
 
   /* Check if current route is in blog section */

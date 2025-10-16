@@ -141,7 +141,7 @@
     contain: layout style paint;
     /* CSS containment for better performance */
     image-rendering: optimizeSpeed;
-    background-image: url('/img/vinyl.jpg');
+    background-image: url('/img/vinyl-2.jpg');
 
     /* Firefox-specific optimizations */
     @-moz-document url-prefix() {
@@ -149,8 +149,8 @@
       image-rendering: optimizeSpeed;
     }
 
-    @supports (background-image: url('/img/vinyl.webp')) {
-      background-image: url('/img/vinyl.webp');
+    @supports (background-image: url('/img/vinyl-2.webp')) {
+      background-image: url('/img/vinyl-2.webp');
     }
 
     /* Very small mobile screens - extra aggressive left positioning */

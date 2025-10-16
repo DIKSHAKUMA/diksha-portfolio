@@ -14,14 +14,14 @@
     ctx = $gsap.context((self) => {
       /* Animate entire sections instead of individual words */
       const sections = $gsap.utils.toArray('.code__value-block')
-      
+
       sections.forEach((section: any) => {
         /* Set initial state */
         $gsap.set(section, {
           opacity: 0,
           y: 30,
         })
-        
+
         /* Animate section on scroll */
         $gsap.to(section, {
           opacity: 1,
@@ -95,7 +95,6 @@
         </div>
 
         <div class="code__value-block">
-          
           <h2 class="code__value-title split-code-w">
             {{ store.data.about?.codeThreeTitle }}
           </h2>

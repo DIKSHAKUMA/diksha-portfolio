@@ -322,8 +322,12 @@
         height: 70px;
         opacity: 0.9;
 
+        .light-mode & {
+          background: rgba(23, 23, 23, 0.1);
+        }
+
         .cursor__shape__text {
-          color: $secondary;
+          color:#faf7ff;
         }
       }
 

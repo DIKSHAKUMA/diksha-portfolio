@@ -30,9 +30,119 @@ export default defineNuxtConfig({
 
   /* Sitemap Configuration */
   sitemap: {
-    sources: [
-      '/api/__sitemap__/urls', // Auto-discover routes
-    ],
+    urls: async () => {
+      const urls = []
+      
+      /* Static pages with SEO optimization - use actual last modified dates */
+      const staticPages = [
+        {
+          loc: '/',
+          lastmod: '2025-10-16', /* Update when homepage content changes */
+          changefreq: 'weekly',
+          priority: 1.0
+        },
+        {
+          loc: '/about',
+          lastmod: '2025-10-15', /* Update when about page changes */
+          changefreq: 'monthly',
+          priority: 0.8
+        },
+        {
+          loc: '/projects',
+          lastmod: '2025-10-15', /* Update when projects list changes */
+          changefreq: 'weekly',
+          priority: 0.9
+        },
+        {
+          loc: '/blog',
+          lastmod: '2025-10-10', /* Update when blog structure changes */
+          changefreq: 'weekly',
+          priority: 0.8
+        },
+        {
+          loc: '/contact',
+          lastmod: '2025-10-16', /* Update when contact info changes */
+          changefreq: 'monthly',
+          priority: 0.7
+        }
+      ]
+      
+
+      /* Fetch pages from endpoint for SEO */
+      urls.push(...staticPages)
+      
+      try {
+        /* Dynamically fetch project pages if GraphQL is available */
+        const { $fetch } = await import('ofetch')
+        const projectsQuery = `
+          query GetProjects {
+            projects {
+              id
+              updatedAt
+            }
+          }
+        `
+        
+        const response = await $fetch('https://thomasthorstensson.com/api/graphql', {
+          method: 'POST',
+          body: {
+            query: projectsQuery
+          }
+        }).catch(() => null)
+        
+        if (response?.data?.projects) {
+          const projectUrls = response.data.projects.map((project: any) => ({
+            loc: `/project/${project.id}`,
+            lastmod: project.updatedAt || new Date().toISOString(),
+            changefreq: 'monthly',
+            priority: 0.7
+          }))
+          urls.push(...projectUrls)
+        }
+      } catch (error) {
+        console.warn('Failed to fetch projects for sitemap:', error)
+      }
+      
+      try {
+        /* Dynamically fetch blog post pages if GraphQL is available */
+        const { $fetch } = await import('ofetch')
+        const blogQuery = `
+          query GetBlogPosts {
+            blogPosts {
+              id
+              updatedAt
+            }
+          }
+        `
+        
+        const response = await $fetch('https://thomasthorstensson.com/api/graphql', {
+          method: 'POST',
+          body: {
+            query: blogQuery
+          }
+        }).catch(() => null)
+        
+        if (response?.data?.blogPosts) {
+          const blogUrls = response.data.blogPosts.map((post: any) => ({
+            loc: `/blog-post/${post.id}`,
+            lastmod: post.updatedAt || new Date().toISOString(),
+            changefreq: 'monthly',
+            priority: 0.6
+          }))
+          urls.push(...blogUrls)
+        }
+      } catch (error) {
+        console.warn('Failed to fetch blog posts for sitemap:', error)
+      }
+      
+      return urls
+    },
+    /* Additional sitemap configuration for better SEO */
+    defaults: {
+      changefreq: 'weekly',
+      priority: 0.5,
+      lastmod: new Date().toISOString()
+    }
   },
 
   fonts: {
@@ -69,7 +179,7 @@ export default defineNuxtConfig({
     '@nuxtjs/robots',
     'nuxt-site-config',
     '@nuxtjs/seo',
-    '@nuxtjs/sitemap', // Add sitemap module
+    '@nuxtjs/sitemap', /* Add sitemap module */
     '@nuxt/fonts',
     '@nuxtjs/color-mode',
     '@nuxtjs/mdc',
@@ -77,7 +187,7 @@ export default defineNuxtConfig({
   ],
 
   colorMode: {
-    preference: 'light',
+    preference: 'dark',
   },
 
   mdc: {
@@ -135,10 +245,10 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     openWeatherApiKey:
-      '' /* Will be populated from NUXT_OPEN_WEATHER_API_KEY env var */,
-    gqlHost: '' /* Will be populated from NUXT_GQL_HOST env var */,
+      '', /* Will be populated from NUXT_OPEN_WEATHER_API_KEY env var */
+    gqlHost: '', /* Will be populated from NUXT_GQL_HOST env var */
     public: {
-      // Public runtime config - exposed to client-side
+      /* Public runtime config - exposed to client-side */
     },
   },
 
@@ -155,7 +265,7 @@ export default defineNuxtConfig({
       },
     },
     domains: ['eu-west-2.graphassets.com'],
-    // Don't optimize external images in production
+    /* Don't optimize external images in production */
     provider: process.env.NODE_ENV === 'production' ? 'none' : 'ipx',
   },
 
@@ -181,6 +291,14 @@ export default defineNuxtConfig({
 
   robots: {
     blockNonSeoBots: true,
+    sitemap: 'https://thomasthorstensson.com/sitemap.xml',
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        sitemap: 'https://thomasthorstensson.com/sitemap.xml'
+      }
+    ]
   },
 
   devtools: { enabled: false },
