@@ -293,7 +293,7 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 
       .light-mode & {
-        background: rgba(23, 23, 23, 0.1);
+        background: #1717171a;
         border-color: rgba(23, 23, 23, 0.1);
       }
 
@@ -321,10 +321,6 @@
         width: 70px;
         height: 70px;
         opacity: 0.9;
-
-        .light-mode & {
-          background: rgba(23, 23, 23, 0.1);
-        }
 
         .cursor__shape__text {
           color:#faf7ff;

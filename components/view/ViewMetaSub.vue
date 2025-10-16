@@ -25,6 +25,7 @@
     }
   }
 
+
   /**
    * Rock on.
    */
@@ -197,7 +198,7 @@
             <NuxtLink :to="store.data.intro?.metaRepoUrl">Folio</NuxtLink>
           </p>
         </div>
-        <div>
+        <div class="canvas-container">
           <div class="canvas-wrapper">
             <canvas class="meta__img" ref="pixi"></canvas>
           </div>
@@ -208,15 +209,28 @@
 </template>
 
 <style lang="scss" scoped>
+  .canvas-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
   .canvas-wrapper {
     overflow: hidden;
-    display: inline-block;
+    border-radius: 16px;
+    max-width: 100%;
+    
+    @media (max-width: 767px) {
+      border-radius: 12px;
+      max-width: 90vw;
+    }
   }
 
   canvas {
     display: block;
-    margin: 0 auto;
     pointer-events: none;
+    max-width: 100%;
+    height: auto;
   }
 
   h2,
