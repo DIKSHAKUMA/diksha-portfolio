@@ -53,7 +53,6 @@
     align-items: center;
     overflow: hidden;
     height: 100vh;
-    height:100dvh;
 
     &__label {
       font-size: clamped(36px, 52px, 480px, 1920px);
@@ -97,19 +96,21 @@
     position: relative;
     padding: 0 $px-16-spacer;
     overflow: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
 
     --dot-size: 3px;
     --dot-space: 50px;
-    /* dont ask me how linear backgrounds function, but google provides, it is complex*/
+
     background: linear-gradient(
           90deg,
           $primary calc(var(--dot-space) - var(--dot-size)),
-          transparent 99%
+          transparent 101%
         )
         center / var(--dot-space) var(--dot-space),
       linear-gradient(
           $primary calc(var(--dot-space) - var(--dot-size)),
-          transparent 99%
+          transparent 101%
         )
         center / var(--dot-space) var(--dot-space),
       $secondary;

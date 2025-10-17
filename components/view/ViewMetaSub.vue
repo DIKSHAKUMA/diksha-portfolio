@@ -25,7 +25,6 @@
     }
   }
 
-
   /**
    * Rock on.
    */
@@ -95,7 +94,9 @@
               scrub: false,
               end: 'top 50%',
               toggleActions: 'restart none none reverse',
-              preventOverlaps: true,
+              fastScrollEnd: true, // ← Helps with fast scrolling
+              refreshPriority: -1, // ← Lower priority
+              invalidateOnRefresh: false, // ← Skip expensive refresh
             },
             duration: 0.4,
           })
@@ -209,52 +210,13 @@
 </template>
 
 <style lang="scss" scoped>
-  .canvas-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .canvas-wrapper {
-    overflow: hidden;
-    border-radius: 16px;
-    max-width: 100%;
-    
-    @media (max-width: 767px) {
-      border-radius: 12px;
-      max-width: 90vw;
-    }
-  }
-
-  canvas {
-    display: block;
-    pointer-events: none;
-    max-width: 100%;
-    height: auto;
-  }
-
-  h2,
-  h3,
-  h4,
-  h5 {
-    color: #171717;
-    font-weight: 600;
-  }
-
-  h3 {
-    font-weight: 500;
-  }
-
-  .meta-index {
-    position: absolute;
-  }
 
   .meta-wrapper {
     position: relative;
     padding: 0 $px-16-spacer;
     overflow: hidden;
     background-color: $primary;
-    padding: $px-64-spacer $px-16-spacer;
+    padding: $px-128-spacer $px-16-spacer;
 
     @include this-and-above('sm') {
       padding: $px-128-spacer $px-32-spacer;
@@ -316,5 +278,52 @@
         margin-bottom: $px-32-spacer;
       }
     }
+  }
+  .canvas-container {
+    display: flex;
+    justify-content: center;
+    height: 450px;
+
+    @include this-and-above('sm') {
+      height: 100%;
+    }
+  }
+
+  .canvas-wrapper {
+    overflow: hidden;
+    border-radius: 16px;
+    max-width: 100%;
+
+    @media (max-width: 767px) {
+      border-radius: 12px;
+      max-width: 90vw;
+    }
+  }
+
+  canvas {
+    display: block;
+    pointer-events: none;
+    max-width: 100%;
+    height: 450px;
+
+    @include this-and-above('sm') {
+      height: 100%;
+    }
+  }
+
+  h2,
+  h3,
+  h4,
+  h5 {
+    color: #171717;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-weight: 500;
+  }
+
+  .meta-index {
+    position: absolute;
   }
 </style>

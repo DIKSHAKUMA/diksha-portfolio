@@ -32,7 +32,9 @@
     position: relative;
     overflow-x: visible;
     z-index: inherit;
-    overflow: hidden;
+    overflow-x: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
     /* Prevent SCSS parsing errors */
   }
 </style>

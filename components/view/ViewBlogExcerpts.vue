@@ -97,9 +97,9 @@
   .excerpts-wrapper {
     position: relative;
     background-color: $primary;
-    padding: $px-64-spacer $px-16-spacer;
+    padding: $px-128-spacer $px-16-spacer;
     height: 100vh;
-    height: 100dvh;
+    min-height: 100dvh;
 
     @include this-and-above('lg') {
       padding: $px-128-spacer $px-64-spacer;

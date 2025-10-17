@@ -5,6 +5,7 @@
   const navlist = useTemplateRef('navlist')
   const isDown = ref(false)
   const isMobileActive = ref(false)
+  const isAnimating = ref(false)
   const isLightMode = ref<boolean>(false)
   const route = useRoute()
 
@@ -34,22 +35,36 @@
    * Turns full modal on smaller devices. Hides on scroll down.
    */
   const toggleMenu = () => {
+    // Prevent clicks during animation
+    if (isAnimating.value) return
+    
+    isAnimating.value = true
     isMobileActive.value = !isMobileActive.value
+    
     if (isMobileActive.value) {
       $gsap.fromTo(
         '.nav__item',
         { opacity: 0, x: -40 },
         {
-          duration: 0.3,
+          duration: 0.2,
           opacity: 1,
           x: 0,
-          stagger: 0.2,
+          stagger: 0.1,
           ease: 'power3.out',
           delay: 0.5,
+          onComplete: () => {
+            isAnimating.value = false
+          }
         }
       )
     } else {
-      $gsap.to('.nav__item', { duration: 0.2, opacity: 0 })
+      $gsap.to('.nav__item', { 
+        duration: 0.2, 
+        opacity: 0,
+        onComplete: () => {
+          isAnimating.value = false
+        }
+      })
     }
   }
 
@@ -101,8 +116,8 @@
       () => isLightMode.value,
       (newValue, oldValue) => {
         newValue == true
-          ? (colorMode.preference = 'light')
-          : (colorMode.preference = 'dark')
+          ? (colorMode.value = 'light')
+          : (colorMode.value = 'dark')
       },
       { immediate: true }
     )
@@ -131,7 +146,7 @@
               to="/"
               data-name="yo"
               data-text="Home"
-              class="logo action magnet"
+              class="logo action"
               @click="closeMenu"
               >THOMAS
             </NuxtLink>
@@ -152,9 +167,12 @@
             to="/projects"
             data-name="menu"
             class="nav__item action magnet"
-            :class="{ 'nav--link-active': isProjectsActive }"
+            :class="{ 
+              'nav--link-active': isProjectsActive,
+              'nav__item--disabled': isAnimating
+            }"
             no-prefetch
-            @click="closeMenu"
+            @click="!isAnimating && closeMenu()"
           >
             Projects
           </NuxtLink>
@@ -163,9 +181,12 @@
             to="/blog"
             data-name="menu"
             class="nav__item action magnet"
-            :class="{ 'nav--link-active': isBlogActive }"
+            :class="{ 
+              'nav--link-active': isBlogActive,
+              'nav__item--disabled': isAnimating
+            }"
             no-prefetch
-            @click="closeMenu"
+            @click="!isAnimating && closeMenu()"
           >
             Blog
           </NuxtLink>
@@ -174,9 +195,12 @@
             to="/about"
             data-name="menu"
             class="nav__item action magnet"
-            activeClass="nav--link-active"
+            :class="[
+              { 'nav--link-active': route.path === '/about' },
+              { 'nav__item--disabled': isAnimating }
+            ]"
             no-prefetch
-            @click="closeMenu"
+            @click="!isAnimating && closeMenu()"
           >
             About
           </NuxtLink>
@@ -185,9 +209,12 @@
             to="/contact"
             data-name="menu"
             class="nav__item action magnet"
-            activeClass="nav--link-active"
+            :class="[
+              { 'nav--link-active': route.path === '/contact' },
+              { 'nav__item--disabled': isAnimating }
+            ]"
             no-prefetch
-            @click="closeMenu"
+            @click="!isAnimating && closeMenu()"
           >
             Contact
           </NuxtLink>
@@ -231,7 +258,10 @@
         class="burger action"
         data-name="menu"
         @click="toggleMenu"
-        :class="{ 'burger--anim': isMobileActive }"
+        :class="{ 
+          'burger--anim': isMobileActive,
+          'burger--disabled': isAnimating
+        }"
       >
         <span></span>
         <span></span>
@@ -444,6 +474,12 @@ just use a simple modal and be done with it. */
       &:hover {
         color: $accent1;
       }
+
+      &--disabled {
+        pointer-events: none;
+        opacity: 0.5;
+        cursor: default;
+      }
     }
 
     &__item::before {
@@ -541,9 +577,19 @@ just use a simple modal and be done with it. */
     height: 25px;
     position: relative;
     transition: 0.1s;
-    /*margin: 10px 10px;*/
     cursor: pointer;
     display: inline-block;
+    
+    /* Invisible larger touch area - keeps visual size small but improves touch target */
+    &::before {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      right: -15px;
+      bottom: -15px;
+      /* Creates a 55x55px invisible touch area around the 25x25px visual icon */
+    }
 
     span {
       width: 4px;
@@ -640,6 +686,19 @@ just use a simple modal and be done with it. */
     &--anim span:nth-child(8) {
       left: 15px;
       bottom: 5px;
+    }
+
+    &--disabled {
+      pointer-events: none;
+      opacity: 0.6;
+      
+      span {
+        transition: none;
+      }
+      
+      &:hover span {
+        transform: none;
+      }
     }
 
     /* Bubbles */

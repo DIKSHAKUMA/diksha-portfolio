@@ -197,6 +197,7 @@
   }
 
   onMounted(async () => {
+    
     // Note: Page-level component handles scrollTo(0) - don't duplicate here
 
     ctx = $gsap.context((self) => {
@@ -241,21 +242,20 @@
 <template>
   <main ref="main" class="projects-wrapper">
     <!--:className here is for gsap-->
-    <div class="abstract--center">
-      <CommonAbstract
-        :label="'Projects'"
-        :delay="1"
-        :desc="''"
-        :class-name="'abstract__projects'"
-        :is-hero="true"
-        :is-full-width="false"
-        :is-secondary="false"
-        :author="''"
-        :date="''"
-        :is-page-title="false"
-        :is-two-lines="false"
-      />
-    </div>
+    <CommonAbstract
+      class="front-header"
+      :label="'Projects'"
+      :delay="1"
+      :desc="''"
+      :class-name="'abstract__projects'"
+      :is-hero="true"
+      :is-full-width="false"
+      :is-secondary="false"
+      :author="''"
+      :date="''"
+      :is-page-title="false"
+      :is-two-lines="false"
+    />
 
     <div class="progress">
       <div class="progress__text">
@@ -318,23 +318,23 @@
 
   .projects-wrapper {
     position: relative;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
-    height:100dvh;
+    min-height: 100dvh;
+    overflow: hidden;
     padding: 0 $px-16-spacer;
-    overflow-x: hidden;
 
     @include this-and-above('lg') {
       padding: 0 $px-64-spacer;
     }
   }
 
-  .abstract--center {
+  .front-header {
     position: absolute;
-    display: block;
-    bottom: 0%;
-    will-change: transform;
-    width: 50%;
+    bottom: 0px;
+        &--ios-safari {
+      bottom: 80px;
+    }
   }
 
   .progress {
@@ -352,7 +352,7 @@
       font-variation-settings: 'wght' 550;
       white-space: nowrap;
       color: $secondary;
-      opacity:.5;
+      opacity: 0.5;
       font-variant-numeric: tabular-nums;
       /* Monospace numbers for consistent width */
     }
@@ -475,12 +475,11 @@
       justify-content: center;
 
       &-svg {
-          position: relative;
-          width: 20px;
-          height:auto;
-          fill: #faf8ff;
-        }
-
+        position: relative;
+        width: 20px;
+        height: auto;
+        fill: #faf8ff;
+      }
 
       @include this-and-above('md') {
         font-size: 18px;

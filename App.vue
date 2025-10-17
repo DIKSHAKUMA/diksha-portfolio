@@ -91,12 +91,10 @@
     overflow-x: hidden;
   }
 
-  body{
-
-      overscroll-behavior-y: none;
-  }
-
   .venice {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100vh;
     position: fixed;
@@ -112,6 +110,7 @@
     transform: translateZ(0); /* Force hardware acceleration */
     backface-visibility: hidden;
     perspective: 1000px; /* Add perspective for 3D rotation */
+    pointer-events: none;
 
     &__blind {
       position: relative;
@@ -125,6 +124,7 @@
       transform: translateZ(0); /* Force hardware acceleration */
       backface-visibility: hidden;
       contain: layout style paint;
+      pointer-events: none;
 
       &:first-child {
         margin-left: 0;

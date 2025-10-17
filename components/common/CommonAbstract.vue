@@ -1,4 +1,4 @@
-<script setup lang="ts">
+b<script setup lang="ts">
   import SplitType from 'split-type'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -167,7 +167,7 @@
     height: fit-content;
 
     width: 80%;
-    margin-bottom: $px-64-spacer;
+    margin-bottom: $px-32-spacer;
 
     &--hero {
       width: 80%;

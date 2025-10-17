@@ -10,14 +10,18 @@
   /* SEO Meta Tags for Home Page */
   useSeoMeta({
     title: 'Thomas Thorstensson • Creative Developer & Designer',
-    description: 'Creative developer and designer crafting digital experiences with modern web technologies. Specializing in Vue.js, Nuxt.js, and interactive code.',
-    keywords: 'Thomas Thorstensson, creative developer, web designer, Vue.js, Nuxt.js, Svelte, APIs, frontend developer, portfolio, interactive design',
+    description:
+      'Creative developer and designer crafting digital experiences with modern web technologies. Specializing in Vue.js, Nuxt.js, and interactive code.',
+    keywords:
+      'Thomas Thorstensson, creative developer, web designer, Vue.js, Nuxt.js, Svelte, APIs, frontend developer, portfolio, interactive design',
     author: 'Thomas Thorstensson',
     robots: 'index, follow',
-    
+    viewport: 'width=device-width, initial-scale=1.0, viewport-fit=cover',
+
     /* Open Graph */
     ogTitle: 'Thomas Thorstensson • Creative Developer & Designer',
-    ogDescription: 'Creative developer and designer crafting digital experiences with modern web technologies.',
+    ogDescription:
+      'Creative developer and designer crafting digital experiences with modern web technologies.',
     ogImage: '/og-image.jpg',
     ogImageAlt: 'Thomas Thorstensson Portfolio',
     ogType: 'website',
@@ -36,45 +40,53 @@
         // Add your social media profiles
         'https://https://github.com/thorstensson',
         'https://linkedin.com/in/thomasthorstensson',
-        'https://bsky.app/profile/thorstensson.bsky.social'
+        'https://bsky.app/profile/thorstensson.bsky.social',
       ],
-      knowsAbout: ['Web Development', 'Vue.js', 'Nuxt.js', 'Creative Coding', 'UI/UX Design', 'APIs', 'Svelte'],
+      knowsAbout: [
+        'Web Development',
+        'Vue.js',
+        'Nuxt.js',
+        'Creative Coding',
+        'UI/UX Design',
+        'APIs',
+        'Svelte',
+      ],
     },
     {
       '@type': 'WebSite',
       name: 'Thomas Thorstensson Portfolio',
       url: 'https://thomasthorstensson.com',
-      description: 'Creative developer. I express content through motion and interactivity.',
+      description:
+        'Creative developer. I express content through motion and interactivity.',
       author: {
         '@type': 'Person',
-        name: 'Thomas Thorstensson'
-      }
-    }
+        name: 'Thomas Thorstensson',
+      },
+    },
   ])
 
   const { $lenis } = useNuxtApp()
 
   onMounted(() => {
-    
     $lenis.scrollTo(0, { immediate: true, force: true })
-    
+
     // Multiple refresh attempts to handle async content loading
     // Home page has PIXI animations, images, and GSAP ScrollTriggers
     const refreshDelays = [1000, 2000, 3000] // Progressive refresh
-    
-    refreshDelays.forEach(delay => {
+
+    refreshDelays.forEach((delay) => {
       setTimeout(() => {
         if (($lenis as any).refresh) {
-          ($lenis as any).refresh()
+          ;($lenis as any).refresh()
         }
       }, delay)
     })
-    
+
     // Also refresh on window load (all resources loaded)
     window.addEventListener('load', () => {
       setTimeout(() => {
         if (($lenis as any).refresh) {
-          ($lenis as any).refresh()
+          ;($lenis as any).refresh()
         }
       }, 500)
     })
@@ -105,5 +117,6 @@
     position: relative;
     overflow-x: hidden;
     z-index: inherit;
+    height:100%;
   }
 </style>

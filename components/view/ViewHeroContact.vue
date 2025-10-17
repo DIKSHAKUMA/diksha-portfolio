@@ -91,7 +91,7 @@
     position: relative;
     width: 100%;
     height: 100vh;
-    height:100dvh;
+    height: 100dvh;
     overflow: hidden;
     padding: 0 $px-16-spacer;
 

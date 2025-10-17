@@ -19,6 +19,7 @@
     ],
   })
 
+  const isMobile = ref(false)
   const { $gsap } = useNuxtApp()
   const pixiCtx = useTemplateRef<any>('pixi')
   const imgFrames = useTemplateRef<any>('imgFrames')
@@ -34,6 +35,13 @@
   let rafId = 0
   let stopWatching: (() => void) | null = null
   let pixiDestroyed = false
+  let resizeListener: (() => void) | null = null
+
+  const checkIfMobile = () => {
+    if (import.meta.client) {
+      isMobile.value = window.innerWidth < 768
+    }
+  }
 
   /* Helper function to safely destroy PIXI resources */
   const destroyPixiResources = () => {
@@ -84,6 +92,16 @@
   onMounted(async () => {
     if (import.meta.client) {
       // Note: Page-level component handles scrollTo(0) - don't duplicate here
+
+      // Set initial mobile state
+      checkIfMobile()
+      
+      // Add resize listener for both mobile check and image dimensions
+      resizeListener = () => {
+        checkIfMobile()
+        setImageDimensions()
+      }
+      window.addEventListener('resize', resizeListener)
 
       pixiCtx.value.fillStyle = '#1E201E'
 
@@ -166,6 +184,19 @@
             destroyPixiResources()
           })
 
+        /* Move abstract wrapper up when user starts scrolling */
+        $gsap.to('.front-header', {
+          y: -40,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.hero-wrapper', // Use hero wrapper itself as trigger
+            start: 'bottom bottom-=200', // Start when hero bottom is 200px from viewport bottom
+            end: 'bottom top',
+            scrub: 1,
+          },
+        })
+
         /* Fade out author intro */
         let authorTl = $gsap.timeline({
           /* Pin intro is actually in ViewProjects.vue; fade out author intro when pin intro moves above bottom of browser window */
@@ -191,6 +222,11 @@
     /* Clean up route watcher */
     if (stopWatching) {
       stopWatching()
+    }
+
+    /* Clean up resize listener */
+    if (resizeListener && import.meta.client) {
+      window.removeEventListener('resize', resizeListener)
     }
 
     /* Clean up GSAP context */
@@ -227,7 +263,7 @@
       :is-hero="true"
       :is-full-width="false"
       :is-secondary="false"
-      :is-two-lines="true"
+      :is-two-lines="!isMobile"
       :author="''"
       :date="''"
       :is-page-title="false"
@@ -262,6 +298,12 @@
     left: 50%;
     transform: translateX(-50%);
     opacity: 0;
+    width: 60vw;
+    max-width: 400px;
+
+    @include this-and-above('md') {
+      width: 400px;
+    }
   }
 
   .img-pixi {
@@ -280,8 +322,8 @@
   }
 
   canvas {
-    width: 400px;
-    height: 300px; /* 4:3 aspect ratio (400 ÷ 4 × 3 = 300) */
+    width: 100%;
+    height: auto;
     aspect-ratio: 4 / 3;
     border-radius: 12px;
   }

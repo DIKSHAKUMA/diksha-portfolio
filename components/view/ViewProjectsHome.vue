@@ -9,6 +9,7 @@
   const { $gsap } = useNuxtApp()
 
   let ctx: gsap.Context
+  const hoverHandlers = new Map<Element, { mouseenter: () => void; mouseleave: () => void }>()
   const splitInstances: SplitType[] = []
 
   const dateSorted = computed(() => {
@@ -65,14 +66,14 @@
               start: 'top 90%',
               toggleActions: 'play none none reverse',
               fastScrollEnd: true, // ← Helps with fast scrolling
-              refreshPriority: -1, // ← Lower priority
-              invalidateOnRefresh: false, // ← Skip expensive r
+              // refreshPriority: -1, // COMMENTED OUT - Testing if low priority affects viewport timing
+              // invalidateOnRefresh: false, // COMMENTED OUT - Testing if this caches bad viewport state
             },
           })
         } else {
           /* Full clipPath reveal for Chrome/Safari/Edge */
           $gsap.to(img, {
-            yPercent: 0,
+            // yPercent: 0,  // COMMENTED OUT - Testing if this contaminates iOS Safari viewport
             opacity: 1,
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
             duration: 0.5,
@@ -80,10 +81,10 @@
             scrollTrigger: {
               trigger: img,
               start: 'top 90%',
-              end: 'top 60%',
+              // end: 'top 60%', // COMMENTED OUT - Testing if range-based trigger affects viewport
               toggleActions: 'play none none reverse',
-              refreshPriority: -1, // ← Lower priority
-              invalidateOnRefresh: false, // ← Skip expensive r
+              // refreshPriority: -1, // COMMENTED OUT - Testing if low priority affects viewport timing
+              // invalidateOnRefresh: false, // COMMENTED OUT - Testing if this caches bad viewport state
               preventOverlaps: true,
             },
           })
@@ -128,7 +129,7 @@
 </script>
 
 <template>
-  <div class="projects-wrapper">
+  <div class="projects-home-wrapper">
     <main class="projects">
       <CommonAbstract
         class="projects__header"
@@ -210,11 +211,11 @@
   }
 
   /* same margins as project-wrapper in [id].vue */
-  .projects-wrapper {
+  .projects-home-wrapper {
     /* or else info label get confused */
     position: relative;
     height: 100%;
-    padding: $px-64-spacer $px-16-spacer;
+    padding: $px-128-spacer $px-16-spacer;
 
     @include this-and-above('sm') {
       padding: $px-128-spacer $px-32-spacer;
@@ -279,8 +280,6 @@
         clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
         border-radius: 12px;
         aspect-ratio: 16/9;
-        /* Match exact image dimensions (1.78:1) */
-        filter: brightness(1.01);
       }
 
       &__image:after {

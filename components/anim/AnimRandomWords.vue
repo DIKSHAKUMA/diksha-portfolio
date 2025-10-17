@@ -195,7 +195,6 @@
     return [23, 23, 23] /* #171717 in RGB */
   }
 
-
   onMounted(async () => {
     if (import.meta.client) {
       const p5 = await import('p5')
@@ -231,7 +230,10 @@
             wordObjects.push({
               text: randomWord,
               x: p.random(p.width),
-              y: p.random(0, p.height - reservedBottomSpace), /* Avoid bottom 200px */
+              y: p.random(
+                0,
+                p.height - reservedBottomSpace
+              ) /* Avoid bottom 200px */,
               size: p.random(16, 48),
               offsetX: p.random(0, p.TWO_PI),
               offsetY: p.random(0, p.TWO_PI),
@@ -255,8 +257,10 @@
             p.textSize(word.size)
 
             /* Calculate floating position - cached time */
-            const floatX = word.x + p.sin(frameTime * word.speed + word.offsetX) * 20
-            const floatY = word.y + p.cos(frameTime * word.speed + word.offsetY) * 15
+            const floatX =
+              word.x + p.sin(frameTime * word.speed + word.offsetX) * 20
+            const floatY =
+              word.y + p.cos(frameTime * word.speed + word.offsetY) * 15
 
             /* Simplified color calculation for performance */
             const colorShift = p.sin(time + word.offsetX) * 30
@@ -267,7 +271,7 @@
                 74 + colorShift,
                 68 + colorShift * 0.8,
                 83 + colorShift * 1.2,
-                145  /* Add opacity (0-255, 145 = ~57% opacity) */
+                145 /* Add opacity (0-255, 145 = ~57% opacity) */
               )
             } else {
               /* Dark mode: variations of accent2 (#fff0e8) with opacity */
@@ -275,7 +279,7 @@
                 255 - colorShift * 0.3,
                 240 + colorShift * 0.2,
                 232 + colorShift * 0.5,
-                125  /* Add opacity (0-255, 125 = ~49% opacity) */
+                125 /* Add opacity (0-255, 125 = ~49% opacity) */
               )
             }
 
@@ -317,8 +321,7 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
-    height: 100dvh; /* Dynamic viewport height for mobile browsers */
+    height: 100%;
     pointer-events: none;
   }
 </style>

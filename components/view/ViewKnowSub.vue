@@ -126,7 +126,9 @@
   .know-wrapper {
     position: relative;
     background-color: $primary;
-    padding: $px-64-spacer $px-16-spacer;
+    padding: $px-128-spacer $px-16-spacer;
+    min-height: 100vh;
+    min-height: 100dvh;
 
     @include this-and-above('sm') {
       padding: $px-128-spacer $px-32-spacer;
