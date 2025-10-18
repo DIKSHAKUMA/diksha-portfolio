@@ -301,26 +301,26 @@
       &--proj {
         width: 80px;
         height: 80px;
-        opacity: 0.9;
+        opacity: 0.8;
       }
 
       &--reel {
         width: 50px;
         height: 50px;
-        opacity: 0.9;
+        opacity: 0.8;
       }
 
       &--menu {
         width: 70px;
         height: 70px;
-        opacity: 0.9;
+        opacity: 0.8;
       }
 
       /* Easter egg */
       &--yo {
         width: 70px;
         height: 70px;
-        opacity: 0.9;
+        opacity: 0.8;
       }
 
       &__text {
