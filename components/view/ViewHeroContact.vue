@@ -105,14 +105,14 @@
 
   .ilabel {
     a .action {
-      color: #faf7ff !important;
+      color: $secondary-static !important;
     }
   }
 
   .front-header {
     position: absolute;
     bottom: 0px;
-    color: #faf7ff;
+    color: $secondary-static;
     &--ios-safari {
       bottom: 80px;
     }
@@ -123,7 +123,7 @@
     bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
-    color: #faf7ff;
+    color: $secondary-static;
     z-index: 200;
 
     .hero-wrapper.ios-safari & {
@@ -136,10 +136,10 @@
 
     &__email {
       font-size: clamped(20px, 42px, 480px, 1920px);
-      color: #faf7ff;
+      color: $secondary-static;
 
       text-decoration: none;
-      border-bottom: 4px solid #faf7ff;
+      border-bottom: 4px solid $secondary-static;
       padding-bottom: 5px;
       transition: color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67),
         border-bottom-color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);

@@ -90,6 +90,8 @@
       screenWidth.value = window.innerWidth
       if (screenWidth.value > 768) {
         isMobileActive.value = false
+        /* Reset GSAP animations when switching back to desktop */
+        $gsap.set('.nav__item', { opacity: 1, x: 0 })
       }
     }
   }

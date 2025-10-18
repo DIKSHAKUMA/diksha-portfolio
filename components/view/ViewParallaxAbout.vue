@@ -74,7 +74,7 @@
     width: 100%;
 
     &__label {
-      color: #faf7ff;
+      color: $secondary-static;
       position: relative;
       z-index: 100;
     }

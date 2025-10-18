@@ -15,27 +15,27 @@
   /* Function to get ring colors based on color mode */
   const getRingColors = () => {
     if (typeof window !== 'undefined') {
-      /* If primary is light (#faf7ff), we're in light mode - use black variations */
+      /* If primary is light use black variations */
       if (colorMode.value === 'light') {
         return [
-          [23, 23, 23], /* #171717 - your black */
+          [23, 23, 23], /* black */
           [80, 80, 80], /* even lighter */
           [23, 23, 23], /* back to black for smooth cycling */
         ]
       }
       /* Dark mode - use original brand colors */
       return [
-        [250, 247, 255], /* secondary light (#faf7ff) */
-        [255, 240, 232], /* accent1 light (#fff0e8) */
-        [74, 68, 83], /* accent2 dark (#4a4453) */
+        [250, 247, 255], /* secondary */
+        [255, 240, 232], /* accent1 light */
+        [74, 68, 83], /* accent2 dark */
         [250, 247, 255], /* secondary light again for smooth cycling */
       ]
     }
     /* Fallback to dark mode colors */
     return [
-      [250, 247, 255], /* secondary light (#faf7ff) */
-      [255, 240, 232], /* accent1 light (#fff0e8) */
-      [74, 68, 83], /* accent2 dark (#4a4453) */
+      [250, 247, 255], /* secondary */
+      [255, 240, 232], /* accent1 light */
+      [74, 68, 83], /* accent2 dark */
       [250, 247, 255], /* secondary light again for smooth cycling */
     ]
   }

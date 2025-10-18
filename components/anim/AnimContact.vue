@@ -283,7 +283,7 @@
 
     &__label {
       font-size: clamped(12px, 14px, 480px, 1920px);
-      color: #faf7ff;
+      color: $secondary-static;
       opacity: 0.8;
       margin-bottom: $px-8-spacer;
       font-weight: 500;
@@ -291,7 +291,7 @@
 
     &__value {
       font-size: clamped(20px, 24px, 480px, 1920px);
-      color: #faf7ff;
+      color: $secondary-static;
       font-weight: 500;
       margin-bottom: $px-16-spacer;
     }

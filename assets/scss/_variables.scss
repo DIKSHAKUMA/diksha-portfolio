@@ -1,3 +1,5 @@
+$primary-static: #171717;
+$secondary-static: #dbdbdb;
 
 .dark-mode {
     --primary: #171717;
@@ -10,7 +12,7 @@
 .light-mode {
     --primary: #dbdbdb;
     --secondary: #171717;
-    --accent1: #e3e0e8;
+    --accent1: #bec1c6;
     --accent2: #2c2a38;
     --color-scheme: light;
 }

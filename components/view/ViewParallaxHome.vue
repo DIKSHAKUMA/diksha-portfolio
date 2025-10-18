@@ -69,7 +69,7 @@
   }
 
   .about__label {
-    color: #faf7ff;
+    color: $secondary-static;
   }
 
   .about {

@@ -247,14 +247,14 @@
     pointer-events: none;
     margin-left: 5px;
     margin-bottom: 4px;
-    fill: #faf7ff;
+    fill: $secondary-static;
   }
   .arrow {
     width: 12px;
     height: auto;
     pointer-events: none;
     margin-left: 5px;
-    fill: #faf7ff;
+    fill: $secondary-static;
 
     &--reverse {
       transform: rotate(180deg);
@@ -293,7 +293,7 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 
       .light-mode & {
-        background: #1717171a;
+        background: $primary-static;
         border-color: rgba(23, 23, 23, 0.1);
       }
 
@@ -321,10 +321,6 @@
         width: 70px;
         height: 70px;
         opacity: 0.9;
-
-        .cursor__shape__text {
-          color:#faf7ff;
-        }
       }
 
       &__text {
@@ -338,7 +334,7 @@
         white-space: nowrap;
         opacity: 1 !important;
         font-weight: 400;
-        color: #faf7ff;
+        color: $secondary-static;
       }
     }
   }
