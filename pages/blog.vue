@@ -34,7 +34,11 @@
     z-index: inherit;
     overflow-x: hidden;
     min-height: 100vh;
-    min-height: 100dvh;
+    overscroll-behavior-y:contain;
+ 
+    @supports (height: 100svh) {
+      min-height: 100svh;
+    }
     /* Prevent SCSS parsing errors */
   }
 </style>

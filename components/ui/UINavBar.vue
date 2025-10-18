@@ -28,7 +28,18 @@
 
   if (import.meta.client) {
     screenWidth = ref(window.innerWidth)
+
   }
+
+  /* Watch isLightMode changes and update colorMode - OUTSIDE onMounted */
+  watch(
+    () => isLightMode.value,
+    (newValue) => {
+      colorMode.preference = newValue ? 'light' : 'dark'
+      console.log(colorMode.value)
+    },
+    { immediate: true }
+  )
 
   /**
    * A minimal & responsive navbar for those who like BEM with &.
@@ -110,17 +121,6 @@
     onScroll()
     window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', checkScreenWidth)
-
-    /* In this case, the value is just a trigger, the comparison is for what color mode we are in: it can be cached */
-    watch(
-      () => isLightMode.value,
-      (newValue, oldValue) => {
-        newValue == true
-          ? (colorMode.value = 'light')
-          : (colorMode.value = 'dark')
-      },
-      { immediate: true }
-    )
 
     /* Reset magnetic links on route change */
     const router = useRouter()
@@ -323,9 +323,9 @@ just use a simple modal and be done with it. */
 
       .light-mode & {
         background-color: rgba(
-          243,
-          243,
-          243,
+          219,
+          219,
+          219,
           1
         ); /* Semi-transparent light background */
       }

@@ -78,7 +78,6 @@
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    min-height: 100dvh;
     transition: background-color 1s;
     background-color: $primary;
     -webkit-font-smoothing: antialiased;
@@ -87,8 +86,12 @@
     -moz-osx-font-smoothing: grayscale;
     font-family: $sans-text;
     font-variation-settings: 'slnt' 0, 'wght' 500;
-    overscroll-behavior-y: none;
+    /*overscroll-behavior-yNo fan of bounce on mobile but a hard stop can cause issues too*/
+    overscroll-behavior-y: auto;
     overflow-x: hidden;
+    @supports (height: 100svh) {
+      min-height: 100svh;
+    }
   }
 
   .venice {
@@ -117,7 +120,7 @@
       top: 0;
       overflow: hidden;
       flex: 1;
-      height: 100vh;
+      height: 100%;
       background-color: $secondary;
       margin-left: -1px;
       will-change: transform, opacity;

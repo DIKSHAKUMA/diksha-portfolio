@@ -98,8 +98,10 @@
     position: relative;
     background-color: $primary;
     padding: $px-128-spacer $px-16-spacer;
-    height: 100vh;
-    min-height: 100dvh;
+    min-height: 100vh;
+    @supports (height: 100svh) {
+      min-height: 100svh;
+    }
 
     @include this-and-above('lg') {
       padding: $px-128-spacer $px-64-spacer;

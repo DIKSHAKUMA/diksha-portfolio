@@ -5,7 +5,6 @@
   /* PINIA 🍍 */
   const store = useFolioStore()
   const { $gsap } = useNuxtApp()
-  const colorMode = useColorMode()
 
   let ctx: gsap.Context
 
@@ -53,10 +52,13 @@
   .hero-wrapper {
     position: relative;
     width: 100%;
-    height: 100vh;
-    height:100dvh;
+    min-height: 100vh;
     overflow: hidden;
     padding: 0 $px-16-spacer;
+
+    @supports (height: 100svh) {
+      min-height: 100svh;
+    }
 
     @include this-and-above('lg') {
       padding: 0 $px-64-spacer;

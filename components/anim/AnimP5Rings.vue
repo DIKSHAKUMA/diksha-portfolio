@@ -6,8 +6,8 @@
   /* We used Pixi and GSAP, now lets use P5 library, but stay on theme! */
 
   const getCurrentBgColor = () => {
-    if (colorMode.preference === 'light') {
-      return '#f3f3f3'
+    if (colorMode.value === 'light') {
+      return '#dbdbdb'
     }
     return '#171717'
   }
@@ -16,7 +16,7 @@
   const getRingColors = () => {
     if (typeof window !== 'undefined') {
       /* If primary is light (#faf7ff), we're in light mode - use black variations */
-      if (colorMode.preference === 'light') {
+      if (colorMode.value === 'light') {
         return [
           [23, 23, 23], /* #171717 - your black */
           [80, 80, 80], /* even lighter */
@@ -51,6 +51,7 @@
 
       p5Instance = new p5.default((p: any) => {
         p.setup = () => {
+          console.log('P5.js setup running!')
           /* Reduce canvas height on mobile to give space for title */
           const isMobile = window.innerWidth < 768
           const canvasHeight = isMobile ? window.innerHeight * 0.75 : window.innerHeight
@@ -64,6 +65,7 @@
         }
 
         p.draw = () => {
+          console.log('P5.js draw running!')
           p.background(getCurrentBgColor()) /* Dynamic background from color mode */
 
           p.push()

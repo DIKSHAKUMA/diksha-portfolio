@@ -31,49 +31,48 @@ export default defineNuxtConfig({
   /* Sitemap Configuration */
   sitemap: {
     urls: async () => {
-      
       /* Static pages with SEO optimization - use actual last modified dates */
       const staticPages = [
         {
           loc: '/',
-          lastmod: '2025-10-16', /* Update when homepage content changes */
+          lastmod: '2025-10-16' /* Update when homepage content changes */,
           changefreq: 'weekly',
-          priority: 1.0
+          priority: 1.0,
         },
         {
           loc: '/about',
-          lastmod: '2025-10-15', /* Update when about page changes */
+          lastmod: '2025-10-15' /* Update when about page changes */,
           changefreq: 'monthly',
-          priority: 0.8
+          priority: 0.8,
         },
         {
           loc: '/projects',
-          lastmod: '2025-10-15', /* Update when projects list changes */
+          lastmod: '2025-10-15' /* Update when projects list changes */,
           changefreq: 'weekly',
-          priority: 0.9
+          priority: 0.9,
         },
         {
           loc: '/blog',
-          lastmod: '2025-10-10', /* Update when blog structure changes */
+          lastmod: '2025-10-10' /* Update when blog structure changes */,
           changefreq: 'weekly',
-          priority: 0.8
+          priority: 0.8,
         },
         {
           loc: '/contact',
-          lastmod: '2025-10-16', /* Update when contact info changes */
+          lastmod: '2025-10-16' /* Update when contact info changes */,
           changefreq: 'monthly',
-          priority: 0.7
-        }
+          priority: 0.7,
+        },
       ]
-      
+
       return staticPages
     },
     /* Additional sitemap configuration for better SEO */
     defaults: {
       changefreq: 'weekly',
       priority: 0.5,
-      lastmod: new Date().toISOString()
-    }
+      lastmod: new Date().toISOString(),
+    },
   },
 
   fonts: {
@@ -82,6 +81,7 @@ export default defineNuxtConfig({
     experimental: {
       /* Defines whether to enable adding local fallbacks. Default is `false`. Might add some CLS but want to avoid font on font if user installed locally. */
       disableLocalFallbacks: true,
+      typedPages: true,
     },
 
     families: [
@@ -89,7 +89,7 @@ export default defineNuxtConfig({
       {
         name: 'Geist',
         provider: 'google',
-        fallbacks: ['sans-serif']
+        fallbacks: ['sans-serif'],
       },
       { name: 'Geist Mono', provider: 'google' },
     ],
@@ -110,7 +110,7 @@ export default defineNuxtConfig({
     '@nuxtjs/robots',
     'nuxt-site-config',
     '@nuxtjs/seo',
-    '@nuxtjs/sitemap', /* Add sitemap module */
+    '@nuxtjs/sitemap' /* Add sitemap module */,
     '@nuxt/fonts',
     '@nuxtjs/color-mode',
     '@nuxtjs/mdc',
@@ -176,8 +176,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     openWeatherApiKey:
-      '', /* Will be populated from NUXT_OPEN_WEATHER_API_KEY env var */
-    gqlHost: '', /* Will be populated from NUXT_GQL_HOST env var */
+      '' /* Will be populated from NUXT_OPEN_WEATHER_API_KEY env var */,
+    gqlHost: '' /* Will be populated from NUXT_GQL_HOST env var */,
     public: {
       /* Public runtime config - exposed to client-side */
     },
@@ -227,9 +227,9 @@ export default defineNuxtConfig({
       {
         userAgent: '*',
         allow: '/',
-        sitemap: 'https://thomasthorstensson.com/sitemap.xml'
-      }
-    ]
+        sitemap: 'https://thomasthorstensson.com/sitemap.xml',
+      },
+    ],
   },
 
   devtools: { enabled: false },

@@ -95,7 +95,7 @@
 
       // Set initial mobile state
       checkIfMobile()
-      
+
       // Add resize listener for both mobile check and image dimensions
       resizeListener = () => {
         checkIfMobile()
@@ -274,9 +274,11 @@
 <style lang="scss" scoped>
   .hero-wrapper {
     position: relative;
-    height: 100vh;
-    height: 100dvh;
+    min-height: 100vh;
     padding: 0 $px-16-spacer;
+    @supports (height: 100svh) {
+      min-height: 100svh;
+    }
 
     @include this-and-above('md') {
       padding: 0 $px-64-spacer;
@@ -294,7 +296,7 @@
   .images-wrapper {
     display: flex;
     position: absolute;
-    top: 25%;
+    top: 35%;
     left: 50%;
     transform: translateX(-50%);
     opacity: 0;
@@ -302,6 +304,7 @@
     max-width: 400px;
 
     @include this-and-above('md') {
+      top:25%;
       width: 400px;
     }
   }

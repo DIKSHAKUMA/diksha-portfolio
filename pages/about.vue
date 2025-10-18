@@ -42,5 +42,10 @@
     overflow-x: visible;
     z-index: inherit;
     overflow: hidden;
+    min-height: 100vh;
+
+    @supports (height: 100svh) {
+      min-height: 100svh;
+    }
   }
 </style>

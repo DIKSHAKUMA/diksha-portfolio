@@ -97,7 +97,9 @@
     padding: 0 $px-16-spacer;
     overflow: hidden;
     min-height: 100vh;
-    min-height: 100dvh;
+    @supports (height: 100svh) {
+      min-height: 100svh;
+    }
 
     --dot-size: 3px;
     --dot-space: 50px;

@@ -189,8 +189,8 @@
   let wordObjects: any[] = []
 
   const getCurrentBgColor = () => {
-    if (colorMode.preference === 'light') {
-      return [243, 243, 243] /* #f3f3f3 in RGB */
+    if (colorMode.value === 'light') {
+      return [219, 219, 219] /* #dbdbdb in RGB */
     }
     return [23, 23, 23] /* #171717 in RGB */
   }
@@ -265,7 +265,7 @@
             /* Simplified color calculation for performance */
             const colorShift = p.sin(time + word.offsetX) * 30
 
-            if (colorMode.preference === 'light') {
+            if (colorMode.value === 'light') {
               /* Light mode: variations of accent1 (#4a4453) with opacity */
               p.fill(
                 74 + colorShift,
@@ -287,16 +287,36 @@
           }
         }
 
-        /* Handle window resize - optimized to just update positions */
+        /* Handle window resize - only reposition on significant size changes */
+        let lastWidth = window.innerWidth
+        let lastHeight = window.innerHeight
+        
         p.windowResized = () => {
-          p.resizeCanvas(window.innerWidth, window.innerHeight)
-
-          /* Update existing word positions instead of recreating objects */
-          const reservedBottomSpace = 120
-          for (let i = 0; i < wordObjects.length; i++) {
-            /* Keep existing properties, just update positions */
-            wordObjects[i].x = p.random(p.width)
-            wordObjects[i].y = p.random(0, p.height - reservedBottomSpace)
+          const newWidth = window.innerWidth
+          const newHeight = window.innerHeight
+          
+          /* Only reposition if there's a significant size change (>50px) */
+          /* This prevents repositioning during iOS Safari scroll viewport changes */
+          const widthDiff = Math.abs(newWidth - lastWidth)
+          const heightDiff = Math.abs(newHeight - lastHeight)
+          
+          if (widthDiff > 50 || heightDiff > 50) {
+            p.resizeCanvas(newWidth, newHeight)
+            
+            /* Update existing word positions for significant resizes */
+            const reservedBottomSpace = 120
+            for (let i = 0; i < wordObjects.length; i++) {
+              /* Keep existing properties, just update positions */
+              wordObjects[i].x = p.random(p.width)
+              wordObjects[i].y = p.random(0, p.height - reservedBottomSpace)
+            }
+            
+            /* Update last known dimensions */
+            lastWidth = newWidth
+            lastHeight = newHeight
+          } else {
+            /* For minor changes, just resize canvas without repositioning */
+            p.resizeCanvas(newWidth, newHeight)
           }
         }
       })
@@ -317,11 +337,11 @@
 
 <style lang="scss" scoped>
   #random-words {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100%;
+    min-height: 100vh;
     pointer-events: none;
   }
 </style>

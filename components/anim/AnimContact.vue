@@ -2,7 +2,6 @@
   import { useSafariIOSDetection } from '~/composable/useSafariIOSDetection'
 
   const { isSafariIOS } = useSafariIOSDetection()
-  const colorMode = useColorMode()
   const isFirefox = ref(false)
   const showRaindrops = ref(false)
   

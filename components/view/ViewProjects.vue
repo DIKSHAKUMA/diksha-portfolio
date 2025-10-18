@@ -197,7 +197,6 @@
   }
 
   onMounted(async () => {
-    
     // Note: Page-level component handles scrollTo(0) - don't duplicate here
 
     ctx = $gsap.context((self) => {
@@ -319,20 +318,25 @@
   .projects-wrapper {
     position: relative;
     width: 100%;
-    height: 100vh;
-    min-height: 100dvh;
+    min-height: 100vh;
+
     overflow: hidden;
     padding: 0 $px-16-spacer;
 
     @include this-and-above('lg') {
       padding: 0 $px-64-spacer;
     }
+
+    /*The “small” viewport units assume that any dynamic toolbars are expanded and visible, and calculates the viewport’s size accordingly.*/
+    @supports (height: 100svh) {
+      min-height: 100svh;
+    }
   }
 
   .front-header {
     position: absolute;
     bottom: 0px;
-        &--ios-safari {
+    &--ios-safari {
       bottom: 80px;
     }
   }
