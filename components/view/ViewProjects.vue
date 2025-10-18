@@ -240,6 +240,9 @@
 
 <template>
   <main ref="main" class="projects-wrapper">
+    <!-- Moving light background effect -->
+    <div class="projects-background"></div>
+    
     <!--:className here is for gsap-->
     <CommonAbstract
       class="front-header"
@@ -323,6 +326,7 @@
     overflow: hidden;
     padding: 0 $px-16-spacer;
 
+
     @include this-and-above('lg') {
       padding: 0 $px-64-spacer;
     }
@@ -330,6 +334,46 @@
     /*The “small” viewport units assume that any dynamic toolbars are expanded and visible, and calculates the viewport’s size accordingly.*/
     @supports (height: 100svh) {
       min-height: 100svh;
+    }
+  }
+
+  .projects-background {
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow:hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 300%;
+      height: 100%;
+      background: linear-gradient(
+        45deg,
+        transparent 0%,
+        transparent 40%,
+        rgba(255, 255, 255, 0.03) 50%,
+        transparent 60%,
+        transparent 100%
+      );
+      animation: moveLight 12s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    /* Stronger effect for light theme */
+    .light-mode &::before {
+      background: linear-gradient(
+        45deg,
+        transparent 0%,
+        transparent 40%,
+        #ffffff 50%,
+        transparent 60%,
+        transparent 100%
+      );
     }
   }
 
@@ -444,6 +488,9 @@
         aspect-ratio: 16/9;
         object-fit: cover;
         transform-origin: center;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: optimize-contrast;
+        image-rendering: auto;
 
         @include this-and-above('sm') {
           width: 75vw;
@@ -492,6 +539,19 @@
         top: -14px;
         right: -14px;
       }
+    }
+  }
+
+  /* Moving light animation */
+  @keyframes moveLight {
+    0% {
+      transform: translateX(-25%);
+    }
+    50% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(25%);
     }
   }
 </style>

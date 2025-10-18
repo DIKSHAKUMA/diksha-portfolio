@@ -107,12 +107,12 @@
     background: linear-gradient(
           90deg,
           $primary calc(var(--dot-space) - var(--dot-size)),
-          transparent 101%
+          transparent 100%
         )
         center / var(--dot-space) var(--dot-space),
       linear-gradient(
           $primary calc(var(--dot-space) - var(--dot-size)),
-          transparent 101%
+          transparent 100%
         )
         center / var(--dot-space) var(--dot-space),
       $secondary;

@@ -170,7 +170,7 @@ b<script setup lang="ts">
     margin-bottom: $px-32-spacer;
 
     &--hero {
-      width: 80%;
+      width: 90%;
       margin-bottom: $px-16-spacer;
 
       @include this-and-above('lg') {

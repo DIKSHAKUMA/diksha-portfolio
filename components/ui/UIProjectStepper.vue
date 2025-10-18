@@ -243,7 +243,7 @@
             :to="prev"
             class="action"
             data-name="proj"
-            data-text="Previous"
+            data-text="Prev"
           >
             <NuxtImg
               :src="prevImg"

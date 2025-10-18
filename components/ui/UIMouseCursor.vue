@@ -215,7 +215,7 @@
     <div :class="classObject" ref="shape">
       <div v-if="dataName === 'proj'" class="cursor__shape__text">
         <ChevronSVG
-          v-if="dataText === 'Previous'"
+          v-if="dataText === 'Prev'"
           class="arrow arrow--reverse arrow--before"
         />
         {{ dataText }}
