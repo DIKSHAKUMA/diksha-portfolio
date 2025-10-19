@@ -89,9 +89,6 @@
     background-color: $primary;
     overflow: hidden;
     height: 100vh;
-    @supports (height: 100svh) {
-      height: 100svh;
-    }
     padding: $px-64-spacer $px-16-spacer;
 
     @include this-and-above('sm') {
@@ -116,7 +113,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
     z-index: 1;
   }

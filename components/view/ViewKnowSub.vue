@@ -128,9 +128,6 @@
     background-color: $primary;
     padding: $px-128-spacer $px-16-spacer;
     min-height: 100vh;
-    @supports (height: 100svh) {
-      min-height: 100svh;
-    }
 
     @include this-and-above('sm') {
       padding: $px-128-spacer $px-32-spacer;

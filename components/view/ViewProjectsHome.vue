@@ -9,7 +9,10 @@
   const { $gsap } = useNuxtApp()
 
   let ctx: gsap.Context
-  const hoverHandlers = new Map<Element, { mouseenter: () => void; mouseleave: () => void }>()
+  const hoverHandlers = new Map<
+    Element,
+    { mouseenter: () => void; mouseleave: () => void }
+  >()
   const splitInstances: SplitType[] = []
 
   const dateSorted = computed(() => {
@@ -65,9 +68,8 @@
               trigger: img,
               start: 'top 90%',
               toggleActions: 'play none none reverse',
-              fastScrollEnd: true, // ← Helps with fast scrolling
-              // refreshPriority: -1, // COMMENTED OUT - Testing if low priority affects viewport timing
-              // invalidateOnRefresh: false, // COMMENTED OUT - Testing if this caches bad viewport state
+              refreshPriority: -1, // COMMENTED OUT - Testing if low priority affects viewport timing
+              invalidateOnRefresh: false, // COMMENTED OUT - Testing if this caches bad viewport state
             },
           })
         } else {
@@ -80,7 +82,7 @@
             ease: 'power1.out',
             scrollTrigger: {
               trigger: img,
-              start: 'top 90%',
+              start: 'top 80%',
               // end: 'top 60%', // COMMENTED OUT - Testing if range-based trigger affects viewport
               toggleActions: 'play none none reverse',
               // refreshPriority: -1, // COMMENTED OUT - Testing if low priority affects viewport timing
@@ -241,7 +243,7 @@
     .projects__abstract {
       display: flex;
       flex-direction: column;
-      row-gap: $px-64-spacer;
+      row-gap: $px-128-spacer;
       width: 100%;
       align-self: flex-start;
 
@@ -279,7 +281,18 @@
         opacity: 0;
         clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
         border-radius: 12px;
-        aspect-ratio: 16/9;
+        aspect-ratio: 4/3;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+        }
+
+        @include this-and-above('sm') {
+          aspect-ratio: 16/9;
+        }
       }
 
       &__image:after {

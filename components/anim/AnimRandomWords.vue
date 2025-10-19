@@ -300,7 +300,7 @@
           const widthDiff = Math.abs(newWidth - lastWidth)
           const heightDiff = Math.abs(newHeight - lastHeight)
           
-          if (widthDiff > 50 || heightDiff > 50) {
+          if (widthDiff > 50 && heightDiff > 50) {
             p.resizeCanvas(newWidth, newHeight)
             
             /* Update existing word positions for significant resizes */
@@ -337,7 +337,7 @@
 
 <style lang="scss" scoped>
   #random-words {
-    position: relative;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100vw;

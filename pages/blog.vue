@@ -30,15 +30,13 @@
     flex-flow: column;
     display: flex;
     position: relative;
-    overflow-x: visible;
     z-index: inherit;
-    overflow-x: hidden;
     min-height: 100vh;
-    overscroll-behavior-y:contain;
- 
+
     @supports (height: 100svh) {
       min-height: 100svh;
     }
+    
     /* Prevent SCSS parsing errors */
   }
 </style>

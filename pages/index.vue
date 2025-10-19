@@ -96,6 +96,6 @@
     position: relative;
     overflow-x: hidden;
     z-index: inherit;
-    height: 100%;
+    min-height: 100vh;
   }
 </style>

@@ -6,8 +6,9 @@
   const isDown = ref(false)
   const isMobileActive = ref(false)
   const isAnimating = ref(false)
-  const isLightMode = ref<boolean>(false)
+  const isLightMode = ref<boolean>(true)
   const route = useRoute()
+  const isProjectsOpen = ref(false)
 
   /* Check if current route is in blog section */
   const isBlogActive = computed(() => {
@@ -28,30 +29,27 @@
 
   if (import.meta.client) {
     screenWidth = ref(window.innerWidth)
-
   }
-
-  /* Watch isLightMode changes and update colorMode - OUTSIDE onMounted */
-  watch(
-    () => isLightMode.value,
-    (newValue) => {
-      colorMode.preference = newValue ? 'light' : 'dark'
-      console.log(colorMode.value)
-    },
-    { immediate: true }
-  )
 
   /**
    * A minimal & responsive navbar for those who like BEM with &.
    * Turns full modal on smaller devices. Hides on scroll down.
+   *
+   * As per usual I try my best to follow this order:
+   * 1. Reactive state
+   * 2. Computed properties
+   * 3. Functions
+   * 4. Watchers
+   * 5. Lifecycle hooks
+   * 6. Define/Expose
    */
   const toggleMenu = () => {
     // Prevent clicks during animation
     if (isAnimating.value) return
-    
+
     isAnimating.value = true
     isMobileActive.value = !isMobileActive.value
-    
+
     if (isMobileActive.value) {
       $gsap.fromTo(
         '.nav__item',
@@ -65,16 +63,16 @@
           delay: 0.5,
           onComplete: () => {
             isAnimating.value = false
-          }
+          },
         }
       )
     } else {
-      $gsap.to('.nav__item', { 
-        duration: 0.2, 
+      $gsap.to('.nav__item', {
+        duration: 0.2,
         opacity: 0,
         onComplete: () => {
           isAnimating.value = false
-        }
+        },
       })
     }
   }
@@ -119,6 +117,28 @@
     })
   }
 
+  /* Watch isLightMode changes and update colorMode - OUTSIDE onMounted */
+  watch(
+    () => isLightMode.value,
+    (newValue) => {
+      colorMode.preference = newValue ? 'light' : 'dark'
+      console.log(colorMode.value)
+    },
+    { immediate: true }
+  )
+
+  watch(
+    () => route.path,
+    (newPath) => {
+      if (newPath === '/projects') {
+        isProjectsOpen.value = true
+      } else {
+        isProjectsOpen.value = false
+      }
+    },
+    { immediate: true }
+  )
+
   onMounted(() => {
     onScroll()
     window.addEventListener('scroll', onScroll)
@@ -135,11 +155,16 @@
     window.removeEventListener('resize', checkScreenWidth)
     window.removeEventListener('scroll', onScroll)
   })
+
   checkScreenWidth()
 </script>
 
 <template>
-  <div class="nav-wrapper" :class="{ 'nav-wrapper--moveup': isDown }">
+  <div
+    class="nav-wrapper"
+    :class="{ 'nav-wrapper--moveup': isDown }"
+    :style="{ 'background-color': isProjectsOpen ? 'transparent' : 'unset' }"
+  >
     <div class="nav-wrapper__inner">
       <UINavHeader :is-mobile="isMobileActive" class="header-wrapper">
         <template #logo>
@@ -169,9 +194,9 @@
             to="/projects"
             data-name="menu"
             class="nav__item action magnet"
-            :class="{ 
+            :class="{
               'nav--link-active': isProjectsActive,
-              'nav__item--disabled': isAnimating
+              'nav__item--disabled': isAnimating,
             }"
             no-prefetch
             @click="!isAnimating && closeMenu()"
@@ -183,9 +208,9 @@
             to="/blog"
             data-name="menu"
             class="nav__item action magnet"
-            :class="{ 
+            :class="{
               'nav--link-active': isBlogActive,
-              'nav__item--disabled': isAnimating
+              'nav__item--disabled': isAnimating,
             }"
             no-prefetch
             @click="!isAnimating && closeMenu()"
@@ -199,7 +224,7 @@
             class="nav__item action magnet"
             :class="[
               { 'nav--link-active': route.path === '/about' },
-              { 'nav__item--disabled': isAnimating }
+              { 'nav__item--disabled': isAnimating },
             ]"
             no-prefetch
             @click="!isAnimating && closeMenu()"
@@ -213,7 +238,7 @@
             class="nav__item action magnet"
             :class="[
               { 'nav--link-active': route.path === '/contact' },
-              { 'nav__item--disabled': isAnimating }
+              { 'nav__item--disabled': isAnimating },
             ]"
             no-prefetch
             @click="!isAnimating && closeMenu()"
@@ -260,9 +285,9 @@
         class="burger action"
         data-name="menu"
         @click="toggleMenu"
-        :class="{ 
+        :class="{
           'burger--anim': isMobileActive,
-          'burger--disabled': isAnimating
+          'burger--disabled': isAnimating,
         }"
       >
         <span></span>
@@ -581,7 +606,7 @@ just use a simple modal and be done with it. */
     transition: 0.1s;
     cursor: pointer;
     display: inline-block;
-    
+
     /* Invisible larger touch area - keeps visual size small but improves touch target */
     &::before {
       content: '';
@@ -693,11 +718,11 @@ just use a simple modal and be done with it. */
     &--disabled {
       pointer-events: none;
       opacity: 0.6;
-      
+
       span {
         transition: none;
       }
-      
+
       &:hover span {
         transform: none;
       }

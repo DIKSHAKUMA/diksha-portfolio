@@ -304,7 +304,7 @@
     max-width: 400px;
 
     @include this-and-above('md') {
-      top:25%;
+      top: 25%;
       width: 400px;
     }
   }

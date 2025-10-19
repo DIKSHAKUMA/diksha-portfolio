@@ -4,7 +4,7 @@
   }>()
 
   const title = ref('')
-  const model = defineModel({ default: false })
+  const model = defineModel({ default: true })
 </script>
 
 <template>

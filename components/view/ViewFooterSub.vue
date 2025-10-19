@@ -47,6 +47,32 @@
 </template>
 
 <style lang="scss" scoped>
+  /* same margins as project-wrapper in [id].vue */
+  .archive-wrapper {
+    position: relative;
+    padding: 0 $px-16-spacer;
+    overflow: hidden;
+    --dot-size: 3px;
+    --dot-space: 50px;
+    min-height: 100vh;
+
+    background: linear-gradient(
+          90deg,
+          $primary calc(var(--dot-space) - var(--dot-size)),
+          transparent 100%
+        )
+        center / var(--dot-space) var(--dot-space),
+      linear-gradient(
+          $primary calc(var(--dot-space) - var(--dot-size)),
+          transparent 100%
+        )
+        center / var(--dot-space) var(--dot-space),
+      $secondary;
+
+    @include this-and-above('sm') {
+      --dot-space: 128px;
+    }
+  }
   .archive {
     display: flex;
     justify-content: center;
@@ -88,37 +114,6 @@
       font-weight: 400;
       font-size: 0.8rem;
       letter-spacing: 0.5px;
-    }
-  }
-
-  /* same margins as project-wrapper in [id].vue */
-  .archive-wrapper {
-    position: relative;
-    padding: 0 $px-16-spacer;
-    overflow: hidden;
-    min-height: 100vh;
-    @supports (height: 100svh) {
-      min-height: 100svh;
-    }
-
-    --dot-size: 3px;
-    --dot-space: 50px;
-
-    background: linear-gradient(
-          90deg,
-          $primary calc(var(--dot-space) - var(--dot-size)),
-          transparent 100%
-        )
-        center / var(--dot-space) var(--dot-space),
-      linear-gradient(
-          $primary calc(var(--dot-space) - var(--dot-size)),
-          transparent 100%
-        )
-        center / var(--dot-space) var(--dot-space),
-      $secondary;
-
-    @include this-and-above('sm') {
-      --dot-space: 128px;
     }
   }
 </style>

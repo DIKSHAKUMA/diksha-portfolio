@@ -173,7 +173,7 @@
 
         minDuration: 0.1,
         maxDuration: 1,
-
+        dragResistance: 0.3,
         edgeResistance: 0.5 /* Smooth resistance at bounds */,
         allowEventDefault: false /* Prevent default touch behaviors */,
 
@@ -242,7 +242,7 @@
   <main ref="main" class="projects-wrapper">
     <!-- Moving light background effect -->
     <div class="projects-background"></div>
-    
+
     <!--:className here is for gsap-->
     <CommonAbstract
       class="front-header"
@@ -326,7 +326,6 @@
     overflow: hidden;
     padding: 0 $px-16-spacer;
 
-
     @include this-and-above('lg') {
       padding: 0 $px-64-spacer;
     }
@@ -339,12 +338,12 @@
 
   .projects-background {
     position: absolute;
-    top: 56px;
+    top: 0px;
     left: 0;
     right: 0;
     bottom: 0;
-    overflow:hidden;
-    
+    overflow: hidden;
+
     &::before {
       content: '';
       position: absolute;

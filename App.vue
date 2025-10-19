@@ -86,11 +86,12 @@
     -moz-osx-font-smoothing: grayscale;
     font-family: $sans-text;
     font-variation-settings: 'slnt' 0, 'wght' 500;
-    /*overscroll-behavior-yNo fan of bounce on mobile but a hard stop can cause issues too*/
-    overscroll-behavior-y: auto;
+    /*overscroll-behavior-y, No fan of bounce on mobile but a hard stop can cause issues too*/
+    overscroll-behavior-y:auto;
     overflow-x: hidden;
+
     @supports (height: 100svh) {
-      min-height: 100svh;
+     min-height: 100svh;
     }
   }
 
