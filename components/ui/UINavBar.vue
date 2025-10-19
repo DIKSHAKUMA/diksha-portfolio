@@ -8,7 +8,7 @@
   const isAnimating = ref(false)
   const isLightMode = ref<boolean>(true)
   const route = useRoute()
-  const isProjectsOpen = ref(false)
+  const isProjectsOrContactOpen = ref(false)
 
   /* Check if current route is in blog section */
   const isBlogActive = computed(() => {
@@ -43,6 +43,18 @@
    * 5. Lifecycle hooks
    * 6. Define/Expose
    */
+
+  /**
+   * We need to also be able to turn off background color
+   * So we can enjoy the strobe on projects page.
+   */
+  const navClassObj = computed(() => {
+    return {
+      'nav-wrapper--moveup': isDown.value,
+      'nav-wrapper--projects-open': isProjectsOrContactOpen.value,
+    }
+  })
+
   const toggleMenu = () => {
     // Prevent clicks during animation
     if (isAnimating.value) return
@@ -130,10 +142,10 @@
   watch(
     () => route.path,
     (newPath) => {
-      if (newPath === '/projects') {
-        isProjectsOpen.value = true
+      if (newPath === '/projects' || newPath === '/contact') {
+        isProjectsOrContactOpen.value = true
       } else {
-        isProjectsOpen.value = false
+        isProjectsOrContactOpen.value = false
       }
     },
     { immediate: true }
@@ -160,11 +172,7 @@
 </script>
 
 <template>
-  <div
-    class="nav-wrapper"
-    :class="{ 'nav-wrapper--moveup': isDown }"
-    :style="{ 'background-color': isProjectsOpen ? 'transparent' : 'unset' }"
-  >
+  <div class="nav-wrapper" :class="navClassObj">
     <div class="nav-wrapper__inner">
       <UINavHeader :is-mobile="isMobileActive" class="header-wrapper">
         <template #logo>
@@ -353,9 +361,12 @@ just use a simple modal and be done with it. */
           219,
           219,
           219,
-          1
+          0.3
         ); /* Semi-transparent light background */
       }
+    }
+    &--projects-open {
+      background-color: unset !important;
     }
   }
 
