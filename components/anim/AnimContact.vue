@@ -286,13 +286,13 @@
       color: $secondary-static;
       opacity: 0.8;
       margin-bottom: $px-8-spacer;
-      font-weight: 500;
+      font-weight: 400;
     }
 
     &__value {
-      font-size: clamped(20px, 24px, 480px, 1920px);
+      font-size: clamped(16px, 20px, 480px, 1920px);
       color: $secondary-static;
-      font-weight: 500;
+      font-weight: 400;
       margin-bottom: $px-16-spacer;
     }
 

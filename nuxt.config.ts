@@ -17,7 +17,7 @@ export default defineNuxtConfig({
 
   site: {
     url: 'https://thomasthorstensson.com',
-    name: 'Thomas Thorstensson • Creative Developer & Designer',
+    name: 'Thomas Thorstensson • Creative Dev.',
     description:
       'Creative developer and designer crafting digital experiences with modern web technologies.',
     defaultLocale: 'en',

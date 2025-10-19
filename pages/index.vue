@@ -9,7 +9,6 @@
 
   /* SEO Meta Tags for Home Page */
   useSeoMeta({
-    title: 'Thomas Thorstensson • Creative Developer & Designer',
     description:
       'Creative developer and designer crafting digital experiences with modern web technologies. Specializing in Vue.js, Nuxt.js, and interactive code.',
     keywords:
@@ -19,14 +18,14 @@
     viewport: 'width=device-width, initial-scale=1.0, viewport-fit=cover',
 
     /* Open Graph */
-    ogTitle: 'Thomas Thorstensson • Creative Developer & Designer',
+    ogTitle: 'Thomas Thorstensson • Creative Dev.',
     ogDescription:
       'Creative developer and designer crafting digital experiences with modern web technologies.',
     ogImage: '/og-image.jpg',
     ogImageAlt: 'Thomas Thorstensson Portfolio',
     ogType: 'website',
     ogUrl: 'https://thomasthorstensson.com',
-    ogSiteName: 'Thomas Thorstensson Portfolio',
+    ogSiteName: 'Thomas Thorstensson • Creative Dev.',
   })
 
   /* Structured Data*/
