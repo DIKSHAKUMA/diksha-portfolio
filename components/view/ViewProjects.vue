@@ -170,7 +170,6 @@
           maxX: initialOffset /* Start from centered position, not 0 */,
         },
         inertia: true,
-
         minDuration: 0.1,
         maxDuration: 1,
         dragResistance: 0.3,
@@ -477,7 +476,7 @@
       /* Smooth scale transitions */
 
       &--open {
-        transform: scale(1.1);
+        transform: scale(1.08);
       }
 
       img {
@@ -490,6 +489,8 @@
         image-rendering: -webkit-optimize-contrast;
         image-rendering: optimize-contrast;
         image-rendering: auto;
+        backface-visibility: hidden;
+        will-change: transform;
 
         @include this-and-above('sm') {
           width: 75vw;

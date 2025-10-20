@@ -134,7 +134,6 @@
     () => isLightMode.value,
     (newValue) => {
       colorMode.preference = newValue ? 'light' : 'dark'
-      console.log(colorMode.value)
     },
     { immediate: true }
   )

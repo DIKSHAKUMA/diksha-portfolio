@@ -73,22 +73,20 @@
 
     /* Light mode styling */
     .light-mode & {
-      background: rgba(23, 23, 23, 0.08);
+      background: rgba(23, 23, 23, 0.05);
       border-color: rgba(23, 23, 23, 0.15);
       color: $secondary;
     }
 
     /* Hover effects, binding to color mode here folks */
     &:hover {
-      transform: translateY(-2px) translateZ(0);
+      transform: translateX(-5px) translateZ(0);
       background: rgba(250, 247, 255, 0.15);
       border-color: rgba(250, 247, 255, 0.3);
-      box-shadow: 0 8px 32px rgba(250, 247, 255, 0.1);
 
       .light-mode & {
-        background: rgba(23, 23, 23, 0.12);
+        background: rgba(23, 23, 23, 0.10);
         border-color: rgba(23, 23, 23, 0.25);
-        box-shadow: 0 8px 32px rgba(23, 23, 23, 0.1);
       }
     }
 

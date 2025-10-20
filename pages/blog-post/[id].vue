@@ -53,8 +53,10 @@
 
   /* SEO Meta Tags */
   useSeoMeta({
-    title: () => post.value ? `${post.value.title} • Thomas Thorstensson` : 'Blog Post',
-    description: () => post.value?.subject || 'Read this blog post by Thomas Thorstensson',
+    title: () =>
+      post.value ? `${post.value.title} • Thomas Thorstensson` : 'Blog Post',
+    description: () =>
+      post.value?.subject || 'Read this blog post by Thomas Thorstensson',
     ogTitle: () => post.value?.title,
     ogDescription: () => post.value?.subject,
     ogImage: () => post.value?.coverImage?.handle,
@@ -73,9 +75,10 @@
     link: [
       {
         rel: 'canonical',
-        href: () => `https://thomasthorstensson.com/blog-post/${post.value?.slug}`
-      }
-    ]
+        href: () =>
+          `https://thomasthorstensson.com/blog-post/${post.value?.slug}`,
+      },
+    ],
   })
 
   /* Structured Data for SEO */
@@ -88,18 +91,21 @@
       dateModified: () => post.value?.updatedAt || post.value?.date,
       author: {
         name: () => post.value?.authors?.[0]?.name || 'Thomas Thorstensson',
-        url: 'https://thomasthorstensson.com/about'
+        url: 'https://thomasthorstensson.com/about',
       },
       publisher: {
         name: 'Thomas Thorstensson',
-        url: 'https://thomasthorstensson.com'
-      }
+        url: 'https://thomasthorstensson.com',
+      },
     }),
     defineBreadcrumb([
       { name: 'Home', item: '/' },
       { name: 'Blog', item: '/blog' },
-      { name: () => post.value?.title, item: () => `/blog-post/${post.value?.slug}` }
-    ])
+      {
+        name: () => post.value?.title,
+        item: () => `/blog-post/${post.value?.slug}`,
+      },
+    ]),
   ])
 
   const runTrigger = () => {
@@ -129,7 +135,7 @@
     const { $lenis } = useNuxtApp()
     // Ensure we start at top of page
     $lenis.scrollTo(0, { immediate: true, force: true })
-    
+
     $gsap.registerPlugin(ScrollTrigger)
     $gsap.set('.blog__post-cover img', { opacity: 0 })
     $gsap.delayedCall(1, runTrigger)
@@ -160,13 +166,12 @@
       })
 
       mdcContentReady.value = true
-      
+
       // Refresh Lenis after content is loaded to recalculate scroll bounds
       if (($lenis as any).refresh) {
-        ($lenis as any).refresh()
+        ;($lenis as any).refresh()
       }
-
-    }, 500) 
+    }, 500)
   }
 
   onUnmounted(() => {
@@ -205,7 +210,11 @@
               <NuxtImg
                 :src="post.coverImage?.handle"
                 provider="hygraph"
-                :alt="post.title ? `Cover image for ${post.title}` : 'Blog post cover image'"
+                :alt="
+                  post.title
+                    ? `Cover image for ${post.title}`
+                    : 'Blog post cover image'
+                "
                 format="webp"
                 sizes=" sm:100vw md:65vw lg:65vw xl:45vw"
                 densities="x1 x2"
@@ -309,9 +318,12 @@
     }
   }
 
-  :deep(figure figcaption),
-  :deep(em) {
+  :deep(figure figcaption) {
     font-size: 14px;
+  }
+
+  :deep(em) {
+    font-size: clamped(16px, 20px, 380px, 1920px);
   }
 
   .blog-post-wrapper {
@@ -321,7 +333,6 @@
     overflow-x: visible;
     z-index: inherit;
     margin: 0 auto;
-
     padding: 0 $px-16-spacer;
 
     @include this-and-above('md') {

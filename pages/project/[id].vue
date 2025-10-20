@@ -519,6 +519,10 @@
     max-width: 2048px;
   }
 
+    h5 {
+    font-weight: 600;
+  }
+
   .project-wrapper {
     flex-flow: column;
     display: flex;

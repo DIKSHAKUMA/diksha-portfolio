@@ -67,10 +67,19 @@
 <template>
   <div class="tech-wrapper">
     <div class="text">
-      <span class="quote">Nuxt / Vue</span>
       <span class="quote">TypeScript</span>
+      <span class="quote">Nuxt / Vue</span>
+      <span class="quote">Svelte</span>
+      <span class="quote">SvelteKit</span>
+      <span class="quote">SSR</span>
+      <span class="quote">PixiJS</span>
+      <span class="quote">P5JS</span>
       <span class="quote">GraphQL</span>
       <span class="quote">GSAP</span>
+      <span class="quote">UI/UX</span>
+      <span class="quote">Figma</span>
+      <span class="quote">Web Performance</span>
+      <span class="quote">Problem Solving</span>
     </div>
   </div>
 </template>

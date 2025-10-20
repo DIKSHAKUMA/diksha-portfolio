@@ -51,7 +51,6 @@
 
       p5Instance = new p5.default((p: any) => {
         p.setup = () => {
-          console.log('P5.js setup running!')
           /* Reduce canvas height on mobile to give space for title */
           const isMobile = window.innerWidth < 768
           const canvasHeight = isMobile ? window.innerHeight * 0.75 : window.innerHeight
@@ -65,7 +64,6 @@
         }
 
         p.draw = () => {
-          console.log('P5.js draw running!')
           p.background(getCurrentBgColor()) /* Dynamic background from color mode */
 
           p.push()
@@ -134,14 +132,11 @@
         observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
-              console.log('Parallax intersection:', entry.isIntersecting, entry.intersectionRatio)
               if (entry.isIntersecting) {
                 /* Pause animation when parallax enters viewport */
-                console.log('Pausing P5 rings animation')
                 if (p5Instance) p5Instance.noLoop()
               } else {
                 /* Resume animation when parallax leaves viewport */
-                console.log('Resuming P5 rings animation')
                 if (p5Instance) p5Instance.loop()
               }
             })
@@ -156,7 +151,6 @@
         nextTick(() => {
           const parallaxSection = document.querySelector('.parallax__wrapper')
           if (parallaxSection && observer) {
-            console.log('Observing parallax section for P5 rings')
             observer.observe(parallaxSection)
           } else {
             console.warn('Parallax section not found for P5 rings observer')

@@ -59,7 +59,7 @@
     }
 
     &__date {
-      font-size: clamped(12px, 14px, 480px, 1920px);
+      font-size: clamped(10px, 14px, 480px, 1920px);
       color: $accent2;
       margin: 0;
       font-style: italic;
@@ -73,7 +73,7 @@
     }
 
     &__definition {
-      font-size: clamped(14px, 16px, 480px, 1920px);
+      font-size: clamped(10px, 14px, 480px, 1920px);
       color: $secondary;
       line-height: 1.5;
       margin: 0;
