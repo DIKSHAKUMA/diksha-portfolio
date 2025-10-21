@@ -132,7 +132,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     /* Mobile: Move camera far left to ensure visibility on narrow screens */
-    background-position: 80% top;
+    background-position: 72% top;
     transform: translateZ(0);
     /* Force hardware acceleration */
     backface-visibility: hidden;

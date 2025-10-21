@@ -68,7 +68,10 @@
   .info-label-wrapper {
     position: absolute;
     display: flex;
-    color: var(--secondary);
+    color: $secondary;
+    will-change:transform;
+    text-rendering: optimizeLegibility;
+    font-weight: 400;
     width: 100%;
     height: 100%;
     top: 0;
@@ -82,7 +85,7 @@
   .info-label-header {
     font-size: clamped(12px, 14px, 480px, 1920px);
     opacity: 0.8;
-    font-family: $sans-ui;
+    font-family: $sans-ui-mono;
 
     font-weight:500;
     line-height: 1;
