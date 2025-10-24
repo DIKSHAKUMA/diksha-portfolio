@@ -19,7 +19,15 @@
   let stopWatching: (() => void) | null = null
   let pixiDestroyed = false
   let resizeListener: (() => void) | null = null
-  let waves: Array<{ graphics: PIXI.Graphics; phase: number; amplitude: number; frequency: number; speed: number; colorOffset: number; colorSpeed: number }> = []
+  let waves: Array<{
+    graphics: PIXI.Graphics
+    phase: number
+    amplitude: number
+    frequency: number
+    speed: number
+    colorOffset: number
+    colorSpeed: number
+  }> = []
 
   const checkIfMobile = () => {
     if (import.meta.client) {
@@ -32,7 +40,7 @@
     if (pixiDestroyed || !app) return
 
     pixiDestroyed = true
-    waves.forEach(wave => wave.graphics.destroy())
+    waves.forEach((wave) => wave.graphics.destroy())
     waves = []
     app.destroy()
   }
@@ -40,7 +48,7 @@
   /* Helper function to convert HSL to hex color */
   const hslToHex = (h: number, s: number, l: number): number => {
     l /= 100
-    const a = s * Math.min(l, 1 - l) / 100
+    const a = (s * Math.min(l, 1 - l)) / 100
     const f = (n: number) => {
       const k = (n + h / 30) % 12
       const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)
@@ -53,122 +61,134 @@
   }
 
   /* Get color for wave segment based on position and time */
-  const getWaveColor = (waveIndex: number, segmentRatio: number, time: number): number => {
+  const getWaveColor = (
+    waveIndex: number,
+    segmentRatio: number,
+    time: number
+  ): number => {
     const isLightMode = colorMode.value === 'light'
-    
+
     if (isLightMode) {
       // Light mode: More prominent but still appropriate colors
       const baseHue = 194
       const baseSat = 16 // Increased from 12 for stronger presence
       const baseLight = 65 // Darker from 70 for better contrast
-      
+
       // More pronounced variation
       const lightnessOffset = waveIndex * 4 // Increased from 3
       const colorSpeed = 0.6 + waveIndex * 0.25 // Faster, more dynamic animation
-      
+
       // Much more noticeable traveling shade effect
-      const travelingLight = baseLight + lightnessOffset + Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 16 // Increased from 12
-      const travelingSat = baseSat + Math.sin(segmentRatio * Math.PI * 3 + time * colorSpeed * 0.7) * 8 // Increased from 6
-      
+      const travelingLight =
+        baseLight +
+        lightnessOffset +
+        Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 16 // Increased from 12
+      const travelingSat =
+        baseSat +
+        Math.sin(segmentRatio * Math.PI * 3 + time * colorSpeed * 0.7) * 8 // Increased from 6
+
       // Wider range for prominent shades
       const finalLight = Math.max(55, Math.min(85, travelingLight)) // Expanded range 55-85 vs 65-85
       const finalSat = Math.max(10, Math.min(25, travelingSat)) // Increased from 8-20 to 10-25
-      
+
       return hslToHex(baseHue, finalSat, finalLight)
     } else {
       // Dark mode: Original dramatic colors
       const baseHue = 194 // Keep hue constant for shades
       const baseSat = 21
       const baseLight = 24
-      
-      // MORE PRONOUNCED: Increased lightness range and speed
+
       const lightnessOffset = waveIndex * 5 // Bigger variation per wave
       const colorSpeed = 0.8 + waveIndex * 0.3 // Faster, more noticeable speeds
-      
+
       // Create traveling shade effect with MUCH more contrast
-      const travelingLight = baseLight + lightnessOffset + Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 20 // Increased from 12 to 20
-      const travelingSat = baseSat + Math.sin(segmentRatio * Math.PI * 3 + time * colorSpeed * 0.7) * 15 // Increased from 8 to 15
-      
+      const travelingLight =
+        baseLight +
+        lightnessOffset +
+        Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 20
+      const travelingSat =
+        baseSat +
+        Math.sin(segmentRatio * Math.PI * 3 + time * colorSpeed * 0.7) * 15
+
       // WIDER range for more dramatic shades of #2f454b
-      const finalLight = Math.max(5, Math.min(50, travelingLight)) // Expanded from 8-40 to 5-50
-      const finalSat = Math.max(8, Math.min(45, travelingSat)) // Expanded from 10-35 to 8-45
-      
+      const finalLight = Math.max(5, Math.min(50, travelingLight))
+      const finalSat = Math.max(8, Math.min(45, travelingSat))
+
       return hslToHex(baseHue, finalSat, finalLight)
     }
   }
 
   /* Create animated sinus waves */
   const createWaves = () => {
-    console.log('Creating waves with color wandering effect')
-    
     for (let i = 0; i < 6; i++) {
       const graphics = new PIXI.Graphics()
       const wave = {
         graphics,
         phase: Math.random() * Math.PI * 2,
-        amplitude: 50 + Math.random() * 80, // Increased amplitude
-        frequency: 0.005 + Math.random() * 0.01, // Adjusted frequency
-        speed: 0.01 + Math.random() * 0.02, // Adjusted speed
-        colorOffset: i * 0.5, // Each wave starts with different color phase
-        colorSpeed: 0.3 + Math.random() * 0.4 // Different color animation speeds
+        amplitude: 50 + Math.random() * 80,
+        frequency: 0.005 + Math.random() * 0.01,
+        speed: 0.01 + Math.random() * 0.02,
+        colorOffset: i * 0.5,
+        colorSpeed: 0.3 + Math.random() * 0.4,
       }
-      
+
       waves.push(wave)
       app.stage.addChild(graphics)
     }
-    
-    console.log('Created waves:', waves.length) // Debug
   }
 
-  /* Animate waves with color wandering */
+  let cachedWidth = 0
+  let cachedHeight = 0
+
   const animateWaves = () => {
     if (pixiDestroyed || !app) return
 
-    const currentTime = Date.now() * 0.001 // Convert to seconds
+    const currentTime = Date.now() * 0.001
+    
+    if (cachedWidth !== app.screen.width || cachedHeight !== app.screen.height) {
+      cachedWidth = app.screen.width
+      cachedHeight = app.screen.height
+    }
 
     waves.forEach((wave, index) => {
       wave.graphics.clear()
+      const centerY = cachedHeight / 2 + (index - 2.5) * 60
+      const segmentSize = 8
       
-      const width = app.screen.width
-      const height = app.screen.height
-      const centerY = height / 2 + (index - 2.5) * 60 // Keep original positioning
-      
-      // Draw wave with color segments
-      const segmentSize = 8 // Size of each color segment
-      let prevX = 0
-      let prevY = centerY + Math.sin(wave.phase) * wave.amplitude
-      
-      for (let x = 0; x <= width; x += segmentSize) {
+      const points = []
+      for (let x = 0; x <= cachedWidth; x += segmentSize) {
         const y = centerY + Math.sin(x * wave.frequency + wave.phase) * wave.amplitude
-        
-        // Calculate color for this segment
-        const segmentRatio = x / width
+        const segmentRatio = x / cachedWidth
         const segmentColor = getWaveColor(index, segmentRatio, currentTime + wave.colorOffset)
-        
-        // Draw segment with its unique color
-        wave.graphics.setStrokeStyle({ width: 4, color: segmentColor, alpha: 1 })
-        wave.graphics.moveTo(prevX, prevY)
-        wave.graphics.lineTo(x, y)
-        wave.graphics.stroke()
-        
-        prevX = x
-        prevY = y
+        points.push({ x, y, color: segmentColor })
       }
       
+      for (let i = 0; i < points.length - 1; i++) {
+        const current = points[i]
+        const next = points[i + 1]
+        
+        wave.graphics.setStrokeStyle({ width: 4, color: current.color, alpha: 1 })
+        wave.graphics.moveTo(current.x, current.y)
+        wave.graphics.lineTo(next.x, next.y)
+        wave.graphics.stroke()
+      }
+
       wave.phase += wave.speed
     })
-    
+
     rafId = requestAnimationFrame(animateWaves)
   }
 
   /* Resize canvas to fit container */
   const resizeCanvas = () => {
     if (!app || !pixiCtx.value) return
-    
+
     const width = pixiCtx.value.clientWidth || window.innerWidth
     const height = pixiCtx.value.clientHeight || window.innerHeight
-    
+
     app.renderer.resize(width, height)
+    cachedWidth = 0
+    cachedHeight = 0
   }
 
   /* Watch for route changes and resize canvas */
@@ -186,9 +206,8 @@
     () => colorMode.value,
     (newMode, oldMode) => {
       if (pixiReady && app && !pixiDestroyed) {
-        console.log('Color mode changed:', oldMode, '->', newMode)
         // Clear existing waves
-        waves.forEach(wave => wave.graphics.destroy())
+        waves.forEach((wave) => wave.graphics.destroy())
         waves = []
         // Recreate with new colors
         createWaves()
@@ -219,30 +238,31 @@
         height: window.innerHeight,
         antialias: true,
         resolution: window.devicePixelRatio || 1,
-        autoDensity: true
+        autoDensity: true,
       })
 
       /* Create waves but delay animation start to avoid Venice blind collision */
       createWaves()
-      
+
       /* Mark PIXI as ready but delay animation start */
       pixiReady = true
-      
+
       // Delay wave animation to let Venice blind complete
       setTimeout(() => {
         if (!pixiDestroyed && app) {
           animateWaves()
         }
-      }, 1200) // 1.2s delay to let Venice blind finish
-      
+      }, 1200) 
+
       /* Resize canvas to fit */
       resizeCanvas()
 
       /* Context! The friendly GSAP garbage collector */
       ctx = $gsap.context((self) => {
         /* Fade in the canvas */
-        $gsap.fromTo(pixiCtx.value, 
-          { opacity: 0 }, 
+        $gsap.fromTo(
+          pixiCtx.value,
+          { opacity: 0 },
           { duration: 2, opacity: 1, delay: 1.5 }
         )
 

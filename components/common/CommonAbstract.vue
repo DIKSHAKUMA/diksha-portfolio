@@ -179,7 +179,7 @@ b<script setup lang="ts">
       }
 
       @include this-and-above('xl') {
-        width: 58%;
+        width: 55%;
       }
     }
 
