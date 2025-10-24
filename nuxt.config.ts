@@ -90,7 +90,7 @@ export default defineNuxtConfig({
         provider: 'google',
       },
       {
-        name: 'Geist',
+        name: 'Lato',
         provider: 'google',
       },
       { name: 'Geist Mono', 

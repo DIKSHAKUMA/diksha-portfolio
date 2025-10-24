@@ -205,7 +205,7 @@
               :date="post.date"
               :is-hero="false"
               :is-secondary="false"
-              :is-two-lines="false"
+              :is-two-lines="true"
             />
 
             <div class="blog__post-cover">
@@ -318,11 +318,9 @@
 </template>
 
 <style lang="scss" scoped>
-
   :deep(.abstract__desc) {
-    margin-top: $px-16-spacer !important;
+    margin-top: $px-8-spacer !important;
   }
-
   /* Deep to reach into MDC Markdown */
   :deep(*) {
     word-wrap: break-word;
