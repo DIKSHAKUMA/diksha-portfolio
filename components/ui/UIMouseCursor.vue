@@ -186,7 +186,13 @@
   }
 
   onBeforeUnmount(() => {
-    /* Remove GSAP ticker */
+    if (import.meta.client) {
+      document.removeEventListener('mousemove', setFromEvent)
+      document.removeEventListener('mouseenter', setFromEvent)
+      document.removeEventListener('mouseleave', setFromEvent)
+      window.removeEventListener('scroll', setFromEvent)
+    }
+
     if (loopStarted.value) {
       $gsap.ticker.remove(loop)
       loopStarted.value = false
@@ -289,8 +295,9 @@
       will-change: width, height, transform;
       transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
       backdrop-filter: blur(15px);
-      opacity: 0.5;
+      opacity: 0.8;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        background: $primary-static;
 
       .light-mode & {
         background: $primary-static;

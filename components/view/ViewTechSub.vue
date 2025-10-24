@@ -88,6 +88,7 @@
           $gsap.to(splitTxt.words, {
             autoAlpha: 1,
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+            force3D: true,
             scrollTrigger: {
               trigger: sec,
               start: 'top 90%',

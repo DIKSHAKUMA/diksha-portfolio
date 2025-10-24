@@ -19,6 +19,8 @@
   let stopWatching: (() => void) | null = null
   let pixiDestroyed = false
   let resizeListener: (() => void) | null = null
+  let observer: IntersectionObserver | null = null
+  let isWavesPaused = false
   let waves: Array<{
     graphics: PIXI.Graphics
     phase: number
@@ -141,7 +143,7 @@
   let cachedHeight = 0
 
   const animateWaves = () => {
-    if (pixiDestroyed || !app) return
+    if (pixiDestroyed || !app || isWavesPaused) return
 
     const currentTime = Date.now() * 0.001
     
@@ -254,6 +256,33 @@
         }
       }, 1200) 
 
+      /* Setup IntersectionObserver for parallax section */
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              isWavesPaused = true
+            } else {
+              isWavesPaused = false
+              if (!pixiDestroyed && app) {
+                animateWaves()
+              }
+            }
+          })
+        },
+        {
+          threshold: 0,
+          rootMargin: '-50% 0px -50% 0px'
+        }
+      )
+
+      nextTick(() => {
+        const parallaxSection = document.querySelector('.parallax__wrapper')
+        if (parallaxSection && observer) {
+          observer.observe(parallaxSection)
+        }
+      })
+
       /* Resize canvas to fit */
       resizeCanvas()
 
@@ -301,6 +330,12 @@
     /* Clean up resize listener */
     if (resizeListener && import.meta.client) {
       window.removeEventListener('resize', resizeListener)
+    }
+
+    /* Clean up IntersectionObserver */
+    if (observer) {
+      observer.disconnect()
+      observer = null
     }
 
     /* Clean up GSAP context */

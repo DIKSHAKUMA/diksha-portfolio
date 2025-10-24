@@ -62,83 +62,68 @@
       const p5 = await import('p5')
       const rings = 20
       let frameCount = 0
+      let cachedColors = getRingColors()
+      let cachedBgColor = getCurrentBgColor()
+      let isMobile = false
       
-      /* Detect Firefox for performance optimization */
       const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
 
       p5Instance = new p5.default((p: any) => {
         p.setup = () => {
-          /* Reduce canvas height on mobile to give space for title */
-          const isMobile = window.innerWidth < 768
+          isMobile = window.innerWidth < 768
           const canvasHeight = isMobile ? window.innerHeight * 0.75 : window.innerHeight
           const canvas = p.createCanvas(window.innerWidth, canvasHeight)
           canvas.parent('rings')
-          p.background(getCurrentBgColor()) /* Dynamic background from color mode */
+          p.background(cachedBgColor)
           p.noStroke()
-          p.colorMode(p.RGB, 255) /* Switch to RGB for brand colors */
-          p.pixelDensity(1) /* Force 1:1 pixel ratio for Firefox performance */
-          p.frameRate(24) /* Reduce to 24fps for better Firefox performance */
+          p.colorMode(p.RGB, 255)
+          p.pixelDensity(1)
+          p.frameRate(24)
         }
 
         p.draw = () => {
-          p.background(getCurrentBgColor()) /* Dynamic background from color mode */
+          p.background(cachedBgColor)
 
           p.push()
-          /* Center rings vertically on mobile, keep centered on desktop */
-          const isMobile = p.width < 768
-          /* For mobile: use actual viewport center, not canvas center */
           const centerY = isMobile ? (window.innerHeight * 0.45) : p.height / 2
           p.translate(p.width / 2, centerY)
 
-          const time = p.millis() * 0.001 /* Use seconds for smoother animation */
+          const time = p.millis() * 0.001
           const speed = time * 0.5
-
-          /* Pre-calculate values to reduce Firefox math overhead */
           const timeForAlpha = time * 2
           const timeForSize = time * 3
+          const baseSpace = isMobile ? 8 : 15
+          const baseSize = isMobile ? 2 : 4
 
           for (let i = 1; i < rings; i++) {
-            /* Start from 1, render all rings */
             p.push()
             p.rotate(speed * (i * 0.02))
 
-            /* Cycle through colors based on current color mode */
-            const currentColors = getRingColors()
-            const colorIndex = Math.floor(
-              (time * 2 + i * 0.5) % currentColors.length
-            )
-            const color = currentColors[colorIndex]
-            /* Simplified alpha calculation for Firefox */
-            const alpha = 150 + 30 * p.sin(timeForAlpha + i * 0.3) /* Reduced amplitude */
+            const colorIndex = Math.floor((time * 2 + i * 0.5) % cachedColors.length)
+            const color = cachedColors[colorIndex]
+            const alpha = 150 + 30 * p.sin(timeForAlpha + i * 0.3)
             p.fill(color[0], color[1], color[2], alpha)
 
-            /* Create radiating star rays */
-            const numRays = Math.max(6, Math.floor(i * 0.6)) /* Fewer rays for cleaner star effect */
+            const numRays = Math.max(6, Math.floor(i * 0.6))
             for (let j = 0; j < numRays; j++) {
               const rayAngle = (j / numRays) * p.TWO_PI
+              const cosAngle = p.cos(rayAngle)
+              const sinAngle = p.sin(rayAngle)
               
-              /* Dynamic spacing based on screen size */
-              const isMobile = p.width < 768
-              const baseSpace = isMobile ? 8 : 15
-              
-              /* Create multiple dots along each ray */
               const dotsPerRay = Math.max(2, Math.floor(i * 0.4))
               for (let k = 1; k <= dotsPerRay; k++) {
                 const rayProgress = k / dotsPerRay
                 const rayLength = baseSpace * i * rayProgress
                 
-                /* Add pulsing motion to the rays */
                 const pulse = p.sin(time * 2 + i * 0.5 + rayAngle + rayProgress * p.PI) * 0.2
                 const finalRadius = rayLength * (1 + pulse)
                 
-                /* Vary dot size along the ray - smaller towards center, bigger at tips */
-                const baseSize = isMobile ? 2 : 4
-                const rayTipMultiplier = 0.5 + rayProgress * 1.5 /* Grow towards ray tips */
+                const rayTipMultiplier = 0.5 + rayProgress * 1.5
                 const size = (baseSize * rayTipMultiplier) + p.sin(i * 0.3 + timeForSize) * 1.5
 
                 p.ellipse(
-                  finalRadius * p.cos(rayAngle),
-                  finalRadius * p.sin(rayAngle),
+                  finalRadius * cosAngle,
+                  finalRadius * sinAngle,
                   size,
                   size
                 )
@@ -150,11 +135,16 @@
         }
 
         p.windowResized = () => {
-          /* Maintain mobile sizing on resize */
-          const isMobile = window.innerWidth < 768
+          isMobile = window.innerWidth < 768
           const canvasHeight = isMobile ? window.innerHeight * 0.75 : window.innerHeight
           p.resizeCanvas(window.innerWidth, canvasHeight)
         }
+      })
+      
+      /* Watch for color mode changes and update cached values */
+      watch(() => colorMode.value, () => {
+        cachedColors = getRingColors()
+        cachedBgColor = getCurrentBgColor()
       })
       
       /* Firefox-only Intersection Observer for performance */

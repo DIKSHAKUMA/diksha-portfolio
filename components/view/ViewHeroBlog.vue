@@ -9,9 +9,6 @@
     () => (store.data.intro?.blogTitle as string) || ''
   )
 
-  onMounted(() => {})
-
-  onUnmounted(() => {})
 </script>
 
 <template>

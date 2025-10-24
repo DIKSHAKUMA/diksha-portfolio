@@ -25,9 +25,6 @@
   const { $gsap } = useNuxtApp()
   let ctx: gsap.Context
 
-  onMounted(() => {})
-
-  onUnmounted(() => {})
 </script>
 
 <template>

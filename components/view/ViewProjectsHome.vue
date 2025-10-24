@@ -84,6 +84,7 @@
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
             duration: 0.5,
             ease: 'power1.out',
+            force3D: true,
             scrollTrigger: {
               trigger: img,
               start: 'top 80%',
@@ -121,6 +122,7 @@
           opacity: 0,
           duration: 0.5,
           ease: 'power2.out',
+          force3D: true,
           scrollTrigger: {
             trigger: word,
             start: 'top 80%',
