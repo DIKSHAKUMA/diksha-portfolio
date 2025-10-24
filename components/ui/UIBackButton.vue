@@ -24,7 +24,8 @@
 
 <template>
   <button
-    class="back-button"
+    class="back-button action"
+    data-name="proj"
     @click="handleBack"
     :aria-label="`Go ${text.toLowerCase()}`"
   >
@@ -39,8 +40,7 @@
     align-self: flex-end;
     align-items: center;
     width: fit-content;
-    padding: $px-8-spacer $px-16-spacer;
-    border-radius: 12px;
+    padding: $px-8-spacer $px-16-spacer $px-8-spacer 24px;
     cursor: pointer;
     font-family: $sans-ui;
     font-size: 14px;
@@ -48,9 +48,10 @@
     transition: all 0.3s ease;
     position: relative;
 
-    /* Glassmorphism styling */
-    background: rgba(250, 247, 255, 0.1);
-    backdrop-filter: blur(12px);
+    /* Triangle pointing left using clip-path polygon */
+    clip-path: polygon(15px 0%, 100% 0%, 100% 100%, 15px 100%, 0% 50%);
+
+    background-color: $accent1; /* Ensure solid background for clip-path */
     color: $primary;
 
     /* Hardware acceleration */
@@ -85,7 +86,7 @@
       border-color: rgba(250, 247, 255, 0.3);
 
       .light-mode & {
-        background: rgba(23, 23, 23, 0.10);
+        background: rgba(23, 23, 23, 0.1);
         border-color: rgba(23, 23, 23, 0.25);
       }
     }

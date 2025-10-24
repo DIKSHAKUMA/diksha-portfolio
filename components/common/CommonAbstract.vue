@@ -14,7 +14,6 @@ b<script setup lang="ts">
     isTwoLines: boolean
     author: string
     date: string
-    isPageTitle: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -28,7 +27,6 @@ b<script setup lang="ts">
     isTwoLines: false,
     author: '',
     date: '',
-    isPageTitle: false,
   })
 
   const { $gsap } = useNuxtApp()
@@ -40,13 +38,11 @@ b<script setup lang="ts">
       'abstract-wrapper--hero': props.isHero,
       'abstract-wrapper--secondary': props.isSecondary,
       'abstract-wrapper--full-width': props.isFullWidth,
-      'abstract-wrapper--page-title': props.isPageTitle,
     }
   })
 
   const headerClassObj = computed(() => {
     return {
-      'abstract__header--page-title': props.isPageTitle,
       'abstract__header--hero': props.isHero,
       'abstract__header--secondary': props.isSecondary,
       'abstract__header--full-width': props.isFullWidth,
@@ -143,14 +139,14 @@ b<script setup lang="ts">
       <!-- For blog posts -->
       <div class="abstract__info">
         <div v-if="author && author.trim()">
-          <h4 class="abstract__author" :class="props.className">
+          <div class="abstract__author" :class="props.className">
             by: {{ author }}
-          </h4>
+          </div>
         </div>
         <div v-if="date && date.trim()">
-          <h4 class="abstract__date" :class="props.className">
+          <div class="abstract__date" :class="props.className">
             on: {{ date }}
-          </h4>
+          </div>
         </div>
       </div>
     </div>
@@ -158,6 +154,11 @@ b<script setup lang="ts">
 </template>
 
 <style lang="scss" scoped>
+
+/**
+ * For semantic distionction, this component feels like a display case of typography
+ * so I a not using h1-h6 tags.
+ */
   .abstract-wrapper {
     display: flex;
     flex-flow: column;
@@ -203,7 +204,7 @@ b<script setup lang="ts">
       margin-bottom: $px-64-spacer;
 
       &.abstract-wrapper--hero {
-        margin-bottom: $px-16-spacer;
+        margin-bottom: $px-8-spacer;
       }
     }
   }
@@ -211,12 +212,13 @@ b<script setup lang="ts">
   .abstract {
     &__header {
       position: relative;
-      font-size: clamped(40px, 90px, 480px, 1920px);
+      font-size: clamped(54px, 116px, 480px, 1920px);
       flex-wrap: wrap;
       height: max-content;
       margin-bottom: $px-32-spacer;
-      line-height: 1.2;
+      line-height: 1;
       font-family: $sans-ui;
+      text-transform: uppercase;
 
       &--hero {
         margin-bottom: 0;
@@ -228,11 +230,6 @@ b<script setup lang="ts">
       }
 
       &--full-width {
-        margin-bottom: 0;
-      }
-
-      &--page-title {
-        font-size: clamped(36px, 68px, 480px, 1920px);
         margin-bottom: 0;
       }
 
@@ -250,6 +247,7 @@ b<script setup lang="ts">
     }
 
     &__desc {
+      display:inline-block;
       font-size: clamped(18px, 30px, 480px, 1920px);
       font-family: $sans-text;
     }

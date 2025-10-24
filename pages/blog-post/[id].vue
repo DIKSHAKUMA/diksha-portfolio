@@ -165,12 +165,15 @@
         link.classList.add('action')
       })
 
-      mdcContentReady.value = true
+      // Small delay to ensure skeleton is visible
+      setTimeout(() => {
+        mdcContentReady.value = true
 
-      // Refresh Lenis after content is loaded to recalculate scroll bounds
-      if (($lenis as any).refresh) {
-        ;($lenis as any).refresh()
-      }
+        // Refresh Lenis after content is loaded to recalculate scroll bounds
+        if (($lenis as any).refresh) {
+          ;($lenis as any).refresh()
+        }
+      }, 300) // Additional delay to show skeleton
     }, 500)
   }
 
@@ -193,7 +196,6 @@
         <main class="blog__post">
           <div v-if="post">
             <CommonAbstract
-              :is-page-title="true"
               :label="post.title"
               :desc="post.subject"
               :delay="1"
@@ -224,21 +226,48 @@
               class="blog__post-content"
               :class="{ 'blog__post-content--show': mdcContentReady }"
             >
-              <ClientOnly>
-                <MDC
-                  :value="post.content"
-                  ref="mdc"
-                  @vue:mounted="setupMDCLinks"
-                />
-                <template #fallback>
-                  <div class="mdc-loading">
-                    <div class="mdc-skeleton"></div>
-                    <div class="mdc-skeleton"></div>
-                    <div class="mdc-skeleton short"></div>
-                    <div class="mdc-skeleton"></div>
-                  </div>
-                </template>
-              </ClientOnly>
+              <!-- Show skeleton while content is loading -->
+              <div v-if="!mdcContentReady" class="mdc-loading">
+                <!-- Paragraph skeleton -->
+                <div class="mdc-skeleton"></div>
+                <div class="mdc-skeleton"></div>
+                <div class="mdc-skeleton short"></div>
+
+                <!-- Spacing -->
+                <div class="mdc-skeleton-spacer"></div>
+
+                <!-- Heading skeleton -->
+                <div class="mdc-skeleton heading"></div>
+
+                <!-- Another paragraph -->
+                <div class="mdc-skeleton"></div>
+                <div class="mdc-skeleton"></div>
+                <div class="mdc-skeleton medium"></div>
+
+                <!-- Spacing -->
+                <div class="mdc-skeleton-spacer"></div>
+
+                <!-- Code block skeleton -->
+                <div class="mdc-skeleton code-block"></div>
+
+                <!-- Final paragraph -->
+                <div class="mdc-skeleton"></div>
+                <div class="mdc-skeleton short"></div>
+              </div>
+
+              <!-- Always render MDC but hide it until ready -->
+              <div
+                class="mdc-content"
+                :class="{ 'mdc-content--hidden': !mdcContentReady }"
+              >
+                <ClientOnly>
+                  <MDC
+                    :value="post.content"
+                    ref="mdc"
+                    @vue:mounted="setupMDCLinks"
+                  />
+                </ClientOnly>
+              </div>
             </div>
           </div>
         </main>
@@ -289,6 +318,11 @@
 </template>
 
 <style lang="scss" scoped>
+
+  :deep(.abstract__desc) {
+    margin-top: $px-16-spacer !important;
+  }
+
   /* Deep to reach into MDC Markdown */
   :deep(*) {
     word-wrap: break-word;
@@ -304,7 +338,6 @@
       width: 100%;
       max-width: 100%;
       height: auto;
-      border-radius: 4px;
 
       @include this-and-above('md') {
         /* Slightly larger on tablets */
@@ -386,7 +419,6 @@
       :deep(pre.shiki) {
         overflow-x: auto;
         padding: $px-16-spacer;
-        border-radius: 4px;
 
         code {
           display: block;
@@ -545,6 +577,18 @@
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
+  /* MDC Content visibility control */
+  .mdc-content {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+
+    &--hidden {
+      opacity: 0;
+      position: absolute;
+      visibility: hidden;
+    }
+  }
+
   .mdc-skeleton {
     height: 1.2em;
     background: linear-gradient(
@@ -556,11 +600,36 @@
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
     margin-bottom: $px-16-spacer;
-    border-radius: 4px;
 
     &.short {
       width: 60%;
     }
+
+    &.medium {
+      width: 80%;
+    }
+
+    &.heading {
+      height: 1.8em;
+      width: 40%;
+      margin-bottom: $px-8-spacer;
+    }
+
+    &.code-block {
+      height: 4em;
+      width: 90%;
+      background: linear-gradient(
+        90deg,
+        rgba($accent2, 0.3) 25%,
+        rgba(250, 247, 255, 0.05) 50%,
+        rgba($accent2, 0.3) 75%
+      );
+    }
+  }
+
+  .mdc-skeleton-spacer {
+    height: $px-32-spacer;
+    margin-bottom: 0;
   }
 
   @keyframes pulse {

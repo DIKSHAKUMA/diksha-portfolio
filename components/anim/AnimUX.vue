@@ -24,8 +24,11 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: $secondary;
-          border-radius:16px;
+    background: radial-gradient(
+      125% 125% at 50% 100%,
+      $secondary 40%,
+      $accent2 100%
+    );
   }
 
   .arrow-next-row {

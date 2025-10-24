@@ -25,9 +25,9 @@
           end: 'bottom top',
           scrub: 1,
           pinSpacing: false,
-          fastScrollEnd: true, // ← Helps with fast scrolling
-          refreshPriority: -1, // ← Lower priority
-          invalidateOnRefresh: false, // ← Skip expensive r
+          fastScrollEnd: true,
+          refreshPriority: -1,
+          invalidateOnRefresh: false,
         },
         force3D: true,
         transformOrigin: 'center center',
@@ -57,7 +57,6 @@
         :is-hero="false"
         :author="''"
         :date="''"
-        :is-page-title="false"
         :is-two-lines="false"
       />
     </main>
@@ -132,7 +131,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     /* Mobile: Move camera far left to ensure visibility on narrow screens */
-    background-position: 72% top;
+    background-position: center center;
     transform: translateZ(0);
     /* Force hardware acceleration */
     backface-visibility: hidden;
@@ -140,7 +139,7 @@
     contain: layout style paint;
     /* CSS containment for better performance */
     image-rendering: optimizeSpeed;
-    background-image: url('/img/camera.jpg');
+    background-image: url('/img/flower.jpg');
 
     /* Firefox-specific optimizations */
     @-moz-document url-prefix() {
@@ -148,11 +147,9 @@
       image-rendering: optimizeSpeed;
     }
 
-    @supports (background-image: url('/img/camera.webp')) {
-      background-image: url('/img/camera.webp');
+    @supports (background-image: url('/img/flower.webp')) {
+      background-image: url('/img/flower.webp');
     }
-
-    /* Very small mobile screens - extra aggressive left positioning */
 
     /* Responsive background positioning */
     @include this-and-above('sm') {

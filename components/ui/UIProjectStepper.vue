@@ -301,7 +301,6 @@
     object-fit: cover;
     pointer-events: none;
     font-size: 0;
-    border-radius: 12px;
   }
 
   /* Position canvas absolutely to prevent layout interference */
@@ -317,7 +316,6 @@
     pointer-events: auto;
     padding: 0;
     margin: 0;
-    border-radius: 12px;
   }
 
   .project-stepper-wrapper {

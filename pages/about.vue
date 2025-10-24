@@ -23,12 +23,12 @@
       <ViewParallaxAbout />
       <ViewTimelineAbout />
       <ViewCodeSub />
-      <ViewKnowSub />
+      <ViewKnowledgeSub />
       <ViewFooterSub
-        label="Explore"
+        label="Photography"
         link="https://thomasthorstensson.photography"
         target="_blank"
-        link-label="Lens"
+        link-label="Explore!"
       />
     </div>
   </div>

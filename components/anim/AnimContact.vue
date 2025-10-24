@@ -2,18 +2,23 @@
   import { useSafariIOSDetection } from '~/composable/useSafariIOSDetection'
 
   const { isSafariIOS } = useSafariIOSDetection()
-  const isFirefox = ref(false)
   const showRaindrops = ref(false)
-  
+
+  /**
+   * Seriouslly, the widgets should not be in here and be there own component
+   * but I'm lazy.
+   * TODO: Refactor out widgets
+   */
+
   /* Local Barcelona time that updates every minute */
   const localTime = ref('')
-  
+
   const updateLocalTime = () => {
     localTime.value = new Date().toLocaleTimeString('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
-      timeZone: 'Europe/Madrid' // Barcelona timezone
+      timeZone: 'Europe/Madrid', // Barcelona timezone
     })
   }
 
@@ -60,18 +65,14 @@
   let timeInterval: NodeJS.Timeout | null = null
 
   onMounted(() => {
-    if (navigator.userAgent.toLowerCase().includes('firefox')) {
-      isFirefox.value = true
-    }
-
     /* Initialize and start local time updates */
     updateLocalTime() // Set initial time
     timeInterval = setInterval(updateLocalTime, 60000) // Update every minute
 
-    /* Delay raindrops to avoid Venice blind interference */
+    /* Delay raindrops to avoid Venice blind interference and reduce initial lag */
     setTimeout(() => {
       showRaindrops.value = true
-    }, 1000) /* Adjust timing as needed - 600ms should be after Venice blind completes */
+    }, 1500) /* Increased delay to let Venice blind complete and reduce initial page lag */
   })
 
   onUnmounted(() => {
@@ -83,10 +84,7 @@
 </script>
 
 <template>
-  <div
-    class="rain-wrapper"
-    :class="{'ios-safari': isSafariIOS }"
-  >
+  <div class="rain-wrapper" :class="{ 'ios-safari': isSafariIOS }">
     <div class="window"></div>
 
     <ClientOnly>
@@ -107,54 +105,22 @@
       </div>
     </ClientOnly>
 
-    <!-- Weather Widgets TODO: Could be refactored into component and reside in ViewHeroContact -->
-    <div v-if="weatherData && !weatherPending" class="weather-widgets">
-      <!-- Local Time Widget -->
-      <div
-        class="weather-widget weather-widget--time"
-        :class="{ 'weather-widget--firefox': isFirefox }"
-      >
-        <div class="weather-widget__icon">🕐</div>
-        <div class="weather-widget__label">{{ weatherData.location }}</div>
-        <div class="weather-widget__value">{{ localTime }}</div>
+    <!-- Weather Widgets - Clean minimal layout -->
+    <div v-if="weatherData && !weatherPending" class="weather-info">
+      <div class="weather-info__item location-info">
+        <svg class="location-info__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
+        </svg>
+        <span class="location-info__text">Barcelona</span>
       </div>
-
-      <!-- Temperature Widget -->
-      <div
-        class="weather-widget weather-widget--temperature"
-        :class="{ 'weather-widget--firefox': isFirefox }"
-      >
-        <div class="weather-widget__icon">🌡️</div>
-        <div class="weather-widget__label">Temperature</div>
-        <div class="weather-widget__value">{{ weatherData.temperature }}°C</div>
-        <div class="weather-widget__bar">
-          <div
-            class="weather-widget__progress weather-widget__progress--temp"
-            :style="{
-              width:
-                Math.min(
-                  100,
-                  Math.max(0, (weatherData.temperature + 10) * 2.5)
-                ) + '%',
-            }"
-          ></div>
-        </div>
+      <div class="weather-info__item">
+        CET: {{ localTime }}
       </div>
-
-      <!-- Humidity Widget -->
-      <div
-        class="weather-widget weather-widget--humidity weather-widget--hidden"
-        :class="{ 'weather-widget--firefox': isFirefox }"
-      >
-        <div class="weather-widget__icon">💧</div>
-        <div class="weather-widget__label">Humidity</div>
-        <div class="weather-widget__value">{{ weatherData.humidity }}%</div>
-        <div class="weather-widget__bar">
-          <div
-            class="weather-widget__progress weather-widget__progress--humidity"
-            :style="{ width: weatherData.humidity + '%' }"
-          ></div>
-        </div>
+      <div class="weather-info__item">
+        T: {{ weatherData.temperature }}°C
+      </div>
+      <div class="weather-info__item">
+        RH: {{ weatherData.humidity }}%
       </div>
     </div>
   </div>
@@ -184,7 +150,7 @@
     height: 100%;
     background-image: url('/img/sun-rain.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: 80% 50%;
     background-repeat: no-repeat;
 
     @supports (background-image: url('/img/sun-rain.webp')) {
@@ -234,121 +200,49 @@
     }
   }
 
-  /* Weather Widgets */
-  .weather-widgets {
-    position: absolute;
+  /* Weather Info - Clean minimal layout */
+  .location-info {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-    z-index: 100;
+    align-items: center;
+    gap: $px-4-spacer;
+    font-family: $sans-ui-mono;
+    font-size: clamped(12px, 16px, 480px, 1920px);
+    color: $secondary-static;
+    text-transform: uppercase;
 
-    .rain-wrapper.ios-safari & {
-      margin-bottom: 120px;
+    &__icon {
+      width: 12px;
+      height: 12px;
+      color: $secondary-static;
     }
 
-    @include this-and-above('sm') {
-      right: $px-16-spacer;
-      gap: $px-32-spacer;
-    }
-
-    @include this-and-above('md') {
-      right: $px-64-spacer;
-      gap: $px-32-spacer;
+    &__text {
+      white-space: nowrap;
     }
   }
 
-  .weather-widget {
-    background: rgba(250, 247, 255, 0.1);
-    backdrop-filter: blur(15px);
-    border-radius: 12px;
-    padding: $px-16-spacer;
-    min-width: 180px;
-    border: 1px solid rgba(250, 247, 255, 0.2);
-    animation: float 6s ease-in-out infinite;
+  .weather-info {
+    position: absolute;
+    bottom: $px-16-spacer;
+    right: $px-16-spacer;
+    display: flex;
+    flex-direction: column;
+    row-gap: $px-4-spacer;
+    align-items: flex-end;
+    z-index: 100;
     font-family: $sans-ui-mono;
-
-    &--firefox {
-      animation: none;
-    }
-
-    .light-mode & {
-      background: rgba(23, 23, 23, 0.1);
-      border-color: rgba(23, 23, 23, 0.2);
-    }
-
-    &__icon {
-      font-size: 24px;
-      margin-bottom: $px-8-spacer;
-    }
-
-    &__label {
-      font-size: clamped(12px, 14px, 480px, 1920px);
-      color: $secondary-static;
-      opacity: 0.8;
-      margin-bottom: $px-8-spacer;
-      font-weight: 400;
-    }
-
-    &__value {
-      font-size: clamped(16px, 20px, 480px, 1920px);
-      color: $secondary-static;
-      font-weight: 400;
-      margin-bottom: $px-16-spacer;
-    }
-
-    &__bar {
-      width: 100%;
-      height: 6px;
-      background: rgba(250, 247, 255, 0.2);
-      border-radius: 3px;
-      overflow: hidden;
-
-      .light-mode & {
-        background: rgba(23, 23, 23, 0.2);
-      }
-    }
-
-    &__progress {
-      height: 100%;
-      border-radius: 3px;
-      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-
-      &--temp {
-        background: linear-gradient(
-          90deg,
-          #4facfe 0%,
-          #00f2fe 50%,
-          #ff6b6b 100%
-        );
-      }
-
-      &--humidity {
-        background: linear-gradient(90deg, $accent2 0%, $accent1 100%);
-      }
-    }
-
-    &--time {
-      animation-delay: 0s;
-    }
-
-    &--temperature {
-      animation-delay: 1.5s;
-    }
-
-    &--humidity {
-      animation-delay: 3s;
-    }
-
-    &--hidden {
-      display: none;
-      @include this-and-above('sm') {
-        display: block;
-      }
-    }
+    font-size: clamped(12px, 16px, 480px, 1920px);
+    color: $secondary-static;
+    text-transform: uppercase;
 
     @include this-and-above('sm') {
-      padding: $px-16-spacer;
-      min-width: 200px;
+      flex-direction: row;
+      column-gap: $px-8-spacer;
+      right: $px-64-spacer;
+    }
+
+    &__item {
+      white-space: nowrap;
     }
   }
 

@@ -28,12 +28,12 @@
   .logo {
     color: $secondary;
     z-index: 100;
-    font-size: clamped(16px, 18px, 480px, 1920px);
-    font-weight: 400;
+    font-size: clamped(18px, 20px, 480px, 1920px);
+    font-variation-settings: 'wght' 400;
 
     /* Lighter font weight in dark mode */
     .dark-mode & {
-      font-weight: 300;
+      font-variation-settings: "wght" 350;
     }
 
     [is-mobile='true'] & {

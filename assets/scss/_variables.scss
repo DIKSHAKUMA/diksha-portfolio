@@ -5,7 +5,7 @@ $secondary-static: #dbdbdb;
     --primary: #171717;
     --secondary: #dbdbdb;
     --accent1: #2c2a38;
-    --accent2: #e3e0e8;
+    --accent2: #bec1c6;
     --color-scheme: dark;
 }
 
@@ -25,7 +25,7 @@ $accent2: var(--accent2);
 $color-scheme: var(--color-scheme);
 
 /* Fonts */
-$sans-ui: "Sora", sans-serif;
+$sans-ui: "Reddit Sans", sans-serif;
 $sans-ui-opt: auto;
 $sans-ui-wgt: 600;
 $sans-ui-stl: normal;
@@ -35,7 +35,7 @@ $sans-ui-mono-opt: auto;
 $sans-ui-mono-wgt: 600;
 $sans-ui-mono-stl: normal;
 
-$sans-text: "Geist", sans-serif;
+$sans-text: "Lato", sans-serif;
 $sans-text-opt: auto;
 $sans-text-wgt: 400;
 $sans-text-stl: normal;

@@ -36,7 +36,6 @@
       jobTitle: 'Creative Developer & Designer',
       url: 'https://thomasthorstensson.com',
       sameAs: [
-        // Add your social media profiles
         'https://https://github.com/thorstensson',
         'https://linkedin.com/in/thomasthorstensson',
         'https://bsky.app/profile/thorstensson.bsky.social',
@@ -78,8 +77,8 @@
       <ViewHeroHome />
       <ViewParallaxHome />
       <ViewProjectsHome />
-      <ViewKnowSub />
-      <ViewMetaSub />
+      <ViewKnowledgeSub />
+      <ViewTechSub />
       <ViewFooterSub
         label="Projects"
         link="/projects"

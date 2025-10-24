@@ -15,6 +15,11 @@
   >()
   const splitInstances: SplitType[] = []
 
+  const getProjectTags = (project: any) => {
+    if (!project?.tags || !Array.isArray(project.tags)) return ''
+    return project.tags.join(', ')
+  }
+
   const dateSorted = computed(() => {
     if (!store.data?.projects) return []
 
@@ -54,6 +59,7 @@
 
       /* Batch DOM queries for better performance */
       const images = $gsap.utils.toArray('.projects__abstract__image')
+      const words = $gsap.utils.toArray('.split-proj-w')
 
       /* Firefox gets simple fade, others get full clipPath reveal */
       images.forEach((img: any) => {
@@ -68,14 +74,12 @@
               trigger: img,
               start: 'top 90%',
               toggleActions: 'play none none reverse',
-              refreshPriority: -1, // COMMENTED OUT - Testing if low priority affects viewport timing
-              invalidateOnRefresh: false, // COMMENTED OUT - Testing if this caches bad viewport state
+              invalidateOnRefresh: false,
             },
           })
         } else {
           /* Full clipPath reveal for Chrome/Safari/Edge */
           $gsap.to(img, {
-            // yPercent: 0,  // COMMENTED OUT - Testing if this contaminates iOS Safari viewport
             opacity: 1,
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
             duration: 0.5,
@@ -83,11 +87,10 @@
             scrollTrigger: {
               trigger: img,
               start: 'top 80%',
-              // end: 'top 60%', // COMMENTED OUT - Testing if range-based trigger affects viewport
+              end: 'top 60%', 
               toggleActions: 'play none none reverse',
-              // refreshPriority: -1, // COMMENTED OUT - Testing if low priority affects viewport timing
-              // invalidateOnRefresh: false, // COMMENTED OUT - Testing if this caches bad viewport state
-              preventOverlaps: true,
+              invalidateOnRefresh: true,
+              fastScrollEnd: true,
             },
           })
         }
@@ -111,6 +114,23 @@
             force3D: false,
             autoRound: true,
           })
+        })
+      })
+
+      words.forEach((word: any) => {
+        $gsap.from(word, {
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: word,
+            start: 'top 80%',
+            end: 'top 60%',
+            toggleActions: 'play none none reverse',
+            refreshPriority: -1,
+            invalidateOnRefresh: false,
+            preventOverlaps: true,
+          },
         })
       })
     })
@@ -144,7 +164,6 @@
         :is-hero="false"
         :author="''"
         :date="''"
-        :is-page-title="false"
         :is-two-lines="false"
       />
       <section class="projects__abstract">
@@ -161,18 +180,25 @@
               provider="hygraph"
               alt="Project image"
               format="webp"
-              sizes="sm:100vw md:45vw lg:45vw xl:34vw"
+              sizes="sm:100vw md:45vw lg:45vw xl:33vw"
               densities="x1 x2"
               quality="80"
             ></NuxtImg>
-            <div class="projects__abstract__name split-proj-w">
-              <p>{{ proj.name }}</p>
-              <span
-                v-if="proj.labUrl"
-                class="projects__abstract__lab"
-                title="Lab Project"
-                ><LabSVG class="projects__abstract__lab-svg"
-              /></span>
+          </div>
+
+          <div class="projects__abstract__info">
+            <p class="split-proj-w">{{ proj.name }}</p>
+            <span
+              v-if="proj.tags && proj.tags.length > 0"
+              class="project-tags split-proj-w"
+              >{{ getProjectTags(proj) }}</span
+            >
+            <div
+              v-if="proj.labUrl"
+              class="projects__abstract__info__lab"
+              title="Lab Project"
+            >
+              <LabSVG class="projects__abstract__info__lab-svg" />
             </div>
           </div>
         </div>
@@ -247,40 +273,12 @@
       width: 100%;
       align-self: flex-start;
 
-      &__lab {
-        position: absolute;
-        top: -12px;
-        right: -12px;
-        font-size: 16px;
-        width: 34px;
-        height: 34px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        &-svg {
-          position: relative;
-          top: -15px;
-          left: 10px;
-          width: 24px;
-          height: 24px;
-          fill: #faf8ff;
-        }
-
-        @include this-and-above('md') {
-          font-size: 18px;
-          width: 38px;
-          height: 38px;
-        }
-      }
-
       &__image {
         position: relative;
-        overflow: hidden;
+
         cursor: pointer;
         opacity: 0;
         clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-        border-radius: 12px;
         aspect-ratio: 4/3;
 
         img {
@@ -311,26 +309,51 @@
         opacity: 0.3;
       }
 
-      &__name {
-        position: absolute;
-        height: 30px;
-        bottom: $px-16-spacer;
-        left: $px-16-spacer;
-        background: rgba(0, 0, 0, 0.4);
-        padding: $px-8-spacer $px-16-spacer;
-        border-radius: 4px;
+      &__info {
+        margin-top: $px-8-spacer;
+        margin-left: $px-16-spacer;
         pointer-events: none;
         /* Don't interfere with link clicks */
 
         p {
           position: relative;
           margin: 0;
-          color: white;
-          font-family: $sans-ui;
-          font-variation-settings: 'slnt' 0, 'wght' 400;
-          font-size: clamped(16px, 20px, 380px, 1920px);
-          top: 50%;
-          transform: translateY(-50%);
+          color: $secondary;
+          font-family: $sans-ui-mono;
+          font-size: clamped(14px, 20px, 380px, 1920px);
+          font-weight: 400;
+        }
+        span {
+          position: relative;
+          margin: 0;
+          color: $secondary;
+          font-family: $sans-ui-mono;
+          font-size: clamped(10px, 14px, 380px, 1920px);
+          font-weight: 400;
+        }
+
+        &__lab {
+          position: relative;
+          bottom: 74px;
+          left: -10px;
+          font-size: 16px;
+          width: 34px;
+          height: 34px;
+
+          &-svg {
+            position: relative;
+            top: -15px;
+            left: 10px;
+            width: 24px;
+            height: 24px;
+            fill: #faf8ff;
+          }
+
+          @include this-and-above('md') {
+            font-size: 18px;
+            width: 38px;
+            height: 38px;
+          }
         }
       }
 
@@ -340,12 +363,10 @@
 
         :nth-child(odd) {
           align-self: flex-end;
-          margin-bottom: -5px;
         }
 
         :nth-child(even) {
           align-self: flex-start;
-          margin-bottom: -5px;
         }
       }
     }

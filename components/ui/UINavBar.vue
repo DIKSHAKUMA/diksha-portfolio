@@ -6,9 +6,10 @@
   const isDown = ref(false)
   const isMobileActive = ref(false)
   const isAnimating = ref(false)
-  const isLightMode = ref<boolean>(true)
+  const isLightMode = ref<boolean>(false)
   const route = useRoute()
   const isProjectsOrContactOpen = ref(false)
+  const isContactOpen = ref(false)
 
   /* Check if current route is in blog section */
   const isBlogActive = computed(() => {
@@ -52,6 +53,7 @@
     return {
       'nav-wrapper--moveup': isDown.value,
       'nav-wrapper--projects-open': isProjectsOrContactOpen.value,
+      'nav-wrapper--contact-open': isContactOpen.value,
     }
   })
 
@@ -138,6 +140,7 @@
     { immediate: true }
   )
 
+  /* I felt like retro this eve; no ternary */
   watch(
     () => route.path,
     (newPath) => {
@@ -145,6 +148,11 @@
         isProjectsOrContactOpen.value = true
       } else {
         isProjectsOrContactOpen.value = false
+      }
+      if (newPath === '/contact') {
+        isContactOpen.value = true
+      } else {
+        isContactOpen.value = false
       }
     },
     { immediate: true }
@@ -187,11 +195,13 @@
           </ClientOnly>
         </template>
         <template #mode>
-          <UIAppleSwitch
-            :is-mobile="isMobileActive"
-            v-model="isLightMode"
-            ref="colorSwitch"
-          />
+          <div v-if="!isContactOpen">
+            <UIAppleSwitch
+              :is-mobile="isMobileActive"
+              v-model="isLightMode"
+              ref="colorSwitch"
+            />
+          </div>
         </template>
       </UINavHeader>
 
@@ -367,15 +377,32 @@ just use a simple modal and be done with it. */
     &--projects-open {
       background-color: unset !important;
     }
+
+    &--contact-open {
+      @include this-and-above('lg') {
+        background-color: unset;
+        backdrop-filter: blur(0px);
+        
+        // Force text color to #DBDBDB on contact page
+        color: #DBDBDB !important;
+        
+        .nav__item {
+          color: #DBDBDB !important;
+        }
+        
+        .logo {
+          color: #DBDBDB !important;
+        }
+      }
+    }
   }
 
   .nav-wrapper__inner {
     display: flex;
     align-items: center;
     height: 100%;
-    font-weight: 400;
-    font-size: $fs-16;
     margin: 0 $px-16-spacer;
+    text-transform: uppercase;
 
     @include this-and-above('md') {
       margin: 0 $px-64-spacer;
@@ -451,7 +478,6 @@ just use a simple modal and be done with it. */
     transition: left 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 
     &--open {
-      font-weight: 400;
       left: 0%;
       touch-action: none;
       -webkit-overflow-scrolling: none;
@@ -497,16 +523,6 @@ just use a simple modal and be done with it. */
       transition: color 0.3s;
       padding-right: 0px;
       color: $primary;
-      font-weight: 400;
-
-      /* Mobile overlay has inverted colors, so invert font weight logic */
-      /* Light mode: overlay is white bg + black text = thin font (300) */
-      /* Dark mode: overlay is black bg + white text = normal font (400) */
-      font-weight: 300;
-
-      .dark-mode & {
-        font-weight: 400;
-      }
 
       &:hover {
         color: $accent1;
@@ -570,17 +586,17 @@ just use a simple modal and be done with it. */
         position: relative;
         margin: 0;
         /*FONT SIZE OF NAVBAR ITEMS DESKTOP, RETURNED AS REM*/
-        font-size: clamped(16px, 18px, 480px, 1920px);
+        font-size: clamped(18px, 20px, 480px, 1920px);
         line-height: unset;
         padding-right: 25px;
         color: $secondary;
         opacity: 1;
         transition: transform 0.1s linear;
-        font-weight: 400;
+        font-variation-settings: 'wght' 400;
 
         /* Lighter font weight in dark mode */
         .dark-mode & {
-          font-weight: 300;
+          font-variation-settings: 'wght' 350;
         }
 
         &:hover {

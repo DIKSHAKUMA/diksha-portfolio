@@ -84,10 +84,8 @@
 
   .info-label-header {
     font-size: clamped(12px, 14px, 480px, 1920px);
-    opacity: 0.8;
     font-family: $sans-ui-mono;
-
-    font-weight:500;
+    font-weight:400;
     line-height: 1;
     margin: $px-16-spacer $px-16-spacer;
     pointer-events: auto; /* Re-enable mouse events only on the actual label */

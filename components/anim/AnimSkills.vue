@@ -86,7 +86,6 @@
 
 <style scoped lang="scss">
   .text {
-          border-radius:16px;
     display: flex;
     position: absolute;
     justify-content: center;
@@ -94,7 +93,11 @@
     width: 100%;
     height: 100%;
     color: $primary;
-    background-color:$secondary;
+    background: radial-gradient(
+      125% 125% at 50% 100%,
+      $secondary 40%,
+      $accent2 100%
+    );
   }
 
   .quote {

@@ -42,6 +42,11 @@
     return { current: clampedIndex.value + 1, total: totalProjects }
   })
 
+  const getProjectTags = (project: any) => {
+    if (!project?.tags || !Array.isArray(project.tags)) return ''
+    return project.tags.join(', ')
+  }
+
   const handleProjectClick = (project: any) => {
     if (project.labUrl) {
       window.open(project.labUrl, '_blank')
@@ -163,7 +168,6 @@
 
     $gsap.context((self) => {
       draggableInstance = Draggable.create('.projects__reel', {
-        cursor: 'grab',
         type: 'x' /* Horizontal dragging */,
         bounds: {
           minX: -maxDragDistance,
@@ -254,7 +258,6 @@
       :is-secondary="false"
       :author="''"
       :date="''"
-      :is-page-title="false"
       :is-two-lines="false"
     />
 
@@ -268,37 +271,42 @@
       <div class="projects__reel" ref="projectsReel">
         <div v-for="(project, index) in dateSorted" :key="project.id">
           <div
-            class="projects__project action"
-            data-name="reel"
+            class="projects__project"
             ref="projectItem"
             :class="{
               'projects__project--open': index === clampedIndex && !isDragging,
             }"
           >
-            <NuxtLink @click="handleProjectClick(project)">
-              <NuxtImg
-                :src="project.coverImage?.handle"
-                provider="hygraph"
-                alt="Project image"
-                format="webp"
-                sizes="sm:100vw"
-                densities="x1 x2"
-                class="projects__project__image"
-              ></NuxtImg>
-            </NuxtLink>
-            <div
-              class="projects__project-name"
-              :class="{
-                'projects__project-name--open': index === clampedIndex,
-              }"
+            <div 
+              class="projects__project__image-container action"
+              data-name="reel"
             >
-              <p>{{ project.name }}</p>
+              <NuxtLink @click="handleProjectClick(project)">
+                <NuxtImg
+                  :src="project.coverImage?.handle"
+                  provider="hygraph"
+                  alt="Project image"
+                  format="webp"
+                  sizes="sm:100vw"
+                  densities="x1 x2"
+                  class="projects__project__image"
+                ></NuxtImg>
+              </NuxtLink>
               <span
                 v-if="project.labUrl"
                 class="projects__lab-indicator"
                 title="Lab Project"
                 ><LabSVG class="projects__lab-indicator-svg"
               /></span>
+            </div>
+            
+            <div class="projects__project__info">
+              <p class="projects__project__name">{{ project.name }}</p>
+              <span
+                v-if="project.tags && project.tags.length > 0"
+                class="projects__project__tags"
+                >{{ getProjectTags(project) }}</span
+              >
             </div>
           </div>
         </div>
@@ -310,7 +318,6 @@
 <style lang="scss" scoped>
   img {
     height: auto;
-    border-radius: 12px;
   }
 
   a:hover {
@@ -394,8 +401,9 @@
     }
 
     &__text {
-      font-size: clamped(16px, 44px, 480px, 1920px);
-      font-variation-settings: 'wght' 550;
+      font-size: clamped(24px, 44px, 480px, 1920px);
+      font-family: $sans-ui-mono;
+      font-weight: 500;
       white-space: nowrap;
       color: $secondary;
       opacity: 0.5;
@@ -411,75 +419,51 @@
     align-items: center;
     color: $secondary;
 
-    &__project-name {
-      position: absolute;
-      bottom: $px-16-spacer;
-      left: $px-16-spacer;
-      background: rgba(0, 0, 0, 0.7);
-      padding: $px-8-spacer $px-16-spacer;
-      border-radius: 4px;
-      pointer-events: none;
-      /* Don't interfere with dragging */
-      opacity: 0;
-      will-change: opacity;
-      transition: opacity 0.2s ease-in-out;
-      backface-visibility: hidden;
-
-      &--open {
-        opacity: 1;
-        transform: scale(1.1);
-      }
-
-      p {
-        margin: 0;
-        color: white;
-        font-size: $fs-14;
-        font-weight: 500;
-      }
-    }
-
-    &__reel {
-      display: flex;
-      flex-flow: row nowrap;
-      column-gap: $px-32-spacer;
-      /* Mobile: tight spacing */
-      justify-content: flex-start;
-      /* Start from left instead of center */
-      align-items: center;
-      position: absolute;
-      left: 0;
-      width: max-content;
-      /* Allow width to expand based on content */
-      padding-left: $px-32-spacer;
-      /* Mobile: minimal padding */
-      cursor: grab;
-
-      /* Progressive spacing increases */
-      @include this-and-above('sm') {
-        column-gap: $px-32-spacer;
-        padding-left: $px-32-spacer;
-      }
-
-      @include this-and-above('lg') {
-        column-gap: $px-64-spacer;
-        padding-left: $px-64-spacer;
-      }
-    }
-
     &__project {
       position: relative;
-      /* For absolute positioning of project name */
+      /* For absolute positioning of lab indicator */
       flex-shrink: 0;
       /* Prevent shrinking to maintain consistent layout */
       transform-origin: center;
       transition: transform 0.3s ease-out;
       /* Smooth scale transitions */
+      cursor: default;
 
       &--open {
         transform: scale(1.08);
       }
 
-      img {
+      &__image-container {
+        position: relative;
+      }
+
+      &__info {
+        margin-top: $px-8-spacer;
+        pointer-events: none;
+        cursor: default;
+        /* Don't interfere with dragging */
+      }
+
+      &__name {
+        position: relative;
+        margin: 0;
+        color: $secondary;
+        font-family: $sans-ui-mono;
+        font-size: clamped(14px, 18px, 380px, 1920px);
+        font-weight: 400;
+      }
+
+      &__tags {
+        position: relative;
+        margin: 0;
+        color: $secondary;
+        font-family: $sans-ui-mono;
+        font-size: clamped(12px, 14px, 380px, 1920px);
+        font-weight: 400;
+      }
+
+      &__image {
+        cursor:grab;
         width: 85vw;
         /* Mobile-first: larger than viewport for immersive feel */
         height: auto;
@@ -514,30 +498,54 @@
       }
     }
 
+    &__reel {
+      display: flex;
+      flex-flow: row nowrap;
+      column-gap: $px-32-spacer;
+      /* Mobile: tight spacing */
+      justify-content: flex-start;
+      /* Start from left instead of center */
+      align-items: center;
+      position: absolute;
+      left: 0;
+      width: max-content;
+      /* Allow width to expand based on content */
+      padding-left: $px-32-spacer;
+      /* Mobile: minimal padding */
+
+      /* Progressive spacing increases */
+      @include this-and-above('sm') {
+        column-gap: $px-32-spacer;
+        padding-left: $px-32-spacer;
+      }
+
+      @include this-and-above('lg') {
+        column-gap: $px-64-spacer;
+        padding-left: $px-64-spacer;
+      }
+    }
+
     &__lab-indicator {
       position: absolute;
-      top: -12px;
-      right: -12px;
+      top: $px-16-spacer;
+      right: $px-16-spacer;
       font-size: 16px;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 34px;
+      height: 34px;
 
       &-svg {
         position: relative;
-        width: 20px;
-        height: auto;
+        top: -15px;
+        left: 10px;
+        width: 24px;
+        height: 24px;
         fill: #faf8ff;
       }
 
       @include this-and-above('md') {
         font-size: 18px;
-        width: 28px;
-        height: 28px;
-        top: -14px;
-        right: -14px;
+        width: 38px;
+        height: 38px;
       }
     }
   }

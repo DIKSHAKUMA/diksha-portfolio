@@ -16,6 +16,26 @@
     $gsap.registerPlugin(ScrollTrigger)
 
     ctx = $gsap.context((self) => {
+      // Pin the section and scroll the inner wrapper
+      const demoWrapper = document.querySelector('.know__demo-wrapper')
+      if (demoWrapper) {
+        $gsap.to(demoWrapper, {
+          y: '-1400px', // Move up to show third block properly (700px + 700px)
+          ease: 'none',
+
+          scrollTrigger: {
+            trigger: '.know-wrapper',
+            start: 'top top',
+            end: '+=200%',
+            scrub: 1,
+            pin: '.know-wrapper',
+            anticipatePin: 1,
+            pinSpacing: true
+          }
+        })
+      }
+
+      // Text animations (keep original)
       let sectionsChar = $gsap.utils.toArray('.split-skills-w')
       sectionsChar.forEach((sec: any) => {
         const splitTxt = new SplitType(sec, { types: 'words' })
@@ -33,8 +53,7 @@
             scrub: false,
             end: 'top 50%',
             toggleActions: 'restart none none reverse',
-            preventOverlaps: true, /* <- HERE */
-            /* markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 } */
+            preventOverlaps: true,
           },
           duration: 0.4,
         })
@@ -71,7 +90,6 @@
         :is-hero="false"
         :author="''"
         :date="''"
-        :is-page-title="false"
         :is-two-lines="false"
       />
       <CommonInfoLabel
@@ -85,32 +103,34 @@
       />
 
       <section class="know__demo">
-        <div class="know__demo-block">
-          <h3 class="know__demo-title split-skills-w">
-            {{ store.data.intro?.knowOneTitle }}
-          </h3>
-          <p class="know__demo-desc split-skills-w">
-            {{ store.data.intro?.knowOneDesc }}
-          </p>
-          <AnimSkills class="know__demo-comp" />
-        </div>
-        <div class="know__demo-block">
-          <h3 class="know__demo-title split-skills-w">
-            {{ store.data.intro?.knowTwoTitle }}
-          </h3>
-          <p class="know__demo-desc split-skills-w">
-            {{ store.data.intro?.knowTwoDesc }}
-          </p>
-          <AnimDemo class="know__demo-comp" />
-        </div>
-        <div class="know__demo-block">
-          <h3 class="know__demo-title split-skills-w">
-            {{ store.data.intro?.knowThreeTitle }}
-          </h3>
-          <p class="know__demo-desc split-skills-w">
-            {{ store.data.intro?.knowThreeDesc }}
-          </p>
-          <AnimUX class="know__demo-comp" />
+        <div class="know__demo-wrapper">
+          <div class="know__demo-block">
+            <h2 class="know__demo-title split-skills-w">
+              {{ store.data.intro?.knowOneTitle }}
+            </h2>
+            <p class="know__demo-desc split-skills-w">
+              {{ store.data.intro?.knowOneDesc }}
+            </p>
+            <AnimSkills class="know__demo-comp" />
+          </div>
+          <div class="know__demo-block">
+            <h2 class="know__demo-title split-skills-w">
+              {{ store.data.intro?.knowTwoTitle }}
+            </h2>
+            <p class="know__demo-desc split-skills-w">
+              {{ store.data.intro?.knowTwoDesc }}
+            </p>
+            <AnimDynamic class="know__demo-comp" />
+          </div>
+          <div class="know__demo-block">
+            <h2 class="know__demo-title split-skills-w">
+              {{ store.data.intro?.knowThreeTitle }}
+            </h2>
+            <p class="know__demo-desc split-skills-w">
+              {{ store.data.intro?.knowThreeDesc }}
+            </p>
+            <AnimUX class="know__demo-comp" />
+          </div>
         </div>
       </section>
     </main>
@@ -152,18 +172,25 @@
     }
 
     &__demo {
+      height: 600px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    &__demo-wrapper {
+      height: 2100px; // 3 blocks × 700px each (600px + 100px gap)
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
-      row-gap: 64px;
+      gap: 100px;
     }
 
     &__demo-block {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      justify-content: center;
       width: 100%;
-      height: 100%;
+      height: 600px;
       min-width: 300px;
     }
 
@@ -202,14 +229,13 @@
       position: relative;
       width: 100%;
       min-width: 300px;
-      background-color: $secondary;
-      border-radius: 12px;
 
       @include this-and-above('md') {
         width: 60%;
         min-width: 300px;
         height: 42vh;
       }
+      
     }
   }
 </style>

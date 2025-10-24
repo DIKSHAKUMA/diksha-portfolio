@@ -119,7 +119,7 @@
       transform: translateX(-50%);
       text-align: center;
       color: $secondary;
-      font-size: clamped(20px, 36px, 480px, 1920px);
+      font-size: clamped(20px, 26px, 480px, 1920px);
       font-style: italic;
 
       @include this-and-above('sm') {

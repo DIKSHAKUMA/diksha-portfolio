@@ -85,13 +85,16 @@ export default defineNuxtConfig({
     },
 
     families: [
-      { name: 'Sora', provider: 'google' },
+      {
+        name: 'Reddit Sans',
+        provider: 'google',
+      },
       {
         name: 'Geist',
         provider: 'google',
-        fallbacks: ['sans-serif'],
       },
-      { name: 'Geist Mono', provider: 'google' },
+      { name: 'Geist Mono', 
+        provider: 'google' },
     ],
 
     defaults: {
@@ -118,7 +121,7 @@ export default defineNuxtConfig({
   ],
 
   colorMode: {
-    preference: 'light',
+    preference: 'dark',
   },
 
   mdc: {

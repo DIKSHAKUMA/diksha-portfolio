@@ -199,7 +199,10 @@
     if (import.meta.client) {
       const p5 = await import('p5')
 
-      p5Instance = new p5.default((p: any) => {
+      // Delay P5.js animation to avoid Venice blind collision
+      setTimeout(() => {
+        if (!p5Instance) { // Only start if not already destroyed
+          p5Instance = new p5.default((p: any) => {
         p.setup = () => {
           /* Create canvas with full window dimensions */
           const canvas = p.createCanvas(window.innerWidth, window.innerHeight)
@@ -320,6 +323,8 @@
           }
         }
       })
+        }
+      }, 800) // 800ms delay to let Venice blind complete
     }
   })
 

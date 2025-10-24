@@ -226,6 +226,13 @@
     ctx?.revert()
     videoObserver?.disconnect()
     videoObserver2?.disconnect()
+
+    // Cleanup mux player to prevent memory leaks and continued streaming
+    if (muxPlayer.value) {
+      muxPlayer.value.pause()
+      // Additional cleanup if needed
+      muxPlayer.value.currentTime = 0
+    }
   })
 </script>
 
@@ -235,9 +242,8 @@
 
     <div class="project-wrapper" v-if="proj">
       <main class="project">
-        <UIBackButton :text="'Back'" :to="''" />
+        <UIBackButton class="project__back-button" :text="'Back'" :to="''" />
         <CommonAbstract
-          :is-page-title="true"
           :label="proj.name"
           :desc="proj.synop?.[0] || proj.client || ''"
           :is-full-width="true"
@@ -313,9 +319,9 @@
           <!-- Info text always after first media item -->
           <div class="project__info" ref="infoSection">
             <div class="project__info-col-1">
-              <h5>Challenge</h5>
+              <h4>Challenge</h4>
               <p class="split-proj-w">{{ proj.description[0] }}</p>
-              <h5>Perspective</h5>
+              <h4>Perspective</h4>
               <p class="split-proj-w">{{ proj.description[1] }}</p>
             </div>
             <div class="project__info-col-2">
@@ -366,11 +372,7 @@
 
           <!-- Video first if second exists -->
           <div
-            style="
-              border-radius: 16px;
-              overflow: hidden;
-              background: transparent;
-            "
+            style="overflow: hidden; background: transparent"
             v-if="proj.video?.[1]?.playbackId"
             class="project__media project__media--video"
             data-video="1"
@@ -496,22 +498,16 @@
             :nextSynop="getNextProj.synop"
           />
         </nav>
-
-        <CommonInfoLabel
-          :label="'—Made by Thomas'"
-          :class-name="'photo-label'"
-          :hpos="'flex-end'"
-          :hover-label="''"
-          :force-white="false"
-          :vpos="'flex-end'"
-          :link="'https://github.com/thorstensson'"
-        />
       </main>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+  :deep(.abstract__desc) {
+    margin-top: $px-8-spacer !important;
+  }
+
   img {
     display: block;
     width: 100%;
@@ -519,7 +515,7 @@
     max-width: 2048px;
   }
 
-    h5 {
+  h5 {
     font-weight: 600;
   }
 
@@ -557,6 +553,10 @@
     align-self: flex-start;
     margin-top: 128px;
 
+    &__back-button {
+      margin-bottom: $px-32-spacer;
+    }
+
     &__line {
       margin-top: $px-64-spacer;
     }
@@ -581,7 +581,6 @@
 
     &__media {
       overflow: hidden;
-      border-radius: 16px;
 
       &--video {
         background: transparent;
@@ -667,7 +666,6 @@
       line-height: 1.2;
       background-color: $primary;
       border: 2px solid $accent2;
-      border-radius: 12px;
       padding: $px-32-spacer;
       max-height: fit-content;
       overflow-y: auto;
@@ -736,13 +734,8 @@
     }
   }
 
-  .vid {
-    border-radius: 16px;
-  }
-
   .video-skeleton {
     background: $primary;
-    border-radius: 16px;
     width: 100%;
     height: auto;
   }
@@ -795,16 +788,13 @@
     --media-background-color: transparent;
 
     /* Force border-radius and remove any borders */
-    border-radius: 16px !important;
     overflow: hidden;
     border: none !important;
     outline: none !important;
     background: transparent;
     box-shadow: none !important;
 
-    /* Ensure the video element inside respects border-radius and has no borders */
     video {
-      border-radius: 16px !important;
       border: none !important;
       outline: none !important;
       background: transparent;

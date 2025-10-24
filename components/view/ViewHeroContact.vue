@@ -21,7 +21,7 @@
         })
         $gsap.to(splitTxt.words, {
           autoAlpha: 1,
-          delay: 1.5,
+          delay: 2.2, /* Increased delay to avoid Venice blind collision */
           clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
           scrollTrigger: {
             trigger: sec,
@@ -46,16 +46,6 @@
 <template>
   <main class="hero-wrapper">
     <AnimContact />
-    <CommonInfoLabel
-      class="ilabel"
-      :label="'—Made by Thomas'"
-      :class-name="'contact-label'"
-      :hpos="'flex-end'"
-      :hover-label="'Moi'"
-      :vpos="'flex-end'"
-      :link="'https://github.com/thorstensson'"
-      :force-white="true"
-    />
     <div class="contact">
       <div class="contact__label split-label-w">
         {{ store.data.contact?.emailTitle }}
@@ -80,7 +70,6 @@
       :is-secondary="false"
       :author="''"
       :date="''"
-      :is-page-title="false"
       :is-two-lines="false"
     />
   </main>
@@ -119,41 +108,26 @@
   }
 
   .contact {
-    position: absolute;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    top: $px-128-spacer;
+    bottom: unset;
     color: $secondary-static;
     z-index: 200;
-
-    .hero-wrapper.ios-safari & {
-      bottom: 180px;
-    }
+    font-family: $sans-text;
+    font-size: clamped(16px, 20px, 480px, 1920px);
 
     &__label {
-      font-size: clamped(16px, 32px, 480px, 1920px);
+      font-size: clamped(16px, 20px, 480px, 1920px);
     }
-
     &__email {
-      font-size: clamped(20px, 42px, 480px, 1920px);
+      font-size: clamped(20px, 42px, 480px);
       color: $secondary-static;
-
       text-decoration: none;
-      border-bottom: 4px solid $secondary-static;
-      padding-bottom: 5px;
-      transition: color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67),
-        border-bottom-color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+      transition: color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 
       &:hover {
         color: $accent2;
-        border-bottom-color: $accent2;
       }
-    }
-
-    @include this-and-above('sm') {
-      position: relative;
-      top: $px-128-spacer;
-      bottom: unset;
     }
   }
 </style>

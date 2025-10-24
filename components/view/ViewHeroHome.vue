@@ -1,41 +1,25 @@
 <script setup lang="ts">
   import * as PIXI from 'pixi.js'
-  import { Assets, DisplacementFilter } from 'pixi.js'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '~/store/useFolioStore'
-  import { useHead } from '#imports' /* Nuxt composable for managing head tags */
 
   /* PINIA */
   const store = useFolioStore()
 
-  useHead({
-    link: [
-      {
-        rel: 'preload',
-        as: 'image',
-        href: '/img/front.webp',
-        type: 'image/webp',
-      },
-    ],
-  })
-
   const isMobile = ref(false)
   const { $gsap } = useNuxtApp()
   const pixiCtx = useTemplateRef<any>('pixi')
-  const imgFrames = useTemplateRef<any>('imgFrames')
-  const imagesWrapper = useTemplateRef<any>('imagesWrapper')
   const route = useRoute()
+  const colorMode = useColorMode()
 
   let app: PIXI.Application
-  let filter: DisplacementFilter
-  let ripple: PIXI.Sprite
-  let sprite: PIXI.Sprite
   let ctx: gsap.Context
   let pixiReady = false
   let rafId = 0
   let stopWatching: (() => void) | null = null
   let pixiDestroyed = false
   let resizeListener: (() => void) | null = null
+  let waves: Array<{ graphics: PIXI.Graphics; phase: number; amplitude: number; frequency: number; speed: number; colorOffset: number; colorSpeed: number }> = []
 
   const checkIfMobile = () => {
     if (import.meta.client) {
@@ -48,62 +32,181 @@
     if (pixiDestroyed || !app) return
 
     pixiDestroyed = true
-    app.stage.filters = []
-    filter?.destroy()
-    sprite?.destroy()
-    ripple?.destroy()
+    waves.forEach(wave => wave.graphics.destroy())
+    waves = []
     app.destroy()
   }
 
-  /* Function to set image dimensions to make sure canvas is initialized if user returns using back button */
-  const setImageDimensions = () => {
-    if (imgFrames.value && pixiCtx.value && pixiReady) {
-      const canvasWidth = pixiCtx.value.clientWidth || 400
-      // Maintain 4:3 aspect ratio to match 1600x1200 images
-      const aspectRatio = 4 / 3
-      const calculatedHeight = canvasWidth / aspectRatio
+  /* Helper function to convert HSL to hex color */
+  const hslToHex = (h: number, s: number, l: number): number => {
+    l /= 100
+    const a = s * Math.min(l, 1 - l) / 100
+    const f = (n: number) => {
+      const k = (n + h / 30) % 12
+      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)
+      return Math.round(255 * color)
+    }
+    const r = f(0)
+    const g = f(8)
+    const b = f(4)
+    return (r << 16) | (g << 8) | b
+  }
 
-      imgFrames.value.style.width = canvasWidth + 'px'
-      imgFrames.value.style.height = calculatedHeight + 'px'
-    } else if (imgFrames.value && !pixiReady) {
-      /* If PIXI isn't ready yet, wait for it; more solid than a setTimeout */
-      const checkReady = () => {
-        if (pixiReady) {
-          setImageDimensions()
-          $gsap.to(imagesWrapper.value, { duration: 0.5, autoAlpha: 1 })
-        } else {
-          rafId = requestAnimationFrame(checkReady)
-        }
-      }
-      checkReady()
+  /* Get color for wave segment based on position and time */
+  const getWaveColor = (waveIndex: number, segmentRatio: number, time: number): number => {
+    const isLightMode = colorMode.value === 'light'
+    
+    if (isLightMode) {
+      // Light mode: More prominent but still appropriate colors
+      const baseHue = 194
+      const baseSat = 16 // Increased from 12 for stronger presence
+      const baseLight = 65 // Darker from 70 for better contrast
+      
+      // More pronounced variation
+      const lightnessOffset = waveIndex * 4 // Increased from 3
+      const colorSpeed = 0.6 + waveIndex * 0.25 // Faster, more dynamic animation
+      
+      // Much more noticeable traveling shade effect
+      const travelingLight = baseLight + lightnessOffset + Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 16 // Increased from 12
+      const travelingSat = baseSat + Math.sin(segmentRatio * Math.PI * 3 + time * colorSpeed * 0.7) * 8 // Increased from 6
+      
+      // Wider range for prominent shades
+      const finalLight = Math.max(55, Math.min(85, travelingLight)) // Expanded range 55-85 vs 65-85
+      const finalSat = Math.max(10, Math.min(25, travelingSat)) // Increased from 8-20 to 10-25
+      
+      return hslToHex(baseHue, finalSat, finalLight)
+    } else {
+      // Dark mode: Original dramatic colors
+      const baseHue = 194 // Keep hue constant for shades
+      const baseSat = 21
+      const baseLight = 24
+      
+      // MORE PRONOUNCED: Increased lightness range and speed
+      const lightnessOffset = waveIndex * 5 // Bigger variation per wave
+      const colorSpeed = 0.8 + waveIndex * 0.3 // Faster, more noticeable speeds
+      
+      // Create traveling shade effect with MUCH more contrast
+      const travelingLight = baseLight + lightnessOffset + Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 20 // Increased from 12 to 20
+      const travelingSat = baseSat + Math.sin(segmentRatio * Math.PI * 3 + time * colorSpeed * 0.7) * 15 // Increased from 8 to 15
+      
+      // WIDER range for more dramatic shades of #2f454b
+      const finalLight = Math.max(5, Math.min(50, travelingLight)) // Expanded from 8-40 to 5-50
+      const finalSat = Math.max(8, Math.min(45, travelingSat)) // Expanded from 10-35 to 8-45
+      
+      return hslToHex(baseHue, finalSat, finalLight)
     }
   }
 
-  /* Watch for route changes and reset dimensions */
+  /* Create animated sinus waves */
+  const createWaves = () => {
+    console.log('Creating waves with color wandering effect')
+    
+    for (let i = 0; i < 6; i++) {
+      const graphics = new PIXI.Graphics()
+      const wave = {
+        graphics,
+        phase: Math.random() * Math.PI * 2,
+        amplitude: 50 + Math.random() * 80, // Increased amplitude
+        frequency: 0.005 + Math.random() * 0.01, // Adjusted frequency
+        speed: 0.01 + Math.random() * 0.02, // Adjusted speed
+        colorOffset: i * 0.5, // Each wave starts with different color phase
+        colorSpeed: 0.3 + Math.random() * 0.4 // Different color animation speeds
+      }
+      
+      waves.push(wave)
+      app.stage.addChild(graphics)
+    }
+    
+    console.log('Created waves:', waves.length) // Debug
+  }
+
+  /* Animate waves with color wandering */
+  const animateWaves = () => {
+    if (pixiDestroyed || !app) return
+
+    const currentTime = Date.now() * 0.001 // Convert to seconds
+
+    waves.forEach((wave, index) => {
+      wave.graphics.clear()
+      
+      const width = app.screen.width
+      const height = app.screen.height
+      const centerY = height / 2 + (index - 2.5) * 60 // Keep original positioning
+      
+      // Draw wave with color segments
+      const segmentSize = 8 // Size of each color segment
+      let prevX = 0
+      let prevY = centerY + Math.sin(wave.phase) * wave.amplitude
+      
+      for (let x = 0; x <= width; x += segmentSize) {
+        const y = centerY + Math.sin(x * wave.frequency + wave.phase) * wave.amplitude
+        
+        // Calculate color for this segment
+        const segmentRatio = x / width
+        const segmentColor = getWaveColor(index, segmentRatio, currentTime + wave.colorOffset)
+        
+        // Draw segment with its unique color
+        wave.graphics.setStrokeStyle({ width: 4, color: segmentColor, alpha: 1 })
+        wave.graphics.moveTo(prevX, prevY)
+        wave.graphics.lineTo(x, y)
+        wave.graphics.stroke()
+        
+        prevX = x
+        prevY = y
+      }
+      
+      wave.phase += wave.speed
+    })
+    
+    rafId = requestAnimationFrame(animateWaves)
+  }
+
+  /* Resize canvas to fit container */
+  const resizeCanvas = () => {
+    if (!app || !pixiCtx.value) return
+    
+    const width = pixiCtx.value.clientWidth || window.innerWidth
+    const height = pixiCtx.value.clientHeight || window.innerHeight
+    
+    app.renderer.resize(width, height)
+  }
+
+  /* Watch for route changes and resize canvas */
   stopWatching = watch(
     () => route.path,
     (newPath, oldPath) => {
       nextTick(() => {
-        setImageDimensions()
+        resizeCanvas()
       })
+    }
+  )
+
+  /* Watch for color mode changes and recreate waves */
+  const stopColorModeWatching = watch(
+    () => colorMode.value,
+    (newMode, oldMode) => {
+      if (pixiReady && app && !pixiDestroyed) {
+        console.log('Color mode changed:', oldMode, '->', newMode)
+        // Clear existing waves
+        waves.forEach(wave => wave.graphics.destroy())
+        waves = []
+        // Recreate with new colors
+        createWaves()
+      }
     }
   )
 
   onMounted(async () => {
     if (import.meta.client) {
-      // Note: Page-level component handles scrollTo(0) - don't duplicate here
-
       // Set initial mobile state
       checkIfMobile()
 
-      // Add resize listener for both mobile check and image dimensions
+      // Add resize listener
       resizeListener = () => {
         checkIfMobile()
-        setImageDimensions()
+        resizeCanvas()
       }
       window.addEventListener('resize', resizeListener)
-
-      pixiCtx.value.fillStyle = '#1E201E'
 
       $gsap.registerPlugin(ScrollTrigger)
       app = new PIXI.Application()
@@ -112,77 +215,36 @@
       await app.init({
         backgroundAlpha: 0,
         canvas: pixiCtx.value,
-        width: 400,
-        height: 300,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        antialias: true,
+        resolution: window.devicePixelRatio || 1,
+        autoDensity: true
       })
 
-      const image = await Assets.load('/img/front.jpg')
-      sprite = PIXI.Sprite.from(image)
-      sprite.alpha = 0
-
-      const displacer = await Assets.load('/img/displacemap.png')
-
-      ripple = PIXI.Sprite.from(displacer)
-      ripple.alpha = 0
-
-      app.stage.addChild(sprite)
-      app.stage.addChild(ripple)
-
-      filter = new DisplacementFilter(ripple)
-      app.stage.filters = [filter]
-
-      sprite.anchor.set(0.5)
-
-      /* Scale sprite to cover canvas dimensions (like object-fit: cover) */
-      const scaleX = pixiCtx.value.width / sprite.texture.width
-      const scaleY = pixiCtx.value.height / sprite.texture.height
-      const scale = Math.max(scaleX, scaleY)
-      sprite.scale.set(scale)
-
-      ripple.anchor.set(0.5)
-      ripple.scale.set(0.05)
-      filter.scale.set(0) /* Start with no displacement effect */
-
-      sprite.position.set(pixiCtx.value.width / 2, pixiCtx.value.height / 2)
-      ripple.position.set(pixiCtx.value.width / 2, pixiCtx.value.height / 2)
-
-      /* Mark PIXI as ready */
+      /* Create waves but delay animation start to avoid Venice blind collision */
+      createWaves()
+      
+      /* Mark PIXI as ready but delay animation start */
       pixiReady = true
-
-      /* Set image dimensions using the shared function */
-      setImageDimensions()
+      
+      // Delay wave animation to let Venice blind complete
+      setTimeout(() => {
+        if (!pixiDestroyed && app) {
+          animateWaves()
+        }
+      }, 1200) // 1.2s delay to let Venice blind finish
+      
+      /* Resize canvas to fit */
+      resizeCanvas()
 
       /* Context! The friendly GSAP garbage collector */
       ctx = $gsap.context((self) => {
-        /* For the sprite animate a pixi displacement pulse */
-        let pixiTl = $gsap.timeline({ repeat: 0 })
-        pixiTl
-          .fromTo(sprite, { alpha: 0 }, { duration: 1, alpha: 1, delay: 1.5 })
-          .fromTo(imagesWrapper.value, { opacity: 0 }, { opacity: 1 }, '<')
-          .fromTo(
-            filter.scale,
-            { x: 0, y: 0 },
-            { duration: 0.3, x: 100, y: 100 },
-            'ripple'
-          )
-          .to(ripple.scale, { duration: 1.5, x: 1.5, y: 1.5 }, 'ripple')
-          .to(filter.scale, { duration: 1.2, x: 0, y: 0 }, '-=0.3')
-          .to(sprite, { duration: 1, alpha: 0 }, '+=1')
-          .fromTo(
-            imgFrames.value,
-            { autoAlpha: 0 },
-            { duration: 0.5, autoAlpha: 1 },
-            '<'
-          ) /* Start img-frames as sprite fades out */
-          .to(
-            pixiCtx.value,
-            { duration: 0.1, alpha: 0 },
-            '>'
-          ) /* Hide canvas after sprite fades out */
-          .call(() => {
-            /* Destroy PIXI resources after animation completes */
-            destroyPixiResources()
-          })
+        /* Fade in the canvas */
+        $gsap.fromTo(pixiCtx.value, 
+          { opacity: 0 }, 
+          { duration: 2, opacity: 1, delay: 1.5 }
+        )
 
         /* Move abstract wrapper up when user starts scrolling */
         $gsap.to('.front-header', {
@@ -190,23 +252,10 @@
           duration: 0.8,
           ease: 'power2.out',
           scrollTrigger: {
-            trigger: '.hero-wrapper', // Use hero wrapper itself as trigger
-            start: 'bottom bottom-=200', // Start when hero bottom is 200px from viewport bottom
+            trigger: '.hero-wrapper',
+            start: 'bottom bottom-=200',
             end: 'bottom top',
             scrub: 1,
-          },
-        })
-
-        /* Fade out author intro */
-        let authorTl = $gsap.timeline({
-          /* Pin intro is actually in ViewProjects.vue; fade out author intro when pin intro moves above bottom of browser window */
-          scrollTrigger: {
-            trigger: '.about-wrapper',
-            pinSpacing: true,
-            start:
-              'top bottom' /* when the top of the trigger hits the bottom of the viewport */,
-            end: '+=50',
-            scrub: 3,
           },
         })
       })
@@ -224,6 +273,11 @@
       stopWatching()
     }
 
+    /* Clean up color mode watcher */
+    if (stopColorModeWatching) {
+      stopColorModeWatching()
+    }
+
     /* Clean up resize listener */
     if (resizeListener && import.meta.client) {
       window.removeEventListener('resize', resizeListener)
@@ -239,19 +293,8 @@
 
 <template>
   <main class="hero-wrapper">
-    <div class="pin">
-      <div class="images-wrapper" ref="imagesWrapper">
-        <div>
-          <canvas class="img-pixi" ref="pixi" id="pixi"></canvas>
-          <img
-            class="img-frames"
-            src="/img/front.webp"
-            ref="imgFrames"
-            width="400"
-            height="300"
-          />
-        </div>
-      </div>
+    <div class="waves-container">
+      <canvas class="waves-canvas" ref="pixi" id="pixi"></canvas>
     </div>
     <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
     <CommonAbstract
@@ -266,7 +309,6 @@
       :is-two-lines="!isMobile"
       :author="''"
       :date="''"
-      :is-page-title="false"
     />
   </main>
 </template>
@@ -276,6 +318,7 @@
     position: relative;
     min-height: 100vh;
     padding: 0 $px-16-spacer;
+    overflow: hidden;
     @supports (height: 100svh) {
       min-height: 100svh;
     }
@@ -285,49 +328,33 @@
     }
   }
 
+  .waves-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+  }
+
+  .waves-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+  }
+
   .front-header {
     position: absolute;
     bottom: 0px;
+    z-index: 20;
     &--ios-safari {
       bottom: 0px;
     }
-  }
-
-  .images-wrapper {
-    display: flex;
-    position: absolute;
-    top: 35%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    width: 60vw;
-    max-width: 400px;
-
-    @include this-and-above('md') {
-      top: 25%;
-      width: 400px;
-    }
-  }
-
-  .img-pixi {
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .img-frames {
-    position: relative;
-    border: $primary solid 1px;
-    aspect-ratio: 4 / 3;
-    width: 100%;
-    height: auto;
-    border: none;
-    border-radius: 12px;
-  }
-
-  canvas {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 3;
-    border-radius: 12px;
   }
 </style>

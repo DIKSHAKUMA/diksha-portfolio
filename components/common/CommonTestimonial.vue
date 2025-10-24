@@ -39,7 +39,7 @@
             start: 'top 85%',
             end: 'top 50%',
             toggleActions: 'play none none reverse',
-            preventOverlaps: true
+            preventOverlaps: false
           }
         })
       })
@@ -97,10 +97,12 @@
     }
 
     cite {
+
       font-size: clamped(16px, 20px, 380px, 1920px);
     }
 
     .testimonial__cite {
+      margin-top: $px-16-spacer;
       text-align: right;
     }
   }

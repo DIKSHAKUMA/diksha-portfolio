@@ -157,7 +157,6 @@
         :is-hero="false"
         :author="''"
         :date="''"
-        :is-page-title="false"
         :is-two-lines="false"
       />
       <CommonInfoLabel
@@ -291,11 +290,9 @@
 
   .canvas-wrapper {
     overflow: hidden;
-    border-radius: 16px;
     max-width: 100%;
 
     @media (max-width: 767px) {
-      border-radius: 12px;
       max-width: 90vw;
     }
   }

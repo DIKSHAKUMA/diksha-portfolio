@@ -56,7 +56,6 @@
         :is-hero="false"
         :author="''"
         :date="''"
-        :is-page-title="false"
         :is-two-lines="false"
       />
     </main>
@@ -140,7 +139,7 @@
     contain: layout style paint;
     /* CSS containment for better performance */
     image-rendering: optimizeSpeed;
-    background-image: url('/img/vinyl-2.jpg');
+    background-image: url('/img/sea-parallax.jpg');
 
     /* Firefox-specific optimizations */
     @-moz-document url-prefix() {
@@ -148,8 +147,8 @@
       image-rendering: optimizeSpeed;
     }
 
-    @supports (background-image: url('/img/vinyl-2.webp')) {
-      background-image: url('/img/vinyl-2.webp');
+    @supports (background-image: url('/img/sea-parallax.webp')) {
+      background-image: url('/img/sea-parallax.webp');
     }
 
     /* Very small mobile screens - extra aggressive left positioning */

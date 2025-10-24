@@ -41,7 +41,6 @@
         :is-secondary="false"
         :author="''"
         :date="''"
-        :is-page-title="false"
         :is-two-lines="false"
       />
     </main>

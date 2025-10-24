@@ -12,31 +12,48 @@
     return '#171717'
   }
 
-  /* Function to get ring colors based on color mode */
+  /* Helper function to convert HSL to RGB */
+  const hslToRgb = (h: number, s: number, l: number): [number, number, number] => {
+    l /= 100
+    const a = s * Math.min(l, 1 - l) / 100
+    const f = (n: number) => {
+      const k = (n + h / 30) % 12
+      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)
+      return Math.round(255 * color)
+    }
+    return [f(0), f(8), f(4)]
+  }
+
+  /* Function to get ring colors based on color mode - matching PIXI animation */
   const getRingColors = () => {
     if (typeof window !== 'undefined') {
-      /* If primary is light use black variations */
+      /* Base color from PIXI: #2f454b (HSL: h=194°, s=21%, l=24%) */
+      const baseHue = 194
+      const baseSat = 21
+      
       if (colorMode.value === 'light') {
+        /* Light mode: Use darker shades of the teal-blue */
         return [
-          [23, 23, 23], /* black */
-          [80, 80, 80], /* even lighter */
-          [23, 23, 23], /* back to black for smooth cycling */
+          hslToRgb(baseHue, baseSat + 10, 15), /* Darker teal */
+          hslToRgb(baseHue, baseSat + 5, 25),  /* Medium teal */
+          hslToRgb(baseHue, baseSat, 35),      /* Lighter teal */
+          hslToRgb(baseHue, baseSat + 15, 20), /* Rich teal */
         ]
       }
-      /* Dark mode - use original brand colors */
+      /* Dark mode: Use lighter shades of the teal-blue */
       return [
-        [250, 247, 255], /* secondary */
-        [255, 240, 232], /* accent1 light */
-        [74, 68, 83], /* accent2 dark */
-        [250, 247, 255], /* secondary light again for smooth cycling */
+        hslToRgb(baseHue, baseSat, 40),      /* Light teal */
+        hslToRgb(baseHue, baseSat + 10, 50), /* Bright teal */
+        hslToRgb(baseHue, baseSat + 5, 30),  /* Medium teal */
+        hslToRgb(baseHue, baseSat + 20, 45), /* Vibrant teal */
       ]
     }
     /* Fallback to dark mode colors */
     return [
-      [250, 247, 255], /* secondary */
-      [255, 240, 232], /* accent1 light */
-      [74, 68, 83], /* accent2 dark */
-      [250, 247, 255], /* secondary light again for smooth cycling */
+      hslToRgb(194, 21, 40),
+      hslToRgb(194, 31, 50),
+      hslToRgb(194, 26, 30),
+      hslToRgb(194, 41, 45),
     ]
   }
 
@@ -95,24 +112,37 @@
             const alpha = 150 + 30 * p.sin(timeForAlpha + i * 0.3) /* Reduced amplitude */
             p.fill(color[0], color[1], color[2], alpha)
 
-            /* Optimized dots per ring */
-            const dotsPerRing = Math.max(4, Math.floor(i * 1.2))
-            for (let j = 0; j < dotsPerRing; j++) {
-              const angle = (j / dotsPerRing) * p.TWO_PI
+            /* Create radiating star rays */
+            const numRays = Math.max(6, Math.floor(i * 0.6)) /* Fewer rays for cleaner star effect */
+            for (let j = 0; j < numRays; j++) {
+              const rayAngle = (j / numRays) * p.TWO_PI
+              
               /* Dynamic spacing based on screen size */
               const isMobile = p.width < 768
-              const space = isMobile ? 8 : 15 /* Smaller spacing on mobile */
-              const radius = space * i
-              /* Smaller dots on mobile */
-              const baseSize = isMobile ? 3 : 5
-              const size = baseSize + 2 * p.sin(i * 0.3 + timeForSize)
+              const baseSpace = isMobile ? 8 : 15
+              
+              /* Create multiple dots along each ray */
+              const dotsPerRay = Math.max(2, Math.floor(i * 0.4))
+              for (let k = 1; k <= dotsPerRay; k++) {
+                const rayProgress = k / dotsPerRay
+                const rayLength = baseSpace * i * rayProgress
+                
+                /* Add pulsing motion to the rays */
+                const pulse = p.sin(time * 2 + i * 0.5 + rayAngle + rayProgress * p.PI) * 0.2
+                const finalRadius = rayLength * (1 + pulse)
+                
+                /* Vary dot size along the ray - smaller towards center, bigger at tips */
+                const baseSize = isMobile ? 2 : 4
+                const rayTipMultiplier = 0.5 + rayProgress * 1.5 /* Grow towards ray tips */
+                const size = (baseSize * rayTipMultiplier) + p.sin(i * 0.3 + timeForSize) * 1.5
 
-              p.ellipse(
-                radius * p.cos(angle),
-                radius * p.sin(angle),
-                size,
-                size
-              )
+                p.ellipse(
+                  finalRadius * p.cos(rayAngle),
+                  finalRadius * p.sin(rayAngle),
+                  size,
+                  size
+                )
+              }
             }
             p.pop()
           }

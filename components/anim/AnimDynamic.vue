@@ -5,6 +5,8 @@
   let ctx: gsap.Context
 
   onMounted(() => {
+    if (!import.meta.client) return
+    
     const triad_tl = $gsap.timeline({ repeat: -1 })
 
     ctx = $gsap.context((self) => {
@@ -69,7 +71,6 @@
 </template>
 
 <style scoped lang="scss">
-
   .anim {
     display: flex;
     position: absolute;
@@ -77,8 +78,11 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color:$secondary;
-      border-radius:16px;
+    background: radial-gradient(
+      125% 125% at 50% 100%,
+      $secondary 40%,
+      $accent2 100%
+    );
   }
 
   .circle {
@@ -90,7 +94,6 @@
     place-self: center;
     position: absolute;
 
-    
     @include this-and-above('md') {
       width: 200px;
       height: 200px;
