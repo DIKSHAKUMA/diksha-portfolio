@@ -87,7 +87,6 @@ export default defineNuxtConfig({
       {
         name: 'Reddit Sans',
         provider: 'google',
-        styles: ['normal'],
       },
       {
         name: 'Lato',
@@ -98,7 +97,6 @@ export default defineNuxtConfig({
       {
         name: 'Geist Mono',
         provider: 'google',
-        styles: ['normal'],
       },
     ],
   },
