@@ -147,36 +147,41 @@
         cachedBgColor = getCurrentBgColor()
       })
       
-      /* Firefox-only Intersection Observer for performance */
-      if (isFirefox) {
-        observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                /* Pause animation when parallax enters viewport */
-                if (p5Instance) p5Instance.noLoop()
-              } else {
-                /* Resume animation when parallax leaves viewport */
-                if (p5Instance) p5Instance.loop()
-              }
+      /* Intersection Observer to pause P5 rings when ViewParallaxAbout is halfway up */
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            console.log('P5 Rings Observer:', {
+              isIntersecting: entry.isIntersecting,
+              intersectionRatio: entry.intersectionRatio,
+              target: entry.target.className
             })
-          },
-          {
-            threshold: 0.05, /* Trigger when parallax is 5% visible */
-            rootMargin: '0px 0px 0px 0px', /* No margin - detect exact entry */
-          }
-        )
-        
-        /* Wait for DOM to be ready, then observe the parallax section */
-        nextTick(() => {
-          const parallaxSection = document.querySelector('.parallax__wrapper')
-          if (parallaxSection && observer) {
-            observer.observe(parallaxSection)
-          } else {
-            console.warn('Parallax section not found for P5 rings observer')
-          }
-        })
-      }
+            
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+              console.log('Pausing P5 rings - ViewParallaxAbout is half up')
+              if (p5Instance) p5Instance.noLoop()
+            } else {
+              console.log('Resuming P5 rings - ViewParallaxAbout is less than half visible')
+              if (p5Instance) p5Instance.loop()
+            }
+          })
+        },
+        {
+          threshold: [0, 0.5, 1], /* Trigger at 0%, 50%, and 100% visibility */
+          rootMargin: '0px 0px 0px 0px',
+        }
+      )
+      
+      /* Wait for DOM to be ready, then observe the parallax section */
+      nextTick(() => {
+        const parallaxSection = document.querySelector('.parallax__wrapper')
+        if (parallaxSection && observer) {
+          console.log('P5 Rings: Found parallax section, starting observation')
+          observer.observe(parallaxSection)
+        } else {
+          console.warn('P5 Rings: Parallax section not found for observer')
+        }
+      })
 
     }
   })

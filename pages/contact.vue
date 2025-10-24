@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useNavbarStore } from '~/store/useNavbarStore'
   definePageMeta({
     layout: 'default',
     pageTransition: {
@@ -7,12 +8,17 @@
     },
   })
 
+  const navbarStore = useNavbarStore()
+
   onMounted(() => {
     const { $lenis } = useNuxtApp()
     $lenis.scrollTo(0, { immediate: true, force: true })
+    if (import.meta.client) navbarStore.setTransparent(true, 'contact')
   })
 
-  onUnmounted(() => {})
+  onUnmounted(() => {
+    navbarStore.setTransparent(false, 'contact')
+  })
 </script>
 <template>
   <div>

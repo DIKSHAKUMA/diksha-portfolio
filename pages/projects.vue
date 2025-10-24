@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { useNavbarStore } from '~/store/useNavbarStore'
+  const navbarStore = useNavbarStore()
   definePageMeta({
     layout: 'default',
     pageTransition: {
@@ -8,11 +10,14 @@
   })
 
   onMounted(() => {
-        const { $lenis } = useNuxtApp()
+    const { $lenis } = useNuxtApp()
     $lenis.scrollTo(0, { immediate: true, force: true })
+    if (import.meta.client) navbarStore.setTransparent(true, 'projects')
   })
 
-  onUnmounted(() => {})
+  onUnmounted(() => {
+    if (import.meta.client) navbarStore.setTransparent(false, 'projects')
+  })
 </script>
 <!--Shows all projects, something in a horizontal style using draggable-->
 <template>
@@ -32,7 +37,7 @@
     overflow-x: visible;
     z-index: inherit;
     overflow: hidden;
-    height:100dvh;
+    height: 100dvh;
     min-height: 100dvh;
   }
 </style>

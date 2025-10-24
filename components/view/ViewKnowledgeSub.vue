@@ -30,34 +30,10 @@
             scrub: 1,
             pin: '.know-wrapper',
             anticipatePin: 1,
-            pinSpacing: true
-          }
+            pinSpacing: true,
+          },
         })
       }
-
-      // Text animations (keep original)
-      let sectionsChar = $gsap.utils.toArray('.split-skills-w')
-      sectionsChar.forEach((sec: any) => {
-        const splitTxt = new SplitType(sec, { types: 'words' })
-        splitInstances.push(splitTxt)
-        $gsap.set(splitTxt.words, {
-          autoAlpha: 0,
-          clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
-        })
-        $gsap.to(splitTxt.words, {
-          autoAlpha: 1,
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          scrollTrigger: {
-            trigger: sec,
-            start: 'top 90%',
-            scrub: false,
-            end: 'top 50%',
-            toggleActions: 'restart none none reverse',
-            preventOverlaps: true,
-          },
-          duration: 0.4,
-        })
-      })
     })
   })
 
@@ -235,7 +211,6 @@
         min-width: 300px;
         height: 42vh;
       }
-      
     }
   }
 </style>

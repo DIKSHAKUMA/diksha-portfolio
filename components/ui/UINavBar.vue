@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { ref, onBeforeUnmount } from 'vue'
+  import { useNavbarStore } from '~/store/useNavbarStore'
 
   const colorSwitch = useTemplateRef('colorSwitch')
   const navlist = useTemplateRef('navlist')
@@ -8,8 +9,8 @@
   const isAnimating = ref(false)
   const isLightMode = ref<boolean>(false)
   const route = useRoute()
+  const navbarStore = useNavbarStore()
   const isProjectsOrContactOpen = ref(false)
-  const isContactOpen = ref(false)
 
   /* Check if current route is in blog section */
   const isBlogActive = computed(() => {
@@ -53,7 +54,7 @@
     return {
       'nav-wrapper--moveup': isDown.value,
       'nav-wrapper--projects-open': isProjectsOrContactOpen.value,
-      'nav-wrapper--contact-open': isContactOpen.value,
+      'nav-wrapper--contact-open': navbarStore.isContactPage,
     }
   })
 
@@ -140,19 +141,14 @@
     { immediate: true }
   )
 
-  /* I felt like retro this eve; no ternary */
+  /* Watch for projects route to maintain projects page transparency */
   watch(
     () => route.path,
     (newPath) => {
-      if (newPath === '/projects' || newPath === '/contact') {
+      if (newPath === '/projects') {
         isProjectsOrContactOpen.value = true
-      } else {
+      } else if (newPath !== '/contact') {
         isProjectsOrContactOpen.value = false
-      }
-      if (newPath === '/contact') {
-        isContactOpen.value = true
-      } else {
-        isContactOpen.value = false
       }
     },
     { immediate: true }
@@ -195,7 +191,7 @@
           </ClientOnly>
         </template>
         <template #mode>
-          <div v-if="!isContactOpen">
+          <div v-if="!navbarStore.isContactPage">
             <UIAppleSwitch
               :is-mobile="isMobileActive"
               v-model="isLightMode"

@@ -58,8 +58,7 @@
       const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
 
       /* Batch DOM queries for better performance */
-      const images = $gsap.utils.toArray('.projects__abstract__image')
-      const words = $gsap.utils.toArray('.split-proj-w')
+      const images = $gsap.utils.toArray('.projects__abstract__item')
 
       /* Firefox gets simple fade, others get full clipPath reveal */
       images.forEach((img: any) => {
@@ -88,9 +87,9 @@
             scrollTrigger: {
               trigger: img,
               start: 'top 80%',
-              end: 'top 60%', 
+              end: 'top 60%',
               toggleActions: 'play none none reverse',
-              invalidateOnRefresh: true
+              invalidateOnRefresh: false
             },
           })
         }
@@ -114,24 +113,6 @@
             force3D: false,
             autoRound: true,
           })
-        })
-      })
-
-      words.forEach((word: any) => {
-        $gsap.from(word, {
-          opacity: 0,
-          duration: 0.5,
-          ease: 'power2.out',
-          force3D: true,
-          scrollTrigger: {
-            trigger: word,
-            start: 'top 80%',
-            end: 'top 60%',
-            toggleActions: 'play none none reverse',
-            refreshPriority: -1,
-            invalidateOnRefresh: false,
-            preventOverlaps: true,
-          },
         })
       })
     })
@@ -169,37 +150,39 @@
       />
       <section class="projects__abstract">
         <div v-for="proj in dateSorted" :key="proj.slug">
-          <div
-            class="projects__abstract__image action"
-            data-name="proj"
-            data-text="View"
-            data-color="#FFF"
-            @click="handleProjectClick(proj)"
-          >
-            <NuxtImg
-              :src="proj.coverImage?.handle"
-              provider="hygraph"
-              alt="Project image"
-              format="webp"
-              sizes="sm:100vw md:45vw lg:45vw xl:33vw"
-              densities="x1 x2"
-              quality="80"
-            ></NuxtImg>
-          </div>
-
-          <div class="projects__abstract__info">
-            <p class="split-proj-w">{{ proj.name }}</p>
-            <span
-              v-if="proj.tags && proj.tags.length > 0"
-              class="project-tags split-proj-w"
-              >{{ getProjectTags(proj) }}</span
-            >
+          <div class="projects__abstract__item">
             <div
-              v-if="proj.labUrl"
-              class="projects__abstract__info__lab"
-              title="Lab Project"
+              class="projects__abstract__image action"
+              data-name="proj"
+              data-text="View"
+              data-color="#FFF"
+              @click="handleProjectClick(proj)"
             >
-              <LabSVG class="projects__abstract__info__lab-svg" />
+              <NuxtImg
+                :src="proj.coverImage?.handle"
+                provider="hygraph"
+                alt="Project image"
+                format="webp"
+                sizes="sm:100vw md:45vw lg:45vw xl:33vw"
+                densities="x1 x2"
+                quality="80"
+              ></NuxtImg>
+            </div>
+
+            <div class="projects__abstract__info">
+              <p class="split-proj-w">{{ proj.name }}</p>
+              <span
+                v-if="proj.tags && proj.tags.length > 0"
+                class="project-tags split-proj-w"
+                >{{ getProjectTags(proj) }}</span
+              >
+              <div
+                v-if="proj.labUrl"
+                class="projects__abstract__info__lab"
+                title="Lab Project"
+              >
+                <LabSVG class="projects__abstract__info__lab-svg" />
+              </div>
             </div>
           </div>
         </div>
@@ -274,12 +257,16 @@
       width: 100%;
       align-self: flex-start;
 
+      &__item {
+        opacity: 0;
+        pointer-events: none;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+      }
+
       &__image {
         position: relative;
 
         cursor: pointer;
-        opacity: 0;
-        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
         aspect-ratio: 4/3;
 
         img {
