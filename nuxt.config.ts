@@ -75,30 +75,38 @@ export default defineNuxtConfig({
     },
   },
 
+  // Font configuration with optimized loading
   fonts: {
-    processCSSVariables: true,
-
-    experimental: {
-      disableLocalFallbacks: true,
-      typedPages: true,
-    },
-
+    // Your font specifications
     families: [
       {
         name: 'Reddit Sans',
-        provider: 'google',
+        provider: 'google' as const,
       },
       {
         name: 'Lato',
-        provider: 'google',
+        provider: 'google' as const,
         weights: [300, 400, 500, 600, 700],
-        styles: ['normal', 'italic'],
+        styles: ['normal', 'italic'] as const,
       },
       {
         name: 'Geist Mono',
-        provider: 'google',
+        provider: 'google' as const,
       },
     ],
+    // Optimize font loading
+    experimental: {
+      // Keep CSS variables for theming support
+      processCSSVariables: true,
+      // Enable modern font loading
+      inlineImports: true,
+    },
+    // Enable font preloading
+    preload: true,
+    // Use display: swap for better performance
+    display: 'swap',
+    // Download fonts for better performance
+    download: true,
   },
 
   modules: [
