@@ -86,18 +86,20 @@
 
     .testimonial {
       font-family: $sans-text;
+      font-weight: 400;
       display: flex;
       flex-direction: column;
     }
 
     blockquote {
       font-size: clamped(16px, 32px, 480px, 1920px);
+      font-weight: 400;
       color: $secondary;
       margin: 0;
     }
 
     cite {
-
+      font-weight: 400;
       font-size: clamped(16px, 20px, 380px, 1920px);
     }
 

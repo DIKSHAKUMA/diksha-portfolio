@@ -592,10 +592,12 @@ just use a simple modal and be done with it. */
         color: $secondary;
         opacity: 1;
         transition: transform 0.1s linear;
+        font-weight: 400;
         font-variation-settings: 'wght' 400;
 
         /* Lighter font weight in dark mode */
         .dark-mode & {
+          font-weight: 350;
           font-variation-settings: 'wght' 350;
         }
 
