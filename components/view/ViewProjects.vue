@@ -404,6 +404,7 @@
       font-size: clamped(24px, 44px, 480px, 1920px);
       font-family: $sans-ui-mono;
       font-weight: 500;
+      font-variation-settings: 'wght' 500;
       white-space: nowrap;
       color: $secondary;
       opacity: 0.5;
