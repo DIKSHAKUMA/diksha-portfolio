@@ -78,11 +78,11 @@ export default defineNuxtConfig({
   fonts: {
     processCSSVariables: true,
 
-    experimental: {
-      /* Defines whether to enable adding local fallbacks. Default is `false`. Might add some CLS but want to avoid font on font if user installed locally. */
-      disableLocalFallbacks: true,
-      typedPages: true,
-    },
+    // experimental: {
+    //   /* Defines whether to enable adding local fallbacks. Default is `false`. Might add some CLS but want to avoid font on font if user installed locally. */
+    //   disableLocalFallbacks: true,
+    //   typedPages: true,
+    // },
 
     families: [
       {
