@@ -265,7 +265,7 @@
 
       &__image {
         position: relative;
-
+        pointer-events: all;
         cursor: pointer;
         aspect-ratio: 4/3;
 
