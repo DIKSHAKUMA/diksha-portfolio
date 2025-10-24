@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
-
   const { $gsap } = useNuxtApp()
   let ctx: gsap.Context
 

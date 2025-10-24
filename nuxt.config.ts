@@ -88,19 +88,19 @@ export default defineNuxtConfig({
       {
         name: 'Reddit Sans',
         provider: 'google',
-        weights: [400, 500, 600, 700],
+        weights: [300, 400, 500, 600, 700],
         styles: ['normal'],
       },
       {
         name: 'Lato',
         provider: 'google',
-        weights: [400, 500, 600, 700],
+        weights: [300, 400, 700],
         styles: ['normal', 'italic'],
       },
       { 
         name: 'Geist Mono', 
         provider: 'google',
-        weights: [400, 500, 600],
+        weights: [300, 400, 500, 600],
         styles: ['normal'],
       },
     ],
