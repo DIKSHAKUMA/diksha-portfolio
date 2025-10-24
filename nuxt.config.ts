@@ -78,17 +78,15 @@ export default defineNuxtConfig({
   fonts: {
     processCSSVariables: true,
 
-    // experimental: {
-    //   /* Defines whether to enable adding local fallbacks. Default is `false`. Might add some CLS but want to avoid font on font if user installed locally. */
-    //   disableLocalFallbacks: true,
-    //   typedPages: true,
-    // },
+    experimental: {
+      disableLocalFallbacks: true,
+      typedPages: true,
+    },
 
     families: [
       {
         name: 'Reddit Sans',
         provider: 'google',
-        weights: [300, 350, 400, 500, 600, 700],
         styles: ['normal'],
       },
       {
@@ -97,10 +95,9 @@ export default defineNuxtConfig({
         weights: [300, 400, 700],
         styles: ['normal', 'italic'],
       },
-      { 
-        name: 'Geist Mono', 
+      {
+        name: 'Geist Mono',
         provider: 'google',
-        weights: [300, 400, 500, 600],
         styles: ['normal'],
       },
     ],
