@@ -1,0 +1,25 @@
+[build]
+  command = "npx --yes npm-google-fonts@latest --output=assets/fonts && npx nuxi build"
+  publish = ".output/public"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--prefer-offline"
+  NODE_OPTIONS = "--max_old_space_size=4096"
+
+# Cache node_modules and build outputs for faster builds
+[[plugins]]
+  package = "@netlify/plugin-cache"
+  
+# Enable build caching for Nuxt
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+  [plugins.inputs]
+    functions_src = ".output/server"
+    functions_dist = ".netlify/functions"
+
+# Redirects for SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
