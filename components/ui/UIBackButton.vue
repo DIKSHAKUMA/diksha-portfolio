@@ -45,6 +45,7 @@
     font-family: $sans-ui;
     font-size: 14px;
     font-weight: 500;
+    font-variation-settings: 'wght' 500;
     transition: all 0.3s ease;
     position: relative;
 
