@@ -126,12 +126,5 @@
         }
       }
     }
-
-    &__ilabel :deep(.info-label-header) {
-      text-transform: none;
-      font-weight: 400;
-      font-size: 0.8rem;
-      letter-spacing: 0.5px;
-    }
   }
 </style>

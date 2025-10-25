@@ -94,29 +94,28 @@ export default defineNuxtConfig({
 
   // Font configuration with optimized loading
   fonts: {
-    // Your font specifications
     families: [
       {
         name: 'Reddit Sans',
         provider: 'google',
+        styles: ['normal']
       },
       {
         name: 'Lato',
         provider: 'google',
+        weights: [300, 400],
+        styles: ['normal', 'italic']
       },
       {
         name: 'Geist Mono',
         provider: 'google',
-      },
+        styles: ['normal']
+      }
     ],
-
     defaults: {
-      weights: [300, 400, 500, 600],
-      styles: ['normal', 'italic'],
+      styles: ['normal']
     },
-    
     processCSSVariables: true,
-
     experimental: {
       disableLocalFallbacks: true,
     },
