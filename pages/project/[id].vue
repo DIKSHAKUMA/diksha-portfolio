@@ -517,6 +517,7 @@
 
   h5 {
     font-weight: 600;
+    font-variation-settings: 'wght' 600;
   }
 
   .project-wrapper {
