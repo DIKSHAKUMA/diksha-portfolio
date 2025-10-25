@@ -28,6 +28,41 @@ export default defineNuxtConfig({
     redirectToCanonicalSiteUrl: true,
   },
 
+  // Font configuration with optimized loading
+  fonts: {
+    // Your font specifications
+    families: [
+      {
+        name: 'Reddit Sans',
+        provider: 'google',
+      },
+      {
+        name: 'Lato',
+        provider: 'google',
+        weights: [300, 400, 500, 600, 700],
+        styles: ['normal', 'italic'],
+      },
+      {
+        name: 'Geist Mono',
+        provider: 'google',
+      },
+    ],
+    // Optimize font loading
+    experimental: {
+      // Keep CSS variables for theming support
+      processCSSVariables: true,
+      // Enable modern font loading
+      inlineImports: true,
+    },
+    disableLocalFallbacks: true,
+    // Enable font preloading
+    preload: false,
+    // Use display: swap for better performance
+    display: 'swap',
+    // Download fonts for better performance
+    download: true,
+  },
+
   /* Sitemap Configuration */
   sitemap: {
     urls: async () => {
@@ -73,41 +108,6 @@ export default defineNuxtConfig({
       priority: 0.5,
       lastmod: new Date().toISOString(),
     },
-  },
-
-  // Font configuration with optimized loading
-  fonts: {
-    // Your font specifications
-    families: [
-      {
-        name: 'Reddit Sans',
-        provider: 'google',
-      },
-      {
-        name: 'Lato',
-        provider: 'google',
-        weights: [300, 400, 500, 600, 700],
-        styles: ['normal', 'italic'],
-      },
-      {
-        name: 'Geist Mono',
-        provider: 'google'
-      },
-    ],
-    // Optimize font loading
-    experimental: {
-      // Keep CSS variables for theming support
-      processCSSVariables: true,
-      // Enable modern font loading
-      inlineImports: true,
-    },
-    disableLocalFallbacks: true,
-    // Enable font preloading
-    preload: false,
-    // Use display: swap for better performance
-    display: 'swap',
-    // Download fonts for better performance
-    download: true,
   },
 
   modules: [
