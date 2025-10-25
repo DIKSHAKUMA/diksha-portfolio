@@ -2,6 +2,7 @@
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '~/store/useFolioStore'
   import SplitType from 'split-type'
+  import SpecialKudos from '@/assets/svg/cssda-special-kudos-yellow.svg'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
@@ -21,7 +22,7 @@
         })
         $gsap.to(splitTxt.words, {
           autoAlpha: 1,
-          delay: 2.2, /* Increased delay to avoid Venice blind collision */
+          delay: 2.2 /* Increased delay to avoid Venice blind collision */,
           clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
           scrollTrigger: {
             trigger: sec,
@@ -72,10 +73,58 @@
       :date="''"
       :is-two-lines="false"
     />
+    <NuxtLink
+      class="no-blur-link"
+      to="https://www.cssdesignawards.com/sites/thomas-thorstensson/48276"
+      target="_blank"
+    >
+      <SpecialKudos class="csda-special-kudos action" data-name="proj" data-text="CSSDA!" />
+    </NuxtLink>
   </main>
 </template>
 
 <style lang="scss" scoped>
+  /* Prevent blur effect on this specific link */
+  .no-blur-link:hover {
+    filter: none !important;
+    -webkit-filter: none !important;
+  }
+
+  .csda-special-kudos {
+    position: absolute;
+    width: 100px;
+    height: auto;
+    bottom: $px-128-spacer;
+    right: $px-16-spacer;
+    z-index: 900;
+    animation: rotation 6s infinite linear;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1) rotate(5deg);
+      animation-play-state: paused;
+      opacity: 0.9;
+    }
+
+    @include this-and-above('sm') {
+      width: 128px;
+      bottom: $px-64-spacer;
+      right: $px-64-spacer;
+    }
+  }
+
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+
   .hero-wrapper {
     position: relative;
     width: 100%;

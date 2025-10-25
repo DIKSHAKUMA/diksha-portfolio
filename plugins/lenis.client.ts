@@ -9,7 +9,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     const lenis = new Lenis({
         autoRaf: true,
         // Revert to default multipliers for proper scroll distance
-        touchMultiplier: 2,
+        touchMultiplier: 1,
         wheelMultiplier: 1,
     });
 

@@ -1,4 +1,5 @@
-b<script setup lang="ts">
+b
+<script setup lang="ts">
   import SplitType from 'split-type'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -35,6 +36,8 @@ b<script setup lang="ts">
 
   const abstractClassObj = computed(() => {
     return {
+      'abstract-wrapper--hero--with-desc':
+        props.isHero && props.desc && props.desc.trim(),
       'abstract-wrapper--hero': props.isHero,
       'abstract-wrapper--secondary': props.isSecondary,
       'abstract-wrapper--full-width': props.isFullWidth,
@@ -154,8 +157,7 @@ b<script setup lang="ts">
 </template>
 
 <style lang="scss" scoped>
-
-/**
+  /**
  * For semantic distionction, this component feels like a display case of typography
  * so I a not using h1-h6 tags.
  */
@@ -166,13 +168,16 @@ b<script setup lang="ts">
     color: $secondary;
     margin: 0;
     height: fit-content;
-
     width: 80%;
     margin-bottom: $px-32-spacer;
 
     &--hero {
       width: 90%;
       margin-bottom: $px-16-spacer;
+
+      &--with-desc {
+        margin-bottom: $px-16-spacer;
+      }
 
       @include this-and-above('lg') {
         width: 70%;
@@ -198,14 +203,6 @@ b<script setup lang="ts">
     &--full-width {
       margin-bottom: $px-64-spacer;
       width: 100%;
-    }
-
-    @include this-and-above('md') {
-      margin-bottom: $px-64-spacer;
-
-      &.abstract-wrapper--hero {
-        margin-bottom: $px-8-spacer;
-      }
     }
   }
 
@@ -247,7 +244,7 @@ b<script setup lang="ts">
     }
 
     &__desc {
-      display:inline-block;
+      display: inline-block;
       font-size: clamped(18px, 30px, 480px, 1920px);
       font-family: $sans-text;
     }

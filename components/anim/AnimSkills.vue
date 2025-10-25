@@ -4,63 +4,66 @@
   const { $gsap } = useNuxtApp()
 
   const scrambleChars = 'upperAndLowerCase'
+  let ctx: gsap.Context
 
   onMounted(() => {
     $gsap.registerPlugin(ScrambleTextPlugin)
 
-    const quotes = $gsap.utils.toArray<HTMLElement>('.quote')
+    ctx = $gsap.context((self) => {
+      const quotes = $gsap.utils.toArray<HTMLElement>('.quote')
 
-    /* Initialize all quotes */
-    quotes.forEach((quote, index) => {
-      $gsap.set(quote, {
-        position: 'absolute',
-        opacity: 0,
-        whiteSpace: 'nowrap',
-        transform: 'translateY(0)',
-        y: 0,
+      /* Initialize all quotes */
+      quotes.forEach((quote, index) => {
+        $gsap.set(quote, {
+          position: 'absolute',
+          opacity: 0,
+          whiteSpace: 'nowrap',
+          transform: 'translateY(0)',
+          y: 0,
+        })
       })
-    })
 
-    /* Create a master timeline for all animations */
-    const masterTimeline = $gsap.timeline({ repeat: -1, repeatDelay: 0 })
+      /* Create a master timeline for all animations */
+      const masterTimeline = $gsap.timeline({ repeat: -1, repeatDelay: 0 })
 
-    /* Add each quote to the timeline with proper delays */
-    quotes.forEach((quote, index) => {
-      const text = quote.textContent || ''
-      /* Scramble in */
-      masterTimeline
-        .to(
-          quote,
-          {
-            duration: 1,
-            opacity: 1,
-            scrambleText: {
-              text,
-              chars: scrambleChars,
-              revealDelay: 1,
-              speed: 0.5,
+      /* Add each quote to the timeline with proper delays */
+      quotes.forEach((quote, index) => {
+        const text = quote.textContent || ''
+        /* Scramble in */
+        masterTimeline
+          .to(
+            quote,
+            {
+              duration: 1,
+              opacity: 1,
+              scrambleText: {
+                text,
+                chars: scrambleChars,
+                revealDelay: 1,
+                speed: 0.5,
+              },
+              ease: 'power2.out',
             },
-            ease: 'power2.out',
-          },
-          index * 3
-        ) /* Start each word 3 seconds after the previous one */
+            index * 3
+          ) /* Start each word 3 seconds after the previous one */
 
-        /* Scramble out */
-        .to(
-          quote,
-          {
-            duration: 1,
-            scrambleText: { text: '', chars: scrambleChars },
-            opacity: 0,
-            ease: 'none',
-          },
-          `+=1.2`
-        ) /* Start 2 seconds after becoming visible */
+          /* Scramble out */
+          .to(
+            quote,
+            {
+              duration: 1,
+              scrambleText: { text: '', chars: scrambleChars },
+              opacity: 0,
+              ease: 'none',
+            },
+            `+=1.2`
+          ) /* Start 2 seconds after becoming visible */
+      })
     })
   })
 
   onUnmounted(() => {
-    $gsap.killTweensOf('.quote')
+    ctx?.revert()
   })
 </script>
 

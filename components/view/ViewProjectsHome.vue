@@ -308,7 +308,7 @@
           margin: 0;
           color: $secondary;
           font-family: $sans-ui-mono;
-          font-size: clamped(14px, 20px, 380px, 1920px);
+             font-size: clamped(16px, 18px, 380px, 1920px);
           font-weight: 400;
         }
         span {
@@ -316,7 +316,7 @@
           margin: 0;
           color: $secondary;
           font-family: $sans-ui-mono;
-          font-size: clamped(10px, 14px, 380px, 1920px);
+                  font-size: clamped(13px, 14px, 380px, 1920px);
           font-weight: 400;
         }
 

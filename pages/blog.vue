@@ -33,10 +33,6 @@
     z-index: inherit;
     min-height: 100vh;
 
-    @supports (height: 100svh) {
-      min-height: 100svh;
-    }
-    
     /* Prevent SCSS parsing errors */
   }
 </style>

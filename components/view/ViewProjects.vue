@@ -277,7 +277,7 @@
               'projects__project--open': index === clampedIndex && !isDragging,
             }"
           >
-            <div 
+            <div
               class="projects__project__image-container action"
               data-name="reel"
             >
@@ -299,7 +299,7 @@
                 ><LabSVG class="projects__lab-indicator-svg"
               /></span>
             </div>
-            
+
             <div class="projects__project__info">
               <p class="projects__project__name">{{ project.name }}</p>
               <span
@@ -439,6 +439,7 @@
       }
 
       &__info {
+        margin-left:$px-16-spacer;
         margin-top: $px-8-spacer;
         pointer-events: none;
         cursor: default;
@@ -450,7 +451,7 @@
         margin: 0;
         color: $secondary;
         font-family: $sans-ui-mono;
-        font-size: clamped(14px, 18px, 380px, 1920px);
+        font-size: clamped(16px, 18px, 380px, 1920px);
         font-weight: 400;
       }
 
@@ -459,12 +460,12 @@
         margin: 0;
         color: $secondary;
         font-family: $sans-ui-mono;
-        font-size: clamped(12px, 14px, 380px, 1920px);
+        font-size: clamped(13px, 14px, 380px, 1920px);
         font-weight: 400;
       }
 
       &__image {
-        cursor:grab;
+        cursor: grab;
         width: 85vw;
         /* Mobile-first: larger than viewport for immersive feel */
         height: auto;
@@ -528,8 +529,8 @@
 
     &__lab-indicator {
       position: absolute;
-      top: $px-16-spacer;
-      right: $px-16-spacer;
+      bottom: -16px;
+      left: 4px;
       font-size: 16px;
       width: 34px;
       height: 34px;
