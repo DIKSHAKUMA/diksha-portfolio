@@ -669,6 +669,7 @@
       padding: $px-32-spacer;
       max-height: fit-content;
       overflow-y: auto;
+      font-family: $sans-text;
       font-size: clamped(14px, 16px, 380px, 1920px);
 
       &__a,
@@ -681,7 +682,6 @@
       &__b {
         &--link {
           font-size: clamped(14px, 16px, 380px, 1920px);
-          font-weight: 500;
           text-decoration: underline;
         }
 

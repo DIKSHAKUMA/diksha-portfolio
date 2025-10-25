@@ -264,6 +264,7 @@
       width: 90%;
 
       &-item {
+        font-family: $sans-text;
         font-size: clamped(16px, 20px, 380px, 1920px);
 
         /* Also target direct links as fallback */

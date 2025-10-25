@@ -213,7 +213,7 @@
     &__project-name {
       color: $secondary;
       font-size: clamped(14px, 16px, 380px, 1920px);
-      font-weight: 500;
+      font-weight: 400;
       line-height: 1.3;
       flex: 1;
     }
@@ -222,7 +222,7 @@
       color: $secondary;
       opacity: 0.8;
       font-size: clamped(14px, 16px, 380px, 1920px);
-      font-weight: 500;
+      font-weight: 400;
       flex-shrink: 0;
     }
 
@@ -240,7 +240,7 @@
     }
 
     &__type {
-      font-weight: 500;
+      font-weight: 400;
     }
 
     &__toggle {
@@ -251,7 +251,7 @@
       border: none;
       color: $accent2;
       font-size: clamped(14px, 16px, 380px, 1920px);
-      font-weight: 500;
+      font-weight: 400;
       cursor: pointer;
       padding: $px-8-spacer 0;
       margin-top: $px-16-spacer;

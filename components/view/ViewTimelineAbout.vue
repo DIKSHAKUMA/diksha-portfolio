@@ -207,7 +207,7 @@
 
         &__company {
           font-size: clamped(14px, 16px, 380px, 1920px);
-          font-weight: 500;
+          font-weight: 400;
           color: $accent2;
         }
 
