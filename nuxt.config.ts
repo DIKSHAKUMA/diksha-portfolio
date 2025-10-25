@@ -81,17 +81,17 @@ export default defineNuxtConfig({
     families: [
       {
         name: 'Reddit Sans',
-        provider: 'google' as const,
+        provider: 'google',
       },
       {
         name: 'Lato',
-        provider: 'google' as const,
+        provider: 'google',
         weights: [300, 400, 500, 600, 700],
-        styles: ['normal', 'italic'] as const,
+        styles: ['normal', 'italic'],
       },
       {
         name: 'Geist Mono',
-        provider: 'google' as const,
+        provider: 'google'
       },
     ],
     // Optimize font loading
@@ -101,8 +101,9 @@ export default defineNuxtConfig({
       // Enable modern font loading
       inlineImports: true,
     },
+    disableLocalFallbacks: true,
     // Enable font preloading
-    preload: true,
+    preload: false,
     // Use display: swap for better performance
     display: 'swap',
     // Download fonts for better performance
