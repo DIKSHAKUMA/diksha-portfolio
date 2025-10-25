@@ -439,7 +439,7 @@
       }
 
       &__info {
-        margin-left:$px-16-spacer;
+        margin-left: $px-16-spacer;
         margin-top: $px-8-spacer;
         pointer-events: none;
         cursor: default;
@@ -453,6 +453,7 @@
         font-family: $sans-ui-mono;
         font-size: clamped(16px, 18px, 380px, 1920px);
         font-weight: 400;
+        font-variation-settings: 'wght' 400;
       }
 
       &__tags {
@@ -462,6 +463,7 @@
         font-family: $sans-ui-mono;
         font-size: clamped(13px, 14px, 380px, 1920px);
         font-weight: 400;
+        font-variation-settings: 'wght' 400;
       }
 
       &__image {
