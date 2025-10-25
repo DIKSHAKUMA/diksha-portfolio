@@ -92,7 +92,7 @@ export default defineNuxtConfig({
     '@stefanobartoletti/nuxt-social-share',
   ],
 
-    // Font configuration with optimized loading
+  // Font configuration with optimized loading
   fonts: {
     // Your font specifications
     families: [
@@ -103,28 +103,23 @@ export default defineNuxtConfig({
       {
         name: 'Lato',
         provider: 'google',
-        weights: [300, 400, 600, 700],
-        styles: ['normal', 'italic'],
       },
       {
         name: 'Geist Mono',
         provider: 'google',
       },
     ],
-    // Optimize font loading
-    experimental: {
-      // Keep CSS variables for theming support
-      processCSSVariables: true,
-      // Enable modern font loading
-      inlineImports: true,
+
+    defaults: {
+      weights: [300, 400, 500, 600],
+      styles: ['normal', 'italic'],
     },
-    disableLocalFallbacks: true,
-    // Enable font preloading
-    preload: false,
-    // Use display: swap for better performance
-    display: 'swap',
-    // Download fonts for better performance
-    download: true,
+    
+    processCSSVariables: true,
+
+    experimental: {
+      disableLocalFallbacks: true,
+    },
   },
 
   colorMode: {
