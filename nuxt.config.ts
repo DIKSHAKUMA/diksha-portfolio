@@ -97,8 +97,7 @@ export default defineNuxtConfig({
     families: [
       {
         name: 'Reddit Sans',
-        provider: 'google',
-        styles: ['normal']
+        provider: 'google'
       },
       {
         name: 'Lato',
@@ -108,13 +107,10 @@ export default defineNuxtConfig({
       },
       {
         name: 'Geist Mono',
-        provider: 'google',
-        styles: ['normal']
+        provider: 'google'
       }
-    ],
-    defaults: {
-      styles: ['normal']
-    },
+    ]
+    
     processCSSVariables: true,
     experimental: {
       disableLocalFallbacks: true,
