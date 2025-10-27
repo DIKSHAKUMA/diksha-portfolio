@@ -88,6 +88,8 @@
 </template>
 
 <style scoped lang="scss">
+
+
   .text {
     display: flex;
     position: absolute;

@@ -209,7 +209,7 @@
       @include this-and-above('md') {
         width: 60%;
         min-width: 300px;
-        height: 42vh;
+        min-height:300px;
       }
     }
   }

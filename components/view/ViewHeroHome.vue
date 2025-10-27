@@ -47,8 +47,9 @@
     app.destroy()
   }
 
-  /* Helper function to convert HSL to hex color */
+  /* Helper function to convert HSL to hex color . I really need to study this one deeper. */
   const hslToHex = (h: number, s: number, l: number): number => {
+    // Okey, normalize to decimal
     l /= 100
     const a = (s * Math.min(l, 1 - l)) / 100
     const f = (n: number) => {
@@ -71,37 +72,36 @@
     const isLightMode = colorMode.value === 'light'
 
     if (isLightMode) {
-      // Light mode: More prominent but still appropriate colors
+
       const baseHue = 194
-      const baseSat = 16 // Increased from 12 for stronger presence
-      const baseLight = 65 // Darker from 70 for better contrast
+      const baseSat = 16 
+      const baseLight = 65 
 
-      // More pronounced variation
-      const lightnessOffset = waveIndex * 4 // Increased from 3
-      const colorSpeed = 0.6 + waveIndex * 0.25 // Faster, more dynamic animation
 
-      // Much more noticeable traveling shade effect
+      const lightnessOffset = waveIndex * 4 
+      const colorSpeed = 0.6 + waveIndex * 0.25 
+
+
       const travelingLight =
         baseLight +
         lightnessOffset +
-        Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 16 // Increased from 12
+        Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 16 
       const travelingSat =
         baseSat +
-        Math.sin(segmentRatio * Math.PI * 3 + time * colorSpeed * 0.7) * 8 // Increased from 6
+        Math.sin(segmentRatio * Math.PI * 3 + time * colorSpeed * 0.7) * 8 
 
-      // Wider range for prominent shades
-      const finalLight = Math.max(55, Math.min(85, travelingLight)) // Expanded range 55-85 vs 65-85
-      const finalSat = Math.max(10, Math.min(25, travelingSat)) // Increased from 8-20 to 10-25
+      const finalLight = Math.max(55, Math.min(85, travelingLight)) 
+      const finalSat = Math.max(10, Math.min(25, travelingSat)) 
 
       return hslToHex(baseHue, finalSat, finalLight)
     } else {
-      // Dark mode: Original dramatic colors
-      const baseHue = 194 // Keep hue constant for shades
+
+      const baseHue = 194 
       const baseSat = 21
       const baseLight = 24
 
-      const lightnessOffset = waveIndex * 5 // Bigger variation per wave
-      const colorSpeed = 0.8 + waveIndex * 0.3 // Faster, more noticeable speeds
+      const lightnessOffset = waveIndex * 5 
+      const colorSpeed = 0.8 + waveIndex * 0.3 
 
       // Create traveling shade effect with MUCH more contrast
       const travelingLight =
@@ -154,7 +154,7 @@
 
     waves.forEach((wave, index) => {
       wave.graphics.clear()
-      const centerY = cachedHeight / 2 + (index - 2.5) * 60
+      const centerY = cachedHeight / 2.2 + (index - 2.5) * 20
       const segmentSize = 8
       
       const points = []
@@ -185,9 +185,8 @@
   const resizeCanvas = () => {
     if (!app || !pixiCtx.value) return
 
-    const width = pixiCtx.value.clientWidth || window.innerWidth
-    const height = pixiCtx.value.clientHeight || window.innerHeight
-
+    const width = window.innerWidth
+    const height = window.innerHeight
     app.renderer.resize(width, height)
     cachedWidth = 0
     cachedHeight = 0

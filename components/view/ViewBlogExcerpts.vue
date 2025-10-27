@@ -32,21 +32,10 @@
       window.removeEventListener('resize', checkScreenSize)
     }
   })
-
 </script>
 
 <template>
   <div class="excerpts-wrapper">
-    <CommonLine class="excerpts__line" :width="''" :pos="'absolute'" />
-    <CommonInfoLabel
-      :label="'Current Musings'"
-      :class-name="'photo-label'"
-      :hpos="'center'"
-      :hover-label="''"
-      :force-white="false"
-      :vpos="'flex-start'"
-      :link="''"
-    />
     <CommonAbstract
       class="blog__header"
       :label="store.data.intro?.blogDesc"

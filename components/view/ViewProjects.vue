@@ -439,31 +439,36 @@
       }
 
       &__info {
+        width: 80%;
         margin-left: $px-16-spacer;
         margin-top: $px-8-spacer;
         pointer-events: none;
         cursor: default;
-        /* Don't interfere with dragging */
       }
 
       &__name {
         position: relative;
+        width: 80%;
         margin: 0;
         color: $secondary;
         font-family: $sans-ui-mono;
         font-size: clamped(16px, 18px, 380px, 1920px);
         font-weight: 400;
         font-variation-settings: 'wght' 400;
+        backface-visibility: hidden;
       }
 
       &__tags {
         position: relative;
+        width: 80%;
+        overflow-wrap: break-word;
         margin: 0;
         color: $secondary;
         font-family: $sans-ui-mono;
         font-size: clamped(13px, 14px, 380px, 1920px);
         font-weight: 400;
         font-variation-settings: 'wght' 400;
+        backface-visibility: hidden;
       }
 
       &__image {

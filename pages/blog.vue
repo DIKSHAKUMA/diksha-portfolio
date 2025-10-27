@@ -32,7 +32,7 @@
     position: relative;
     z-index: inherit;
     min-height: 100vh;
-
+    overflow: hidden;
     /* Prevent SCSS parsing errors */
   }
 </style>

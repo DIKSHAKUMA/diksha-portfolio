@@ -56,15 +56,10 @@
     <div class="venice__blind"></div>
     <!-- Mobile: Hide every other blind for cleaner look -->
     <div class="venice__blind venice__blind--desktop"></div>
-    <div class="venice__blind"></div>
     <div class="venice__blind venice__blind--desktop"></div>
-    <div class="venice__blind"></div>
     <div class="venice__blind venice__blind--desktop"></div>
-    <div class="venice__blind"></div>
     <div class="venice__blind venice__blind--desktop"></div>
-    <div class="venice__blind"></div>
     <div class="venice__blind venice__blind--desktop"></div>
-    <div class="venice__blind"></div>
   </div>
   <UINavBar />
   <NuxtLayout>
@@ -77,7 +72,7 @@
   body {
     margin: 0;
     padding: 0;
-    min-height: 100vh;
+    /*min-height: 100vh; */
     transition: background-color 1s;
     background-color: $primary;
     -webkit-font-smoothing: antialiased;
@@ -87,12 +82,71 @@
     font-family: $sans-text;
     font-variation-settings: 'slnt' 0, 'wght' 500;
     /*overscroll-behavior-y, No fan of bounce on mobile but a hard stop can cause issues too*/
-    overscroll-behavior-y: auto;
-    overflow-x: hidden;
-    overflow-y: auto;
-
     @supports (height: 100svh) {
       min-height: 100svh;
+    }
+  }
+
+  html {
+    min-height: 100vh;
+  }
+
+  body {
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* Modern scrollbar for WebKit (Chrome, Safari, newer Edge) */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(
+      44,
+      42,
+      56,
+      0.4
+    ); /* accent1 with 40% opacity (increased from 30%) */
+    border-radius: 4px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(44, 42, 56, 0.5); /* accent1 with 50% opacity on hover */
+    }
+  }
+
+  /* For Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(44, 42, 56, 0.4) transparent; /* accent1 with 40% opacity (increased from 30%) */
+  }
+
+  /* Dark mode specific styles */
+  .dark-mode {
+    &::-webkit-scrollbar-thumb {
+      background: rgba(
+        190,
+        193,
+        198,
+        0.4
+      ); /* accent2 with 40% opacity (increased from 30%) */
+
+      &:hover {
+        background: rgba(
+          190,
+          193,
+          198,
+          0.5
+        ); /* accent2 with 50% opacity on hover */
+      }
+    }
+
+    * {
+      scrollbar-color: rgba(190, 193, 198, 0.4) transparent; /* accent2 with 40% opacity (increased from 30%) */
     }
   }
 
