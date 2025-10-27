@@ -216,7 +216,7 @@
           /* Set color mode and text properties */
           p.colorMode(p.RGB, 255)
           p.textAlign(p.CENTER)
-          p.textFont('Lato')
+          p.textFont('Geist')
 
           /* Define hue as a random value */
           hue = p.random(180, 360)
