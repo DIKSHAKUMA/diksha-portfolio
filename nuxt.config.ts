@@ -109,8 +109,8 @@ export default defineNuxtConfig({
         name: 'Geist Mono',
         provider: 'google'
       }
-    ]
-    
+    ],
+
     processCSSVariables: true,
     experimental: {
       disableLocalFallbacks: true,
