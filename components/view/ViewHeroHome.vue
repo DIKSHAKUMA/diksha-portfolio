@@ -154,7 +154,7 @@
 
     waves.forEach((wave, index) => {
       wave.graphics.clear()
-      const centerY = cachedHeight / 2.2 + (index - 2.5) * 20
+      const centerY = cachedHeight / 2 + (index - 2.5) * 20
       const segmentSize = 8
       
       const points = []

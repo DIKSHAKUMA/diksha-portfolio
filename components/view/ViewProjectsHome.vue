@@ -89,7 +89,7 @@
               start: 'top 80%',
               end: 'top 60%',
               toggleActions: 'play none none reverse',
-              invalidateOnRefresh: false
+              invalidateOnRefresh: false,
             },
           })
         }
@@ -163,9 +163,9 @@
                 provider="hygraph"
                 alt="Project image"
                 format="webp"
-                sizes="sm:100vw md:45vw lg:45vw xl:33vw"
+                sizes="sm:100vw md:45vw lg:45vw xl:34vw"
                 densities="x1 x2"
-                quality="80"
+                quality="100"
               ></NuxtImg>
             </div>
 
@@ -214,7 +214,6 @@
     transform: translateZ(0);
     /* Image sharpness optimizations */
     image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
     -ms-interpolation-mode: bicubic;
     /* Prevent subpixel rendering issues */
     -webkit-font-smoothing: subpixel-antialiased;
@@ -274,6 +273,7 @@
           height: 100%;
           object-fit: cover;
           object-position: center;
+          
         }
 
         @include this-and-above('sm') {
@@ -308,7 +308,7 @@
           margin: 0;
           color: $secondary;
           font-family: $sans-ui-mono;
-             font-size: clamped(16px, 18px, 380px, 1920px);
+          font-size: clamped(16px, 18px, 380px, 1920px);
           font-weight: 400;
         }
         span {
@@ -316,7 +316,7 @@
           margin: 0;
           color: $secondary;
           font-family: $sans-ui-mono;
-                  font-size: clamped(13px, 14px, 380px, 1920px);
+          font-size: clamped(13px, 14px, 380px, 1920px);
           font-weight: 400;
         }
 

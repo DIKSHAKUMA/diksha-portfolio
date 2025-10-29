@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   const veniceEl = document.querySelector('.venice') as HTMLElement
   /* Only animate visible blinds (exclude hidden mobile ones) */
   const allBlinds = document.querySelectorAll('.venice__blind')
-  const blinds = Array.from(allBlinds).filter(blind => {
+  const blinds = Array.from(allBlinds).filter((blind) => {
     const computedStyle = window.getComputedStyle(blind)
     return computedStyle.display !== 'none'
   })
@@ -57,10 +57,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
       blinds,
       { rotationY: 120, opacity: 0 },
       {
-        duration: 0.4,
+        duration: 1.5,
         rotationY: 0,
         opacity: 1,
-        stagger: 0.1,
         transformOrigin: 'left center',
         force3D: true,
         ease: 'power2.out',
@@ -93,10 +92,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
       blinds,
       { rotationY: 0, opacity: 1 },
       {
-        duration: 0.4,
+        duration: 1.5,
         rotationY: -120,
         opacity: 0,
-        stagger: 0.1,
         transformOrigin: 'left center',
         force3D: true,
         ease: 'power2.out',

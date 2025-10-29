@@ -22,13 +22,11 @@
       cachedBlinds,
       { scaleX: 1, opacity: 1, force3D: true },
       {
-        duration: 0.2,
+        duration: 1.5,
+        rotationY: -120,
         opacity: 0,
-        scaleX: 0,
-        stagger: 0.05,
-        transformOrigin: '0% 50%',
+        transformOrigin: 'left center',
         force3D: true,
-        ease: 'power2.out',
         onComplete: clearProps,
       }
     )
@@ -44,6 +42,11 @@
 
 <template>
   <div class="venice">
+    <div class="venice__blind"></div>
+    <div class="venice__blind"></div>
+    <div class="venice__blind"></div>
+    <div class="venice__blind"></div>
+    <div class="venice__blind"></div>
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
