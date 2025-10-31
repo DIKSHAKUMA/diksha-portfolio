@@ -102,7 +102,6 @@ export default defineNuxtConfig({
       {
         name: 'Geist',
         provider: 'google',
-        weights: [300, 400],
         styles: ['normal', 'italic']
       },
       {
