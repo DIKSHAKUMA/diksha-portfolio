@@ -133,12 +133,12 @@
     position: relative;
     width: 100%;
     min-height: 100vh;
+    overflow: hidden;
+    padding: 0 $px-16-spacer;
 
     @supports (height: 100svh) {
       min-height: 100svh;
     }
-    overflow: hidden;
-    padding: 0 $px-16-spacer;
 
     @include this-and-above('md') {
       padding: 0 $px-64-spacer;
