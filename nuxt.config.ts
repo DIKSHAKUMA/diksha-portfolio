@@ -102,7 +102,6 @@ export default defineNuxtConfig({
       {
         name: 'Geist',
         provider: 'google',
-        styles: ['normal', 'italic']
       },
       {
         name: 'Geist Mono',
