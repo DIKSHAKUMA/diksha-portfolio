@@ -172,7 +172,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['gsap'],
+    transpile: ['gsap', 'shiki'],
   },
 
   svgo: {

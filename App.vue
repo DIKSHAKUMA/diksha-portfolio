@@ -28,13 +28,11 @@
     cachedBlinds = $gsap.utils.toArray('.venice__blind')
     $gsap.set(cachedBlinds, { scaleX: 0, force3D: true })
 
-    /* Only show intro animation on homepage or first visit */
-    const hasSeenIntro = sessionStorage.getItem('hasSeenIntro')
+    /* Show intro animation on homepage */
     const isHomepage = route.path === '/'
     
-    if (!hasSeenIntro || isHomepage) {
+    if (isHomepage) {
       showIntroAnimation.value = true
-      sessionStorage.setItem('hasSeenIntro', 'true')
       
       // Create a timeline
       const tl = $gsap.timeline()
@@ -78,8 +76,8 @@
 </script>
 
 <template>
-  <FavBaseSVG v-if="showIntroAnimation" class="fav-base" ref="favBaseSVG" />
-  <div v-if="showIntroAnimation" class="venice">
+  <FavBaseSVG class="fav-base" ref="favBaseSVG" />
+  <div class="venice">
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
