@@ -102,7 +102,7 @@ export default defineNuxtConfig({
         styles: ['normal', 'italic'],
       },
       {
-        name: 'Geist',
+        name: 'Lato',
         provider: 'google',
         weights: [400],
         styles: ['normal', 'italic'],
@@ -126,7 +126,10 @@ export default defineNuxtConfig({
 
   mdc: {
     highlight: {
-      theme: 'github-dark',
+      theme: {
+        default: 'github-dark',
+        dark: 'github-dark'
+      },
       langs: [
         'js',
         'javascript',

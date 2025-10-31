@@ -4,6 +4,7 @@
   import FavBaseSVG from '@/assets/svg/favbase.svg'
 
   const favBaseSVG = useTemplateRef<HTMLHtmlElement>('favBaseSVG')
+  const route = useRoute()
 
   /* Pinia 🍍 */
   const store = useFolioStore()
@@ -13,6 +14,7 @@
   await callOnce('blog', () => blogStore.fetchData())
 
   const isLoaded = ref(false)
+  const showIntroAnimation = ref(false)
   const { $gsap } = useNuxtApp()
 
   let cachedBlinds: any[] = []
@@ -26,32 +28,45 @@
     cachedBlinds = $gsap.utils.toArray('.venice__blind')
     $gsap.set(cachedBlinds, { scaleX: 0, force3D: true })
 
-    // Create a timeline
-    const tl = $gsap.timeline()
+    /* Only show intro animation on homepage or first visit */
+    const hasSeenIntro = sessionStorage.getItem('hasSeenIntro')
+    const isHomepage = route.path === '/'
+    
+    if (!hasSeenIntro || isHomepage) {
+      showIntroAnimation.value = true
+      sessionStorage.setItem('hasSeenIntro', 'true')
+      
+      // Create a timeline
+      const tl = $gsap.timeline()
 
-    // Add animations to the timeline
-    tl.fromTo(
-      '.fav-base',
-      { opacity: 0, ease: 'power2.out' },
-      { opacity: 1, ease: 'power2.out' }
-    )
-      .to('.fav-base', { opacity: 0, scale: 0.5, ease: 'power2.out' }, '>1.5')
-      .fromTo(
-        cachedBlinds,
-        {
-          scaleX: 1,
-          opacity: 1,
-          force3D: true,
-          transformOrigin: 'left center',
-        },
-        {
-          duration: 1.5,
-          rotationY: -120,
-          opacity: 0,
-          force3D: true,
-          onComplete: clearProps,
-        }
+      // Add animations to the timeline
+      tl.fromTo(
+        '.fav-base',
+        { opacity: 0, ease: 'power2.out' },
+        { opacity: 1, ease: 'power2.out' }
       )
+        .to('.fav-base', { opacity: 0, scale: 0.5, ease: 'power2.out' }, '>1.5')
+        .fromTo(
+          cachedBlinds,
+          {
+            scaleX: 1,
+            opacity: 1,
+            force3D: true,
+            transformOrigin: 'left center',
+          },
+          {
+            duration: 1.5,
+            rotationY: -120,
+            opacity: 0,
+            force3D: true,
+            onComplete: clearProps,
+          }
+        )
+    } else {
+      /* Hide intro elements immediately if not showing animation */
+      $gsap.set('.fav-base', { opacity: 0, visibility: 'hidden' })
+      $gsap.set('.venice', { visibility: 'hidden', opacity: 0 })
+    }
   })
 
   const clearProps = () => {
@@ -63,8 +78,8 @@
 </script>
 
 <template>
-  <FavBaseSVG class="fav-base" ref="favBaseSVG" />
-  <div class="venice">
+  <FavBaseSVG v-if="showIntroAnimation" class="fav-base" ref="favBaseSVG" />
+  <div v-if="showIntroAnimation" class="venice">
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>

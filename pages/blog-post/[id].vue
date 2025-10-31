@@ -200,7 +200,7 @@
               :desc="post.subject"
               :delay="1"
               :class-name="'blog-intro'"
-              :is-full-width="true"
+              :is-full-width="false"
               :author="post.authors[0].name"
               :date="post.date"
               :is-hero="false"

@@ -246,7 +246,7 @@
         <CommonAbstract
           :label="proj.name"
           :desc="proj.synop?.[0] || proj.client || ''"
-          :is-full-width="true"
+          :is-full-width="false"
           :class-name="'project__abstract'"
           :delay="1"
           :is-hero="false"
