@@ -16,9 +16,7 @@
     if (import.meta.client) navbarStore.setTransparent(true, 'contact')
   })
 
-  onUnmounted(() => {
- 
-  })
+  onUnmounted(() => {})
 </script>
 
 <template>
