@@ -98,7 +98,7 @@ export default defineNuxtConfig({
       {
         name: 'Reddit Sans',
         provider: 'google',
-        weights: [350, 400, 500],
+        weights: [350, 400, 500, 600],
         styles: ['normal', 'italic'],
       },
       {
