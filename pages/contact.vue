@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useNavbarStore } from '~/store/useNavbarStore'
+  import { useNavbarStore } from '~/store/useNavbarStore'
   definePageMeta({
     layout: 'default',
     pageTransition: {
@@ -17,9 +17,10 @@ import { useNavbarStore } from '~/store/useNavbarStore'
   })
 
   onUnmounted(() => {
-    navbarStore.setTransparent(false, 'contact')
+ 
   })
 </script>
+
 <template>
   <div>
     <UIMouseCursor />

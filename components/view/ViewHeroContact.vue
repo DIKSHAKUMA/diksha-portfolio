@@ -22,7 +22,7 @@
         })
         $gsap.to(splitTxt.words, {
           autoAlpha: 1,
-          delay: 2.2 /* Increased delay to avoid Venice blind collision */,
+          delay: 1.2 /* Increased delay to avoid Venice blind collision */,
           clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
           scrollTrigger: {
             trigger: sec,
@@ -78,7 +78,11 @@
       to="https://www.cssdesignawards.com/sites/thomas-thorstensson/48276"
       target="_blank"
     >
-      <SpecialKudos class="csda-special-kudos action" data-name="proj" data-text="CSSDA!" />
+      <SpecialKudos
+        class="csda-special-kudos action"
+        data-name="proj"
+        data-text="CSSDA!"
+      />
     </NuxtLink>
   </main>
 </template>

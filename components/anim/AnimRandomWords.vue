@@ -199,132 +199,132 @@
     if (import.meta.client) {
       const p5 = await import('p5')
 
-      // Delay P5.js animation to avoid Venice blind collision
-      setTimeout(() => {
-        if (!p5Instance) { // Only start if not already destroyed
-          p5Instance = new p5.default((p: any) => {
-        p.setup = () => {
-          /* Create canvas with full window dimensions */
-          const canvas = p.createCanvas(window.innerWidth, window.innerHeight)
-          canvas.parent('random-words')
+      if (!p5Instance) {
+        // Only start if not already destroyed
+        p5Instance = new p5.default((p: any) => {
+          p.setup = () => {
+            /* Create canvas with full window dimensions */
+            const canvas = p.createCanvas(window.innerWidth, window.innerHeight)
+            canvas.parent('random-words')
 
-          /* Performance optimizations */
-          p.pixelDensity(1) /* Force 1:1 pixel ratio for Firefox performance */
-          p.frameRate(24) /* Reduce to 24fps for better Firefox performance */
-          p.noStroke()
+            /* Performance optimizations */
+            p.pixelDensity(
+              1
+            ) /* Force 1:1 pixel ratio for Firefox performance */
+            p.frameRate(24) /* Reduce to 24fps for better Firefox performance */
+            p.noStroke()
 
-          /* Set color mode and text properties */
-          p.colorMode(p.RGB, 255)
-          p.textAlign(p.CENTER)
-          p.textFont('Geist')
+            /* Set color mode and text properties */
+            p.colorMode(p.RGB, 255)
+            p.textAlign(p.CENTER)
+            p.textFont('Geist')
 
-          /* Define hue as a random value */
-          hue = p.random(180, 360)
+            /* Define hue as a random value */
+            hue = p.random(180, 360)
 
-          /* Define the random starting point for selecting words */
-          position = p.floor(p.random(0, words.length - wordCount))
+            /* Define the random starting point for selecting words */
+            position = p.floor(p.random(0, words.length - wordCount))
 
-          /* Create word objects with floating properties
-           * Reserve minimal space for CommonAbstract (about 120px from bottom) */
-          const reservedBottomSpace = 120
-          wordObjects = []
-          for (let i = 0; i < wordCount; i++) {
-            const randomWord = words[position + i] || words[i % words.length]
-            wordObjects.push({
-              text: randomWord,
-              x: p.random(p.width),
-              y: p.random(
-                0,
-                p.height - reservedBottomSpace
-              ) /* Avoid bottom 200px */,
-              size: p.random(16, 48),
-              offsetX: p.random(0, p.TWO_PI),
-              offsetY: p.random(0, p.TWO_PI),
-              speed: p.random(0.001, 0.003),
-            })
-          }
-        }
-
-        p.draw = () => {
-          /* Set background based on color mode */
-          const bgColor = getCurrentBgColor()
-          p.background(bgColor[0], bgColor[1], bgColor[2])
-
-          /* Cache time calculations once per frame for performance */
-          const frameTime = p.millis()
-          const time = frameTime * 0.001
-
-          /* Draw floating words with dynamic colors */
-          for (let i = 0; i < wordObjects.length; i++) {
-            const word = wordObjects[i]
-            p.textSize(word.size)
-
-            /* Calculate floating position - cached time */
-            const floatX =
-              word.x + p.sin(frameTime * word.speed + word.offsetX) * 20
-            const floatY =
-              word.y + p.cos(frameTime * word.speed + word.offsetY) * 15
-
-            /* Simplified color calculation for performance */
-            const colorShift = p.sin(time + word.offsetX) * 30
-
-            if (colorMode.value === 'light') {
-              /* Light mode: variations of accent1 (#4a4453) with opacity */
-              p.fill(
-                74 + colorShift,
-                68 + colorShift * 0.8,
-                83 + colorShift * 1.2,
-                145 /* Add opacity (0-255, 145 = ~57% opacity) */
-              )
-            } else {
-              /* Dark mode: variations of accent2 (#fff0e8) with opacity */
-              p.fill(
-                255 - colorShift * 0.3,
-                240 + colorShift * 0.2,
-                232 + colorShift * 0.5,
-                125 /* Add opacity (0-255, 125 = ~49% opacity) */
-              )
-            }
-
-            p.text(word.text, floatX, floatY)
-          }
-        }
-
-        /* Handle window resize - only reposition on significant size changes */
-        let lastWidth = window.innerWidth
-        let lastHeight = window.innerHeight
-        
-        p.windowResized = () => {
-          const newWidth = window.innerWidth
-          const newHeight = window.innerHeight
-          
-          /* Only reposition if there's a significant size change (>50px) */
-          /* This prevents repositioning during iOS Safari scroll viewport changes */
-          const widthDiff = Math.abs(newWidth - lastWidth)
-          const heightDiff = Math.abs(newHeight - lastHeight)
-          
-          if (widthDiff > 50 && heightDiff > 50) {
-            p.resizeCanvas(newWidth, newHeight)
-            
-            /* Update existing word positions for significant resizes */
+            /* Create word objects with floating properties
+             * Reserve minimal space for CommonAbstract (about 120px from bottom) */
             const reservedBottomSpace = 120
-            for (let i = 0; i < wordObjects.length; i++) {
-              /* Keep existing properties, just update positions */
-              wordObjects[i].x = p.random(p.width)
-              wordObjects[i].y = p.random(0, p.height - reservedBottomSpace)
+            wordObjects = []
+            for (let i = 0; i < wordCount; i++) {
+              const randomWord = words[position + i] || words[i % words.length]
+              wordObjects.push({
+                text: randomWord,
+                x: p.random(p.width),
+                y: p.random(
+                  0,
+                  p.height - reservedBottomSpace
+                ) /* Avoid bottom 200px */,
+                size: p.random(16, 48),
+                offsetX: p.random(0, p.TWO_PI),
+                offsetY: p.random(0, p.TWO_PI),
+                speed: p.random(0.001, 0.003),
+              })
             }
-            
-            /* Update last known dimensions */
-            lastWidth = newWidth
-            lastHeight = newHeight
-          } else {
-            /* For minor changes, just resize canvas without repositioning */
-            p.resizeCanvas(newWidth, newHeight)
           }
-        }
-      })
-        }
-      }, 800) // 800ms delay to let Venice blind complete
+
+          p.draw = () => {
+            /* Set background based on color mode */
+            const bgColor = getCurrentBgColor()
+            p.background(bgColor[0], bgColor[1], bgColor[2])
+
+            /* Cache time calculations once per frame for performance */
+            const frameTime = p.millis()
+            const time = frameTime * 0.001
+
+            /* Draw floating words with dynamic colors */
+            for (let i = 0; i < wordObjects.length; i++) {
+              const word = wordObjects[i]
+              p.textSize(word.size)
+
+              /* Calculate floating position - cached time */
+              const floatX =
+                word.x + p.sin(frameTime * word.speed + word.offsetX) * 20
+              const floatY =
+                word.y + p.cos(frameTime * word.speed + word.offsetY) * 15
+
+              /* Simplified color calculation for performance */
+              const colorShift = p.sin(time + word.offsetX) * 30
+
+              if (colorMode.value === 'light') {
+                /* Light mode: variations of accent1 (#4a4453) with opacity */
+                p.fill(
+                  74 + colorShift,
+                  68 + colorShift * 0.8,
+                  83 + colorShift * 1.2,
+                  145 /* Add opacity (0-255, 145 = ~57% opacity) */
+                )
+              } else {
+                /* Dark mode: variations of accent2 (#fff0e8) with opacity */
+                p.fill(
+                  255 - colorShift * 0.3,
+                  240 + colorShift * 0.2,
+                  232 + colorShift * 0.5,
+                  125 /* Add opacity (0-255, 125 = ~49% opacity) */
+                )
+              }
+
+              p.text(word.text, floatX, floatY)
+            }
+          }
+
+          /* Handle window resize - only reposition on significant size changes */
+          let lastWidth = window.innerWidth
+          let lastHeight = window.innerHeight
+
+          p.windowResized = () => {
+            const newWidth = window.innerWidth
+            const newHeight = window.innerHeight
+
+            /* Only reposition if there's a significant size change (>50px) */
+            /* This prevents repositioning during iOS Safari scroll viewport changes */
+            const widthDiff = Math.abs(newWidth - lastWidth)
+            const heightDiff = Math.abs(newHeight - lastHeight)
+
+            if (widthDiff > 50 && heightDiff > 50) {
+              p.resizeCanvas(newWidth, newHeight)
+
+              /* Update existing word positions for significant resizes */
+              const reservedBottomSpace = 120
+              for (let i = 0; i < wordObjects.length; i++) {
+                /* Keep existing properties, just update positions */
+                wordObjects[i].x = p.random(p.width)
+                wordObjects[i].y = p.random(0, p.height - reservedBottomSpace)
+              }
+
+              /* Update last known dimensions */
+              lastWidth = newWidth
+              lastHeight = newHeight
+            } else {
+              /* For minor changes, just resize canvas without repositioning */
+              p.resizeCanvas(newWidth, newHeight)
+            }
+          }
+        })
+      }
     }
   })
 

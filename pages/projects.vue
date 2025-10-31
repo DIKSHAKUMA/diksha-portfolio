@@ -16,7 +16,7 @@
   })
 
   onUnmounted(() => {
-    if (import.meta.client) navbarStore.setTransparent(false, 'projects')
+  
   })
 </script>
 <!--Shows all projects, something in a horizontal style using draggable-->

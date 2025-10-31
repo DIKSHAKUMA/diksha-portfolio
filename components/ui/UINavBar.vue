@@ -10,9 +10,11 @@
   const isLightMode = ref<boolean>(false)
   const route = useRoute()
   const navbarStore = useNavbarStore()
-  const isProjectsOrContactOpen = ref(false)
 
-  /* Check if current route is in blog section */
+  /* 
+    Check if current route is in blog section
+    The below computed properties helps to add active class to subroutes
+   */
   const isBlogActive = computed(() => {
     return route.path === '/blog' || route.path.startsWith('/blog-post/')
   })
@@ -53,7 +55,7 @@
   const navClassObj = computed(() => {
     return {
       'nav-wrapper--moveup': isDown.value,
-      'nav-wrapper--projects-open': isProjectsOrContactOpen.value,
+      'nav-wrapper--projects-open': navbarStore.isProjectsPage,
       'nav-wrapper--contact-open': navbarStore.isContactPage,
     }
   })
@@ -142,17 +144,21 @@
   )
 
   /* Watch for projects route to maintain projects page transparency */
-  watch(
-    () => route.path,
-    (newPath) => {
-      if (newPath === '/projects') {
-        isProjectsOrContactOpen.value = true
-      } else if (newPath !== '/contact') {
-        isProjectsOrContactOpen.value = false
-      }
-    },
-    { immediate: true }
-  )
+// In UINavBar.vue
+watch(
+  () => route.path,
+  (newPath, oldPath) => {
+    // Only update if we're actually changing routes
+    if (newPath !== oldPath) {
+      // Add a small delay to let the transition start
+      setTimeout(() => {
+        navbarStore.setProjectsOpen(newPath === '/projects')
+        navbarStore.setContactOpen(newPath === '/contact')
+      }, 1200) // Small delay to ensure the transition has started
+    }
+  },
+  { immediate: true }
+)
 
   onMounted(() => {
     onScroll()
@@ -376,18 +382,18 @@ just use a simple modal and be done with it. */
 
     &--contact-open {
       @include this-and-above('lg') {
-        background-color: unset;
+        background-color: unset !important;
         backdrop-filter: blur(0px);
-        
+
         // Force text color to #DBDBDB on contact page
-        color: #DBDBDB !important;
-        
+        color: #dbdbdb !important;
+
         .nav__item {
-          color: #DBDBDB !important;
+          color: #dbdbdb !important;
         }
-        
+
         .logo {
-          color: #DBDBDB !important;
+          color: #dbdbdb !important;
         }
       }
     }

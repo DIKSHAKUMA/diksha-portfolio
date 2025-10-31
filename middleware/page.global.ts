@@ -97,7 +97,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
         opacity: 0,
         transformOrigin: 'left center',
         force3D: true,
-        ease: 'power2.out',
+        ease: 'power1.out',
       }
     )
   }

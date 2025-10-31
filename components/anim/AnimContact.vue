@@ -10,16 +10,20 @@
    * TODO: Refactor out widgets
    */
 
-  /* Local Barcelona time that updates every minute */
+  /* Local Madrid time with CET/CEST timezone */
   const localTime = ref('')
 
   const updateLocalTime = () => {
-    localTime.value = new Date().toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
+    const options = {
+      timeZone: 'Europe/Madrid',
+      hour: '2-digit' as const,
+      minute: '2-digit' as const,
       hour12: false,
-      timeZone: 'Europe/Madrid', // Barcelona timezone
-    })
+      timeZoneName: 'short' as const,
+    }
+
+    // Will show like "14:30 CET" or "15:30 CEST"
+    localTime.value = new Date().toLocaleTimeString('en-GB', options)
   }
 
   /* Fetch weather data client side only , openweather API */
@@ -65,14 +69,16 @@
   let timeInterval: NodeJS.Timeout | null = null
 
   onMounted(() => {
-    /* Initialize and start local time updates */
-    updateLocalTime() // Set initial time
-    timeInterval = setInterval(updateLocalTime, 60000) // Update every minute
+    // Initialize and update time
+    updateLocalTime()
+    const timer = setInterval(updateLocalTime, 60000)
 
-    /* Delay raindrops to avoid Venice blind interference and reduce initial lag */
-    setTimeout(() => {
-      showRaindrops.value = true
-    }, 1500) /* Increased delay to let Venice blind complete and reduce initial page lag */
+    // Cleanup interval on component unmount
+    onUnmounted(() => {
+      clearInterval(timer)
+    })
+
+    showRaindrops.value = true
   })
 
   onUnmounted(() => {

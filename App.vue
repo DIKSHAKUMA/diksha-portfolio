@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { useFolioStore } from '~/store/useFolioStore'
   import { useBlogStore } from '~/store/useBlogStore'
+  import FavBaseSVG from '@/assets/svg/favbase.svg'
+
+  const favBaseSVG = useTemplateRef<HTMLHtmlElement>('favBaseSVG')
 
   /* Pinia 🍍 */
   const store = useFolioStore()
@@ -14,22 +17,41 @@
 
   let cachedBlinds: any[] = []
 
+  /* 
+  The simplistic approach with not turning venice blinds into a component works the fastest. 
+  Or else you end up staring at creating a plugin, hoping its defined, watching it and so on
+  */
   onMounted(() => {
     isLoaded.value = true
     cachedBlinds = $gsap.utils.toArray('.venice__blind')
     $gsap.set(cachedBlinds, { scaleX: 0, force3D: true })
-    $gsap.fromTo(
-      cachedBlinds,
-      { scaleX: 1, opacity: 1, force3D: true },
-      {
-        duration: 1.5,
-        rotationY: -120,
-        opacity: 0,
-        transformOrigin: 'left center',
-        force3D: true,
-        onComplete: clearProps,
-      }
+
+    // Create a timeline
+    const tl = $gsap.timeline()
+
+    // Add animations to the timeline
+    tl.fromTo(
+      '.fav-base',
+      { opacity: 0, ease: 'power2.out' },
+      { opacity: 1, ease: 'power2.out' }
     )
+      .to('.fav-base', { opacity: 0, scale: 0.5, ease: 'power2.out' }, '>1.5')
+      .fromTo(
+        cachedBlinds,
+        {
+          scaleX: 1,
+          opacity: 1,
+          force3D: true,
+          transformOrigin: 'left center',
+        },
+        {
+          duration: 1.5,
+          rotationY: -120,
+          opacity: 0,
+          force3D: true,
+          onComplete: clearProps,
+        }
+      )
   })
 
   const clearProps = () => {
@@ -41,6 +63,7 @@
 </script>
 
 <template>
+  <FavBaseSVG class="fav-base" ref="favBaseSVG" />
   <div class="venice">
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
@@ -98,6 +121,18 @@
     min-height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+  }
+
+  /*SVG intro*/
+  .fav-base {
+    position: absolute;
+    width: 100px;
+    height: auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    opacity: 0;
   }
 
   /* Modern scrollbar for WebKit (Chrome, Safari, newer Edge) */
