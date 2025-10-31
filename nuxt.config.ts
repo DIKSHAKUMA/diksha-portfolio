@@ -97,16 +97,21 @@ export default defineNuxtConfig({
     families: [
       {
         name: 'Reddit Sans',
-        provider: 'google'
+        provider: 'google',
+        weights: [350, 400, 500],
+        styles: ['normal', 'italic'],
       },
       {
         name: 'Geist',
         provider: 'google',
+        weights: [300, 400],
+        styles: ['normal', 'italic'],
       },
       {
         name: 'Geist Mono',
-        provider: 'google'
-      }
+        weights: [400, 500, 600],
+        provider: 'google',
+      },
     ],
 
     processCSSVariables: true,
