@@ -30,10 +30,10 @@
 
     /* Show intro animation on homepage */
     const isHomepage = route.path === '/'
-    
+
     if (isHomepage) {
       showIntroAnimation.value = true
-      
+
       // Create a timeline
       const tl = $gsap.timeline()
 
@@ -201,11 +201,7 @@
     }
   }
 
-  @supports (-webkit-touch-callout: none) {
-    body {
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-  }
+
 
   .venice {
     position: fixed;

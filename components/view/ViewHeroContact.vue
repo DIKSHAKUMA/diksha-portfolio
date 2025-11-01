@@ -168,13 +168,13 @@
     color: $secondary-static;
     z-index: 200;
     font-family: $sans-text;
-    font-size: clamped(16px, 20px, 480px, 1920px);
+    font-weight: 500;
 
     &__label {
       font-size: clamped(16px, 20px, 480px, 1920px);
     }
     &__email {
-      font-size: clamped(20px, 42px, 480px);
+      font-size: clamped(22px, 42px, 480px);
       color: $secondary-static;
       text-decoration: none;
       transition: color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);

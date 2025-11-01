@@ -63,19 +63,24 @@
     return store.data.projects.filter((proj: any) => !proj.labUrl)
   })
 
-  const getNextProj = computed(() => {
-    const index = nonLabProjects.value.findIndex(
+  /* Cache the current project index to avoid repeated findIndex calls */
+  const currentProjectIndex = computed(() => {
+    return nonLabProjects.value.findIndex(
       (proj: any) => proj.slug === route.params.id
     )
+  })
+
+  const getNextProj = computed(() => {
+    const index = currentProjectIndex.value
+    if (index === -1) return null
     /* If at last project, loop back to first (index 0) */
     const nextIndex = index === nonLabProjects.value.length - 1 ? 0 : index + 1
     return nonLabProjects.value[nextIndex]
   })
 
   const getPrevProj = computed(() => {
-    const index = nonLabProjects.value.findIndex(
-      (proj: any) => proj.slug === route.params.id
-    )
+    const index = currentProjectIndex.value
+    if (index === -1) return null
     /* If at first project, loop to last project */
     const prevIndex = index === 0 ? nonLabProjects.value.length - 1 : index - 1
     return nonLabProjects.value[prevIndex]
@@ -87,7 +92,9 @@
     const { $lenis, $gsap } = useNuxtApp()
     $lenis.scrollTo(0, { immediate: true, force: true })
 
-    ctx = $gsap.context((self: any) => {
+    /* Defer heavy GSAP setup to next tick for smoother navigation */
+    nextTick(() => {
+      ctx = $gsap.context((self: any) => {
       $gsap.utils.toArray('.project__media').forEach((mediaContainer: any) => {
         /* Set initial state - hidden with scale */
         $gsap.set(mediaContainer, {
@@ -176,6 +183,7 @@
         })
       }
     }, '.project')
+    }) /* Close nextTick */
 
     /* Add video intersection observer only if project has video */
     if (process.client && proj.value?.video?.[0]?.playbackId) {

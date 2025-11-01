@@ -453,7 +453,7 @@
         margin: 0;
         color: $secondary;
         font-family: $sans-ui-mono;
-        font-size: clamped(14px, 18px, 380px, 1920px);
+        font-size: clamped(15px, 18px, 380px, 1920px);
         font-weight: 400;
         font-variation-settings: 'wght' 400;
         backface-visibility: hidden;

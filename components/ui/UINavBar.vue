@@ -381,8 +381,9 @@ just use a simple modal and be done with it. */
     }
 
     &--contact-open {
+      background-color: unset !important;
+      
       @include this-and-above('lg') {
-        background-color: unset !important;
         backdrop-filter: blur(0px);
 
         // Force text color to #DBDBDB on contact page
