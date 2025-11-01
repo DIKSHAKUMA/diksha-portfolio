@@ -13,6 +13,7 @@ b
     isHero: boolean
     isSecondary: boolean
     isTwoLines: boolean
+    isPageHeader: boolean
     author: string
     date: string
   }
@@ -26,6 +27,7 @@ b
     isHero: false,
     isSecondary: false,
     isTwoLines: false,
+    isPageHeader: false,
     author: '',
     date: '',
   })
@@ -49,6 +51,7 @@ b
       'abstract__header--hero': props.isHero,
       'abstract__header--secondary': props.isSecondary,
       'abstract__header--full-width': props.isFullWidth,
+      'abstract__header--page-header': props.isPageHeader,
     }
   })
 
@@ -209,7 +212,7 @@ b
   .abstract {
     &__header {
       position: relative;
-      font-size: clamped(54px, 116px, 480px, 1920px);
+      font-size: clamped(50px, 110px, 480px, 1920px);
       flex-wrap: wrap;
       height: max-content;
       margin-bottom: $px-32-spacer;
@@ -223,10 +226,14 @@ b
 
       /* When we need a sub header (smaller) */
       &--secondary {
-        font-size: clamped(36px, 52px, 480px, 1920px);
+        font-size: clamped(36px, 48px, 480px, 1920px);
       }
 
       &--full-width {
+        margin-bottom: 0;
+      }
+
+      &--page-header {
         margin-bottom: 0;
       }
 
@@ -239,6 +246,10 @@ b
 
         &--full-width {
           margin-bottom: 0;
+        }
+
+        &--page-header {
+          margin-bottom: $px-16-spacer;
         }
       }
     }

@@ -96,13 +96,13 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       {
-        name: 'Reddit Sans',
+        name: 'Merriweather Sans',
         provider: 'google',
         weights: [350, 400, 500, 600],
         styles: ['normal', 'italic'],
       },
       {
-        name: 'Geist',
+        name: 'Rethink Sans',
         provider: 'google',
         weights: [400],
         styles: ['normal', 'italic'],
@@ -128,7 +128,7 @@ export default defineNuxtConfig({
     highlight: {
       theme: {
         default: 'github-dark',
-        dark: 'github-dark'
+        dark: 'github-dark',
       },
       langs: [
         'js',

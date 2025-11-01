@@ -72,36 +72,32 @@
     const isLightMode = colorMode.value === 'light'
 
     if (isLightMode) {
-
       const baseHue = 194
-      const baseSat = 16 
-      const baseLight = 65 
+      const baseSat = 16
+      const baseLight = 65
 
-
-      const lightnessOffset = waveIndex * 4 
-      const colorSpeed = 0.6 + waveIndex * 0.25 
-
+      const lightnessOffset = waveIndex * 4
+      const colorSpeed = 0.6 + waveIndex * 0.25
 
       const travelingLight =
         baseLight +
         lightnessOffset +
-        Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 16 
+        Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 16
       const travelingSat =
         baseSat +
-        Math.sin(segmentRatio * Math.PI * 3 + time * colorSpeed * 0.7) * 8 
+        Math.sin(segmentRatio * Math.PI * 3 + time * colorSpeed * 0.7) * 8
 
-      const finalLight = Math.max(55, Math.min(85, travelingLight)) 
-      const finalSat = Math.max(10, Math.min(25, travelingSat)) 
+      const finalLight = Math.max(55, Math.min(85, travelingLight))
+      const finalSat = Math.max(10, Math.min(25, travelingSat))
 
       return hslToHex(baseHue, finalSat, finalLight)
     } else {
-
-      const baseHue = 194 
+      const baseHue = 194
       const baseSat = 21
       const baseLight = 24
 
-      const lightnessOffset = waveIndex * 5 
-      const colorSpeed = 0.8 + waveIndex * 0.3 
+      const lightnessOffset = waveIndex * 5
+      const colorSpeed = 0.8 + waveIndex * 0.3
 
       // Create traveling shade effect with MUCH more contrast
       const travelingLight =
@@ -146,8 +142,11 @@
     if (pixiDestroyed || !app || isWavesPaused) return
 
     const currentTime = Date.now() * 0.001
-    
-    if (cachedWidth !== app.screen.width || cachedHeight !== app.screen.height) {
+
+    if (
+      cachedWidth !== app.screen.width ||
+      cachedHeight !== app.screen.height
+    ) {
       cachedWidth = app.screen.width
       cachedHeight = app.screen.height
     }
@@ -156,20 +155,29 @@
       wave.graphics.clear()
       const centerY = cachedHeight / 2 + (index - 2.5) * 20
       const segmentSize = 8
-      
+
       const points = []
       for (let x = 0; x <= cachedWidth; x += segmentSize) {
-        const y = centerY + Math.sin(x * wave.frequency + wave.phase) * wave.amplitude
+        const y =
+          centerY + Math.sin(x * wave.frequency + wave.phase) * wave.amplitude
         const segmentRatio = x / cachedWidth
-        const segmentColor = getWaveColor(index, segmentRatio, currentTime + wave.colorOffset)
+        const segmentColor = getWaveColor(
+          index,
+          segmentRatio,
+          currentTime + wave.colorOffset
+        )
         points.push({ x, y, color: segmentColor })
       }
-      
+
       for (let i = 0; i < points.length - 1; i++) {
         const current = points[i]
         const next = points[i + 1]
-        
-        wave.graphics.setStrokeStyle({ width: 4, color: current.color, alpha: 1 })
+
+        wave.graphics.setStrokeStyle({
+          width: 4,
+          color: current.color,
+          alpha: 1,
+        })
         wave.graphics.moveTo(current.x, current.y)
         wave.graphics.lineTo(next.x, next.y)
         wave.graphics.stroke()
@@ -253,7 +261,7 @@
         if (!pixiDestroyed && app) {
           animateWaves()
         }
-      }, 1200) 
+      }, 1200)
 
       /* Setup IntersectionObserver for parallax section */
       observer = new IntersectionObserver(
@@ -271,7 +279,7 @@
         },
         {
           threshold: 0,
-          rootMargin: '-50% 0px -50% 0px'
+          rootMargin: '-50% 0px -50% 0px',
         }
       )
 
@@ -304,6 +312,7 @@
             start: 'bottom bottom-=200',
             end: 'bottom top',
             scrub: 1,
+            invalidateOnRefresh: false
           },
         })
       })
@@ -355,6 +364,7 @@
       class="front-header"
       :label="store.data.intro?.heroIntroTitle"
       :delay="1"
+      :is-page-header="false"
       :desc="store.data.intro?.heroIntroDesc"
       :class-name="'home-intro'"
       :is-hero="true"

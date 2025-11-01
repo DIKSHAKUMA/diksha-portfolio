@@ -60,6 +60,7 @@
         :delay="0"
         :is-full-width="false"
         :is-hero="false"
+        :is-page-header="false"
         :author="''"
         :date="''"
         :is-two-lines="false"

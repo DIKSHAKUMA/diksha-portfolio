@@ -67,7 +67,9 @@
       height: containerHeight,
       resolution: pixelRatio,
       autoDensity: true,
-      resizeTo: parentElement || window, /* Enable auto-resize to parent container or window */
+      resizeTo:
+        parentElement ||
+        window /* Enable auto-resize to parent container or window */,
     })
 
     /* Construct proper Hygraph image URL */
@@ -118,12 +120,8 @@
 
     app.stage
       .on('mousemove', activateDisplacement)
-      .on('touchmove', activateDisplacement)
-      .on('pointermove', activateDisplacement)
       .on('mouseout', resetDisplacement)
       .on('mouseleave', resetDisplacement)
-      .on('pointerout', resetDisplacement)
-      .on('pointerleave', resetDisplacement)
 
     /* Store references */
     if (isNext) {
@@ -217,7 +215,7 @@
         /* Run both PIXI setups in parallel instead of sequential */
         await Promise.all([
           setupPixiEffect(prevCanvas.value, props.prevImg, false),
-          setupPixiEffect(nextCanvas.value, props.nextImg, true)
+          setupPixiEffect(nextCanvas.value, props.nextImg, true),
         ])
       }
     })
@@ -239,12 +237,7 @@
     <main class="project-stepper">
       <div class="project-stepper__prev">
         <div class="project-stepper-image-reveal">
-          <NuxtLink
-            :to="prev"
-            class="action"
-            data-name="proj"
-            data-text="Prev"
-          >
+          <NuxtLink :to="prev" class="action" data-name="proj" data-text="Prev">
             <NuxtImg
               :src="prevImg"
               provider="hygraph"

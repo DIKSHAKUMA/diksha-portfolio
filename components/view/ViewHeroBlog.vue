@@ -19,6 +19,7 @@
       class="front-header"
       :label="store.data.intro?.blogTitle"
       :desc="''"
+      :is-page-header="false"
       :delay="0"
       :class-name="'blog-intro'"
       :is-hero="true"

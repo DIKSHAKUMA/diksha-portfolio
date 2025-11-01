@@ -251,6 +251,7 @@
           :delay="1"
           :is-hero="false"
           :is-secondary="false"
+          :is-page-header="true"
           :author="''"
           :date="''"
           :is-two-lines="true"

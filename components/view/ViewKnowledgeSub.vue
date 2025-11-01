@@ -31,6 +31,7 @@
             pin: '.know-wrapper',
             anticipatePin: 1,
             pinSpacing: true,
+            invalidateOnRefresh: false
           },
         })
       }
@@ -59,6 +60,7 @@
         class="know__label"
         :desc="''"
         :label="store.data.intro?.knowIntroTitle"
+        :is-page-header="false"
         :class-name="'know-intro'"
         :is-secondary="true"
         :delay="0"

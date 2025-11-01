@@ -39,6 +39,7 @@
         :is-hero="true"
         :is-full-width="false"
         :is-secondary="false"
+        :is-page-header="false"
         :author="''"
         :date="''"
         :is-two-lines="false"

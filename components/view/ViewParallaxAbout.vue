@@ -50,6 +50,7 @@
         class="about__label"
         :label="store.data.about?.aboutTitle"
         :desc="store.data.about?.aboutDesc"
+        :is-page-header="false"
         :class-name="'about-intro'"
         :is-secondary="true"
         :delay="0"

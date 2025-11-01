@@ -251,6 +251,7 @@
       class="front-header"
       :label="'Projects'"
       :delay="1"
+      :is-page-header="false"
       :desc="''"
       :class-name="'abstract__projects'"
       :is-hero="true"
@@ -452,7 +453,7 @@
         margin: 0;
         color: $secondary;
         font-family: $sans-ui-mono;
-        font-size: clamped(16px, 18px, 380px, 1920px);
+        font-size: clamped(14px, 18px, 380px, 1920px);
         font-weight: 400;
         font-variation-settings: 'wght' 400;
         backface-visibility: hidden;
@@ -465,14 +466,14 @@
         margin: 0;
         color: $secondary;
         font-family: $sans-ui-mono;
-        font-size: clamped(13px, 14px, 380px, 1920px);
+        font-size: clamped(12px, 14px, 380px, 1920px);
         font-weight: 400;
         font-variation-settings: 'wght' 400;
         backface-visibility: hidden;
       }
 
       &__image {
-        cursor: grab;
+        cursor: pointer;
         width: 85vw;
         /* Mobile-first: larger than viewport for immersive feel */
         height: auto;

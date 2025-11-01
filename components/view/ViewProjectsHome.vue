@@ -139,6 +139,7 @@
         class="projects__header"
         :label="store.data.intro?.projIntroTitle"
         :desc="''"
+        :is-page-header="false"
         :class-name="'projects-intro'"
         :is-secondary="true"
         :delay="0"
@@ -273,7 +274,6 @@
           height: 100%;
           object-fit: cover;
           object-position: center;
-          
         }
 
         @include this-and-above('sm') {
@@ -308,7 +308,7 @@
           margin: 0;
           color: $secondary;
           font-family: $sans-ui-mono;
-          font-size: clamped(16px, 18px, 380px, 1920px);
+          font-size: clamped(14px, 18px, 380px, 1920px);
           font-weight: 400;
         }
         span {
@@ -316,7 +316,7 @@
           margin: 0;
           color: $secondary;
           font-family: $sans-ui-mono;
-          font-size: clamped(13px, 14px, 380px, 1920px);
+          font-size: clamped(12px, 14px, 380px, 1920px);
           font-weight: 400;
         }
 

@@ -64,6 +64,7 @@
       class="front-header"
       :label="store.data.contact?.viewHeroTitle"
       :delay="1"
+      :is-page-header="false"
       :desc="''"
       :class-name="'contact-intro'"
       :is-hero="true"

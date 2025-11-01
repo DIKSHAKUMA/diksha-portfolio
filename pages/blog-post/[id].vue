@@ -205,7 +205,8 @@
               :date="post.date"
               :is-hero="false"
               :is-secondary="false"
-              :is-two-lines="true"
+              :is-two-lines="false"
+              :is-page-header="true"
             />
 
             <div class="blog__post-cover">
@@ -318,6 +319,7 @@
 </template>
 
 <style lang="scss" scoped>
+
   :deep(.abstract__desc) {
     margin-top: $px-8-spacer !important;
   }
@@ -414,14 +416,22 @@
       }
 
       /* Fix Shiki code block overflow on mobile */
-      :deep(pre.shiki) {
+      :deep(.blog__post-content pre.shiki),
+      :deep(.blog__post-content pre[class*="shiki"]),
+      :deep(.blog__post-content .shiki),
+      :deep(.mdc-content pre.shiki),
+      :deep(.mdc-content pre[class*="shiki"]),
+      :deep(.mdc-content .shiki) {
         overflow-x: auto;
         padding: $px-16-spacer;
+        font-size: clamped(12px, 16px, 380px, 1920px) !important;
+        -webkit-text-size-adjust:none !important;
 
         code {
           display: block;
           width: max-content;
           min-width: 100%;
+          
         }
 
         .line {
@@ -659,4 +669,5 @@
     line-height: 0;
     vertical-align: baseline;
   }
+
 </style>

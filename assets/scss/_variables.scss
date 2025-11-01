@@ -25,17 +25,17 @@ $accent2: var(--accent2);
 $color-scheme: var(--color-scheme);
 
 /* Fonts */
-$sans-ui: "Reddit Sans", sans-serif;
+$sans-ui: "Merriweather Sans", sans-serif;
 $sans-ui-opt: auto;
 $sans-ui-stl: normal;
+
+$sans-text: "Rethink Sans", sans-serif;
+$sans-text-opt: auto;
+$sans-text-stl: nomal;
 
 $sans-ui-mono: "Geist Mono", sans-serif;
 $sans-ui-mono-opt: auto;
 $sans-ui-mono-stl: normal;
-
-$sans-text: "Geist", sans-serif;
-$sans-text-opt: auto;
-$sans-text-stl: normal;
 
 /* Font sizes rem - px (we do not set a base) */
 /* Naming as if base was 16, browser default in UI */

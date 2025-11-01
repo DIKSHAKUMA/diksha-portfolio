@@ -26,7 +26,6 @@
           scrub: 1,
           pinSpacing: false,
           fastScrollEnd: true, // ← Helps with fast scrolling
-          refreshPriority: -1, // ← Lower priority
           invalidateOnRefresh: false, // ← Skip expensive r
         },
         force3D: true,
@@ -51,6 +50,7 @@
         class="about__label"
         :label="store.data.intro?.aboutIntroTitle"
         :desc="store.data.intro?.aboutIntroDesc"
+        :is-page-header="false"
         :class-name="'about-intro'"
         :is-secondary="true"
         :delay="0"

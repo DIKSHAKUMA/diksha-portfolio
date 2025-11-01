@@ -55,6 +55,7 @@
             start: 'top 80%',
             end: 'top 50%',
             toggleActions: 'play none none reverse',
+            invalidateOnRefresh: false
           },
         })
       })
@@ -68,6 +69,7 @@
       :label="''"
       :desc="'Past'"
       :class-name="'timeline-start'"
+      :is-page-header="false"
       :delay="0"
       :is-full-width="false"
       :is-hero="false"
@@ -116,6 +118,7 @@
       class="timeline-end"
       :label="''"
       :desc="'Future'"
+      :is-page-header="false"
       :class-name="'timeline-end'"
       :delay="0"
       :is-full-width="false"

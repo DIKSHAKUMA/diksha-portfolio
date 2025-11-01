@@ -95,7 +95,6 @@
               scrub: false,
               end: 'top 50%',
               toggleActions: 'restart none none reverse',
-              fastScrollEnd: true, // ← Helps with fast scrolling
               refreshPriority: -1, // ← Lower priority
               invalidateOnRefresh: false, // ← Skip expensive refresh
             },
@@ -151,6 +150,7 @@
         class="meta__header"
         :label="store.data.intro?.metaIntroTitle"
         :desc="''"
+        :is-page-header="false"
         :class-name="'meta-intro'"
         :is-secondary="true"
         :delay="0"
