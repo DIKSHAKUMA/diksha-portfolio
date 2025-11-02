@@ -51,6 +51,12 @@
     return `${minutes} min read`
   })
 
+  /* Computed cover image URL using Hygraph provider */
+  const coverImageUrl = computed(() => {
+    if (!post.value?.coverImage?.handle) return undefined
+    return `https://eu-west-2.graphassets.com/cm4tev3k1008n01uo6egngvzu/${post.value.coverImage.handle}`
+  })
+
   /* SEO Meta Tags */
   useSeoMeta({
     title: () =>
@@ -59,7 +65,7 @@
       post.value?.subject || 'Read this blog post by Thomas Thorstensson',
     ogTitle: () => post.value?.title,
     ogDescription: () => post.value?.subject,
-    ogImage: () => post.value?.coverImage?.handle,
+    ogImage: () => coverImageUrl.value,
     ogType: 'article',
     articleAuthor: () => post.value?.authors?.[0]?.name,
     articlePublishedTime: () => post.value?.date,
@@ -67,7 +73,7 @@
     twitterCard: 'summary_large_image',
     twitterTitle: () => post.value?.title,
     twitterDescription: () => post.value?.subject,
-    twitterImage: () => post.value?.coverImage?.handle,
+    twitterImage: () => coverImageUrl.value,
   })
 
   /* Canonical URL */
@@ -86,7 +92,7 @@
     defineArticle({
       headline: () => post.value?.title,
       description: () => post.value?.subject,
-      image: () => post.value?.coverImage?.handle,
+      image: () => coverImageUrl.value,
       datePublished: () => post.value?.date,
       dateModified: () => post.value?.updatedAt || post.value?.date,
       author: {
