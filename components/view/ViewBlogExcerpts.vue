@@ -98,6 +98,11 @@
     z-index: 200;
     width: 100%;
 
+    &__info {
+      font-weight: 400;
+      font-variation-settings: 'wght' 400;
+    }
+
     &__quote {
       position: absolute;
       margin-top: $px-128-spacer;
@@ -108,6 +113,8 @@
       color: $secondary;
       font-size: clamped(20px, 26px, 480px, 1920px);
       font-style: italic;
+      font-weight: 400;
+      font-variation-settings: 'wght' 400;
 
       @include this-and-above('sm') {
         margin-top: $px-256-spacer;
@@ -128,6 +135,8 @@
       border-bottom: 2px solid $accent2;
       overflow: hidden;
       cursor: pointer;
+      font-weight: 400;
+      font-variation-settings: 'wght' 400;
 
       @include this-and-above('md') {
         grid-template-columns: 1fr 2fr 1fr 1fr;

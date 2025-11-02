@@ -7,6 +7,28 @@
     },
   })
 
+  /* SEO Meta Tags */
+  useSeoMeta({
+    title: 'About Thomas Thorstensson • Full-Stack Developer',
+    description: 'Learn about Thomas Thorstensson, a full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
+    ogTitle: 'About Thomas Thorstensson',
+    ogDescription: 'Full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
+    ogType: 'profile',
+    twitterCard: 'summary_large_image',
+    twitterTitle: 'About Thomas Thorstensson',
+    twitterDescription: 'Full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
+  })
+
+  /* Canonical URL */
+  useHead({
+    link: [
+      {
+        rel: 'canonical',
+        href: 'https://thomasthorstensson.com/about',
+      },
+    ],
+  })
+
   onMounted(() => {
     const { $lenis } = useNuxtApp()
     $lenis.scrollTo(0, { immediate: true, force: true })

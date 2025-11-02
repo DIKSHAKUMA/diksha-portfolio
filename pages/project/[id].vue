@@ -57,6 +57,59 @@
     )
   })
 
+  /* SEO Meta Tags */
+  useSeoMeta({
+    title: () =>
+      proj.value ? `${proj.value.name} • Thomas Thorstensson` : 'Project',
+    description: () =>
+      proj.value?.description ||
+      `${proj.value?.name} - A project by Thomas Thorstensson`,
+    ogTitle: () => proj.value?.name,
+    ogDescription: () => proj.value?.description,
+    ogImage: () => proj.value?.coverImage?.handle,
+    ogType: 'website',
+    twitterCard: 'summary_large_image',
+    twitterTitle: () => proj.value?.name,
+    twitterDescription: () => proj.value?.description,
+    twitterImage: () => proj.value?.coverImage?.handle,
+    keywords: () => proj.value?.tags?.join(', '),
+  })
+
+  /* Canonical URL */
+  useHead({
+    link: [
+      {
+        rel: 'canonical',
+        href: () =>
+          `https://thomasthorstensson.com/project/${proj.value?.slug}`,
+      },
+    ],
+  })
+
+  /* Structured Data for SEO */
+  useSchemaOrg([
+    defineWebPage({
+      name: () => proj.value?.name,
+      description: () => proj.value?.description,
+      image: () => proj.value?.coverImage?.handle,
+      datePublished: () => proj.value?.date,
+      author: {
+        name: 'Thomas Thorstensson',
+        url: 'https://thomasthorstensson.com/about',
+      },
+      keywords: () => proj.value?.tags?.join(', '),
+      about: () => proj.value?.type,
+    }),
+    defineBreadcrumb([
+      { name: 'Home', item: '/' },
+      { name: 'Projects', item: '/projects' },
+      {
+        name: () => proj.value?.name,
+        item: () => `/project/${proj.value?.slug}`,
+      },
+    ]),
+  ])
+
   /* Get next and previous projects and if we hit the first or last project, loop back to the other end */
   /* Filter out lab projects (those with labUrl) for stepper navigation */
   const nonLabProjects = computed(() => {
@@ -95,94 +148,96 @@
     /* Defer heavy GSAP setup to next tick for smoother navigation */
     nextTick(() => {
       ctx = $gsap.context((self: any) => {
-      $gsap.utils.toArray('.project__media').forEach((mediaContainer: any) => {
-        /* Set initial state - hidden with scale */
-        $gsap.set(mediaContainer, {
-          opacity: 0,
-          scale: 1.05,
-          force3D: true,
-        })
+        $gsap.utils
+          .toArray('.project__media')
+          .forEach((mediaContainer: any) => {
+            /* Set initial state - hidden with scale */
+            $gsap.set(mediaContainer, {
+              opacity: 0,
+              scale: 1.05,
+              force3D: true,
+            })
 
-        /* Check if this is the first media (data-media="0") or video (data-video="0") */
-        const isFirstMedia =
-          mediaContainer.getAttribute('data-media')?.trim() === '0'
-        const isFirstVideo =
-          mediaContainer.getAttribute('data-video')?.trim() === '0'
+            /* Check if this is the first media (data-media="0") or video (data-video="0") */
+            const isFirstMedia =
+              mediaContainer.getAttribute('data-media')?.trim() === '0'
+            const isFirstVideo =
+              mediaContainer.getAttribute('data-video')?.trim() === '0'
 
-        let delay = 0
-        /* Only the very first element should have delay:
-         * - If we have video, only video gets delay (not the first image)
-         * - If no video, first image gets delay */
-        if (
-          proj.value?.video &&
-          proj.value.video.length > 0 &&
-          proj.value.video[0].playbackId
-        ) {
-          /* We have video - only video gets delay */
-          delay = isFirstVideo ? 1.5 : 0
-        } else {
-          /* No video - first image gets delay */
-          delay = isFirstMedia ? 1.5 : 0
+            let delay = 0
+            /* Only the very first element should have delay:
+             * - If we have video, only video gets delay (not the first image)
+             * - If no video, first image gets delay */
+            if (
+              proj.value?.video &&
+              proj.value.video.length > 0 &&
+              proj.value.video[0].playbackId
+            ) {
+              /* We have video - only video gets delay */
+              delay = isFirstVideo ? 1.5 : 0
+            } else {
+              /* No video - first image gets delay */
+              delay = isFirstMedia ? 1.5 : 0
+            }
+
+            /* Animate the mask position on scroll */
+            $gsap.to(mediaContainer, {
+              opacity: 1,
+              delay: delay,
+              scale: 1,
+              duration: 0.3,
+              force3D: true,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: mediaContainer,
+                start: 'top 85%',
+                end: 'top 35%',
+                toggleActions: 'play none none reverse',
+                preventOverlaps: true,
+                fastScrollEnd: true,
+                anticipatePin: 1,
+                refreshPriority: -1,
+              },
+            })
+          })
+
+        /* Animate project sections */
+        if (infoSection.value) {
+          $gsap.from(infoSection.value.children, {
+            opacity: 0,
+            duration: 0.3,
+            force3D: true,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: infoSection.value,
+              start: 'top 80%',
+              toggleActions: 'play none none reverse',
+              preventOverlaps: true,
+              fastScrollEnd: true,
+              anticipatePin: 1,
+              refreshPriority: -1,
+            },
+          })
         }
 
-        /* Animate the mask position on scroll */
-        $gsap.to(mediaContainer, {
-          opacity: 1,
-          delay: delay,
-          scale: 1,
-          duration: 0.3,
-          force3D: true,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: mediaContainer,
-            start: 'top 85%',
-            end: 'top 35%',
-            toggleActions: 'play none none reverse',
-            preventOverlaps: true,
-            fastScrollEnd: true,
-            anticipatePin: 1,
-            refreshPriority: -1,
-          },
-        })
-      })
-
-      /* Animate project sections */
-      if (infoSection.value) {
-        $gsap.from(infoSection.value.children, {
-          opacity: 0,
-          duration: 0.3,
-          force3D: true,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: infoSection.value,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-            preventOverlaps: true,
-            fastScrollEnd: true,
-            anticipatePin: 1,
-            refreshPriority: -1,
-          },
-        })
-      }
-
-      if (textSection.value) {
-        $gsap.from(textSection.value.children, {
-          opacity: 0,
-          duration: 0.4,
-          force3D: true,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: textSection.value,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-            preventOverlaps: true,
-            fastScrollEnd: true,
-            anticipatePin: 1,
-            refreshPriority: -1,
-          },
-        })
-      }
-    }, '.project')
+        if (textSection.value) {
+          $gsap.from(textSection.value.children, {
+            opacity: 0,
+            duration: 0.4,
+            force3D: true,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: textSection.value,
+              start: 'top 80%',
+              toggleActions: 'play none none reverse',
+              preventOverlaps: true,
+              fastScrollEnd: true,
+              anticipatePin: 1,
+              refreshPriority: -1,
+            },
+          })
+        }
+      }, '.project')
     }) /* Close nextTick */
 
     /* Add video intersection observer only if project has video */

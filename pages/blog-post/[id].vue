@@ -223,37 +223,13 @@
                 densities="x1 x2"
               ></NuxtImg>
             </div>
-            <div
-              class="blog__post-content"
-              :class="{ 'blog__post-content--show': mdcContentReady }"
-            >
-              <!-- Show skeleton while content is loading -->
+            <div class="blog__post-content">
+              <!-- Show spinner while content is loading -->
               <div v-if="!mdcContentReady" class="mdc-loading">
-                <!-- Paragraph skeleton -->
-                <div class="mdc-skeleton"></div>
-                <div class="mdc-skeleton"></div>
-                <div class="mdc-skeleton short"></div>
-
-                <!-- Spacing -->
-                <div class="mdc-skeleton-spacer"></div>
-
-                <!-- Heading skeleton -->
-                <div class="mdc-skeleton heading"></div>
-
-                <!-- Another paragraph -->
-                <div class="mdc-skeleton"></div>
-                <div class="mdc-skeleton"></div>
-                <div class="mdc-skeleton medium"></div>
-
-                <!-- Spacing -->
-                <div class="mdc-skeleton-spacer"></div>
-
-                <!-- Code block skeleton -->
-                <div class="mdc-skeleton code-block"></div>
-
-                <!-- Final paragraph -->
-                <div class="mdc-skeleton"></div>
-                <div class="mdc-skeleton short"></div>
+                <div class="mdc-spinner">
+                  <div class="mdc-spinner__circle"></div>
+                </div>
+                <p class="mdc-loading-text">Loading content...</p>
               </div>
 
               <!-- Always render MDC but hide it until ready -->
@@ -408,12 +384,8 @@
       color: $secondary;
       font-size: clamped(16px, 20px, 380px, 1920px);
       max-width: 100vw;
-      opacity: 0;
-      transition: opacity 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+      opacity: 1; /* Always visible so spinner shows */
 
-      &--show {
-        opacity: 1;
-      }
 
       /* Fix Shiki code block overflow on mobile */
       :deep(.blog__post-content pre.shiki),
@@ -579,10 +551,37 @@
     }
   }
 
-  /* MDC Loading Skeleton */
+  /* MDC Loading Spinner */
   .mdc-loading {
     margin-top: $px-64-spacer;
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $px-32-spacer 0;
+  }
+
+  .mdc-spinner {
+    width: 40px;
+    height: 40px;
+    margin-bottom: $px-16-spacer;
+  }
+
+  .mdc-spinner__circle {
+    width: 100%;
+    height: 100%;
+    border: 3px solid transparent;
+    border-top: 3px solid $accent2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  .mdc-loading-text {
+    color: $secondary;
+    font-size: clamped(14px, 16px, 480px, 1920px);
+    font-family: $sans-text;
+    margin: 0;
+    opacity: 0.7;
   }
 
   /* MDC Content visibility control */
@@ -597,67 +596,12 @@
     }
   }
 
-  .mdc-skeleton {
-    height: 1.2em;
-    background: linear-gradient(
-      90deg,
-      $accent2 25%,
-      rgba(250, 247, 255, 0.1) 50%,
-      $accent2 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    margin-bottom: $px-16-spacer;
-
-    &.short {
-      width: 60%;
-    }
-
-    &.medium {
-      width: 80%;
-    }
-
-    &.heading {
-      height: 1.8em;
-      width: 40%;
-      margin-bottom: $px-8-spacer;
-    }
-
-    &.code-block {
-      height: 4em;
-      width: 90%;
-      background: linear-gradient(
-        90deg,
-        rgba($accent2, 0.3) 25%,
-        rgba(250, 247, 255, 0.05) 50%,
-        rgba($accent2, 0.3) 75%
-      );
-    }
-  }
-
-  .mdc-skeleton-spacer {
-    height: $px-32-spacer;
-    margin-bottom: 0;
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0.5;
-    }
-  }
-
-  @keyframes shimmer {
+  @keyframes spin {
     0% {
-      background-position: -200% 0;
+      transform: rotate(0deg);
     }
-
     100% {
-      background-position: 200% 0;
+      transform: rotate(360deg);
     }
   }
 

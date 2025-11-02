@@ -168,7 +168,7 @@
     color: $secondary-static;
     z-index: 200;
     font-family: $sans-text;
-    font-weight: 500;
+    font-weight: 400;
 
     &__label {
       font-size: clamped(16px, 20px, 480px, 1920px);
