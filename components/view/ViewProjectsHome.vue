@@ -58,19 +58,19 @@
       const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
 
       /* Batch DOM queries for better performance */
-      const images = $gsap.utils.toArray('.projects__abstract__item')
+      const items = $gsap.utils.toArray('.projects__abstract__item')
 
       /* Firefox gets simple fade, others get full clipPath reveal */
-      images.forEach((img: any) => {
+      items.forEach((item: any) => {
         if (isFirefox) {
           /* Simple opacity fade for Firefox - no clipPath */
-          $gsap.to(img, {
+          $gsap.to(item, {
             opacity: 1,
             clipPath: 'none',
             duration: 0.4,
             ease: 'power1.out',
             scrollTrigger: {
-              trigger: img,
+              trigger: item,
               start: 'top 90%',
               toggleActions: 'play none none reverse',
               invalidateOnRefresh: false,
@@ -78,14 +78,14 @@
           })
         } else {
           /* Full clipPath reveal for Chrome/Safari/Edge */
-          $gsap.to(img, {
+          $gsap.to(item, {
             opacity: 1,
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
             duration: 0.5,
             ease: 'power1.out',
             force3D: true,
             scrollTrigger: {
-              trigger: img,
+              trigger: item,
               start: 'top 80%',
               end: 'top 60%',
               toggleActions: 'play none none reverse',
@@ -94,20 +94,25 @@
           })
         }
 
+        $gsap.set(item.firstElementChild, { filter: 'brightness(1)' })
         /* GSAP hover animation to avoid CSS transform conflicts */
-        img.parentElement.addEventListener('mouseenter', () => {
-          $gsap.to(img, {
+        item.firstElementChild.addEventListener('mouseenter', () => {
+          $gsap.set(item.firstElementChild, { clearProps: 'transition' })
+          $gsap.to(item.firstElementChild, {
             scale: 0.98,
+            filter: 'brightness(.8)',
             duration: 0.25,
-            ease: 'power2.out',
+            ease: 'power1.in',
             force3D: false,
             autoRound: true,
+            overwrite: true,
           })
         })
 
-        img.parentElement.addEventListener('mouseleave', () => {
-          $gsap.to(img, {
+        item.firstElementChild.addEventListener('mouseleave', () => {
+          $gsap.to(item.firstElementChild, {
             scale: 1,
+            filter: 'brightness(1)',
             duration: 0.25,
             ease: 'power2.out',
             force3D: false,
@@ -168,6 +173,13 @@
                 densities="x1 x2"
                 quality="100"
               ></NuxtImg>
+              <div
+                v-if="proj.labUrl"
+                class="projects__abstract__image--lab"
+                title="Lab Project"
+              >
+                <LabSVG class="projects__abstract__image--lab-svg" />
+              </div>
             </div>
 
             <div class="projects__abstract__info">
@@ -177,13 +189,6 @@
                 class="project-tags split-proj-w"
                 >{{ getProjectTags(proj) }}</span
               >
-              <div
-                v-if="proj.labUrl"
-                class="projects__abstract__info__lab"
-                title="Lab Project"
-              >
-                <LabSVG class="projects__abstract__info__lab-svg" />
-              </div>
             </div>
           </div>
         </div>
@@ -267,6 +272,7 @@
         position: relative;
         pointer-events: all;
         cursor: pointer;
+        height:100%;
         aspect-ratio: 4/3;
 
         img {
@@ -276,29 +282,31 @@
           object-position: center;
         }
 
+        &--lab {
+          position: relative;
+          bottom: 25px;
+          left: 5px;
+          font-size: 16px;
+          width: 34px;
+          height: 34px;
+
+          &-svg {
+            position: relative;
+            top: -15px;
+            left: 10px;
+            width: 24px;
+            height: 24px;
+            fill: #faf8ff;
+          }
+        }
+
         @include this-and-above('sm') {
           aspect-ratio: 16/9;
         }
       }
 
-      &__image:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #000;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-      }
-
-      &__image:hover:after {
-        opacity: 0.3;
-      }
-
       &__info {
-        margin-top: $px-8-spacer;
+        margin-top: $px-16-spacer;
         margin-left: $px-16-spacer;
         pointer-events: none;
         /* Don't interfere with link clicks */
@@ -318,30 +326,6 @@
           font-family: $sans-ui-mono;
           font-size: clamped(12px, 14px, 380px, 1920px);
           font-weight: 400;
-        }
-
-        &__lab {
-          position: relative;
-          bottom: 74px;
-          left: -10px;
-          font-size: 16px;
-          width: 34px;
-          height: 34px;
-
-          &-svg {
-            position: relative;
-            top: -15px;
-            left: 10px;
-            width: 24px;
-            height: 24px;
-            fill: #faf8ff;
-          }
-
-          @include this-and-above('md') {
-            font-size: 18px;
-            width: 38px;
-            height: 38px;
-          }
         }
       }
 
