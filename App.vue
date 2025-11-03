@@ -40,10 +40,10 @@
       // Add animations to the timeline
       tl.fromTo(
         '.fav-base',
-        { opacity: 0, ease: 'power2.out' },
-        { opacity: 1, ease: 'power2.out' }
+        { clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', autoAlpha: 0 },
+        { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)', autoAlpha: 1, duration: 2 }
       )
-        .to('.fav-base', { opacity: 0, scale: 0.5, ease: 'power2.out' }, '>1.5')
+        .to('.fav-base', { autoAlpha: 0, ease: 'power2.out' })
         .fromTo(
           cachedBlinds,
           {
@@ -62,7 +62,7 @@
         )
     } else {
       /* Hide intro elements immediately if not showing animation */
-      $gsap.set('.fav-base', { opacity: 0, visibility: 'hidden' })
+      $gsap.set('.fav-base', { autoAlpha: 0, visibility: 'hidden' })
       $gsap.set('.venice', { visibility: 'hidden', opacity: 0 })
     }
   })

@@ -22,7 +22,7 @@
         $gsap.to(demoWrapper, {
           y: '-1400px', // Move up to show third block properly (700px + 700px)
           ease: 'none',
-
+          force3D: true,
           scrollTrigger: {
             trigger: '.know-wrapper',
             start: 'top top',
@@ -31,7 +31,7 @@
             pin: '.know-wrapper',
             anticipatePin: 1,
             pinSpacing: true,
-            invalidateOnRefresh: false
+            invalidateOnRefresh: false,
           },
         })
       }
@@ -211,7 +211,7 @@
       @include this-and-above('md') {
         width: 60%;
         min-width: 300px;
-        min-height:300px;
+        min-height: 300px;
       }
     }
   }

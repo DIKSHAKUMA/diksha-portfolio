@@ -233,6 +233,7 @@ export default defineNuxtConfig({
       {
         userAgent: '*',
         allow: '/',
+        host: 'thomasthorstensson.com', // Add this line
         sitemap: 'https://thomasthorstensson.com/sitemap.xml',
       },
     ],

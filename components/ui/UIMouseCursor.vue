@@ -341,7 +341,8 @@
         white-space: nowrap;
         opacity: 1 !important;
         font-weight: 400;
-        color: $secondary-static;
+        color: white;
+
       }
     }
   }

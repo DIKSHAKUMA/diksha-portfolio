@@ -94,17 +94,14 @@
           })
         }
 
-        $gsap.set(item.firstElementChild, { filter: 'brightness(1)' })
         /* GSAP hover animation to avoid CSS transform conflicts */
         item.firstElementChild.addEventListener('mouseenter', () => {
           $gsap.set(item.firstElementChild, { clearProps: 'transition' })
           $gsap.to(item.firstElementChild, {
             scale: 0.98,
-            filter: 'brightness(.8)',
             duration: 0.25,
             ease: 'power1.in',
-            force3D: false,
-            autoRound: true,
+            force3D: true,
             overwrite: true,
           })
         })
@@ -112,11 +109,9 @@
         item.firstElementChild.addEventListener('mouseleave', () => {
           $gsap.to(item.firstElementChild, {
             scale: 1,
-            filter: 'brightness(1)',
             duration: 0.25,
             ease: 'power2.out',
-            force3D: false,
-            autoRound: true,
+            force3D: true,
           })
         })
       })
@@ -272,7 +267,7 @@
         position: relative;
         pointer-events: all;
         cursor: pointer;
-        height:100%;
+        height: 100%;
         aspect-ratio: 4/3;
 
         img {
