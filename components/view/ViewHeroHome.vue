@@ -33,7 +33,7 @@
 
   const checkIfMobile = () => {
     if (import.meta.client) {
-      isMobile.value = window.innerWidth < 768
+      isMobile.value = window.innerWidth < 1024
     }
   }
 
@@ -370,7 +370,7 @@
       :is-hero="true"
       :is-full-width="false"
       :is-secondary="false"
-      :is-two-lines="!isMobile"
+      :is-two-lines="true"
       :author="''"
       :date="''"
     />

@@ -212,13 +212,15 @@ b
   .abstract {
     &__header {
       position: relative;
-      font-size: clamped(50px, 110px, 480px, 1920px);
+      font-size: clamped(50px, 120px, 480px, 1920px);
       flex-wrap: wrap;
       height: max-content;
       margin-bottom: $px-32-spacer;
       line-height: 1;
       font-family: $sans-ui;
       text-transform: uppercase;
+      font-weight: 700;
+      font-variation-settings: "wght" 700;
 
       &--hero {
         margin-bottom: 0;

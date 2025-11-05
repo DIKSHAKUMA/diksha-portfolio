@@ -29,8 +29,8 @@
     color: $secondary;
     z-index: 100;
     font-size: clamped(18px, 20px, 480px, 1920px);
-    font-variation-settings: 'wght' 400;
-    font-weight: 400;
+    font-variation-settings: 'wght' 500;
+    font-weight: 500;
 
     /* Lighter font weight in dark mode */
     .dark-mode & {

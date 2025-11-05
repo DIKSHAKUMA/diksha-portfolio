@@ -21,7 +21,10 @@
 
   /* 
   The simplistic approach with not turning venice blinds into a component works the fastest. 
-  Or else you end up staring at creating a plugin, hoping its defined, watching it and so on
+  Or else you end up having to create a plugin, hoping its defined, and watching it.
+  This slows down performance which is super important for this middleware transition.
+
+  TODO: Writeup about how middleware can be used to enhance page transitions in Nuxt.
   */
   onMounted(() => {
     isLoaded.value = true
@@ -34,14 +37,16 @@
     if (isHomepage) {
       showIntroAnimation.value = true
 
-      // Create a timeline
       const tl = $gsap.timeline()
 
-      // Add animations to the timeline
       tl.fromTo(
         '.fav-base',
-        { clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)', autoAlpha: 0 },
-        { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)', autoAlpha: 1, duration: 2 }
+        { clipPath: 'polygon(0px 0%, 0% 0%, 0% 100%, 0% 100%)' },
+        {
+          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+          opacity: 1,
+          duration: 2,
+        }
       )
         .to('.fav-base', { autoAlpha: 0, ease: 'power2.out' })
         .fromTo(
@@ -76,7 +81,8 @@
 </script>
 
 <template>
-  <FavBaseSVG class="fav-base" ref="favBaseSVG" />
+  <NuxtImg src="/img/favbase.png" class="fav-base" />
+
   <div class="venice">
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
@@ -93,6 +99,7 @@
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
+
     <!-- Mobile: Hide every other blind for cleaner look -->
     <div class="venice__blind venice__blind--desktop"></div>
     <div class="venice__blind venice__blind--desktop"></div>
@@ -140,7 +147,7 @@
   .fav-base {
     position: absolute;
     width: 100px;
-    height: auto;
+    height: 100px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -200,8 +207,6 @@
       scrollbar-color: rgba(190, 193, 198, 0.4) transparent; /* accent2 with 40% opacity (increased from 30%) */
     }
   }
-
-
 
   .venice {
     position: fixed;

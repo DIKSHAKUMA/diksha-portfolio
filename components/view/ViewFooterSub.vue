@@ -17,7 +17,9 @@
   })
 
   const footerMessage = computed(() => {
-    return isMobile.value ? '© 2025 Thomas Thorstensson' : '© 2025 Thomas Thorstensson • Fork me on GitHub'
+    return isMobile.value
+      ? '© 2025 Thomas Thorstensson'
+      : '© 2025 Thomas Thorstensson • Fork me on GitHub'
   })
 
   const onResizeCheck = () => {
@@ -97,13 +99,15 @@
     height: 100vh;
 
     &__label {
-      font-family: $sans-ui;
-      text-transform: uppercase;
-      font-size: clamped(36px, 52px, 480px, 1920px);
       position: relative;
       display: inline-block;
       z-index: 200;
-
+      font-family: $sans-ui;
+      text-transform: uppercase;
+      font-size: clamped(36px, 52px, 480px, 1920px);
+      font-weight: 700;
+      font-variation-settings: 'wght' 700;
+      
       a {
         color: $secondary;
         position: relative;

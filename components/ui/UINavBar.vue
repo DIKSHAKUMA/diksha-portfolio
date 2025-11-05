@@ -2,14 +2,27 @@
   import { ref, onBeforeUnmount } from 'vue'
   import { useNavbarStore } from '~/store/useNavbarStore'
 
-  const colorSwitch = useTemplateRef('colorSwitch')
-  const navlist = useTemplateRef('navlist')
   const isDown = ref(false)
   const isMobileActive = ref(false)
   const isAnimating = ref(false)
-  const isLightMode = ref<boolean>(true)
+  const isLightMode = ref<boolean>(false)
   const route = useRoute()
   const navbarStore = useNavbarStore()
+
+  /**
+   * Responsive navbar for those who like BEM with &.
+   * Turns full modal on smaller devices. Hides on scroll down.
+   * The code here is quite extensive as it integrates with the folio.
+   * Could be much simpler in less customized projects.
+   *
+   * As per usual I try my best to follow this order:
+   * 1. Reactive state
+   * 2. Computed properties
+   * 3. Functions
+   * 4. Watchers
+   * 5. Lifecycle hooks
+   * 6. Define/Expose
+   */
 
   /* 
     Check if current route is in blog section
@@ -19,7 +32,7 @@
     return route.path === '/blog' || route.path.startsWith('/blog-post/')
   })
 
-  /* Check if current route is in projects section */
+  /* Same here, preserve active class highlight if on subroute  */
   const isProjectsActive = computed(() => {
     return route.path === '/projects' || route.path.startsWith('/project/')
   })
@@ -34,19 +47,6 @@
   if (import.meta.client) {
     screenWidth = ref(window.innerWidth)
   }
-
-  /**
-   * A minimal & responsive navbar for those who like BEM with &.
-   * Turns full modal on smaller devices. Hides on scroll down.
-   *
-   * As per usual I try my best to follow this order:
-   * 1. Reactive state
-   * 2. Computed properties
-   * 3. Functions
-   * 4. Watchers
-   * 5. Lifecycle hooks
-   * 6. Define/Expose
-   */
 
   /**
    * We need to also be able to turn off background color
@@ -143,22 +143,21 @@
     { immediate: true }
   )
 
-  /* Watch for projects route to maintain projects page transparency */
-// In UINavBar.vue
-watch(
-  () => route.path,
-  (newPath, oldPath) => {
-    // Only update if we're actually changing routes
-    if (newPath !== oldPath) {
-      // Add a small delay to let the transition start
-      setTimeout(() => {
-        navbarStore.setProjectsOpen(newPath === '/projects')
-        navbarStore.setContactOpen(newPath === '/contact')
-      }, 1200) // Small delay to ensure the transition has started
-    }
-  },
-  { immediate: true }
-)
+  /* Watch for projects route to maintain projects & contac page navbar background transparency */
+  watch(
+    () => route.path,
+    (newPath, oldPath) => {
+      // Only update if we're actually changing routes
+      if (newPath !== oldPath) {
+        // Add a small delay to let the transition start
+        setTimeout(() => {
+          navbarStore.setProjectsOpen(newPath === '/projects')
+          navbarStore.setContactOpen(newPath === '/contact')
+        }, 1200) // Small delay to ensure the transition has started
+      }
+    },
+    { immediate: true }
+  )
 
   onMounted(() => {
     onScroll()
@@ -208,7 +207,7 @@ watch(
       </UINavHeader>
 
       <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
-        <div class="nav__list" ref="navlist">
+        <div class="nav__list">
           <NuxtLink
             to="/projects"
             data-name="menu"
@@ -382,7 +381,7 @@ just use a simple modal and be done with it. */
 
     &--contact-open {
       background-color: unset !important;
-      
+
       @include this-and-above('lg') {
         backdrop-filter: blur(0px);
 
@@ -480,6 +479,12 @@ just use a simple modal and be done with it. */
     height: 100vh;
     transition: left 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 
+    &--closed {
+      .footer-wrapper {
+        display: none;
+      }
+    }
+
     &--open {
       left: 0%;
       touch-action: none;
@@ -526,6 +531,8 @@ just use a simple modal and be done with it. */
       transition: color 0.3s;
       padding-right: 0px;
       color: $primary;
+      font-weight: 600;
+      font-variation-settings: 'wght' 600;
 
       &:hover {
         color: $accent1;
@@ -549,7 +556,7 @@ just use a simple modal and be done with it. */
       transition: opacity 0.2s ease;
 
       @include this-and-above('md') {
-        font-size: 20px;
+        font-size: 22px;
       }
     }
 
@@ -596,8 +603,8 @@ just use a simple modal and be done with it. */
         opacity: 1;
         transition: transform 0.1s linear;
         font-family: $sans-ui;
-        font-weight: 400;
-        font-variation-settings: 'wght' 400;
+        font-weight: 500;
+        font-variation-settings: 'wght' 500;
 
         /* Lighter font weight in dark mode */
         .dark-mode & {
@@ -618,11 +625,11 @@ just use a simple modal and be done with it. */
           content: '•';
           position: absolute;
           left: -8px;
-          font-size: 12px;
+          font-size: 14px;
           opacity: 0;
           transition: opacity 0.2s ease;
           margin-left: 0;
-          bottom: 0;
+          bottom: -1px;
         }
 
         &.nav--link-active::before {

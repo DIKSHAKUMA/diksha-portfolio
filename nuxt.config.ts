@@ -96,13 +96,13 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       {
-        name: 'Merriweather Sans',
+        name: 'Source Sans 3',
         provider: 'google',
         weights: [350, 400, 500, 600],
         styles: ['normal', 'italic'],
       },
       {
-        name: 'Rethink Sans',
+        name: 'Hanken Grotesk',
         provider: 'google',
         weights: [400],
         styles: ['normal', 'italic'],
@@ -121,7 +121,7 @@ export default defineNuxtConfig({
   },
 
   colorMode: {
-    preference: 'light',
+    preference: 'dark',
   },
 
   mdc: {

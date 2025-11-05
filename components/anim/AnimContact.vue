@@ -113,9 +113,9 @@
 
     <!-- Weather Widgets - Clean minimal layout -->
     <div v-if="weatherData && !weatherPending" class="weather-info">
-      <div class="weather-info__item location-info">
+      <div class="weather-info__item weather-info__location-info">
         <svg
-          class="location-info__icon"
+          class="weather-info__location-info__icon"
           width="12"
           height="12"
           viewBox="0 0 24 24"
@@ -127,7 +127,7 @@
             fill="currentColor"
           />
         </svg>
-        <span class="location-info__text">Barcelona</span>
+        <span class="weather-info__location-info__text">Barcelona</span>
       </div>
       <div class="weather-info__item">CET: {{ localTime }}</div>
       <div class="weather-info__item">T: {{ weatherData.temperature }}°C</div>
@@ -210,27 +210,6 @@
     }
   }
 
-  /* Weather Info - Clean minimal layout */
-  .location-info {
-    display: flex;
-    align-items: center;
-    gap: $px-4-spacer;
-    font-family: $sans-ui-mono;
-    font-size: clamped(12px, 16px, 480px, 1920px);
-    color: $secondary-static;
-    text-transform: uppercase;
-
-    &__icon {
-      width: 12px;
-      height: 12px;
-      color: $secondary-static;
-    }
-
-    &__text {
-      white-space: nowrap;
-    }
-  }
-
   .weather-info {
     position: absolute;
     bottom: $px-16-spacer;
@@ -242,28 +221,39 @@
     z-index: 100;
     font-family: $sans-ui-mono;
     font-size: clamped(12px, 16px, 480px, 1920px);
+    font-weight: 300;
+    font-variation-settings: "wght" 300;
     color: $secondary-static;
     text-transform: uppercase;
 
-    @include this-and-above('sm') {
-      flex-direction: row;
-      column-gap: $px-8-spacer;
-      right: $px-64-spacer;
+    &__location-info {
+      display: flex;
+      align-items: center;
+      gap: $px-4-spacer;
+      font-family: $sans-ui-mono;
+      font-size: clamped(12px, 16px, 480px, 1920px);
+      color: $secondary-static;
+      text-transform: uppercase;
+
+      &__icon {
+        width: 12px;
+        height: 12px;
+        color: $secondary-static;
+      }
+
+      &__text {
+        white-space: nowrap;
+      }
     }
 
     &__item {
       white-space: nowrap;
     }
-  }
 
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0px);
-    }
-
-    50% {
-      transform: translateY(-10px);
+    @include this-and-above('sm') {
+      flex-direction: row;
+      column-gap: $px-8-spacer;
+      right: $px-64-spacer;
     }
   }
 </style>
