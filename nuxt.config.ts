@@ -96,19 +96,19 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       {
-        name: 'Source Sans 3',
+        name: 'Arimo',
         provider: 'google',
         weights: [350, 400, 500, 600],
         styles: ['normal', 'italic'],
       },
       {
-        name: 'Hanken Grotesk',
+        name: 'Noto Sans',
         provider: 'google',
         weights: [400],
         styles: ['normal', 'italic'],
       },
       {
-        name: 'Geist Mono',
+        name: 'Roboto Mono',
         weights: [400, 500],
         provider: 'google',
       },
