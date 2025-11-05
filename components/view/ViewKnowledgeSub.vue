@@ -21,15 +21,15 @@
       if (demoWrapper) {
         $gsap.to(demoWrapper, {
           y: '-1400px', // Move up to show third block properly (700px + 700px)
-          ease: 'none',
           force3D: true,
+          ease: 'power1.out',
           scrollTrigger: {
             trigger: '.know-wrapper',
             start: 'top top',
             end: '+=200%',
             scrub: 1,
             pin: '.know-wrapper',
-            anticipatePin: 1,
+            anticipatePin: 0,
             pinSpacing: true,
             invalidateOnRefresh: false,
           },

@@ -102,7 +102,7 @@ export default defineNuxtConfig({
         styles: ['normal', 'italic'],
       },
       {
-        name: 'Noto Sans',
+        name: 'Open Sans',
         provider: 'google',
         weights: [400],
         styles: ['normal', 'italic'],

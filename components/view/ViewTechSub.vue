@@ -93,7 +93,7 @@
               trigger: sec,
               start: 'top 90%',
               scrub: false,
-              end: 'top 50%',
+              end: 'top 70%',
               toggleActions: 'restart none none reverse',
               refreshPriority: -1, // ← Lower priority
               invalidateOnRefresh: false, // ← Skip expensive refresh
@@ -171,7 +171,6 @@
       />
       <div class="meta__canvas">
         <div class="meta__tech">
-          <h3 class="split-skills-w">{{ store.data.intro?.metaIntroDesc }}</h3>
           <h5 class="split-skills-w">{{ store.data.intro?.metaTechTitle }}</h5>
           <p class="meta__tech-item split-skills-w">
             {{ store.data.intro?.metaTechDesc }}
@@ -195,7 +194,7 @@
           <h5 class="split-skills-w">
             {{ store.data.intro?.metaRepoTitle }}
           </h5>
-          <p class="meta__tech-item split-skills-w">
+          <p class="meta__tech-item split-skills-w action" data-name="menu">
             <NuxtLink :to="store.data.intro?.metaRepoUrl">Folio</NuxtLink>
           </p>
         </div>
@@ -210,6 +209,14 @@
 </template>
 
 <style lang="scss" scoped>
+  h2,
+  h3,
+  h4,
+  h5 {
+    color: #171717;
+    font-weight: 800;
+    font-variation-settings: 'wght' 800;
+  }
 
   .meta-wrapper {
     position: relative;
@@ -265,12 +272,14 @@
 
       &-item {
         font-family: $sans-text;
-        font-size: clamped(16px, 20px, 380px, 1920px);
+        font-size: clamped(14px, 20px, 380px, 1920px);
+        font-variation-settings: 'wght' 500;
+        font-weight: 500;
 
         /* Also target direct links as fallback */
         a {
           text-decoration: none !important; /* Remove the underline */
-          border-bottom: 1px solid #171717; /* Add border instead */
+          border-bottom: 2px solid #171717; /* Add border instead */
           padding-bottom: 2px; /* Optional: add some space */
         }
       }
@@ -308,21 +317,5 @@
     @include this-and-above('sm') {
       height: 100%;
     }
-  }
-
-  h2,
-  h3,
-  h4,
-  h5 {
-    color: #171717;
-    font-weight: 600;
-  }
-
-  h3 {
-    font-weight: 500;
-  }
-
-  .meta-index {
-    position: absolute;
   }
 </style>

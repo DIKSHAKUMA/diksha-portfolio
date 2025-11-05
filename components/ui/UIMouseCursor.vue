@@ -253,14 +253,14 @@
     pointer-events: none;
     margin-left: 5px;
     margin-bottom: 4px;
-    fill: $secondary-static;
+    fill: $secondary;
   }
   .arrow {
     width: 12px;
     height: auto;
     pointer-events: none;
     margin-left: 5px;
-    fill: $secondary-static;
+    fill: $secondary;
 
     &--reverse {
       transform: rotate(180deg);
@@ -297,10 +297,10 @@
       backdrop-filter: blur(15px);
       opacity: 0.8;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        background: $primary-static;
+      background: $primary-static;
 
       .light-mode & {
-        background: $primary-static;
+        background: $secondary-static;
         border-color: rgba(23, 23, 23, 0.1);
       }
 
@@ -320,7 +320,7 @@
       &--menu {
         width: 70px;
         height: 70px;
-        opacity: 0.8;
+        opacity: 0.6;
       }
 
       /* Easter egg */
@@ -341,8 +341,7 @@
         white-space: nowrap;
         opacity: 1 !important;
         font-weight: 400;
-        color: white;
-
+        color: $secondary;
       }
     }
   }
