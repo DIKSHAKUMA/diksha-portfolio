@@ -276,6 +276,9 @@
           object-fit: cover;
           object-position: center;
         }
+        img:hover {
+          filter: blur(2px);
+        }
 
         &--lab {
           position: relative;

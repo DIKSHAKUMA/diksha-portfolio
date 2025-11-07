@@ -47,7 +47,7 @@
     app.destroy()
   }
 
-  /* Helper function to convert HSL to hex color . I really need to study this one deeper. */
+  /* Helper function to convert HSL to hex color . */
   const hslToHex = (h: number, s: number, l: number): number => {
     // Okey, normalize to decimal
     l /= 100
@@ -93,7 +93,7 @@
       return hslToHex(baseHue, finalSat, finalLight)
     } else {
       const baseHue = 194
-      const baseSat = 21
+      const baseSat = 19
       const baseLight = 24
 
       const lightnessOffset = waveIndex * 5

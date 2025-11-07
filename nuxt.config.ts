@@ -94,25 +94,9 @@ export default defineNuxtConfig({
 
   // Font configuration with optimized loading
   fonts: {
-    families: [
-      {
-        name: 'Arimo',
-        provider: 'google',
-        weights: [350, 400, 500, 600],
-        styles: ['normal', 'italic'],
-      },
-      {
-        name: 'Open Sans',
-        provider: 'google',
-        weights: [400],
-        styles: ['normal', 'italic'],
-      },
-      {
-        name: 'Roboto Mono',
-        weights: [400, 500],
-        provider: 'google',
-      },
-    ],
+    adobe: {
+      id: [process.env.NUXT_FONTS_ID as string || ''],
+    },
 
     processCSSVariables: true,
     experimental: {
