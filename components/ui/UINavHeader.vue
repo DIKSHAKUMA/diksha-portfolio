@@ -35,7 +35,7 @@
     /* Lighter font weight in dark mode */
     .dark-mode & {
       font-variation-settings: "wght" 350;
-      font-weight: 350;
+      font-weight: 400;
     }
 
     [is-mobile='true'] & {

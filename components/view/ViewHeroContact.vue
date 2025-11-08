@@ -30,8 +30,6 @@
             scrub: false,
             end: 'top 50%',
             toggleActions: 'restart none none reverse',
-            preventOverlaps: true /* <- HERE */,
-            /* markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 } */
           },
           duration: 0.4,
         })
@@ -46,7 +44,8 @@
 
 <template>
   <main class="hero-wrapper">
-    <AnimContact />
+    <AnimRain />
+    <UIWeatherInfo />
     <div class="contact">
       <div class="contact__label split-label-w">
         {{ store.data.contact?.emailTitle }}
@@ -167,7 +166,7 @@
     bottom: unset;
     color: $secondary-static;
     z-index: 200;
-    font-family: $sans-text;
+    font-family: $sans-ui-mono;
     font-weight: 400;
 
     &__label {

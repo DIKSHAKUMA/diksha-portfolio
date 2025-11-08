@@ -531,8 +531,8 @@ just use a simple modal and be done with it. */
       transition: color 0.3s;
       padding-right: 0px;
       color: $primary;
-      font-weight: 600;
-      font-variation-settings: 'wght' 600;
+      font-weight: 700;
+      font-variation-settings: 'wght' 700;
 
       &:hover {
         color: $accent1;
@@ -609,8 +609,6 @@ just use a simple modal and be done with it. */
         /* Lighter font weight in dark mode */
         .dark-mode & {
           font-family: $sans-ui;
-          font-weight: 350;
-          font-variation-settings: 'wght' 350;
         }
 
         &:hover {

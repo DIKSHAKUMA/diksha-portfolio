@@ -95,8 +95,22 @@ export default defineNuxtConfig({
   // Font configuration with optimized loading
   fonts: {
     adobe: {
-      id: [process.env.NUXT_FONTS_ID as string || ''],
+      id: ['oyg8cgn'],
     },
+
+    families: [
+      {
+        name: 'Aktiv Grotesk',
+        provider: 'adobe',
+        weights: ['300', '400', '500', '700', '800'],
+      },
+      {
+        name: 'Neue Haas Grotesk Text',
+        provider: 'adobe',
+        weights: ['400', '700'],
+      },
+      { name: 'Roboto Mono', provider: 'adobe', weights: ['400'] },
+    ],
 
     processCSSVariables: true,
     experimental: {
