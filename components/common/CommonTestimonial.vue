@@ -66,6 +66,7 @@
 <style scoped lang="scss">
   .testimonial-wrapper {
     position: relative;
+          margin: 0 $px-32-spacer;
 
     @include this-and-above('sm') {
       flex-direction: row;
@@ -77,7 +78,7 @@
     }
 
     @include this-and-above('lg') {
-      margin: 0 $px-64-spacer;
+      margin: 0 $px-128-spacer;
     }
 
     @include this-and-above('xl') {
@@ -105,7 +106,11 @@
 
     .testimonial__cite {
       margin-top: $px-16-spacer;
-      text-align: right;
+      text-align: center;
+      
+      @include this-and-above('md') {
+        text-align: right;
+      }
     }
   }
 </style>

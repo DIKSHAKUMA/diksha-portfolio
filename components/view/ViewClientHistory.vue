@@ -122,7 +122,7 @@
     border: 2px solid $accent2;
     border-radius: 12px;
     padding: $px-32-spacer;
-    margin: 0 $px-16-spacer;
+    margin: 0 0;
 
     @include this-and-above('sm') {
       margin: 0 $px-32-spacer $px-16-spacer $px-32-spacer;

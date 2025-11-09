@@ -1,9 +1,7 @@
 <script setup lang="ts">
   import { useFolioStore } from '~/store/useFolioStore'
   import '@mux/mux-player'
-  /* import { createBlurUp } from '@mux/blurup' */
-  /* const blurDataURL = ref<string>('') */
-  /* const aspectRatio = ref<any>('') */
+
   const store = useFolioStore()
   const route = useRoute()
   let ctx: gsap.Context
@@ -180,7 +178,7 @@
               delay = isFirstMedia ? 1.5 : 0
             }
 
-            /* Animate the mask position on scroll */
+            /* Animate the media container */
             $gsap.to(mediaContainer, {
               opacity: 1,
               delay: delay,
@@ -194,9 +192,7 @@
                 end: 'top 35%',
                 toggleActions: 'play none none reverse',
                 preventOverlaps: true,
-                fastScrollEnd: true,
-                anticipatePin: 1,
-                refreshPriority: -1,
+                invalidateOnRefresh: false,
               },
             })
           })
@@ -205,6 +201,7 @@
         if (infoSection.value) {
           $gsap.from(infoSection.value.children, {
             opacity: 0,
+            y:+50,
             duration: 0.3,
             force3D: true,
             ease: 'power2.out',
@@ -213,9 +210,7 @@
               start: 'top 80%',
               toggleActions: 'play none none reverse',
               preventOverlaps: true,
-              fastScrollEnd: true,
-              anticipatePin: 1,
-              refreshPriority: -1,
+              invalidateOnRefresh: false,
             },
           })
         }
@@ -223,6 +218,7 @@
         if (textSection.value) {
           $gsap.from(textSection.value.children, {
             opacity: 0,
+             y:+50,
             duration: 0.4,
             force3D: true,
             ease: 'power2.out',
@@ -231,9 +227,7 @@
               start: 'top 80%',
               toggleActions: 'play none none reverse',
               preventOverlaps: true,
-              fastScrollEnd: true,
-              anticipatePin: 1,
-              refreshPriority: -1,
+              invalidateOnRefresh: false,
             },
           })
         }
@@ -467,7 +461,7 @@
             </ClientOnly>
           </div>
 
-          <!-- Templat here or index will be undefined in comparison -->
+          <!-- Template here or index will be undefined in comparison -->
           <template v-for="(image, index) in proj.image" :key="image.id">
             <div
               class="project__media"
@@ -594,15 +588,15 @@
     padding: 0 $px-16-spacer;
 
     @include this-and-above('md') {
-      padding: 0 $px-64-spacer;
+      padding: 0 $px-32-spacer;
     }
 
     @include this-and-above('lg') {
-      padding: 0 $px-64-spacer;
+      padding: 0 $px-32-spacer;
     }
 
     @include this-and-above('xl') {
-      padding: 0 $px-128-spacer;
+      padding: 0 $px-64-spacer;
     }
 
     @include this-and-above('xxl') {
@@ -669,7 +663,7 @@
       gap: 64px;
 
       /*control how much space the text has on the sides*/
-      margin: 0 $px-16-spacer;
+      margin: 0 0;
 
       @include this-and-above('md') {
         margin: 0 $px-32-spacer;
@@ -698,7 +692,7 @@
       gap: 64px;
 
       /*control how much space the text has on the sides*/
-      margin: 0 $px-16-spacer;
+      margin: 0 0;
 
       @include this-and-above('sm') {
         flex-direction: row;
@@ -714,7 +708,7 @@
       }
 
       @include this-and-above('xl') {
-        margin: 0 $px-256-spacer;
+        margin: 0 $px-128-spacer;
       }
     }
 

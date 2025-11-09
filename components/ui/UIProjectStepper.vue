@@ -292,7 +292,8 @@
     height: auto;
     aspect-ratio: 2048/1150;
     object-fit: cover;
-    pointer-events: none;
+    pointer-events: auto;
+    touch-action: pan-y;
     font-size: 0;
   }
 
@@ -306,9 +307,13 @@
     z-index: 9999;
     -o-object-fit: cover;
     object-fit: cover;
-    pointer-events: auto;
+    pointer-events:none;
     padding: 0;
     margin: 0;
+  }
+
+  canvas {
+    pointer-events: none;
   }
 
   .project-stepper-wrapper {
@@ -340,7 +345,15 @@
     color: $secondary;
 
     &__synop {
-      font-size: clamped(16px, 20px, 380px, 1920px);
+       margin-left: $px-16-spacer;
+      font-family: $sans-ui-mono;
+      font-size: clamped(12px, 14px, 380px, 1920px);
+    }
+
+    &__name {
+       margin-left: $px-16-spacer;
+      font-size: clamped(16px, 18px, 380px, 1920px);
+      font-family: $sans-ui-mono;
     }
 
     @include this-and-above('md') {

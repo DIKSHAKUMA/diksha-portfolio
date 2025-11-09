@@ -3,6 +3,10 @@
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '~/store/useFolioStore'
 
+  /*
+   TODO: Should really refactor out the PIXI code into a separate component.
+   */
+
   /* PINIA */
   const store = useFolioStore()
 
@@ -12,8 +16,9 @@
   const route = useRoute()
   const colorMode = useColorMode()
 
-  let app: PIXI.Application
   let ctx: gsap.Context
+
+  let app: PIXI.Application
   let pixiReady = false
   let rafId = 0
   let stopWatching: (() => void) | null = null
@@ -44,7 +49,7 @@
     pixiDestroyed = true
     waves.forEach((wave) => wave.graphics.destroy())
     waves = []
-    app.destroy()
+    app.destroy(true)
   }
 
   /* Helper function to convert HSL to hex color . */
@@ -82,6 +87,10 @@
       const travelingLight =
         baseLight +
         lightnessOffset +
+        /* 
+        Using Math.sin(angle), the function expects the angle to repeat its behavior every 2pi radians. 
+        Sometimes called a periodic effect. Great for creating smooth, continuous motion. And for notebook.
+        */
         Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 16
       const travelingSat =
         baseSat +
@@ -92,9 +101,9 @@
 
       return hslToHex(baseHue, finalSat, finalLight)
     } else {
-      const baseHue = 194
-      const baseSat = 19
-      const baseLight = 24
+      const baseHue = 200
+      const baseSat = 50
+      const baseLight = 5
 
       const lightnessOffset = waveIndex * 5
       const colorSpeed = 0.8 + waveIndex * 0.3
@@ -156,6 +165,14 @@
       const centerY = cachedHeight / 2 + (index - 2.5) * 20
       const segmentSize = 8
 
+      /*
+      x * wave.frequency determines the wave's position in its cycle
+      + wave.phase shifts the wave left/right
+      * wave.amplitude scales the height
+      + centerY positions the wave vertically
+        The wave is not moving in x; the phase is changing over time
+      */
+
       const points = []
       for (let x = 0; x <= cachedWidth; x += segmentSize) {
         const y =
@@ -185,7 +202,7 @@
 
       wave.phase += wave.speed
     })
-
+    // Request next frame using requestAnimationFrame cannot use PixiJS ticker here or it would keep adding up
     rafId = requestAnimationFrame(animateWaves)
   }
 
@@ -312,7 +329,7 @@
             start: 'bottom bottom-=200',
             end: 'bottom top',
             scrub: 1,
-            invalidateOnRefresh: false
+            invalidateOnRefresh: false,
           },
         })
       })
@@ -320,11 +337,10 @@
   })
 
   onUnmounted(() => {
-    /* Clean up animation frame if still pending */
+    // Cancel any pending animation frame
     if (rafId) {
       cancelAnimationFrame(rafId)
     }
-
     /* Clean up route watcher */
     if (stopWatching) {
       stopWatching()

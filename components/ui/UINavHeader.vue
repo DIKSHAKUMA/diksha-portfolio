@@ -32,15 +32,9 @@
     font-variation-settings: 'wght' 500;
     font-weight: 500;
 
-    /* Lighter font weight in dark mode */
-    .dark-mode & {
-      font-variation-settings: "wght" 350;
-      font-weight: 400;
-    }
-
     [is-mobile='true'] & {
       color: $primary;
-      font-weight: 500;
+      font-weight: 700;
     }
   }
 
