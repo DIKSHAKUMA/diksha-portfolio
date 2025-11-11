@@ -10,13 +10,16 @@
   /* SEO Meta Tags */
   useSeoMeta({
     title: 'About Thomas Thorstensson • Full-Stack Developer',
-    description: 'Learn about Thomas Thorstensson, a full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
+    description:
+      'Learn about Thomas Thorstensson, a full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
     ogTitle: 'About Thomas Thorstensson',
-    ogDescription: 'Full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
+    ogDescription:
+      'Full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
     ogType: 'profile',
     twitterCard: 'summary_large_image',
     twitterTitle: 'About Thomas Thorstensson',
-    twitterDescription: 'Full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
+    twitterDescription:
+      'Full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
   })
 
   /* Canonical URL */
@@ -62,6 +65,6 @@
     display: flex;
     position: relative;
     z-index: inherit;
-    min-height: 100vh;
+    height: 100%;
   }
 </style>

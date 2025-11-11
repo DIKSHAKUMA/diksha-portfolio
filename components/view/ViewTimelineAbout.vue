@@ -55,7 +55,7 @@
             start: 'top 80%',
             end: 'top 50%',
             toggleActions: 'play none none reverse',
-            invalidateOnRefresh: false
+            invalidateOnRefresh: false,
           },
         })
       })
@@ -201,7 +201,6 @@
           flex-direction: column;
           gap: 0.25rem;
 
-
           @include this-and-above('md') {
             flex-direction: row;
             gap: 1rem;
@@ -255,7 +254,6 @@
           .timeline__item__meta {
             justify-content: flex-end;
           }
-
         }
 
         &:nth-child(even) {

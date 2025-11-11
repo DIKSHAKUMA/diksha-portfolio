@@ -85,6 +85,7 @@
     position: relative;
     background-color: $primary;
     padding: $px-128-spacer $px-16-spacer;
+    min-height: 100dvh;
     min-height: 100vh;
 
     @include this-and-above('lg') {
@@ -105,7 +106,7 @@
 
     &__quote {
       position: absolute;
-      margin-top: $px-128-spacer;
+      margin-top: $px-32-spacer;
       width: 100%;
       left: 50%;
       transform: translateX(-50%);

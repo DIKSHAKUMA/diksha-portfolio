@@ -307,7 +307,7 @@
         margin-top: $px-16-spacer;
         margin-left: $px-16-spacer;
         pointer-events: none;
-  
+
         /* Don't interfere with link clicks */
 
         p {

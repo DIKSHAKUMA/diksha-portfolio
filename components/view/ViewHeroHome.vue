@@ -396,9 +396,10 @@
 <style lang="scss" scoped>
   .hero-wrapper {
     position: relative;
-    min-height: 100vh;
     padding: 0 $px-16-spacer;
     overflow: hidden;
+    min-height: 100vh;
+
     @supports (height: 100svh) {
       min-height: 100svh;
     }
@@ -412,7 +413,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     pointer-events: none;
     z-index: 10;

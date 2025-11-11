@@ -330,7 +330,11 @@
     width: 100%;
     min-height: 100vh;
 
+    touch-action: none;
+    -webkit-overflow-scrolling: none;
     overflow: hidden;
+    overscroll-behavior: none;
+
     padding: 0 $px-16-spacer;
 
     @include this-and-above('lg') {

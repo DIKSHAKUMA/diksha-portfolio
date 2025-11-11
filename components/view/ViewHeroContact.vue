@@ -3,6 +3,7 @@
   import { useFolioStore } from '~/store/useFolioStore'
   import SplitType from 'split-type'
   import SpecialKudos from '@/assets/svg/cssda-special-kudos-yellow.svg'
+  import SOTD from '@/assets/svg/csswinner-sotd-white.svg'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
@@ -73,17 +74,30 @@
       :date="''"
       :is-two-lines="false"
     />
-    <NuxtLink
-      class="no-blur-link"
-      to="https://www.cssdesignawards.com/sites/thomas-thorstensson/48276"
-      target="_blank"
-    >
-      <SpecialKudos
-        class="csda-special-kudos action"
-        data-name="proj"
-        data-text="CSSDA!"
-      />
-    </NuxtLink>
+    <div class="awards">
+      <NuxtLink
+        class="no-blur-link"
+        to="https://www.cssdesignawards.com/sites/thomas-thorstensson/48276"
+        target="_blank"
+      >
+        <SpecialKudos
+          class="awards__award action"
+          data-name="proj"
+          data-text="CSSDA"
+        />
+      </NuxtLink>
+      <NuxtLink
+        class="no-blur-link"
+        to="https://www.csswinner.com/details/thomas-thorstensson-creative-dev/18925"
+        target="_blank"
+      >
+        <SOTD
+          class="awards__award action"
+          data-name="proj"
+          data-text="CSSWinner"
+        />
+      </NuxtLink>
+    </div>
   </main>
 </template>
 
@@ -94,38 +108,35 @@
     -webkit-filter: none !important;
   }
 
-  .csda-special-kudos {
+  .awards {
     position: absolute;
-    width: 100px;
-    height: auto;
+    display: flex;
+    flex-flow: row nowrap;
+    column-gap: $px-16-spacer;
+    justify-content: flex-end;
+    align-items: center;
     bottom: $px-128-spacer;
     right: $px-16-spacer;
-    z-index: 900;
-    animation: rotation 6s infinite linear;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    &__award {
+      width: 50px;
+      height: auto;
+      z-index: 900;
+      transition: transform 0.3s ease, opacity 0.3s ease;
 
-    &:hover {
-      transform: scale(1.1) rotate(5deg);
-      animation-play-state: paused;
-      opacity: 0.9;
+      &:hover {
+        transform: scale(1.1) rotate(5deg);
+        animation-play-state: paused;
+        opacity: 0.9;
+      }
+
+      @include this-and-above('sm') {
+        width: 80px;
+      }
     }
 
     @include this-and-above('sm') {
-      width: 128px;
       bottom: $px-64-spacer;
       right: $px-64-spacer;
-    }
-  }
-
-  @keyframes rotation {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(359deg);
     }
   }
 
@@ -133,7 +144,11 @@
     position: relative;
     width: 100%;
     min-height: 100vh;
+    touch-action: none;
+    -webkit-overflow-scrolling: none;
     overflow: hidden;
+    overscroll-behavior: none;
+
     padding: 0 $px-16-spacer;
 
     @supports (height: 100svh) {
@@ -173,7 +188,7 @@
       font-size: clamped(16px, 20px, 480px, 1920px);
     }
     &__email {
-      font-size: clamped(22px, 42px, 480px);
+      font-size: clamped(16px, 42px, 480px);
       color: $secondary-static;
       text-decoration: none;
       transition: color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);

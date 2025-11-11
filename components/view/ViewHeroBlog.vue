@@ -8,7 +8,6 @@
   const blogTitle = computed(
     () => (store.data.intro?.blogTitle as string) || ''
   )
-
 </script>
 
 <template>
@@ -40,6 +39,7 @@
     min-height: 100vh;
     overflow: hidden;
     padding: 0 $px-16-spacer;
+
     @supports (height: 100svh) {
       min-height: 100svh;
     }
@@ -52,5 +52,6 @@
   .front-header {
     position: absolute;
     bottom: 0px;
+    transform: translateZ(0);
   }
 </style>

@@ -72,6 +72,8 @@
     overflow: hidden;
     --dot-size: 3px;
     --dot-space: 50px;
+
+    min-height: 100dvh;
     min-height: 100vh;
 
     background: linear-gradient(
@@ -107,7 +109,7 @@
       font-size: clamped(36px, 52px, 480px, 1920px);
       font-weight: 700;
       font-variation-settings: 'wght' 700;
-      
+
       a {
         color: $secondary;
         position: relative;

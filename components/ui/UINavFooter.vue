@@ -23,6 +23,9 @@
     width: fit-content;
     margin-top: $px-16-spacer;
 
+    font-weight: 500;
+    font-variation-settings: 'wght' 500;
+
     @include this-and-above('lg') {
       display: none;
     }

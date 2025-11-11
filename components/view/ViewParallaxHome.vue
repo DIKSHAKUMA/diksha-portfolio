@@ -89,7 +89,9 @@
     position: relative;
     background-color: $primary;
     overflow: hidden;
+    height: 100dvh;
     height: 100vh;
+
     padding: $px-64-spacer $px-16-spacer;
 
     @include this-and-above('sm') {
@@ -120,13 +122,13 @@
   }
 
   .parallax__bg {
-    position: absolute;
+    position: relative;
     display: block;
     /* Changed from inline-block for better performance */
     right: 0;
     height: 130vh;
     /* Reduced from 130vh */
-    width: 100vw;
+    width: 100%;
     /* Reduced from 130vw */
     z-index: 1;
     will-change: transform;

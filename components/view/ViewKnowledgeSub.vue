@@ -125,6 +125,7 @@
     position: relative;
     background-color: $primary;
     padding: $px-128-spacer $px-16-spacer;
+    min-height: 100dvh;
     min-height: 100vh;
 
     @include this-and-above('sm') {

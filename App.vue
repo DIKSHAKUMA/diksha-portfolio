@@ -127,20 +127,17 @@
     -moz-osx-font-smoothing: grayscale;
     font-family: $sans-text;
     font-variation-settings: 'slnt' 0, 'wght' 500;
-    /*overscroll-behavior-y, No fan of bounce on mobile but a hard stop can cause issues too*/
-    @supports (height: 100svh) {
-      min-height: 100svh;
-    }
-  }
-
-  html {
-    min-height: 100vh;
+    height: 100dvh;
+    height: 100vh;
+    overscroll-behavior: auto;
   }
 
   body {
-    min-height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
+    height: 100%;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 
   /*SVG intro*/

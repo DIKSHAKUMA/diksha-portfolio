@@ -14,7 +14,7 @@
 
   onUnmounted(() => {})
 </script>
-<!--Shows all projects, something in a horizontal style using draggable-->
+
 <template>
   <div>
     <UIMouseCursor />
@@ -31,7 +31,7 @@
     display: flex;
     position: relative;
     z-index: inherit;
-    min-height: 100vh;
+    height: 100%;
     overflow: hidden;
     /* Prevent SCSS parsing errors */
   }

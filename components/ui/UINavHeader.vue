@@ -34,7 +34,7 @@
 
     [is-mobile='true'] & {
       color: $primary;
-      font-weight: 700;
+      font-weight: 500;
     }
   }
 
