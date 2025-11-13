@@ -9,10 +9,19 @@ a:visited {
     text-decoration: none;
 }
 
-a:hover {
-    color: variables.$accent2;
-    -webkit-filter: blur(1px);
-    filter: blur(1px);
+@media (hover: hover) {
+    a:hover {
+        color: variables.$accent2;
+        -webkit-filter: blur(1px);
+        filter: blur(1px);
+    }
+}
+
+a:active,
+a:focus,
+a:visited {
+    filter: blur(0px) !important;
+    -webkit-filter: blur(0px) !important;
 }
 
 h1,

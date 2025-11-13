@@ -458,8 +458,7 @@ just use a simple modal and be done with it. */
     outline: none !important;
 
     &:focus,
-    &:active,
-    &:hover {
+    &:active {
       outline: none !important;
       -webkit-tap-highlight-color: transparent !important;
       filter: blur(0px) !important;
@@ -538,6 +537,7 @@ just use a simple modal and be done with it. */
         color: $accent1;
       }
 
+
       &--disabled {
         pointer-events: none;
         opacity: 0.5;
@@ -605,6 +605,14 @@ just use a simple modal and be done with it. */
         font-family: $sans-ui;
         font-weight: 500;
         font-variation-settings: 'wght' 500;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        outline: none !important;
 
         /* Lighter font weight in dark mode */
         .dark-mode & {
@@ -613,6 +621,11 @@ just use a simple modal and be done with it. */
 
         &:hover {
           color: $accent2;
+        }
+
+
+        &:focus-visible {
+          outline: none !important;
         }
 
         &:last-child {

@@ -35,6 +35,7 @@
     [is-mobile='true'] & {
       color: $primary;
       font-weight: 500;
+      font-variation-settings: 'wght' 500;
     }
   }
 

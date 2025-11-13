@@ -21,16 +21,33 @@ a, button /* &c... */ {
   outline: none;
 }
 
+/* Remove stuck focus/active state on mobile after click */
+a:focus, a:active,
+button:focus, button:active {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  /* Force blur removal on focus/active states only */
+  filter: blur(0px) !important;
+  -webkit-filter: blur(0px) !important;
+}
+
 div,
 section,
 span {
   caret-color: transparent;
 }
 
-p, pre, h1, h2, h3, h4, h5, h6 {
+p,
+pre,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   padding: 0;
-  margin-top:0;
+  margin-top: 0;
   -webkit-margin-before: 0;
-          margin-block-start: 0;
+  margin-block-start: 0;
   line-height: 1.5;
 }
