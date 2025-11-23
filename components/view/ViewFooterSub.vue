@@ -71,7 +71,7 @@
     padding: 0 $px-16-spacer;
     overflow: hidden;
     --dot-size: 2px;
-    --dot-space: 64px;
+    --dot-space: 32px;
 
     min-height: 100dvh;
     min-height: 100vh;
@@ -85,13 +85,22 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: radial-gradient(var(--accent2) var(--dot-size), transparent var(--dot-size));
+      background-image: radial-gradient(
+        var(--accent2) var(--dot-size),
+        transparent var(--dot-size)
+      );
       background-size: var(--dot-space) var(--dot-space);
       background-position: 0 32px;
       background-attachment: fixed;
-      opacity: 0.6;
+      opacity: 0.5;
       pointer-events: none;
       z-index: 0;
+
+      @supports (-webkit-touch-callout: none) {
+        .your-element-class {
+          background-attachment: scroll !important;
+        }
+      }
     }
 
     @include this-and-above('sm') {
