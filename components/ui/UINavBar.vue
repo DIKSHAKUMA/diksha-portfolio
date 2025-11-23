@@ -197,7 +197,7 @@
         </template>
         <template #mode>
           <div v-if="!navbarStore.isContactPage">
-            <UIAppleSwitch
+            <UIColorSwitch
               :is-mobile="isMobileActive"
               v-model="isLightMode"
               ref="colorSwitch"

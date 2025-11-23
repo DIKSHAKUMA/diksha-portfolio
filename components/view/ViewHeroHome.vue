@@ -102,7 +102,7 @@
       return hslToHex(baseHue, finalSat, finalLight)
     } else {
       const baseHue = 200
-      const baseSat = 50
+      const baseSat = 25
       const baseLight = 5
 
       const lightnessOffset = waveIndex * 5
@@ -132,7 +132,7 @@
       const wave = {
         graphics,
         phase: Math.random() * Math.PI * 2,
-        amplitude: 50 + Math.random() * 80,
+        amplitude: 50 + Math.random() * 70,
         frequency: 0.005 + Math.random() * 0.01,
         speed: 0.01 + Math.random() * 0.02,
         colorOffset: i * 0.5,

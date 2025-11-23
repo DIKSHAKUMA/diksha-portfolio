@@ -191,7 +191,6 @@
 
         &__heading {
           font-size: clamped(16px, 20px, 380px, 1920px);
-          font-weight: 500;
           color: $secondary;
           line-height: 1.2;
         }

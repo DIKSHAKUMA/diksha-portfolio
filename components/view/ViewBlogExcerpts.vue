@@ -112,7 +112,7 @@
       transform: translateX(-50%);
       text-align: center;
       color: $secondary;
-      font-size: clamped(20px, 26px, 480px, 1920px);
+      font-size: clamped(18px, 24px, 480px, 1920px);
       font-style: italic;
       font-weight: 400;
       font-variation-settings: 'wght' 400;

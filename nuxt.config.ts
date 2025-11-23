@@ -95,12 +95,12 @@ export default defineNuxtConfig({
   // Font configuration with optimized loading
   fonts: {
     adobe: {
-      id: ['oyg8cgn'],
+      id: ['pwn4nqq'],
     },
 
     families: [
       {
-        name: 'Aktiv Grotesk',
+        name: 'Proxima Nova',
         provider: 'adobe',
         weights: ['300', '400', '500', '700', '800'],
       },

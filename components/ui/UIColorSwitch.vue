@@ -26,7 +26,7 @@
               ? 'line-md:sun-rising-loop'
               : 'line-md:sunny-outline-to-moon-alt-loop-transition'
           "
-          size="15"
+          size="18"
         />
       </i>
     </label>
@@ -42,7 +42,7 @@ Added some fancy stuff of course.
   .icon {
     z-index: 999;
     position: relative;
-    left: 2px;
+    left: 0;
   }
 
   .icon--dark {
@@ -69,7 +69,7 @@ Added some fancy stuff of course.
     i {
       position: relative;
       display: inline-block;
-      width: 39px;
+      width: 40px;
       height: 18px;
       background-color: $accent1;
       border-radius: 23px;
@@ -79,29 +79,6 @@ Added some fancy stuff of course.
       &.mobile-mode {
         background-color: $primary;
       }
-    }
-
-    i::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      width: 15px;
-      height: 15px;
-      background-color: $primary;
-      border-radius: 11px;
-      transform: translate3d(2px, 1px, 0) scale3d(1, 1, 1);
-      transition: all 0.3;
-    }
-
-    i::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      width: 15px;
-      height: 15px;
-      background-color: $primary;
-      border-radius: 11px;
-      transform: translate3d(2px, 1px, 0);
     }
 
     i.mobile-mode::after {
