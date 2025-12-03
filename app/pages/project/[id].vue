@@ -15,6 +15,16 @@
   const muxPlayer = useTemplateRef<any>('muxPlayer')
   const muxPlayer2 = useTemplateRef<any>('muxPlayer2')
 
+    definePageMeta({
+    layout: 'default',
+    key: (route) => route.fullPath,
+    /* DO NOT REMOVE THIS! APOLLO STICKER TAPED TO CONSOLE. */
+    pageTransition: {
+      name: 'saki',
+      mode: 'out-in',
+    },
+  })
+
   /* Suppress Annoying Mux Player shadow DOM warnings */
   if (process.client) {
     const originalWarn = console.warn
@@ -31,16 +41,6 @@
       originalWarn.apply(console, args)
     }
   }
-
-  definePageMeta({
-    layout: 'default',
-    key: (route) => route.fullPath,
-    /* DO NOT REMOVE THIS! APOLLO STICKER TAPED TO CONSOLE. */
-    pageTransition: {
-      name: 'saki',
-      mode: 'out-in',
-    },
-  })
 
   /* To varaiate middle section a little bit If 6 images, show 2 middle section, if 8 show 4*/
   const middleIndex = computed(() => {
