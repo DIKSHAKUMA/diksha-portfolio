@@ -1,0 +1,66 @@
+$primary-static: #171717;
+$secondary-static: #e6e6e6;
+
+.dark-mode {
+    --primary: #171717;
+    --secondary: #e6e6e6;
+    --accent1: #2c2a38;
+    --accent2: #bec1c6;
+    --color-scheme: dark;
+}
+
+.light-mode {
+    --primary: #e6e6e6;
+    --secondary: #171717;
+    --accent1: #bec1c6;
+    --accent2: #2c2a38;
+    --color-scheme: light;
+}
+
+$primary: var(--primary);
+$secondary: var(--secondary);
+$accent1: var(--accent1);
+$accent2: var(--accent2);
+$color-scheme: var(--color-scheme);
+
+/* Fonts */
+$sans-ui:
+    "Proxima Nova",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+$sans-ui-opt: auto;
+$sans-ui-stl: normal;
+
+$sans-text:
+    "Neue Haas Grotesk Text",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+$sans-text-opt: auto;
+$sans-text-stl: normal;
+
+$sans-ui-mono: "Roboto Mono", "Courier New", Courier, monospace;
+$sans-ui-mono-opt: auto;
+$sans-ui-mono-stl: normal;
+
+/* Font sizes rem - px (we do not set a base) */
+/* Naming as if base was 16, browser default in UI */
+/* The below values for I don't use Clamp but set direct */
+
+/* TODO: should probably mirror these in pixels for clamp function */
+$fs-18: 1.125rem;
+$fs-16: 1rem; /* 16 */
+$fs-14: 0.875rem; /* 14 */
+$fs-10: 0.625rem; /* 10 */
+
+/* We need some spacers to control folio margins */
+/* Baptized spacer cuz can be padding (footer) */
+$px-4-spacer: 4px;
+$px-8-spacer: 8px;
+$px-16-spacer: 16px;
+$px-32-spacer: 32px;
+$px-64-spacer: 64px;
+$px-128-spacer: 128px;
+$px-256-spacer: 256px;
+$px-512-spacer: 512px;

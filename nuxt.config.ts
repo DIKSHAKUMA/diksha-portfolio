@@ -110,12 +110,7 @@ export default defineNuxtConfig({
         weights: ['400', '700'],
       },
       { name: 'Roboto Mono', provider: 'adobe', weights: ['400'] },
-    ],
-
-    processCSSVariables: true,
-    experimental: {
-      disableLocalFallbacks: true,
-    },
+    ]
   },
 
   colorMode: {
