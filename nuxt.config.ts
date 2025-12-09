@@ -102,7 +102,7 @@ export default defineNuxtConfig({
       {
         name: 'Proxima Nova',
         provider: 'adobe',
-        weights: ['300', '400', '500', '700', '800'],
+        weights: ['400', '500', '600', '700'],
       },
       {
         name: 'Neue Haas Grotesk Text',
@@ -110,11 +110,11 @@ export default defineNuxtConfig({
         weights: ['400', '700'],
       },
       { name: 'Roboto Mono', provider: 'adobe', weights: ['400'] },
-    ]
+    ],
   },
 
   colorMode: {
-    preference: 'dark',
+    preference: 'light',
   },
 
   mdc: {

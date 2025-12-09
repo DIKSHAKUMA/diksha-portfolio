@@ -341,19 +341,23 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: $px-64-spacer;
+    row-gap: $px-32-spacer;
     color: $secondary;
+
+    @include this-and-above('sm') {
+      row-gap: $px-64-spacer;
+    }
 
     &__synop {
        margin-left: $px-16-spacer;
-      font-family: $sans-ui-mono;
+      font-family: $sans-ui;
       font-size: clamped(12px, 14px, 380px, 1920px);
     }
 
     &__name {
        margin-left: $px-16-spacer;
       font-size: clamped(16px, 18px, 380px, 1920px);
-      font-family: $sans-ui-mono;
+      font-family: $sans-ui;
     }
 
     @include this-and-above('md') {

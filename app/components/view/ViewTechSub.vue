@@ -214,8 +214,8 @@
   h4,
   h5 {
     color: #171717;
-    font-weight: 800;
-    font-variation-settings: 'wght' 800;
+    font-weight: 700;
+    font-variation-settings: 'wght' 700;
   }
 
   .meta-wrapper {
@@ -270,7 +270,7 @@
       align-self: center;
       z-index: 1;
       text-align: center;
-      width: 90%;
+      padding:0 40px;
 
       &-item {
         font-family: $sans-text;
@@ -287,7 +287,11 @@
       }
 
       &-item:nth-child(even) {
-        margin-bottom: $px-32-spacer;
+        margin-bottom: $px-16-spacer;
+
+        @include this-and-above('md') {
+          margin-bottom: $px-32-spacer;
+        }
       }
     }
   }

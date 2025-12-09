@@ -5,7 +5,7 @@
   const isDown = ref(false)
   const isMobileActive = ref(false)
   const isAnimating = ref(false)
-  const isLightMode = ref<boolean>(true)
+  const isLightMode = ref<boolean>(false)
   const route = useRoute()
   const navbarStore = useNavbarStore()
 
@@ -57,6 +57,8 @@
       'nav-wrapper--moveup': isDown.value,
       'nav-wrapper--projects-open': navbarStore.isProjectsPage,
       'nav-wrapper--contact-open': navbarStore.isContactPage,
+      'nav-wrapper--contact-burger-white':
+        navbarStore.isContactPage && !isMobileActive.value,
     }
   })
 
@@ -378,19 +380,27 @@ just use a simple modal and be done with it. */
     &--contact-open {
       background-color: unset !important;
 
-      @include this-and-above('lg') {
-        backdrop-filter: blur(0px);
+      .logo {
+        color: $secondary-static !important;
+      }
 
-        // Force text color on contact page
+      @include this-and-above('md') {
+        // Force text color on contact page for desktop nav items
         color: $secondary-static !important;
 
         .nav__item {
           color: $secondary-static !important;
         }
 
-        .logo {
-          color: $secondary-static !important;
+        @include this-and-above('lg') {
+          backdrop-filter: blur(0px);
         }
+      }
+    }
+
+    &--contact-burger-white {
+      .burger span {
+        background-color: $secondary-static;
       }
     }
   }

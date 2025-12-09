@@ -90,13 +90,13 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/img/sun-rain.jpg');
+    background-image: url('/img/vector.jpg');
     background-size: cover;
     background-position: 80% 50%;
     background-repeat: no-repeat;
 
-    @supports (background-image: url('/img/sun-rain.webp')) {
-      background-image: url('/img/sun-rain.webp');
+    @supports (background-image: url('/img/vector.webp')) {
+      background-image: url('/img/vector.webp');
     }
   }
 
@@ -111,7 +111,7 @@
   /* Refraction. Inspired by https://codepen.io/lbebber/pen/kvVKGK */
   .raindrop {
     position: absolute;
-    background-image: url('/img/sun-rain.jpg');
+    background-image: url('/img/vector.jpg');
     background-size: 1000%;
     border-radius: 100%;
     transform: rotate(180deg);
@@ -133,8 +133,8 @@
       }
     }
 
-    @supports (background-image: url('/img/sun-rain.webp')) {
-      background-image: url('/img/sun-rain.webp');
+    @supports (background-image: url('/img/vector.webp')) {
+      background-image: url('/img/vector.webp');
     }
 
     &:hover {

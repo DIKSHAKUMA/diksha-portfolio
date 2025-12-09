@@ -301,7 +301,6 @@
 </template>
 
 <style lang="scss" scoped>
-
   :deep(.abstract__desc) {
     margin-top: $px-8-spacer !important;
   }
@@ -392,24 +391,27 @@
       max-width: 100vw;
       opacity: 1; /* Always visible so spinner shows */
 
+      :deep(.mdc-content strong) {
+        font-weight: 500 !important;
+        font-variation-settings: 'wght' 500 !important;
+      }
 
       /* Fix Shiki code block overflow on mobile */
       :deep(.blog__post-content pre.shiki),
-      :deep(.blog__post-content pre[class*="shiki"]),
+      :deep(.blog__post-content pre[class*='shiki']),
       :deep(.blog__post-content .shiki),
       :deep(.mdc-content pre.shiki),
-      :deep(.mdc-content pre[class*="shiki"]),
+      :deep(.mdc-content pre[class*='shiki']),
       :deep(.mdc-content .shiki) {
         overflow-x: auto;
         padding: $px-16-spacer;
         font-size: clamped(12px, 16px, 380px, 1920px) !important;
-        -webkit-text-size-adjust:none !important;
+        -webkit-text-size-adjust: none !important;
 
         code {
           display: block;
           width: max-content;
           min-width: 100%;
-          
         }
 
         .line {
@@ -619,5 +621,4 @@
     line-height: 0;
     vertical-align: baseline;
   }
-
 </style>

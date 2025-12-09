@@ -181,6 +181,7 @@
         &:first-child {
           text-align: left;
           /* Date */
+          font-weight: 500;
         }
 
         &:nth-child(2) {
