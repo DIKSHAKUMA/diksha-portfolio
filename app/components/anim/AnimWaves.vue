@@ -94,8 +94,8 @@
       return hslToHex(baseHue, finalSat, finalLight)
     } else {
       const baseHue = 200
-      const baseSat = 25
-      const baseLight = 5
+      const baseSat = 30
+      const baseLight = 10
 
       const lightnessOffset = waveIndex * 5
       const colorSpeed = 0.8 + waveIndex * 0.3

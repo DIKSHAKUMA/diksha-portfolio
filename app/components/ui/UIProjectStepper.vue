@@ -178,7 +178,7 @@
 
   onMounted(async () => {
     /* Register the custom Hygraph loader */
-    Assets.loader.parsers.push(hygraphLDR)
+    Assets.loader.parsers.push(hygraphLDR as any)
 
     ctx = $gsap.context(() => {
       $gsap.registerPlugin(ScrollTrigger)
@@ -307,7 +307,7 @@
     z-index: 9999;
     -o-object-fit: cover;
     object-fit: cover;
-    pointer-events:none;
+    pointer-events: none;
     padding: 0;
     margin: 0;
   }
@@ -349,13 +349,13 @@
     }
 
     &__synop {
-       margin-left: $px-16-spacer;
+      margin-left: $px-16-spacer;
       font-family: $sans-ui;
       font-size: clamped(12px, 14px, 380px, 1920px);
     }
 
     &__name {
-       margin-left: $px-16-spacer;
+      margin-left: $px-16-spacer;
       font-size: clamped(16px, 18px, 380px, 1920px);
       font-family: $sans-ui;
     }

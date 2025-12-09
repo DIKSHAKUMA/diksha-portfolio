@@ -44,20 +44,20 @@
           hslToRgb(baseHue, baseSat + 15, 20) /* Rich teal */,
         ]
       }
-      /* Dark mode: Use lighter shades of the teal-blue */
+      /* Dark mode: Use stepped shades of the teal-blue up to the brightest */
       return [
-        hslToRgb(baseHue, baseSat, 40) /* Light teal */,
-        hslToRgb(baseHue, baseSat + 10, 50) /* Bright teal */,
-        hslToRgb(baseHue, baseSat + 5, 30) /* Medium teal */,
-        hslToRgb(baseHue, baseSat + 20, 45) /* Vibrant teal */,
+        hslToRgb(baseHue, baseSat, 20) /* Dark teal */,
+        hslToRgb(baseHue, baseSat + 10, 30) /* Medium teal */,
+        hslToRgb(baseHue, baseSat + 5, 40) /* Light teal */,
+        hslToRgb(baseHue, baseSat + 20, 50) /* Bright teal */,
       ]
     }
     /* Fallback to dark mode colors */
     return [
-      hslToRgb(194, 21, 40),
-      hslToRgb(194, 31, 50),
-      hslToRgb(194, 26, 30),
-      hslToRgb(194, 41, 45),
+      hslToRgb(194, 21, 20),
+      hslToRgb(194, 31, 30),
+      hslToRgb(194, 26, 40),
+      hslToRgb(194, 41, 50),
     ]
   }
 
@@ -98,7 +98,7 @@
           const speed = time * 0.5
           const timeForAlpha = time * 2
           const timeForSize = time * 3
-          const baseSpace = isMobile ? 8 : 15
+          const baseSpace = isMobile ? 10 : 18
           const baseSize = isMobile ? 2 : 4
 
           for (let i = 1; i < rings; i++) {

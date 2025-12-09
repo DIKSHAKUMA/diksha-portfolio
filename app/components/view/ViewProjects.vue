@@ -69,12 +69,12 @@
 
     /* Destroy existing draggable instance */
     if (draggableInstance) {
-      draggableInstance[0].kill()
+      draggableInstance[0]?.kill()
       draggableInstance = null
     }
 
     /* Calculate total width of all projects + gaps */
-    const projectWidth = projectItem.value[1].getBoundingClientRect().width || 0
+    const projectWidth = projectItem.value[1]?.getBoundingClientRect().width || 0
     const gapWidth =
       parseFloat(
         getComputedStyle(projectsReel.value).getPropertyValue('column-gap')
@@ -128,7 +128,7 @@
       const unscaledIndex = clampedIndex.value === 0 ? 1 : 0
       const currentProjectWidth =
         projectItem.value[unscaledIndex]?.getBoundingClientRect().width ||
-        projectItem.value[0].getBoundingClientRect().width ||
+        projectItem.value[0]?.getBoundingClientRect().width ||
         0
       const currentGapWidth = projectsReel.value
         ? parseFloat(
@@ -150,7 +150,7 @@
       const unscaledIndex = clampedIndex.value === 0 ? 1 : 0
       const currentProjectWidth =
         projectItem.value[unscaledIndex]?.getBoundingClientRect().width ||
-        projectItem.value[0].getBoundingClientRect().width ||
+        projectItem.value[0]?.getBoundingClientRect().width ||
         0
       const currentGapWidth = projectsReel.value
         ? parseFloat(
@@ -230,7 +230,7 @@
 
     /* Cleanup draggable instance */
     if (draggableInstance) {
-      draggableInstance[0].kill()
+      draggableInstance[0]?.kill()
       draggableInstance = null
     }
 
