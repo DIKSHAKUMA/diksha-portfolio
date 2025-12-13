@@ -220,7 +220,7 @@ b
       font-family: $sans-ui;
       text-transform: uppercase;
       font-weight: 700;
-      font-variation-settings: "wght" 700;
+      font-variation-settings: 'wght' 700;
 
       &--hero {
         margin-bottom: 0;
