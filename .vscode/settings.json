@@ -1,5 +1,6 @@
 {
     "eslint.format.enable": true,
     "editor.guides.bracketPairsHorizontal": false,
-    "editor.bracketPairColorization.enabled": true
+    "editor.bracketPairColorization.enabled": true,
+    "editor.inlineSuggest.edits.showCollapsed": true
 }

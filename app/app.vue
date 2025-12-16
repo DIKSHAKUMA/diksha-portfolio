@@ -1,9 +1,8 @@
 <script setup lang="ts">
+  import { ExpoScaleEase } from 'gsap/all'
   import { useFolioStore } from '../stores/useFolioStore'
   import { useBlogStore } from '../stores/useBlogStore'
-  import FavBaseSVG from '@/assets/svg/favbase.svg'
 
-  const favBaseSVG = useTemplateRef<HTMLHtmlElement>('favBaseSVG')
   const route = useRoute()
 
   /* Pinia 🍍 */
@@ -15,18 +14,20 @@
 
   const isLoaded = ref(false)
   const showIntroAnimation = ref(false)
+  const percNum = ref(0)
   const { $gsap } = useNuxtApp()
 
   let cachedBlinds: any[] = []
 
-  /* 
-  The simplistic approach with not turning venice blinds into a component works the fastest. 
-  Or else you end up having to create a plugin, hoping its defined, and watching it.
-  This slows down performance which is super important for this middleware transition.
+  /*
+    The simplistic approach with not turning venice blinds into a component works the fastest.
+    Or else you end up having to create a plugin, hoping its defined, and watching it.
+    This slows down performance which is super important for this middleware transition.
 
-  TODO: Writeup about how middleware can be used to enhance page transitions in Nuxt.
-  */
+    TODO: Writeup about how middleware can be used to enhance page transitions in Nuxt.
+    */
   onMounted(() => {
+    $gsap.registerPlugin(ExpoScaleEase)
     isLoaded.value = true
     cachedBlinds = $gsap.utils.toArray('.venice__blind')
     $gsap.set(cachedBlinds, { scaleX: 0, force3D: true })
@@ -40,15 +41,37 @@
       const tl = $gsap.timeline()
 
       tl.fromTo(
-        '.fav-base',
-        { clipPath: 'polygon(0px 0%, 0% 0%, 0% 100%, 0% 100%)' },
+        '.benevolent-ldr__gfx',
         {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          opacity: 1,
-          duration: 2,
+          scaleX: 1,
+          immediateRender: true,
+        },
+        {
+          delay: 0,
+          scaleX: 0,
+          duration: 2.5,
+          transformOrigin: 'right center',
+          ease: 'cubic-bezier(0.33, 1, 0.68, 1)',
         }
       )
-        .to('.fav-base', { autoAlpha: 0, ease: 'power2.out' })
+        .to(
+          percNum, // mutations, not percNum.value here wake up!
+          {
+            value: 100,
+            duration: 2.5,
+            ease: 'cubic-bezier(0.33, 1, 0.68, 1)',
+          },
+          '<'
+        )
+        .to('.benevolent-ldr__gfx', { autoAlpha: 0, ease: 'power2.out' })
+        .to(
+          '.benevolent-ldr',
+          {
+            autoAlpha: 0,
+            ease: 'power2.out',
+          },
+          '<'
+        )
         .fromTo(
           cachedBlinds,
           {
@@ -81,8 +104,6 @@
 </script>
 
 <template>
-  <NuxtImg src="/img/favbase.png" class="fav-base" />
-
   <div class="venice">
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
@@ -106,6 +127,10 @@
     <div class="venice__blind venice__blind--desktop"></div>
     <div class="venice__blind venice__blind--desktop"></div>
     <div class="venice__blind venice__blind--desktop"></div>
+  </div>
+  <div class="benevolent-ldr">
+    <div class="benevolent-ldr__gfx" />
+    <div class="benevolent-ldr__perc">{{ Math.round(percNum) }}%</div>
   </div>
   <UINavBar />
   <NuxtLayout>
@@ -141,15 +166,39 @@
   }
 
   /*SVG intro*/
-  .fav-base {
+  .benevolent-ldr {
+     background-color: $secondary;
     position: absolute;
-    width: 100px;
-    height: 100px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
     z-index: 10000;
-    opacity: 0;
+    &__gfx {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      background-color: $primary;
+      backface-visibility: hidden;
+    }
+    &__perc {
+      position: absolute;
+      right: $px-16-spacer;
+      bottom: $px-16-spacer;
+      font-family: $sans-ui-mono;
+      font-size: clamped(20px, 36px, 480px, 1920px);
+      letter-spacing: 0.08em;
+      color: $secondary;
+      font-weight: 400;
+      mix-blend-mode: difference;
+
+      @include this-and-above('md') {
+        right: $px-64-spacer;
+          mix-blend-mode: difference;
+      }
+    }
   }
 
   /* Modern scrollbar for WebKit (Chrome, Safari, newer Edge) */
