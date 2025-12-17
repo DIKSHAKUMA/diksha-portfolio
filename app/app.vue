@@ -40,20 +40,21 @@
 
       const tl = $gsap.timeline()
 
-      tl.fromTo(
-        '.benevolent-ldr__gfx',
-        {
-          scaleX: 1,
-          immediateRender: true,
-        },
-        {
-          delay: 0,
-          scaleX: 0,
-          duration: 2.5,
-          transformOrigin: 'right center',
-          ease: 'cubic-bezier(0.33, 1, 0.68, 1)',
-        }
-      )
+      tl.set('.benevolent-ldr', { autoAlpha: 1 })
+        .fromTo(
+          '.benevolent-ldr__gfx',
+          {
+            scaleX: 1,
+            immediateRender: true,
+          },
+          {
+            delay: 0,
+            scaleX: 0,
+            duration: 2.5,
+            transformOrigin: 'right center',
+            ease: 'cubic-bezier(0.33, 1, 0.68, 1)',
+          }
+        )
         .to(
           percNum, // mutations, not percNum.value here wake up!
           {
@@ -90,8 +91,8 @@
         )
     } else {
       /* Hide intro elements immediately if not showing animation */
-      $gsap.set('.fav-base', { autoAlpha: 0, visibility: 'hidden' })
       $gsap.set('.venice', { visibility: 'hidden', opacity: 0 })
+      $gsap.set('.benevolent-ldr', { autoAlpha: 0, visibility: 'hidden' })
     }
   })
 
@@ -167,12 +168,13 @@
 
   /*SVG intro*/
   .benevolent-ldr {
-     background-color: $secondary;
+    background-color: $secondary;
     position: absolute;
     width: 100%;
     height: 100%;
     left: 0;
     top: 0;
+    opacity: 0;
     z-index: 10000;
     &__gfx {
       position: absolute;
@@ -196,7 +198,7 @@
 
       @include this-and-above('md') {
         right: $px-64-spacer;
-          mix-blend-mode: difference;
+        mix-blend-mode: difference;
       }
     }
   }
