@@ -5,7 +5,7 @@
 
   const title = ref('')
   /* Lets have light mode as true and recall to update the ref in UINavBar */
-  const model = defineModel({ default: false})
+  const model = defineModel({ default: false })
 </script>
 
 <template>
@@ -71,7 +71,7 @@ Added some fancy stuff of course.
       display: inline-block;
       width: 40px;
       height: 18px;
-      background-color: $accent1;
+     background-color: color-mix(in oklab, var(--accent1) 50%, transparent);
       border-radius: 23px;
       vertical-align: middle;
       transition: all 0.3s;
@@ -99,7 +99,7 @@ Added some fancy stuff of course.
     }
 
     input:checked + i {
-      background-color: $accent1;
+      background-color: color-mix(in oklab, var(--accent1) 50%, transparent);
     }
 
     input:checked + i.mobile-mode {

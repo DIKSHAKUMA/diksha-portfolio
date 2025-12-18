@@ -16,16 +16,20 @@
   const showIntroAnimation = ref(false)
   const percNum = ref(0)
   const { $gsap } = useNuxtApp()
+  const circle = ref(null)
+  const percText = ref(null)
 
   let cachedBlinds: any[] = []
 
   /*
     The simplistic approach with not turning venice blinds into a component works the fastest.
-    Or else you end up having to create a plugin, hoping its defined, and watching it.
-    This slows down performance which is super important for this middleware transition.
+
+    Here, tight coupling works: because speed on initialization is of essence. Not bouncing
+    around subccomponent props and waiting for them to mount. (Love that, but not here.)
 
     TODO: Writeup about how middleware can be used to enhance page transitions in Nuxt.
     */
+
   onMounted(() => {
     $gsap.registerPlugin(ExpoScaleEase)
     isLoaded.value = true
@@ -34,29 +38,34 @@
 
     /* Show intro animation on homepage */
     const isHomepage = route.path === '/'
+    const tl = $gsap.timeline()
 
     if (isHomepage) {
       showIntroAnimation.value = true
 
-      const tl = $gsap.timeline()
+      // Set initial state for circle
+      $gsap.set([circle.value, percText.value], {
+        strokeDasharray: 283, // 2 * π * r (2 * 3.14159 * 45)
+        strokeDashoffset: 283,
+        strokeOpacity: 0,
+        opacity: 0,
+      })
 
-      tl.set('.benevolent-ldr', { autoAlpha: 1 })
-        .fromTo(
-          '.benevolent-ldr__gfx',
-          {
-            scaleX: 1,
-            immediateRender: true,
-          },
-          {
-            delay: 0,
-            scaleX: 0,
-            duration: 2.5,
-            transformOrigin: 'right center',
-            ease: 'cubic-bezier(0.33, 1, 0.68, 1)',
-          }
-        )
+      // Animate the circle
+      tl.set('.circle-preloader', { autoAlpha: 1 })
         .to(
-          percNum, // mutations, not percNum.value here wake up!
+          [circle.value, percText.value],
+          {
+            strokeDashoffset: 0,
+            strokeOpacity: 1, // Fade in as it draws
+            opacity: 1, // Fade in the text
+            duration: 2.5,
+            ease: 'cubic-bezier(0.33, 1, 0.68, 1)',
+          },
+          0
+        ) // Start at the same time as other animations
+        .to(
+          percNum,
           {
             value: 100,
             duration: 2.5,
@@ -64,15 +73,11 @@
           },
           '<'
         )
-        .to('.benevolent-ldr__gfx', { autoAlpha: 0, ease: 'power2.out' })
-        .to(
-          '.benevolent-ldr',
-          {
-            autoAlpha: 0,
-            ease: 'power2.out',
-          },
-          '<'
-        )
+        .to('.circle-preloader', {
+          autoAlpha: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+        })
         .fromTo(
           cachedBlinds,
           {
@@ -91,7 +96,22 @@
         )
     } else {
       /* Hide intro elements immediately if not showing animation */
-      $gsap.set('.venice', { visibility: 'hidden', opacity: 0 })
+      tl.fromTo(
+        cachedBlinds,
+        {
+          scaleX: 1,
+          opacity: 1,
+          force3D: true,
+          transformOrigin: 'left center',
+        },
+        {
+          duration: 1.5,
+          rotationY: -120,
+          opacity: 0,
+          force3D: true,
+          onComplete: clearProps,
+        }
+      )
       $gsap.set('.benevolent-ldr', { autoAlpha: 0, visibility: 'hidden' })
     }
   })
@@ -129,9 +149,20 @@
     <div class="venice__blind venice__blind--desktop"></div>
     <div class="venice__blind venice__blind--desktop"></div>
   </div>
-  <div class="benevolent-ldr">
-    <div class="benevolent-ldr__gfx" />
-    <div class="benevolent-ldr__perc">{{ Math.round(percNum) }}%</div>
+  <div class="circle-preloader" :class="{ 'is-visible': showIntroAnimation }">
+    <svg class="circle-preloader__svg" viewBox="0 0 100 100">
+      <circle
+        ref="circle"
+        class="circle-preloader__path"
+        cx="50"
+        cy="50"
+        r="45"
+        stroke-opacity="0"
+      />
+    </svg>
+    <div ref="percText" class="circle-preloader__perc" style="opacity: 0">
+      {{ Math.round(percNum) }}%
+    </div>
   </div>
   <UINavBar />
   <NuxtLayout>
@@ -167,39 +198,46 @@
   }
 
   /*SVG intro*/
-  .benevolent-ldr {
-    background-color: $secondary;
-    position: absolute;
+  .circle-preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    left: 0;
-    top: 0;
-    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: $secondary;
     z-index: 10000;
-    &__gfx {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      background-color: $primary;
-      backface-visibility: hidden;
-    }
-    &__perc {
-      position: absolute;
-      right: $px-16-spacer;
-      bottom: $px-16-spacer;
-      font-family: $sans-ui-mono;
-      font-size: clamped(20px, 36px, 480px, 1920px);
-      letter-spacing: 0.08em;
-      color: $secondary;
-      font-weight: 400;
-      mix-blend-mode: difference;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
 
-      @include this-and-above('md') {
-        right: $px-64-spacer;
-        mix-blend-mode: difference;
-      }
+    &.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &__svg {
+      width: 100px;
+      height: 100px;
+      transform: rotate(-90deg);
+    }
+
+    &__path {
+      fill: none;
+      stroke: $accent1;
+      stroke-width: 10;
+      stroke-linecap: round;
+    }
+
+    &__perc {
+      margin-top: 20px;
+      color: $accent1;
+      font-size: 1.2rem;
+      font-weight: 600;
+      font-family: $sans-text;
     }
   }
 

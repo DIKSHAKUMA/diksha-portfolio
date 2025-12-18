@@ -63,7 +63,6 @@
   })
 
   const toggleMenu = () => {
-    // Prevent clicks during animation
     if (isAnimating.value) return
 
     isAnimating.value = true
