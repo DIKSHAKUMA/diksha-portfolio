@@ -41,7 +41,7 @@
     padding: 0 $px-16-spacer;
 
     @supports (height: 100dvh) {
-      height: 100dvh;
+      min-height: 100dvh;
     }
 
     @include this-and-above('lg') {

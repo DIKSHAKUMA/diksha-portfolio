@@ -229,7 +229,7 @@
       fill: none;
       stroke: $accent1;
       stroke-width: 10;
-      stroke-linecap: round;
+      stroke-linecap:square;
     }
 
     &__perc {

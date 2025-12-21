@@ -61,7 +61,7 @@
     padding: 0 $px-16-spacer;
     overflow: hidden;
     min-height: 100vh;
-    height: 100dvh;
+    min-height: 100dvh;
 
     @include this-and-above('md') {
       padding: 0 $px-64-spacer;

@@ -349,7 +349,7 @@
 
     /*The “small” viewport units assume that any dynamic toolbars are expanded and visible, and calculates the viewport’s size accordingly.*/
     @supports (height: 100dvh) {
-      height: 100dvh;
+      min-height: 100dvh;
     }
   }
 
