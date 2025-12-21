@@ -10,6 +10,12 @@
 
   onMounted(() => {
     $gsap.registerPlugin(ScrollTrigger)
+    ScrollTrigger.config({
+      ignoreMobileResize: true,
+    })
+    if (ScrollTrigger.isTouch === 1) {
+      ScrollTrigger.normalizeScroll({ allowNestedScroll: true })
+    }
     ctx = $gsap.context((self) => {
       /* Pre-calculate the parallax distance to avoid function calls during scroll */
       const parallaxDistance =
@@ -88,7 +94,7 @@
     position: relative;
     background-color: $primary;
     overflow: hidden;
-    min-height: 100dvh;
+    height: 100dvh;
     min-height: 100vh;
 
     padding: $px-64-spacer $px-16-spacer;
@@ -115,12 +121,14 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100svh;
+    min-height: 100vh;
     overflow: hidden;
     z-index: 1;
   }
 
   .parallax__bg {
+    pointer-events: none;
     position: absolute;
     display: block;
     /* Changed from inline-block for better performance */

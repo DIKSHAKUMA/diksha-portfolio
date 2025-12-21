@@ -52,13 +52,13 @@
   .hero-wrapper {
     position: relative;
     width: 100%;
-    min-height: 100dvh;
+    height: 100dvh;
     min-height: 100vh;
     overflow: hidden;
     padding: 0 $px-16-spacer;
 
-    @supports (height: 100svh) {
-      min-height: 100svh;
+    @supports (height: 100dvh) {
+      height: 100dvh;
     }
 
     @include this-and-above('lg') {

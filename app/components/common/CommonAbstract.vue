@@ -236,7 +236,7 @@ b
       }
 
       &--page-header {
-        margin-bottom: 0;
+        margin-bottom: $px-16-spacer;
       }
 
       @include this-and-above('md') {
@@ -251,15 +251,23 @@ b
         }
 
         &--page-header {
-          margin-bottom: $px-16-spacer;
+          margin-bottom: $px-32-spacer;
         }
       }
     }
 
     &__desc {
       display: inline-block;
-      font-size: clamped(18px, 30px, 480px, 1920px);
       font-family: $sans-text;
+
+      /* Default size for hero sections */
+      font-size: clamped(16px, 24px, 480px, 1920px);
+
+      /* Smaller size when used with secondary headers */
+      .abstract__header--secondary + div &,
+      .abstract__header--page-header + div & {
+        font-size: clamped(16px, 20px, 480px, 1920px);
+      }
     }
 
     &__info {
@@ -276,6 +284,7 @@ b
       width: 100%;
       font-size: clamped(12px, 16px, 480px, 1920px);
       font-family: $sans-text;
+      margin-bottom: $px-32-spacer;
     }
   }
 </style>

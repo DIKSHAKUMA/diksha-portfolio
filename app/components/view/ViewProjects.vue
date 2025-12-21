@@ -74,7 +74,8 @@
     }
 
     /* Calculate total width of all projects + gaps */
-    const projectWidth = projectItem.value[1]?.getBoundingClientRect().width || 0
+    const projectWidth =
+      projectItem.value[1]?.getBoundingClientRect().width || 0
     const gapWidth =
       parseFloat(
         getComputedStyle(projectsReel.value).getPropertyValue('column-gap')
@@ -304,7 +305,10 @@
             </div>
 
             <div class="projects__project__info">
-              <p class="projects__project__name">{{ project.name }}</p>
+              <div class="projects__project__title">
+                <p>{{ project.name }}</p>
+                <p>{{ project.date.split(' ')[1] }}</p>
+              </div>
               <span
                 v-if="project.tags && project.tags.length > 0"
                 class="projects__project__tags"
@@ -327,6 +331,10 @@
     filter: blur(0px);
   }
 
+  p {
+    margin:0;
+  }
+
   .projects-wrapper {
     position: relative;
     width: 100%;
@@ -340,8 +348,8 @@
     }
 
     /*The “small” viewport units assume that any dynamic toolbars are expanded and visible, and calculates the viewport’s size accordingly.*/
-    @supports (height: 100svh) {
-      min-height: 100svh;
+    @supports (height: 100dvh) {
+      height: 100dvh;
     }
   }
 
@@ -404,13 +412,12 @@
     }
 
     &__text {
-      font-size: clamped(24px, 44px, 480px, 1920px);
+      font-size: clamped(24px, 32px, 480px, 1920px);
       font-family: $sans-ui-mono;
       font-weight: 400;
       font-variation-settings: 'wght' 500;
       white-space: nowrap;
       color: $secondary;
-      opacity: 0.5;
       font-variant-numeric: tabular-nums;
       /* Monospace numbers for consistent width */
     }
@@ -442,11 +449,15 @@
       }
 
       &__info {
-        width: 80%;
-        margin-left: $px-16-spacer;
-        margin-top: $px-8-spacer;
+        margin: $px-16-spacer $px-16-spacer;
         pointer-events: none;
         cursor: default;
+      }
+
+      &__title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
       }
 
       &__name {
@@ -467,8 +478,8 @@
         overflow-wrap: break-word;
         margin: 0;
         color: $secondary;
-        font-family: $sans-ui-mono;
-        font-size: clamped(13px, 14px, 380px, 1920px);
+        font-family: $sans-ui;
+        font-size: 12px;
         font-weight: 400;
         font-variation-settings: 'wght' 400;
         backface-visibility: hidden;

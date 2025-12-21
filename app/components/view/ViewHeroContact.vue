@@ -151,8 +151,8 @@
 
     padding: 0 $px-16-spacer;
 
-    @supports (height: 100svh) {
-      min-height: 100svh;
+    @supports (height: 100dvh) {
+      height: 100dvh;
     }
 
     @include this-and-above('md') {

@@ -72,7 +72,7 @@ Added some fancy stuff of course.
       width: 40px;
       height: 18px;
      background-color: color-mix(in oklab, var(--accent1) 50%, transparent);
-      border-radius: 23px;
+      border-radius: 9px;
       vertical-align: middle;
       transition: all 0.3s;
 

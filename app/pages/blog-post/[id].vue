@@ -334,6 +334,7 @@
 
   :deep(figure figcaption) {
     font-size: 14px;
+    font-style: italic;
   }
 
   :deep(em) {

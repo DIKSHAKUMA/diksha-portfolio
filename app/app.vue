@@ -237,7 +237,7 @@
       color: $accent1;
       font-size: 1.2rem;
       font-weight: 600;
-      font-family: $sans-text;
+      font-family: $sans-ui-mono;
     }
   }
 

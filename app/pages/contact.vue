@@ -38,8 +38,8 @@
     overflow: hidden;
     min-height: 100vh;
 
-    @supports (height: 100svh) {
-      min-height: 100svh;
+    @supports (height: 100dvh) {
+      height: 100dvh;
     }
   }
 </style>

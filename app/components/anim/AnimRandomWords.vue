@@ -346,7 +346,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    min-height: 100dvh;
+    height: 100dvh;
     min-height: 100vh;
     pointer-events: none;
   }

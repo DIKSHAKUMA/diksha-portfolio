@@ -36,12 +36,6 @@
     })
   })
 
-  const paginatedProjects = computed(() => {
-    const start = 0
-    const end = 5
-    return dateSorted.value.slice(start, end)
-  })
-
   const handleProjectClick = (project: any) => {
     if (project.labUrl) {
       window.open(project.labUrl, '_blank')
@@ -178,10 +172,13 @@
             </div>
 
             <div class="projects__abstract__info">
-              <p class="split-proj-w">{{ proj.name }}</p>
+              <div class="projects__abstract__title">
+                <p class="split-proj-w">{{ proj.name }}</p>
+                <p class="split-proj-w">{{ proj.date.split(' ')[1] }}</p>
+              </div>
               <span
                 v-if="proj.tags && proj.tags.length > 0"
-                class="project-tags split-proj-w"
+                class="split-proj-w"
                 >{{ getProjectTags(proj) }}</span
               >
             </div>
@@ -275,9 +272,10 @@
           height: 100%;
           object-fit: cover;
           object-position: center;
+          transition: filter 0.3s ease;
         }
         img:hover {
-          filter: blur(2px);
+          filter: brightness(0.99) contrast(1.22);
         }
 
         &--lab {
@@ -304,11 +302,8 @@
       }
 
       &__info {
-        margin-top: $px-16-spacer;
-        margin-left: $px-16-spacer;
+        margin: $px-16-spacer $px-16-spacer;
         pointer-events: none;
-
-        /* Don't interfere with link clicks */
 
         p {
           position: relative;
@@ -318,14 +313,22 @@
           font-size: clamped(16px, 18px, 380px, 1920px);
           font-weight: 600;
         }
+
         span {
           position: relative;
           margin: 0;
           color: $secondary;
           font-family: $sans-ui;
-          font-size: clamped(12px, 14px, 380px, 1920px);
-          font-weight: 400;
+          font-size: 12px;
+          font-weight: 500;
         }
+      }
+
+      /* Sticking to three levels deep looking at parent parent is better */
+      &__title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
       }
 
       @include this-and-above('md') {
