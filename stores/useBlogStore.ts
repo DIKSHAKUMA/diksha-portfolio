@@ -1,23 +1,22 @@
-import { defineStore } from 'pinia';
-
-const _data = ref()
-const _error = ref()
+import { defineStore } from 'pinia'
 
 export const useBlogStore = defineStore('blog', {
-    state: () => ({
-        data: _data,
-        error: _error,
-    }),
+  // 1. Move state inside the function (SSR Safe)
+  state: () => ({
+    data: null as any,
+    error: null as Error | string | null,
+  }),
 
-    persist: true,
+  persist: true,
 
-    actions: {
-        async fetchData() {
-            try {
-                const response = await $fetch('/api/graphql', {
-                    method: 'POST',
-                    body: {
-                        query: `
+  actions: {
+    // 2. Regular function (ensures 'this' works)
+    async fetchData() {
+      try {
+        const response = (await $fetch('/api/graphql', {
+          method: 'POST',
+          body: {
+            query: `
                             query blog {
                                 posts {
                                     content
@@ -37,20 +36,22 @@ export const useBlogStore = defineStore('blog', {
                                     }
                                 }
                             }
-                        `
-                    }
-                }) as any
-                
-                _data.value = response.data
-                _error.value = response.errors || null
-                
-                if (response.errors) {
-                    console.log("store error:", response.errors)
-                }
-            } catch (error) {
-                _error.value = error
-                console.log("fetch error:", error)
-            }
+                        `,
+          },
+        })) as any
+
+        // 3. Assign directly to 'this'
+        this.data = response.data
+        this.error = response.errors || null
+
+        if (response.errors) {
+          console.log('store error:', response.errors)
         }
-    }
-});
+      } catch (error: unknown) {
+        // 4. Type-safe error handling for 2025
+        this.error = error instanceof Error ? error.message : String(error)
+        console.log('fetch error:', error)
+      }
+    },
+  },
+})

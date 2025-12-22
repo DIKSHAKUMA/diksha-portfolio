@@ -11,8 +11,6 @@
   const navbarStore = useNavbarStore()
 
   onMounted(() => {
-    const { $lenis } = useNuxtApp()
-    $lenis.scrollTo(0, { immediate: true, force: true })
     if (import.meta.client) navbarStore.setTransparent(true, 'contact')
   })
 

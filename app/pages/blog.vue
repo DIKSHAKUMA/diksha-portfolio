@@ -8,8 +8,7 @@
   })
 
   onMounted(() => {
-    const { $lenis } = useNuxtApp()
-    $lenis.scrollTo(0, { immediate: true, force: true })
+
   })
 
   onUnmounted(() => {})

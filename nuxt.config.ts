@@ -95,7 +95,7 @@ export default defineNuxtConfig({
   // Font configuration with optimized loading
   fonts: {
     adobe: {
-      id: ['vcx3lou'],
+      id: ['bax5kkf'],
     },
 
     families: [
@@ -109,7 +109,7 @@ export default defineNuxtConfig({
         provider: 'adobe',
         weights: ['400', '700'],
       },
-      { name: 'Auger Mono', provider: 'adobe', weights: ['400'] },
+      { name: 'Azeret Mono', provider: 'adobe', weights: ['400'] },
     ],
   },
 

@@ -22,6 +22,8 @@
   const tickerFunction = (delta: any) => {
     if (displaceSprite) {
       displaceSprite.rotation += 0.001
+      const scale = 1 + Math.sin(Date.now() * 0.001) * 0.1
+      displaceSprite.scale.set(scale)
     }
   }
 
@@ -214,8 +216,7 @@
   h4,
   h5 {
     color: #171717;
-    font-weight: 700;
-    font-variation-settings: 'wght' 700;
+    font-family:$sans-ui-mono;
   }
 
   .meta-wrapper {
@@ -270,13 +271,13 @@
       align-self: center;
       z-index: 1;
       text-align: center;
-      padding:0 40px;
+      padding: 0 40px;
 
       &-item {
-        font-family: $sans-text;
-        font-size: clamped(14px, 20px, 380px, 1920px);
-        font-variation-settings: 'wght' 500;
-        font-weight: 500;
+        font-family: $sans-ui-mono;
+        font-size: clamped(14px, 16px, 380px, 1920px);
+        font-variation-settings: 'wght' 400;
+        font-weight: 400;
 
         /* Also target direct links as fallback */
         a {

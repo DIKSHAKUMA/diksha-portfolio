@@ -274,8 +274,11 @@
           object-position: center;
           transition: filter 0.3s ease;
         }
-        img:hover {
-          filter: brightness(0.99) contrast(1.22);
+
+        @media (hover: hover), (-ms-high-contrast:none) {
+          img:hover {
+            filter: brightness(0.7);
+          }
         }
 
         &--lab {

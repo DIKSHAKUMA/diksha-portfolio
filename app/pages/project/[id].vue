@@ -15,7 +15,7 @@
   const muxPlayer = useTemplateRef<any>('muxPlayer')
   const muxPlayer2 = useTemplateRef<any>('muxPlayer2')
 
-    definePageMeta({
+  definePageMeta({
     layout: 'default',
     key: (route) => route.fullPath,
     /* DO NOT REMOVE THIS! APOLLO STICKER TAPED TO CONSOLE. */
@@ -189,49 +189,61 @@
               duration: 0.3,
               force3D: true,
               ease: 'power2.out',
+              overwrite: 'auto',
               scrollTrigger: {
                 trigger: mediaContainer,
                 start: 'top 85%',
                 end: 'top 35%',
                 toggleActions: 'play none none reverse',
-                preventOverlaps: true,
+                preventOverlaps: false, // Prevents fighting between triggers
+                fastScrollEnd: true, // Forces completion on fast scrolls
                 invalidateOnRefresh: false,
               },
             })
-          })
 
-        /* Animate project sections */
-        if (infoSection.value) {
-          $gsap.from(infoSection.value.children, {
-            opacity: 0,
-            y: +50,
-            duration: 0.3,
-            force3D: true,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: infoSection.value,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-              preventOverlaps: true,
-              invalidateOnRefresh: false,
-            },
+            const childImage = mediaContainer.querySelector('img')
+
+            if (childImage) {
+              $gsap.fromTo(
+                childImage,
+                { scale: 1.2 }, // Start zoomed in
+                {
+                  scale: 1, // Scale down to original size
+                  ease: 'none', // Scrubbing feels most natural with 'none'
+                  force3D: true,
+                  scrollTrigger: {
+                    trigger: mediaContainer,
+                    start: 'top bottom', // Start scaling as soon as it enters the bottom
+                    end: 'top 20%', // Finish scaling when it's near the top
+                    scrub: 1.5,
+                    preventOverlaps: false, // Prevents fighting between triggers
+                    fastScrollEnd: true, // Forces completion on fast scrolls
+                    invalidateOnRefresh: false,
+                  },
+                }
+              )
+            }
           })
-        }
 
         if (textSection.value) {
-          $gsap.from(textSection.value.children, {
-            opacity: 0,
-            y: +50,
-            duration: 0.4,
-            force3D: true,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: textSection.value,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-              preventOverlaps: true,
-              invalidateOnRefresh: false,
-            },
+          const projWords = $gsap.utils.toArray('.split-proj-w')
+
+          projWords.forEach((item: any) => {
+            $gsap.from(item, {
+              opacity: 0,
+              duration: 0.6,
+              force3D: true,
+              ease: 'power1.inOut',
+              overwrite: 'auto',
+              scrollTrigger: {
+                trigger: item,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+                preventOverlaps: false, // Prevents fighting between triggers
+                fastScrollEnd: true, // Forces completion on fast scrolls
+                invalidateOnRefresh: false,
+              },
+            })
           })
         }
       }, '.project')
@@ -378,30 +390,30 @@
           </div>
 
           <!-- Info text always after first media item -->
-          <div class="project__info" ref="infoSection">
+          <div class="project__info project__info--mono" ref="textSection">
             <div class="project__info-col-1">
-              <h4>Challenge</h4>
+              <h2 class="split-proj-w">Challenge</h2>
               <p class="split-proj-w">{{ proj.description[0] }}</p>
-              <h4>Perspective</h4>
+              <h2 class="split-proj-w">Perspective</h2>
               <p class="split-proj-w">{{ proj.description[1] }}</p>
             </div>
             <div class="project__info-col-2">
               <div class="project__info-col-2__a">
-                <h5 class="split-proj-w">Client</h5>
+                <h4 class="split-proj-w">Client</h4>
                 <p class="split-proj-w">{{ proj.client }}</p>
                 <div v-if="proj.endclient">
-                  <h5 class="split-proj-w">End Client</h5>
+                  <h4 class="split-proj-w">End Client</h4>
                   <p class="split-proj-w">{{ proj.endclient }}</p>
                 </div>
-                <h5 class="split-proj-w">Date</h5>
+                <h4 class="split-proj-w">Date</h4>
                 <p class="split-proj-w">{{ proj.date }}</p>
-                <h5 class="split-proj-w">Duration</h5>
+                <h4 class="split-proj-w">Duration</h4>
                 <p class="split-proj-w">{{ proj.duration }}</p>
-                <h5 class="split-proj-w">Type</h5>
+                <h4 class="split-proj-w">Type</h4>
                 <p class="split-proj-w">{{ proj.type }}</p>
               </div>
               <div class="project__info-col-2__b">
-                <h5 class="split-proj-w">Scope</h5>
+                <h4 class="split-proj-w">Scope</h4>
                 <p class="split-proj-w project__info-col-2__b--tags">
                   {{ proj.tags.join(', ') }}
                 </p>
@@ -565,6 +577,12 @@
 </template>
 
 <style lang="scss" scoped>
+  /* Next time I write SCSS use atomic, too much margins here everywhere */
+  .split-proj-w {
+    will-change: transform, opacity;
+    backface-visibility: hidden; /* Helps with transform performance */
+  }
+
   :deep(.abstract__desc) {
     margin-top: $px-8-spacer !important;
   }
@@ -635,8 +653,10 @@
       display: flex;
       flex-direction: column;
       row-gap: $px-64-spacer;
+      margin-top: $px-32-spacer;
 
       @include this-and-above('md') {
+        margin-top: $px-64-spacer;
         row-gap: $px-128-spacer;
       }
     }
@@ -731,26 +751,26 @@
       padding: $px-32-spacer;
       max-height: fit-content;
       overflow-y: auto;
-      font-family: $sans-text;
-      font-size: clamped(14px, 16px, 380px, 1920px);
 
       &__a,
       &__b {
         flex: 1 0 50%;
-        word-break: break-all;
+        word-wrap: normal;
         height: fit-content;
+
+        p{
+           font-size: clamped(14px, 16px, 380px, 1920px);
+        }
       }
 
       &__b {
         &--link {
+          font-family: $sans-text;
           font-size: clamped(14px, 16px, 380px, 1920px);
           text-decoration: underline;
         }
 
-        &--tags {
-          font-size: clamped(12px, 14px, 380px, 1920px);
-          line-height: 1.4;
-        }
+
       }
     }
 

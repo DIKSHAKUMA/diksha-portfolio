@@ -66,10 +66,6 @@
   const { $lenis } = useNuxtApp()
 
   onMounted(() => {
-    $lenis.scrollTo(0, { immediate: true, force: true })
-    setTimeout (() => {
-      $lenis.resize()
-    }, 1000)
   })
 </script>
 

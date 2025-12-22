@@ -13,9 +13,7 @@
     ScrollTrigger.config({
       ignoreMobileResize: true,
     })
-    if (ScrollTrigger.isTouch === 1) {
-      ScrollTrigger.normalizeScroll({ allowNestedScroll: true })
-    }
+
     ctx = $gsap.context((self) => {
       /* Pre-calculate the parallax distance to avoid function calls during scroll */
       const parallaxDistance =

@@ -111,6 +111,7 @@
       $gsap.set('.projects__project__image', {
         skewX: skewAmount,
         duration: 0.4,
+        filter: 'blur(2px)',
         ease: 'power2.out',
       })
     }
@@ -119,6 +120,7 @@
       /* Reset skew and filters when drag ends */
       $gsap.to('.projects__project__image', {
         skewX: 0,
+        filter: 'blur(0px)',
         duration: 0.3,
         ease: 'power2.out',
       })
@@ -267,7 +269,7 @@
 
     <div class="progress">
       <div class="progress__text">
-        {{ progressIndex.current }} / {{ progressIndex.total }}
+        {{ progressIndex.current }}/{{ progressIndex.total }}
       </div>
     </div>
 
@@ -332,7 +334,7 @@
   }
 
   p {
-    margin:0;
+    margin: 0;
   }
 
   .projects-wrapper {

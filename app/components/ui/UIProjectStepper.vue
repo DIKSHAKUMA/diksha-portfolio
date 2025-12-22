@@ -187,16 +187,10 @@
       $gsap.utils
         .toArray('.project-stepper-image-reveal')
         .forEach((imageContainer: any) => {
-          /* Set initial state - hidden with scale */
-          $gsap.set(imageContainer, {
-            opacity: 0,
-            scale: 1.05,
-          })
-
           /* Animate the mask position on scroll */
-          $gsap.to(imageContainer, {
-            opacity: 1,
-            scale: 1,
+          $gsap.from(imageContainer, {
+            opacity: 0,
+            scale: .8,
             duration: 0.5,
             ease: 'power1.out',
             scrollTrigger: {
@@ -252,7 +246,7 @@
             ></canvas>
           </NuxtLink>
         </div>
-        <h3 class="project-stepper__name split-proj-w">{{ prevName }}</h3>
+        <h3 class="project-stepper__name">{{ prevName }}</h3>
         <p class="project-stepper__synop">{{ prevSynop[0] }}</p>
       </div>
       <div class="project-stepper__next">
@@ -272,7 +266,7 @@
             ></canvas>
           </NuxtLink>
         </div>
-        <h3 class="project-stepper__name split-proj-w">{{ nextName }}</h3>
+        <h3 class="project-stepper__name">{{ nextName }}</h3>
         <p class="project-stepper__synop">{{ nextSynop[0] }}</p>
       </div>
     </main>
@@ -317,8 +311,9 @@
   }
 
   .project-stepper-wrapper {
+    height:100vh;
     position: relative;
-    padding: $px-64-spacer 0;
+    padding: $px-32-spacer 0;
 
     @include this-and-above('sm') {
       padding: $px-64-spacer 0;
@@ -341,7 +336,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: $px-32-spacer;
+    row-gap: $px-16-spacer;
     color: $secondary;
 
     @include this-and-above('sm') {

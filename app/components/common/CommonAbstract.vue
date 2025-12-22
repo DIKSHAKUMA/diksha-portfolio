@@ -212,7 +212,7 @@ b
   .abstract {
     &__header {
       position: relative;
-      font-size: clamped(50px, 120px, 480px, 1920px);
+      font-size: clamped(54px, 120px, 480px, 1920px);
       flex-wrap: wrap;
       height: max-content;
       margin-bottom: $px-32-spacer;
@@ -251,7 +251,7 @@ b
         }
 
         &--page-header {
-          margin-bottom: $px-32-spacer;
+          margin-bottom: $px-16-spacer;
         }
       }
     }
@@ -259,14 +259,15 @@ b
     &__desc {
       display: inline-block;
       font-family: $sans-text;
-
       /* Default size for hero sections */
       font-size: clamped(16px, 24px, 480px, 1920px);
 
       /* Smaller size when used with secondary headers */
-      .abstract__header--secondary + div &,
-      .abstract__header--page-header + div & {
+      .abstract__header--secondary + div & {
         font-size: clamped(16px, 20px, 480px, 1920px);
+      }
+      .abstract__header--page-header + div & {
+        font-size: clamped(20px, 36px, 480px, 1920px);
       }
     }
 

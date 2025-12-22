@@ -138,10 +138,6 @@
   }
 
   onMounted(() => {
-    const { $lenis } = useNuxtApp()
-    // Ensure we start at top of page
-    $lenis.scrollTo(0, { immediate: true, force: true })
-
     $gsap.registerPlugin(ScrollTrigger)
     $gsap.set('.blog__post-cover img', { opacity: 0 })
     $gsap.delayedCall(1, runTrigger)

@@ -112,7 +112,6 @@
           onComplete: clearProps,
         }
       )
-      $gsap.set('.benevolent-ldr', { autoAlpha: 0, visibility: 'hidden' })
     }
   })
 
@@ -175,18 +174,20 @@
   body {
     margin: 0;
     padding: 0;
-    /*min-height: 100vh; */
-    transition: background-color 1s;
-    background-color: $primary;
+
+    // 1. CRITICAL: Remove fixed height.
+    // Lenis needs "height: auto" to calculate the full page length.
+    height: auto;
+    min-height: 100%;
+
+    // 2. STABILIZATION: Prevent iOS bounce/jitter at boundaries
+    overscroll-behavior-y: none;
+
+    // 3. CLEANUP: Standardize behavior
     -webkit-font-smoothing: antialiased;
-    -moz-font-smoothing: antialiased;
-    -o-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: $primary;
     font-family: $sans-text;
-    font-variation-settings: 'slnt' 0, 'wght' 500;
-    height: 100dvh;
-    height: 100vh;
-    overscroll-behavior: auto;
   }
 
   body {
@@ -229,7 +230,7 @@
       fill: none;
       stroke: $accent1;
       stroke-width: 10;
-      stroke-linecap:square;
+      stroke-linecap: square;
     }
 
     &__perc {

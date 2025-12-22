@@ -48,6 +48,7 @@
     font-variation-settings: 'wght' 500;
     transition: all 0.3s ease;
     position: relative;
+    opacity:.5;
 
     /* Triangle pointing left using clip-path polygon */
     clip-path: polygon(15px 0%, 100% 0%, 100% 100%, 15px 100%, 0% 50%);
