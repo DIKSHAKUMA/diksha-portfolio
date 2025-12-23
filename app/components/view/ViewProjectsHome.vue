@@ -173,14 +173,16 @@
 
             <div class="projects__abstract__info">
               <div class="projects__abstract__title">
-                <p class="split-proj-w">{{ proj.name }}</p>
-                <p class="split-proj-w">{{ proj.date.split(' ')[1] }}</p>
+                <h4 class="split-proj-w">{{ proj.name }}</h4>
+                <h4 class="split-proj-w">{{ proj.date.split(' ')[1] }}</h4>
               </div>
               <span
                 v-if="proj.tags && proj.tags.length > 0"
-                class="split-proj-w"
-                >{{ getProjectTags(proj) }}</span
+                class="project-tags split-proj-w"
               >
+                <span class="blinking-dot"></span>
+                {{ getProjectTags(proj) }}
+              </span>
             </div>
           </div>
         </div>
@@ -199,9 +201,41 @@
 </template>
 
 <style lang="scss" scoped>
+  h4 {
+    margin: 0;
+  }
+
   img,
   .split-proj-w {
     will-change: transform;
+  }
+
+  .project-tags {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .blinking-dot {
+    align-self: center !important;
+    top: 0.1em; 
+    width: 6px;
+    height: 6px;
+    background-color: #009b81;
+    border-radius: 50%;
+    animation: blink 1.2s steps(1, end) infinite;
+    transition: opacity 0.05s ease-out;
+  }
+
+  @keyframes blink {
+    0%,
+    45% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
   }
 
   img {
@@ -275,7 +309,7 @@
           transition: filter 0.3s ease;
         }
 
-        @media (hover: hover), (-ms-high-contrast:none) {
+        @media (hover: hover), (-ms-high-contrast: none) {
           img:hover {
             filter: brightness(0.7);
           }
@@ -308,21 +342,12 @@
         margin: $px-16-spacer $px-16-spacer;
         pointer-events: none;
 
-        p {
-          position: relative;
-          margin: 0;
-          color: $secondary;
-          font-family: $sans-ui;
-          font-size: clamped(16px, 18px, 380px, 1920px);
-          font-weight: 600;
-        }
-
         span {
           position: relative;
           margin: 0;
           color: $secondary;
           font-family: $sans-ui;
-          font-size: 12px;
+          font-size: 13px;
           font-weight: 500;
         }
       }

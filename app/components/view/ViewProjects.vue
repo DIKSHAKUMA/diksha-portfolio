@@ -308,13 +308,15 @@
 
             <div class="projects__project__info">
               <div class="projects__project__title">
-                <p>{{ project.name }}</p>
-                <p>{{ project.date.split(' ')[1] }}</p>
+                <h4>{{ project.name }}</h4>
+                <h4>{{ project.date.split(' ')[1] }}</h4>
               </div>
               <span
                 v-if="project.tags && project.tags.length > 0"
                 class="projects__project__tags"
-                >{{ getProjectTags(project) }}</span
+              >
+                <span class="blinking-dot"></span>
+                {{ getProjectTags(project) }}</span
               >
             </div>
           </div>
@@ -325,6 +327,30 @@
 </template>
 
 <style lang="scss" scoped>
+  .blinking-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #009b81;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    top: -2px; /* Fine-tune vertical alignment */
+    animation: blink 1.2s steps(1, end) infinite;
+    transition: opacity 0.05s ease-out;
+  }
+
+  @keyframes blink {
+    0%,
+    45% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+
   img {
     height: auto;
   }
@@ -335,6 +361,10 @@
 
   p {
     margin: 0;
+  }
+
+  h4 {
+    margin:0;
   }
 
   .projects-wrapper {
@@ -462,18 +492,6 @@
         justify-content: space-between;
       }
 
-      &__name {
-        position: relative;
-        width: 80%;
-        margin: 0;
-        color: $secondary;
-        font-family: $sans-ui;
-        font-size: clamped(16px, 18px, 380px, 1920px);
-        font-weight: 500;
-        font-variation-settings: 'wght' 500;
-        backface-visibility: hidden;
-      }
-
       &__tags {
         position: relative;
         width: 80%;
@@ -481,7 +499,7 @@
         margin: 0;
         color: $secondary;
         font-family: $sans-ui;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 400;
         font-variation-settings: 'wght' 400;
         backface-visibility: hidden;

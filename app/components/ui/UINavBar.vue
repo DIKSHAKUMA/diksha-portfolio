@@ -117,19 +117,39 @@
     }
   }
 
+  let scrollTimeout: NodeJS.Timeout | null = null
+
   const onScroll = () => {
-    currScrollPos = window.scrollY
-
-    // Clamp scroll position to prevent iOS bounce from affecting navbar
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-    const clampedScrollPos = Math.max(0, Math.min(currScrollPos, maxScroll))
-
-    if (prevScrollPos && prevScrollPos >= clampedScrollPos) {
-      isDown.value = false
-    } else if (prevScrollPos && prevScrollPos <= clampedScrollPos) {
-      isDown.value = true
+    // Clear any pending scroll timeout
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout)
     }
-    prevScrollPos = clampedScrollPos
+
+    // Debounce the scroll handler
+    scrollTimeout = setTimeout(() => {
+      currScrollPos = window.scrollY
+
+      // Clamp scroll position to prevent iOS bounce from affecting navbar
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight
+      const clampedScrollPos = Math.max(0, Math.min(currScrollPos, maxScroll))
+
+      // Initialize prevScrollPos on first run
+      if (prevScrollPos === undefined) {
+        prevScrollPos = clampedScrollPos
+        return
+      }
+
+      // Only update if scroll position changed significantly
+      if (Math.abs(prevScrollPos - clampedScrollPos) > 5) {
+        if (prevScrollPos >= clampedScrollPos) {
+          isDown.value = false
+        } else {
+          isDown.value = true
+        }
+        prevScrollPos = clampedScrollPos
+      }
+    }, 16) // ~60fps
   }
 
   const resetMagneticLinks = () => {
@@ -180,6 +200,9 @@
   onBeforeUnmount(() => {
     window.removeEventListener('resize', checkScreenWidth)
     window.removeEventListener('scroll', onScroll)
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout)
+    }
   })
 
   checkScreenWidth()
@@ -358,9 +381,13 @@ just use a simple modal and be done with it. */
     z-index: 2000;
     background-color: $primary;
 
+    &--no-blur {
+      background-color: transparent;
+    }
+
     @include this-and-above('lg') {
       background-color: rgba(23, 23, 23, 0.3);
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(10px);
       transition: backdrop-filter 0.3s ease, background-color 0.4s ease;
 
       .light-mode & {

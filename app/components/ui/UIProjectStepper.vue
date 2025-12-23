@@ -190,7 +190,7 @@
           /* Animate the mask position on scroll */
           $gsap.from(imageContainer, {
             opacity: 0,
-            scale: .8,
+            scale: 0.8,
             duration: 0.5,
             ease: 'power1.out',
             scrollTrigger: {
@@ -266,7 +266,7 @@
             ></canvas>
           </NuxtLink>
         </div>
-        <h3 class="project-stepper__name">{{ nextName }}</h3>
+        <h4 class="project-stepper__name">{{ nextName }}</h4>
         <p class="project-stepper__synop">{{ nextSynop[0] }}</p>
       </div>
     </main>
@@ -274,9 +274,10 @@
 </template>
 
 <style scoped lang="scss">
-  /* Eliminate any baseline gaps */
+  /* Fiddling here, mmargins work great some layouts but for cards they never do, BEM or Tailwind 2026? */
 
-  h3 {
+  h3,
+  h4 {
     margin-bottom: 0;
   }
 
@@ -311,12 +312,13 @@
   }
 
   .project-stepper-wrapper {
-    height:100vh;
+    height: 100vh;
     position: relative;
     padding: $px-32-spacer 0;
 
     @include this-and-above('sm') {
       padding: $px-64-spacer 0;
+      height:auto;
     }
 
     @include this-and-above('md') {
@@ -345,13 +347,12 @@
 
     &__synop {
       margin-left: $px-16-spacer;
-      font-family: $sans-ui;
+      font-family: $sans-text;
       font-size: clamped(12px, 14px, 380px, 1920px);
     }
 
     &__name {
       margin-left: $px-16-spacer;
-      font-size: clamped(16px, 18px, 380px, 1920px);
       font-family: $sans-ui;
     }
 
