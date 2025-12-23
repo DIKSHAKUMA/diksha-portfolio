@@ -8,12 +8,18 @@
   const isLightMode = ref<boolean>(false)
   const route = useRoute()
   const navbarStore = useNavbarStore()
+  const { $gsap } = useNuxtApp()
+  const colorMode = useColorMode()
+
+  let screenWidth: any
+  let currScrollPos: number
+  let prevScrollPos: number
 
   /**
    * Responsive navbar for those who like BEM with &.
    * Turns full modal on smaller devices. Hides on scroll down.
    * The code here is quite extensive as it integrates with the folio.
-   * Could be much simpler in less customized projects.
+   * Could be much simpler, I have gone overboard.
    *
    * As per usual I try my best to follow this order:
    * 1. Reactive state
@@ -36,13 +42,6 @@
   const isProjectsActive = computed(() => {
     return route.path === '/projects' || route.path.startsWith('/project/')
   })
-
-  let screenWidth: any
-  let currScrollPos: number
-  let prevScrollPos: number
-
-  const { $gsap } = useNuxtApp()
-  const colorMode = useColorMode()
 
   if (import.meta.client) {
     screenWidth = ref(window.innerWidth)
@@ -77,7 +76,7 @@
           opacity: 1,
           x: 0,
           stagger: 0.1,
-          ease: 'power3.out',
+          ease: 'power2.out',
           delay: 0.5,
           onComplete: () => {
             isAnimating.value = false
@@ -196,15 +195,6 @@
             </NuxtLink>
           </ClientOnly>
         </template>
-        <template #mode>
-          <div v-if="!navbarStore.isContactPage">
-            <UIColorSwitch
-              :is-mobile="isMobileActive"
-              v-model="isLightMode"
-              ref="colorSwitch"
-            />
-          </div>
-        </template>
       </UINavHeader>
 
       <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
@@ -260,6 +250,19 @@
           >
             Contact
           </NuxtLink>
+
+          <div
+            v-if="!navbarStore.isContactPage"
+            class="nav__item action"
+            data-name="menu"
+            data-text="Mode"
+          >
+            <UIColorSwitch
+              :is-mobile="isMobileActive"
+              v-model="isLightMode"
+              ref="colorSwitch"
+            />
+          </div>
         </div>
 
         <UINavFooter class="footer-wrapper">

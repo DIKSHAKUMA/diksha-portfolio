@@ -17,10 +17,6 @@
     <div v-if="slots.logo" class="logo">
       <slot name="logo"></slot>
     </div>
-    <div v-if="slots.mode" class="mode">
-      <slot name="mode"></slot>
-    </div>
-    <div></div>
   </div>
 </template>
 
@@ -31,15 +27,5 @@
     font-size: clamped(18px, 20px, 480px, 1920px);
     font-variation-settings: 'wght' 500;
     font-weight: 500;
-
-    [is-mobile='true'] & {
-      color: $primary;
-      font-weight: 500;
-      font-variation-settings: 'wght' 500;
-    }
-  }
-
-  .mode {
-    margin-right: 3px;
   }
 </style>
