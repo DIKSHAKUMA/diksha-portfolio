@@ -118,38 +118,72 @@
   }
 
   let scrollTimeout: NodeJS.Timeout | null = null
+  let lastUpdateTime = 0
+  let lastDirectionChange = 0
+  let lastDirection: 'up' | 'down' | null = null
 
   const onScroll = () => {
-    // Clear any pending scroll timeout
-    if (scrollTimeout) {
-      clearTimeout(scrollTimeout)
+    const now = Date.now()
+    const throttleDelay = 8 // Faster than 16ms for better responsiveness
+    
+    // Throttle to prevent excessive calls
+    if (now - lastUpdateTime < throttleDelay) {
+      return
+    }
+    
+    currScrollPos = window.scrollY
+
+    // Clamp scroll position to prevent iOS bounce from affecting navbar
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+    const clampedScrollPos = Math.max(0, Math.min(currScrollPos, maxScroll))
+
+    // Initialize prevScrollPos on first run
+    if (prevScrollPos === undefined) {
+      prevScrollPos = clampedScrollPos
+      lastUpdateTime = now
+      return
     }
 
-    // Debounce the scroll handler
-    scrollTimeout = setTimeout(() => {
-      currScrollPos = window.scrollY
-
-      // Clamp scroll position to prevent iOS bounce from affecting navbar
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight
-      const clampedScrollPos = Math.max(0, Math.min(currScrollPos, maxScroll))
-
-      // Initialize prevScrollPos on first run
-      if (prevScrollPos === undefined) {
-        prevScrollPos = clampedScrollPos
-        return
-      }
-
-      // Only update if scroll position changed significantly
-      if (Math.abs(prevScrollPos - clampedScrollPos) > 5) {
+    // Only update if scroll position changed significantly
+    if (Math.abs(prevScrollPos - clampedScrollPos) > 5) {
+      const currentDirection = prevScrollPos >= clampedScrollPos ? 'up' : 'down'
+      
+      // Prevent jitter: only change direction if enough time has passed since last change
+      const directionChangeDelay = 100 // Minimum time between direction changes
+      const canChangeDirection = !lastDirection || 
+        currentDirection === lastDirection || 
+        (now - lastDirectionChange > directionChangeDelay)
+      
+      if (canChangeDirection) {
         if (prevScrollPos >= clampedScrollPos) {
           isDown.value = false
         } else {
           isDown.value = true
         }
+        
+        // Track direction changes to prevent jitter
+        if (lastDirection !== currentDirection) {
+          lastDirection = currentDirection
+          lastDirectionChange = now
+        }
+        
         prevScrollPos = clampedScrollPos
+        lastUpdateTime = now
       }
-    }, 16) // ~60fps
+    }
+    
+    // Clear any pending timeout
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout)
+    }
+    
+    // Set timeout for cleanup only (much longer delay)
+    scrollTimeout = setTimeout(() => {
+      // Optional: Reset direction tracking after inactivity
+      if (now - lastDirectionChange > 1000) {
+        lastDirection = null
+      }
+    }, 200)
   }
 
   const resetMagneticLinks = () => {
