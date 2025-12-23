@@ -53,11 +53,17 @@
    */
   const navClassObj = computed(() => {
     return {
-      'nav-wrapper--moveup': isDown.value,
       'nav-wrapper--projects-open': navbarStore.isProjectsPage,
       'nav-wrapper--contact-open': navbarStore.isContactPage,
       'nav-wrapper--contact-burger-white':
         navbarStore.isContactPage && !isMobileActive.value,
+      'nav-wrapper--no-blur': isDown.value,
+    }
+  })
+
+  const navInnerClassObj = computed(() => {
+    return {
+      'nav-wrapper__inner--moveup': isDown.value,
     }
   })
 
@@ -181,7 +187,7 @@
 
 <template>
   <div class="nav-wrapper" :class="navClassObj">
-    <div class="nav-wrapper__inner">
+    <div class="nav-wrapper__inner" :class="navInnerClassObj">
       <UINavHeader :is-mobile="isMobileActive" class="header-wrapper">
         <template #logo>
           <ClientOnly>
@@ -346,35 +352,27 @@ just use a simple modal and be done with it. */
     width: 100%;
     z-index: 999;
     overflow: hidden;
-    transition: top 0.4s cubic-bezier(0, 0.55, 0.45, 1);
     font-family: $sans-ui;
     color: $secondary;
     height: 56px;
     z-index: 2000;
     background-color: $primary;
 
-    &--moveup {
-      top: -100px;
-    }
-
     @include this-and-above('lg') {
-      background-color: rgba(
-        23,
-        23,
-        23,
-        0.3
-      ); /* Semi-transparent dark background */
-      backdrop-filter: blur(15px); /* Just blur, no saturation or background */
+      background-color: rgba(23, 23, 23, 0.3);
+      backdrop-filter: blur(15px);
+      transition: backdrop-filter 0.3s ease, background-color 0.4s ease;
 
       .light-mode & {
-        background-color: rgba(
-          230,
-          230,
-          230,
-          0.3
-        ); /* Semi-transparent light background */
+        background-color: rgba(230, 230, 230, 0.3);
+      }
+
+      &.nav-wrapper--no-blur {
+        backdrop-filter: blur(0px);
+        background-color: unset;
       }
     }
+
     &--projects-open {
       background-color: unset !important;
     }
@@ -408,11 +406,18 @@ just use a simple modal and be done with it. */
   }
 
   .nav-wrapper__inner {
+    position: relative;
     display: flex;
     align-items: center;
     height: 100%;
     margin: 0 $px-16-spacer;
     text-transform: uppercase;
+    top: 0px;
+    transition: top 0.4s cubic-bezier(0, 0.55, 0.45, 1);
+
+    &--moveup {
+      top: -60px;
+    }
 
     @include this-and-above('md') {
       margin: 0 $px-64-spacer;
@@ -431,7 +436,7 @@ just use a simple modal and be done with it. */
     display: flex;
     flex-flow: column;
     position: absolute;
-    bottom: 120px;
+    bottom: $px-16-spacer;
     width: 80%;
     height: -moz-fit-content;
     align-items: flex-end;
@@ -552,15 +557,24 @@ just use a simple modal and be done with it. */
       }
     }
 
-    &__item::before {
-      content: '•';
-      margin-left: -15px;
-      font-size: 38px;
-      color: inherit;
-      bottom: -5px;
-      position: relative;
-      opacity: 0;
-      transition: opacity 0.2s ease;
+    &__item {
+      &::before {
+        content: '•';
+        margin-left: -15px;
+        font-size: 38px;
+        color: inherit;
+        bottom: -5px;
+        position: relative;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      // Hide bullet for color switch (last item with action class)
+      &:last-child.action::before,
+      // Fallback for any action item with direct div child (color switch)
+      &.action:has(> div)::before {
+        display: none;
+      }
 
       @include this-and-above('md') {
         font-size: 22px;

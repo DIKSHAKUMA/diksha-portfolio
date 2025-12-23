@@ -31,14 +31,16 @@
   .icon {
     z-index: 999;
     position: relative;
+    transform: scale(1.001);
+    vector-effect: non-scaling-stroke;
   }
 
   .icon--right {
-    right: 5px;
+    right: 6px;
   }
 
   .ios-switch {
-    position: sticky;
+    position: relative;
     display: inline-block;
     cursor: pointer;
     z-index: 99;
