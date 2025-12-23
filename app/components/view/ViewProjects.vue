@@ -331,11 +331,10 @@
     display: inline-block;
     width: 6px;
     height: 6px;
-    background-color: #009b81;
+    background-color: #008080;
     border-radius: 50%;
     flex-shrink: 0;
     position: relative;
-    top: -2px; /* Fine-tune vertical alignment */
     animation: blink 1.2s steps(1, end) infinite;
     transition: opacity 0.05s ease-out;
   }
@@ -481,7 +480,7 @@
       }
 
       &__info {
-        margin: $px-16-spacer $px-16-spacer;
+        margin: $px-8-spacer $px-16-spacer;
         pointer-events: none;
         cursor: default;
       }

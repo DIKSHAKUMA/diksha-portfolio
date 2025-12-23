@@ -221,7 +221,7 @@
     top: 0.1em; 
     width: 6px;
     height: 6px;
-    background-color: #009b81;
+    background-color: #008080;
     border-radius: 50%;
     animation: blink 1.2s steps(1, end) infinite;
     transition: opacity 0.05s ease-out;
