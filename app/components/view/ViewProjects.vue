@@ -331,12 +331,15 @@
     display: inline-block;
     width: 6px;
     height: 6px;
-    background-color: #008080;
+    background-color: $accent2;
     border-radius: 50%;
     flex-shrink: 0;
     position: relative;
-    animation: blink 1.2s steps(1, end) infinite;
     transition: opacity 0.05s ease-out;
+  }
+
+  .projects__project--open .blinking-dot {
+    animation: blink .8s steps(1, end) infinite;
   }
 
   @keyframes blink {
@@ -363,7 +366,7 @@
   }
 
   h4 {
-    margin:0;
+    margin: 0;
   }
 
   .projects-wrapper {

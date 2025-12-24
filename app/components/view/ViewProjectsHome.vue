@@ -218,13 +218,18 @@
 
   .blinking-dot {
     align-self: center !important;
-    top: 0.1em; 
+    top: 0.1em;
     width: 6px;
     height: 6px;
-    background-color: #008080;
+    background-color: $accent2;
     border-radius: 50%;
-    animation: blink 1.2s steps(1, end) infinite;
     transition: opacity 0.05s ease-out;
+  }
+
+  @media (hover: hover) and (min-width: 768px) {
+    .projects__abstract__item:hover .blinking-dot {
+      animation: blink .8s steps(1, end) infinite;
+    }
   }
 
   @keyframes blink {
