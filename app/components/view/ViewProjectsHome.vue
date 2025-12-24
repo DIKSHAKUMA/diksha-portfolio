@@ -88,26 +88,102 @@
           })
         }
 
-        /* GSAP hover animation to avoid CSS transform conflicts */
-        item.firstElementChild.addEventListener('mouseenter', () => {
-          $gsap.set(item.firstElementChild, { clearProps: 'transition' })
-          $gsap.to(item.firstElementChild, {
-            scale: 0.98,
-            duration: 0.25,
-            ease: 'power1.in',
-            force3D: true,
-            overwrite: true,
+        /* Detect mobile devices */
+        const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window
+
+        /* Track mouse position and parallax for each item
+           We use a map here as we need to store the DOM element jajaja where is my Tenerife */
+        const itemStates = new Map<
+          Element,
+          {
+            isHovered: boolean
+            currentX: number
+            currentY: number
+            targetX: number
+            targetY: number
+          }
+        >()
+
+        items.forEach((item: any) => {
+          const imageContainer = item.firstElementChild
+          const state = {
+            isHovered: false,
+            currentX: 0,
+            currentY: 0,
+            targetX: 0,
+            targetY: 0,
+          }
+          itemStates.set(item, state)
+
+          /* Mouse enter - scale up (works on all devices) */
+          imageContainer.addEventListener('mouseenter', () => {
+            state.isHovered = true
+            $gsap.set(imageContainer, { clearProps: 'transition' })
+            $gsap.to(imageContainer, {
+              scale: 1.05,
+              duration: 0.25,
+              ease: 'power1.out',
+              force3D: true,
+              overwrite: true,
+            })
           })
+
+          /* Mouse leave - scale back to normal and reset position */
+          imageContainer.addEventListener('mouseleave', () => {
+            state.isHovered = false
+            state.targetX = 0
+            state.targetY = 0
+
+            $gsap.to(imageContainer, {
+              scale: 1,
+              x: 0,
+              y: 0,
+              duration: 0.3,
+              ease: 'power2.out',
+              force3D: true,
+            })
+          })
+
+          /* Mouse move - parallax effect (desktop only) */
+          if (!isMobile) {
+            item.addEventListener('mousemove', (e: MouseEvent) => {
+              if (!state.isHovered) return
+
+              const rect = item.getBoundingClientRect()
+              const centerX = rect.left + rect.width / 2
+              const centerY = rect.top + rect.height / 2
+
+              /* Calculate distance from center (normalized) */
+              const deltaX = (e.clientX - centerX) / (rect.width / 2)
+              const deltaY = (e.clientY - centerY) / (rect.height / 2)
+
+              /* Set target position (opposite direction, limited range) */
+              state.targetX = -deltaX * 8
+              state.targetY = -deltaY * 6
+            })
+          }
         })
 
-        item.firstElementChild.addEventListener('mouseleave', () => {
-          $gsap.to(item.firstElementChild, {
-            scale: 1,
-            duration: 0.25,
-            ease: 'power2.out',
-            force3D: true,
-          })
-        })
+        /* Smooth parallax animation using RAF (desktop only) */
+        if (!isMobile) {
+          const animateParallax = () => {
+            itemStates.forEach((state, item) => {
+              const imageContainer = item.firstElementChild
+
+              /* Smooth easing towards target position */
+              state.currentX += (state.targetX - state.currentX) * 0.1
+              state.currentY += (state.targetY - state.currentY) * 0.1
+
+              $gsap.set(imageContainer, {
+                x: state.currentX,
+                y: state.currentY,
+              })
+            })
+
+            requestAnimationFrame(animateParallax)
+          }
+          animateParallax()
+        }
       })
     })
   })
@@ -228,7 +304,7 @@
 
   @media (hover: hover) and (min-width: 768px) {
     .projects__abstract__item:hover .blinking-dot {
-      animation: blink .8s steps(1, end) infinite;
+      animation: blink 0.8s steps(1, end) infinite;
     }
   }
 
@@ -312,12 +388,6 @@
           object-fit: cover;
           object-position: center;
           transition: filter 0.3s ease;
-        }
-
-        @media (hover: hover), (-ms-high-contrast: none) {
-          img:hover {
-            filter: brightness(0.7);
-          }
         }
 
         &--lab {
