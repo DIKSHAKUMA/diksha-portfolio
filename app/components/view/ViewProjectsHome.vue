@@ -106,6 +106,7 @@
 
         items.forEach((item: any) => {
           const imageContainer = item.firstElementChild
+          const image = imageContainer.querySelector('img')
           const state = {
             isHovered: false,
             currentX: 0,
@@ -118,8 +119,8 @@
           /* Mouse enter - scale up (works on all devices) */
           imageContainer.addEventListener('mouseenter', () => {
             state.isHovered = true
-            $gsap.set(imageContainer, { clearProps: 'transition' })
-            $gsap.to(imageContainer, {
+            $gsap.set(image, { clearProps: 'transition' })
+            $gsap.to(image, {
               scale: 1.05,
               duration: 0.25,
               ease: 'power1.out',
@@ -134,7 +135,7 @@
             state.targetX = 0
             state.targetY = 0
 
-            $gsap.to(imageContainer, {
+            $gsap.to(image, {
               scale: 1,
               x: 0,
               y: 0,
@@ -158,8 +159,8 @@
               const deltaY = (e.clientY - centerY) / (rect.height / 2)
 
               /* Set target position (opposite direction, limited range) */
-              state.targetX = -deltaX * 8
-              state.targetY = -deltaY * 6
+              state.targetX = -deltaX * 10
+              state.targetY = -deltaY * 8
             })
           }
         })
@@ -169,12 +170,13 @@
           const animateParallax = () => {
             itemStates.forEach((state, item) => {
               const imageContainer = item.firstElementChild
+              const image = imageContainer.querySelector('img')
 
               /* Smooth easing towards target position */
               state.currentX += (state.targetX - state.currentX) * 0.1
               state.currentY += (state.targetY - state.currentY) * 0.1
 
-              $gsap.set(imageContainer, {
+              $gsap.set(image, {
                 x: state.currentX,
                 y: state.currentY,
               })
@@ -381,13 +383,13 @@
         cursor: pointer;
         height: 100%;
         aspect-ratio: 4/3;
+        overflow: hidden;
 
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           object-position: center;
-          transition: filter 0.3s ease;
         }
 
         &--lab {
