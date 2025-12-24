@@ -20,7 +20,7 @@
               ? 'line-md:sunny-outline-loop'
               : 'line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition'
           "
-          :size="isMobile ? 30 : 19"
+          :size="isMobile ? 30 : 20"
         />
       </i>
     </label>
@@ -33,7 +33,7 @@
     position: relative;
     transform: scale(1.001);
     vector-effect: non-scaling-stroke;
-    bottom:1px;
+    bottom: 1px;
   }
 
   .icon--right {

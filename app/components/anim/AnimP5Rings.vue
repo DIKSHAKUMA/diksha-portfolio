@@ -36,18 +36,18 @@
       const baseSat = 21
 
       if (colorMode.value === 'light') {
-        /* Light mode: Use darker shades of the teal-blue */
+        /* Light mode: Use darker shades of teal-blue with golden accent */
         return [
           hslToRgb(baseHue, baseSat + 10, 15) /* Darker teal */,
-          hslToRgb(baseHue, baseSat + 5, 25) /* Medium teal */,
+          hslToRgb(38, 74, 40) /* Golden accent - darker for light mode */,
           hslToRgb(baseHue, baseSat, 35) /* Lighter teal */,
           hslToRgb(baseHue, baseSat + 15, 20) /* Rich teal */,
         ]
       }
-      /* Dark mode: Use stepped shades of the teal-blue up to the brightest */
+      /* Dark mode: Use stepped shades of teal-blue up to the brightest with golden accent */
       return [
         hslToRgb(baseHue, baseSat, 20) /* Dark teal */,
-        hslToRgb(baseHue, baseSat + 10, 30) /* Medium teal */,
+        hslToRgb(38, 74, 48) /* Golden accent - #d8a20 */,
         hslToRgb(baseHue, baseSat + 5, 40) /* Light teal */,
         hslToRgb(baseHue, baseSat + 20, 50) /* Bright teal */,
       ]

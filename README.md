@@ -14,6 +14,8 @@ This project has been a labor of love in a blazing Barcelona summer.
 
 From the outset, I wanted to pull together many creative ideas and libraries. Motion is key, and so I am making use of P5js, Pixi, and GSAP. The motion parts are there to enhance the content parts. Halfway through the project, I decided to add a blog. I will be posting more about the integration between Hygraph and Nuxt MDC later on, on the blog.
 
+:innocent: 2026. Given time, as I want to work on some other personal projects, I will be adding prefers-reduced-motion option early 2026.
+
 Have a coffee and a slow visit. :penguin: .T
 
 ## Upgrades 3/12/2025

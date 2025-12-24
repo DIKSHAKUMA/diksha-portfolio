@@ -92,7 +92,7 @@
         const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window
 
         /* Track mouse position and parallax for each item
-           We use a map here as we need to store the DOM element jajaja where is my Tenerife */
+           We use a Map here as we need to store the DOM element jajaja where is my Tenerife */
         const itemStates = new Map<
           Element,
           {
@@ -170,7 +170,7 @@
           const animateParallax = () => {
             itemStates.forEach((state, item) => {
               const imageContainer = item.firstElementChild
-              const image = imageContainer.querySelector('img')
+              const image = imageContainer!.querySelector('img')
 
               /* Smooth easing towards target position */
               state.currentX += (state.targetX - state.currentX) * 0.1
