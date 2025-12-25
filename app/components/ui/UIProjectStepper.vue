@@ -190,7 +190,6 @@
           /* Animate the mask position on scroll */
           $gsap.from(imageContainer, {
             opacity: 0,
-            scale: 0.8,
             duration: 0.5,
             ease: 'power1.out',
             scrollTrigger: {
@@ -318,7 +317,7 @@
 
     @include this-and-above('sm') {
       padding: $px-64-spacer 0;
-      height:auto;
+      height: auto;
     }
 
     @include this-and-above('md') {

@@ -3,17 +3,18 @@
 
   const store = useFolioStore()
   const route = useRoute()
-  let ctx: gsap.Context
-  /* Optimize performance a litttle */
-  let videoObserver: IntersectionObserver | null = null
-  let videoObserver2: IntersectionObserver | null = null
-  /* const options = {} */
 
   /* Template refs */
   const infoSection = useTemplateRef<HTMLElement>('infoSection')
   const textSection = useTemplateRef<HTMLElement>('textSection')
   const muxPlayer = useTemplateRef<any>('muxPlayer')
   const muxPlayer2 = useTemplateRef<any>('muxPlayer2')
+
+  let ctx: gsap.Context
+  /* Optimize performance a litttle */
+  let videoObserver: IntersectionObserver | null = null
+  let videoObserver2: IntersectionObserver | null = null
+  /* const options = {} */
 
   definePageMeta({
     layout: 'default',
@@ -139,8 +140,7 @@
   /* Get video placeholder - REMOVED FOR PERFORMANCE */
 
   onMounted(async () => {
-    const { $lenis, $gsap } = useNuxtApp()
-    $lenis.scrollTo(0, { immediate: true, force: true })
+    const { $gsap } = useNuxtApp()
 
     if (process.client) {
       await import('@mux/mux-player')
@@ -175,7 +175,7 @@
               proj.value.video[0].playbackId
             ) {
               /* We have video - only video gets delay */
-              delay = isFirstVideo ? 1.5 : 0
+              delay = isFirstVideo ? 1 : 0
             } else {
               /* No video - first image gets delay */
               delay = isFirstMedia ? 1.5 : 0
@@ -192,7 +192,7 @@
               overwrite: 'auto',
               scrollTrigger: {
                 trigger: mediaContainer,
-                start: 'top 85%',
+                start: 'top 90%',
                 end: 'top 35%',
                 toggleActions: 'play none none reverse',
                 preventOverlaps: false, // Prevents fighting between triggers
@@ -237,7 +237,7 @@
               overwrite: 'auto',
               scrollTrigger: {
                 trigger: item,
-                start: 'top 85%',
+                start: 'top 90%',
                 toggleActions: 'play none none reverse',
                 preventOverlaps: false, // Prevents fighting between triggers
                 fastScrollEnd: true, // Forces completion on fast scrolls
@@ -263,7 +263,7 @@
                 }
               })
             },
-            { threshold: 0.1 }
+            { threshold: 0.1 } // i.e. 10% visible or not visible
           )
 
           videoObserver.observe(muxPlayer.value)
@@ -271,7 +271,7 @@
       })
     }
 
-    /* Add second video intersection observer if project has second video */
+    /* Add back button intersection observer */
     if (process.client && proj.value?.video?.[1]?.playbackId) {
       nextTick(() => {
         if (muxPlayer2.value) {
@@ -285,7 +285,7 @@
                 }
               })
             },
-            { threshold: 0.1 }
+            { threshold: 0.1 } // i.e. 10% visible or not visible
           )
 
           videoObserver2.observe(muxPlayer2.value)
@@ -296,10 +296,11 @@
 
   onUnmounted(() => {
     ctx?.revert()
+
     videoObserver?.disconnect()
     videoObserver2?.disconnect()
 
-    // Cleanup mux player to prevent memory leaks and continued streaming
+    // Mux takes care of its own cleanup but
     if (muxPlayer.value) {
       muxPlayer.value.pause()
       // Additional cleanup if needed
@@ -314,7 +315,6 @@
 
     <div class="project-wrapper" v-if="proj">
       <main class="project">
-        <UIBackButton class="project__back-button" :text="'Back'" :to="''" />
         <CommonAbstract
           :label="proj.name"
           :desc="proj.synop?.[0] || proj.client || ''"
@@ -571,6 +571,12 @@
             :nextSynop="getNextProj.synop"
           />
         </nav>
+        <UIBackButton
+          class="project__back-button-bottom action"
+          data-name="menu"
+          data-text="Back"
+          :to="''"
+        />
       </main>
     </div>
   </div>
@@ -633,8 +639,26 @@
     align-self: flex-start;
     margin-top: 128px;
 
+    &__back-button-bottom {
+      margin: $px-16-spacer 0 $px-16-spacer 0;
+      text-align: center;
+
+      @include this-and-above('md') {
+        display: none;
+      }
+
+      .back-button__icon {
+        font-size: 24px;
+      }
+    }
+
     &__back-button {
-      margin-bottom: $px-32-spacer;
+      margin-bottom: $px-64-spacer;
+      display: none;
+
+      @include this-and-above('md') {
+        display: block;
+      }
     }
 
     &__line {
@@ -756,10 +780,11 @@
       &__b {
         flex: 1 0 50%;
         word-wrap: normal;
+        word-break: break-all;
         height: fit-content;
 
-        p{
-           font-size: clamped(14px, 16px, 380px, 1920px);
+        p {
+          font-size: clamped(14px, 16px, 380px, 1920px);
         }
       }
 
@@ -769,8 +794,6 @@
           font-size: clamped(14px, 16px, 380px, 1920px);
           text-decoration: underline;
         }
-
-
       }
     }
 

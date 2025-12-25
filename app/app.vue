@@ -34,7 +34,7 @@
     $gsap.registerPlugin(ExpoScaleEase)
     isLoaded.value = true
     cachedBlinds = $gsap.utils.toArray('.venice__blind')
-    $gsap.set(cachedBlinds, { scaleX: 0, force3D: true })
+    $gsap.set(cachedBlinds, { scaleX: 0 })
 
     /* Show intro animation on homepage */
     const isHomepage = route.path === '/'
@@ -83,14 +83,13 @@
           {
             scaleX: 1,
             opacity: 1,
-            force3D: true,
             transformOrigin: 'left center',
           },
           {
-            duration: 1.5,
-            rotationY: -120,
+            duration: 1,
+            scaleX: 0,
             opacity: 0,
-            force3D: true,
+            stagger: 0.05,
             onComplete: clearProps,
           }
         )
@@ -101,14 +100,13 @@
         {
           scaleX: 1,
           opacity: 1,
-          force3D: true,
           transformOrigin: 'left center',
         },
         {
-          duration: 1.5,
-          rotationY: -120,
+          duration: 1,
+          scaleX: 0,
           opacity: 0,
-          force3D: true,
+          stagger: 0.05,
           onComplete: clearProps,
         }
       )
@@ -140,13 +138,6 @@
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
-
-    <!-- Mobile: Hide every other blind for cleaner look -->
-    <div class="venice__blind venice__blind--desktop"></div>
-    <div class="venice__blind venice__blind--desktop"></div>
-    <div class="venice__blind venice__blind--desktop"></div>
-    <div class="venice__blind venice__blind--desktop"></div>
-    <div class="venice__blind venice__blind--desktop"></div>
   </div>
   <div class="circle-preloader" :class="{ 'is-visible': showIntroAnimation }">
     <svg class="circle-preloader__svg" viewBox="0 0 100 100">
@@ -192,7 +183,7 @@
 
   body {
     height: 100%;
-    transition: background-color .5s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    transition: background-color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   * {
@@ -333,15 +324,6 @@
 
       &:first-child {
         margin-left: 0;
-      }
-
-      /* Mobile-first: Hide desktop blinds by default, show on md+ */
-      &--desktop {
-        display: none;
-
-        @include this-and-above('md') {
-          display: block;
-        }
       }
     }
   }

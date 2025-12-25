@@ -43,14 +43,6 @@
       .slice(0, 3) /* Limit to 3 related posts */
   })
 
-  /* Reading time estimation */
-  const readingTime = computed(() => {
-    if (!post.value?.content) return '5 min read'
-    const words = post.value.content.split(' ').length
-    const minutes = Math.ceil(words / 200) /* Average reading speed */
-    return `${minutes} min read`
-  })
-
   /* Computed cover image URL using Hygraph provider */
   const coverImageUrl = computed(() => {
     if (!post.value?.coverImage?.handle) return undefined
@@ -196,6 +188,12 @@
     <div class="blog-post-wrapper">
       <div class="blog">
         <main class="blog__post">
+          <UIBackButton
+            class="blog__back-button action"
+            data-name="menu"
+            data-text="Back"
+            :to="''"
+          />
           <div v-if="post">
             <CommonAbstract
               :label="post.title"
@@ -292,6 +290,13 @@
         <UIWordOfDay v-if="showSidebar" />
         <div v-else class="word-sidebar-placeholder"></div>
       </aside>
+
+      <UIBackButton
+        class="blog__back-button-bottom action"
+        data-name="menu"
+        data-text="Back"
+        :to="''"
+      />
     </div>
   </div>
 </template>
@@ -371,6 +376,28 @@
     height: 100%;
     align-self: flex-start;
     margin: $px-128-spacer 0 $px-64-spacer 0;
+
+    &__back-button-bottom {
+      margin: $px-16-spacer 0 $px-16-spacer 0;
+      text-align: center;
+
+      @include this-and-above('md') {
+        display: none;
+      }
+
+      .back-button__icon {
+        font-size: 24px;
+      }
+    }
+
+    &__back-button {
+      margin-bottom: $px-64-spacer;
+      display: none;
+
+      @include this-and-above('md') {
+        display: block;
+      }
+    }
 
     &__line {
       margin: $px-64-spacer 0 $px-64-spacer 0;

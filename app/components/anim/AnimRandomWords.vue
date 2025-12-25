@@ -275,7 +275,7 @@
                   74 + colorShift,
                   68 + colorShift * 0.8,
                   83 + colorShift * 1.2,
-                  145 /* Add opacity (0-255, 145 = ~57% opacity) */
+                  50 /* Add opacity (0-255, 145 = ~57% opacity) */
                 )
               } else {
                 /* Dark mode: variations of accent2 (#fff0e8) with opacity */
@@ -283,7 +283,7 @@
                   255 - colorShift * 0.3,
                   240 + colorShift * 0.2,
                   232 + colorShift * 0.5,
-                  125 /* Add opacity (0-255, 125 = ~49% opacity) */
+                  50 /* Add opacity (0-255, 125 = ~49% opacity) */
                 )
               }
 

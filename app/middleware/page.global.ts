@@ -52,23 +52,22 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
     /* Optimized with cached elements */
     tl.set(veniceEl, { opacity: 1, visibility: 'visible', force3D: true })
-    /* Venetian blind rotation effect */
+    /* Venetian blind scale effect */
     tl.fromTo(
       blinds,
-      { rotationY: 120, opacity: 0 },
+      { scaleX: 0, opacity: 0 },
       {
-        duration: 1.5,
-        rotationY: 0,
+        duration: 1,
+        scaleX: 1,
         opacity: 1,
         transformOrigin: 'left center',
-        force3D: true,
-
+        stagger: 0.05,
       }
     )
   }
 
   to.meta.pageTransition.onBeforeEnter = (el: Element) => {
-    $gsap.set(blinds, { rotationY: 120, opacity: 0, force3D: true })
+    $gsap.set(blinds, { scaleX: 0, opacity: 0 })
   }
 
   to.meta.pageTransition.onEnter = (el: Element, done: () => void) => {
@@ -87,17 +86,16 @@ export default defineNuxtRouteMiddleware((to, from) => {
       },
     })
 
-    /* Venetian blind rotation exit */
+    /* Venetian blind scale exit */
     tl.fromTo(
       blinds,
-      { rotationY: 0, opacity: 1 },
+      { scaleX: 1, opacity: 1 },
       {
-        duration: 1.5,
-        rotationY: -120,
+        duration: 1,
+        scaleX: 0,
         opacity: 0,
         transformOrigin: 'left center',
-        force3D: true,
- 
+        stagger: 0.05,
       }
     )
   }

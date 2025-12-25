@@ -7,13 +7,14 @@
   /* PINIA 🍍 */
   const store = useFolioStore()
   const { $gsap } = useNuxtApp()
-
-  let ctx: gsap.Context
   const hoverHandlers = new Map<
     Element,
     { mouseenter: () => void; mouseleave: () => void }
   >()
   const splitInstances: SplitType[] = []
+
+  let ctx: gsap.Context
+  let rafID: number
 
   const getProjectTags = (project: any) => {
     if (!project?.tags || !Array.isArray(project.tags)) return ''
@@ -80,7 +81,7 @@
             force3D: true,
             scrollTrigger: {
               trigger: item,
-              start: 'top 80%',
+              start: 'top 90%',
               end: 'top 60%',
               toggleActions: 'play none none reverse',
               invalidateOnRefresh: false,
@@ -182,7 +183,7 @@
               })
             })
 
-            requestAnimationFrame(animateParallax)
+            rafID = requestAnimationFrame(animateParallax)
           }
           animateParallax()
         }
@@ -201,6 +202,9 @@
 
     /* Clear the array */
     splitInstances.length = 0
+
+    /* Clean up RAF */
+    cancelAnimationFrame(rafID)
   })
 </script>
 
