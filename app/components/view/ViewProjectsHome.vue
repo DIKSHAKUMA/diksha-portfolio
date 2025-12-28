@@ -271,7 +271,7 @@
       </section>
     </main>
     <CommonInfoLabel
-      :label="'Projects—more to come'"
+      :label="'Recent work / labs'"
       :class-name="'project-label'"
       :hpos="'center'"
       :hover-label="''"

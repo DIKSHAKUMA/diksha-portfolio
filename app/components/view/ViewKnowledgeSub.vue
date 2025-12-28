@@ -71,7 +71,7 @@
         :is-two-lines="false"
       />
       <CommonInfoLabel
-        :label="'Creative Developer'"
+        :label="'Interactive Developer'"
         :class-name="'photo-label'"
         :hpos="'center'"
         :hover-label="''"

@@ -163,7 +163,7 @@
         :is-two-lines="false"
       />
       <CommonInfoLabel
-        :label="'About this folio'"
+        :label="'Byte Me'"
         :class-name="'meta-label'"
         :hpos="'center'"
         :hover-label="''"

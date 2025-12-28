@@ -261,7 +261,7 @@ b
 
     &__desc {
       display: inline-block;
-      font-family: $sans-ui;
+      font-family: $sans-text;
       /* Default size for hero sections */
       font-size: clamped(16px, 24px, 480px, 1920px);
       font-weight: 400;

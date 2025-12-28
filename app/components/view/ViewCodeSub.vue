@@ -110,6 +110,14 @@
 <style lang="scss" scoped>
   .split-code-w {
     will-change: transform;
+    will-change: transform;
+    // Fixes the "shimmer" and blur during/after transform
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    // Forces the element to stay on the pixel grid
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
 
   /* same margins as other home (sub) components; ViewParallaxHome varies slightly due to parallax */
