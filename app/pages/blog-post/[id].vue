@@ -555,7 +555,7 @@
 
     &__title {
       font-size: clamped(18px, 24px, 480px, 1920px);
-      font-variation-settings: 'wght' 600;
+      font-variation-settings: 'wght' 500;
       color: $secondary;
       margin-bottom: $px-8-spacer;
       transition: all 0.3s ease;

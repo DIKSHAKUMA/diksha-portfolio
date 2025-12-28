@@ -254,7 +254,7 @@
               data-text="Home"
               class="logo action"
               @click="closeMenu"
-              >THOMAS
+              >Thomas
             </NuxtLink>
           </ClientOnly>
         </template>
@@ -420,12 +420,12 @@ just use a simple modal and be done with it. */
     }
 
     @include this-and-above('lg') {
-      background-color: rgba(23, 23, 23, 0.3);
+      background-color: rgba(24, 24, 27, 0.3);
       backdrop-filter: blur(10px);
       transition: backdrop-filter 0.3s ease, background-color 0.4s ease;
 
       .light-mode & {
-        background-color: rgba(230, 230, 230, 0.3);
+        background-color: rgba(250, 250, 250, 0.3);
       }
 
       &.nav-wrapper--no-blur {
@@ -472,7 +472,7 @@ just use a simple modal and be done with it. */
     align-items: center;
     height: 100%;
     margin: 0 $px-16-spacer;
-    text-transform: uppercase;
+    text-transform: none;
     top: 0px;
     transition: top 0.4s cubic-bezier(0, 0.55, 0.45, 1);
 

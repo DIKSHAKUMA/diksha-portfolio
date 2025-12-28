@@ -1,7 +1,12 @@
 /* https://nuxt.com/docs/api/configuration/nuxt-config */
 import { defineNuxtConfig } from 'nuxt/config'
+const fontBase = process.env.NUXT_EVERETT_FONT_URL
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
+
+  experimental: {
+    rolldown: true,
+  },
 
   app: {
     baseURL: '/',
@@ -76,17 +81,14 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@pinia/nuxt',
+    '@pinia/nuxt', // State first
     'pinia-plugin-persistedstate/nuxt',
-    '@vueuse/nuxt',
-    'nuxt-svgo',
-    '@nuxt/icon',
+    '@vueuse/nuxt', // Utilities
+    '@nuxt/fonts', // UI/Assets
     '@nuxt/image',
-    '@nuxtjs/robots',
-    'nuxt-site-config',
-    '@nuxtjs/seo',
-    '@nuxtjs/sitemap' /* Add sitemap module */,
-    '@nuxt/fonts',
+    '@nuxt/icon',
+    'nuxt-svgo',
+    '@nuxtjs/seo', // SEO (replaces individual robots/sitemap)
     '@nuxtjs/color-mode',
     '@nuxtjs/mdc',
     '@stefanobartoletti/nuxt-social-share',
@@ -94,22 +96,47 @@ export default defineNuxtConfig({
 
   // Font configuration with optimized loading
   fonts: {
-    adobe: {
-      id: ['bax5kkf'],
-    },
-
     families: [
       {
-        name: 'Proxima Nova',
-        provider: 'adobe',
-        weights: ['400', '500', '600', '700'],
+        name: 'Roboto Mono',
+        provider: 'google',
+        weights: ['400 600'],
+      },
+
+      {
+        name: 'Inter',
+        provider: 'google',
+        weights: ['400'],
+      },
+
+      {
+        name: 'TWK Everett',
+        provider: 'none',
+        src: `${fontBase}TWKEverett-Regular.woff2`,
+        weight: 400,
+        style: 'normal',
       },
       {
-        name: 'Neue Haas Grotesk Text',
-        provider: 'adobe',
-        weights: ['400', '700'],
+        name: 'TWK Everett',
+        provider: 'none',
+        src: `${fontBase}TWKEverett-BookItalic.woff2`,
+        weight: 400,
+        style: 'italic',
       },
-      { name: 'Azeret Mono', provider: 'adobe', weights: ['400'] },
+      {
+        name: 'TWK Everett',
+        provider: 'none',
+        src: `${fontBase}TWKEverett-Medium.woff2`,
+        weight: 500,
+        style: 'normal',
+      },
+      {
+        name: 'TWK Everett',
+        provider: 'none',
+        src: `${fontBase}TWKEverett-Bold.woff2`,
+        weight: 700,
+        style: 'normal',
+      },
     ],
   },
 
@@ -184,9 +211,9 @@ export default defineNuxtConfig({
 
   /* Hygraph base URL for assets */
   image: {
+    provider: 'ipx', // Keep this to protect your local/asset images
     providers: {
       hygraph: {
-        name: 'hygraph',
         provider: 'hygraph',
         options: {
           baseURL:
@@ -194,9 +221,6 @@ export default defineNuxtConfig({
         },
       },
     },
-    domains: ['eu-west-2.graphassets.com'],
-    /* Don't optimize external images in production */
-    provider: process.env.NODE_ENV === 'production' ? 'none' : 'ipx',
   },
 
   /* Hygraph fix rate limit when testing */

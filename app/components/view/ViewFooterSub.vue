@@ -116,31 +116,20 @@
       display: inline-block;
       z-index: 200;
       font-family: $sans-ui;
-      text-transform: uppercase;
       font-size: clamped(36px, 52px, 480px, 1920px);
-      font-weight: 700;
+      font-weight: 500;
       font-variation-settings: 'wght' 700;
 
       a {
         color: $secondary;
         position: relative;
-        background: linear-gradient(to right, $accent2, $accent2) $secondary
-          no-repeat left center;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-size: 0% 100%;
         text-decoration: underline;
         text-underline-offset: 15px;
         text-decoration-thickness: 2px;
         text-decoration-color: $secondary;
         transition: background-size 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67),
           text-decoration-color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-
-        &:hover {
-          background-size: 100% 100%;
-          text-decoration-color: $accent2;
-        }
+        line-height: 1.2;
       }
     }
   }

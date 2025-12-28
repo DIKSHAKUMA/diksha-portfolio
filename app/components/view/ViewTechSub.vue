@@ -45,7 +45,7 @@
         height: 600,
       })
 
-      const image = await Assets.load('/img/commodore.jpg')
+      const image = await Assets.load('/img/key.jpg')
       imageSprite = PIXI.Sprite.from(image)
 
       /* Make imageSprite fill the 800x600 canvas */
@@ -215,7 +215,7 @@
   h3,
   h4,
   h5 {
-    color: #171717;
+    color: #fafafa;
     font-family:$sans-ui-mono;
   }
 
@@ -247,7 +247,7 @@
 
   .meta {
     overflow: hidden;
-    color: #171717;
+    color: #fafafa;
 
     &__header {
       position: relative;
@@ -282,7 +282,7 @@
         /* Also target direct links as fallback */
         a {
           text-decoration: none !important; /* Remove the underline */
-          border-bottom: 2px solid #171717; /* Add border instead */
+          border-bottom: 2px solid #fafafa; /* Add border instead */
           padding-bottom: 2px; /* Optional: add some space */
         }
       }

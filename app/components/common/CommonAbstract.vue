@@ -33,7 +33,7 @@ b
   })
 
   const { $gsap } = useNuxtApp()
-  let ctx: gsap.Context
+  let ctx: gsap.Context | undefined
   const splitInstances: SplitType[] = []
 
   const abstractClassObj = computed(() => {
@@ -216,19 +216,22 @@ b
       flex-wrap: wrap;
       height: max-content;
       margin-bottom: $px-32-spacer;
-      line-height: 1;
       font-family: $sans-ui;
-      text-transform: uppercase;
-      font-weight: 700;
-      font-variation-settings: 'wght' 700;
+      text-transform: none;
+      font-weight: 500;
+      font-variation-settings: 'wght' 500;
 
       &--hero {
         margin-bottom: 0;
+        line-height: 1.2;
+        text-box-trim: both; /* Trims the leading from the top and bottom of the box */
+        text-box-edge: cap alphabetic;
       }
 
       /* When we need a sub header (smaller) */
       &--secondary {
         font-size: clamped(36px, 48px, 480px, 1920px);
+        line-height: 1.2;
       }
 
       &--full-width {
@@ -258,9 +261,10 @@ b
 
     &__desc {
       display: inline-block;
-      font-family: $sans-text;
+      font-family: $sans-ui;
       /* Default size for hero sections */
       font-size: clamped(16px, 24px, 480px, 1920px);
+      font-weight: 400;
 
       /* Smaller size when used with secondary headers */
       .abstract__header--secondary + div & {

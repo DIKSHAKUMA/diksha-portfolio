@@ -7,9 +7,9 @@
 
   const getCurrentBgColor = () => {
     if (colorMode.value === 'light') {
-      return '#e6e6e6'
+      return '#fafafa'
     }
-    return '#171717'
+    return '#18181b'
   }
 
   /* Helper function to convert HSL to RGB */

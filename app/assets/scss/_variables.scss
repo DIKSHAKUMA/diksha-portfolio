@@ -2,18 +2,18 @@ $primary-static: #171717;
 $secondary-static: #e6e6e6;
 
 .dark-mode {
-    --primary: #171717;
-    --secondary: #e6e6e6;
-    --accent1: #2c2a38;
-    --accent2: #bec1c6;
+    --primary: #18181b; /* Rich Zinc background */
+    --secondary: #fafafa; /* Crisp white text */
+    --accent1: #27272a; /* Subtle borders or secondary surfaces */
+    --accent2: #a1a1aa; /* Sophisticated muted gray accent */
     --color-scheme: dark;
 }
 
 .light-mode {
-    --primary: #e6e6e6;
-    --secondary: #171717;
-    --accent1: #bec1c6;
-    --accent2: #2c2a38;
+    --primary: #fafafa;
+    --secondary: #18181b;
+    --accent1: #2c2a38;
+    --accent2: #bec1c6;
     --color-scheme: light;
 }
 
@@ -25,7 +25,7 @@ $color-scheme: var(--color-scheme);
 
 /* Fonts */
 $sans-ui:
-    "Proxima Nova",
+    "TWK Everett",
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;
@@ -33,14 +33,14 @@ $sans-ui-opt: auto;
 $sans-ui-stl: normal;
 
 $sans-text:
-    "Neue Haas Grotesk Text",
+    "Inter",
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;
 $sans-text-opt: auto;
 $sans-text-stl: normal;
 
-$sans-ui-mono: "Azeret Mono", "Courier New", Courier, monospace;
+$sans-ui-mono: "Roboto Mono", "Courier New", Courier, monospace;
 $sans-ui-mono-opt: auto;
 $sans-ui-mono-stl: normal;
 

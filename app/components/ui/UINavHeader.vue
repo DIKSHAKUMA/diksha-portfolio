@@ -27,6 +27,7 @@
     font-size: clamped(18px, 20px, 480px, 1920px);
     font-variation-settings: 'wght' 500;
     font-weight: 500;
+    letter-spacing: 1px;
 
     [is-mobile='true'] & {
       color: $primary;

@@ -18,9 +18,8 @@
 
   const getProjectTags = (project: any) => {
     if (!project?.tags || !Array.isArray(project.tags)) return ''
-    return project.tags.join(', ')
+    return project.tags.map((tag) => `[ ${tag} ]`).join(' ')
   }
-
   const dateSorted = computed(() => {
     if (!store.data?.projects) return []
 
@@ -255,14 +254,15 @@
 
             <div class="projects__abstract__info">
               <div class="projects__abstract__title">
-                <h4 class="split-proj-w">{{ proj.name }}</h4>
-                <h4 class="split-proj-w">{{ proj.date.split(' ')[1] }}</h4>
+                <h6 class="split-proj-w">
+                  {{ proj.name }}
+                </h6>
+                <h6 class="split-proj-w">{{ proj.date.split(' ')[1] }}</h6>
               </div>
               <span
                 v-if="proj.tags && proj.tags.length > 0"
-                class="project-tags split-proj-w"
+                class="projects__abstract__meta split-proj-w"
               >
-                <span class="blinking-dot"></span>
                 {{ getProjectTags(proj) }}
               </span>
             </div>
@@ -283,29 +283,11 @@
 </template>
 
 <style lang="scss" scoped>
-  h4 {
+  h6 {
     margin: 0;
-  }
-
-  img,
-  .split-proj-w {
-    will-change: transform;
-  }
-
-  .project-tags {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .blinking-dot {
-    align-self: center !important;
-    top: 0.1em;
-    width: 6px;
-    height: 6px;
-    background-color: $accent2;
-    border-radius: 50%;
-    transition: opacity 0.05s ease-out;
+    font-family: $sans-ui-mono;
+    font-weight: 500;
+    font-variation-settings: 'wght' 500;
   }
 
   @media (hover: hover) and (min-width: 768px) {
@@ -334,8 +316,6 @@
     /* Image sharpness optimizations */
     image-rendering: -webkit-optimize-contrast;
     -ms-interpolation-mode: bicubic;
-    /* Prevent subpixel rendering issues */
-    -webkit-font-smoothing: subpixel-antialiased;
     /* Performance optimizations */
     contain: layout style paint;
   }
@@ -379,6 +359,8 @@
         opacity: 0;
         pointer-events: none;
         clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        -webkit-font-smoothing: antialiased; /* More consistent during transforms */
+        -moz-osx-font-smoothing: grayscale;
       }
 
       &__image {
@@ -422,13 +404,13 @@
       &__info {
         margin: $px-16-spacer $px-16-spacer;
         pointer-events: none;
+        font-family: $sans-ui-mono;
+        text-transform: uppercase;
 
         span {
           position: relative;
           margin: 0;
           color: $secondary;
-          font-family: $sans-ui;
-          font-size: 13px;
           font-weight: 500;
         }
       }
@@ -438,6 +420,11 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+      }
+
+      &__meta {
+        font-size: clamped(10px, 11px, 480px, 1920px);
+        top: -4px;
       }
 
       @include this-and-above('md') {

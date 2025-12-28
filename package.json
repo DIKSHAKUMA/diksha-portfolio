@@ -9,6 +9,9 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  },
   "dependencies": {
     "@mux/blurup": "^1.0.2",
     "@mux/mux-player": "^3.5.3",

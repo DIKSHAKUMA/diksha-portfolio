@@ -190,9 +190,9 @@
 
   const getCurrentBgColor = () => {
     if (colorMode.value === 'light') {
-      return [230, 230, 230] /* #e6e6e6 in RGB */
+      return [250, 250, 250] /* #fafafa in RGB */
     }
-    return [23, 23, 23] /* #171717 in RGB */
+    return [24, 24, 27] /* #18181b in RGB */
   }
 
   onMounted(async () => {
@@ -217,7 +217,7 @@
             /* Set color mode and text properties */
             p.colorMode(p.RGB, 255)
             p.textAlign(p.CENTER)
-            p.textFont('Neue Haas Grotesk Text')
+            p.textFont('TWK Everett')
 
             /* Define hue as a random value */
             hue = p.random(180, 360)

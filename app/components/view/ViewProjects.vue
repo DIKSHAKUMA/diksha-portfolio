@@ -44,7 +44,7 @@
 
   const getProjectTags = (project: any) => {
     if (!project?.tags || !Array.isArray(project.tags)) return ''
-    return project.tags.join(', ')
+    return project.tags.map((tag) => `[ ${tag} ]`).join(' ')
   }
 
   const handleProjectClick = (project: any) => {
@@ -308,16 +308,17 @@
 
             <div class="projects__project__info">
               <div class="projects__project__title">
-                <h4>{{ project.name }}</h4>
-                <h4>{{ project.date.split(' ')[1] }}</h4>
+                <h6 class="split-proj-w">
+                  {{ project.name }}
+                </h6>
+                <h6 class="split-proj-w">{{ project.date.split(' ')[1] }}</h6>
               </div>
               <span
                 v-if="project.tags && project.tags.length > 0"
-                class="projects__project__tags"
+                class="projects__project__meta split-proj-w"
               >
-                <span class="blinking-dot"></span>
-                {{ getProjectTags(project) }}</span
-              >
+                {{ getProjectTags(project) }}
+              </span>
             </div>
           </div>
         </div>
@@ -327,32 +328,6 @@
 </template>
 
 <style lang="scss" scoped>
-  .blinking-dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background-color: $accent2;
-    border-radius: 50%;
-    flex-shrink: 0;
-    position: relative;
-    transition: opacity 0.05s ease-out;
-  }
-
-  .projects__project--open .blinking-dot {
-    animation: blink .8s steps(1, end) infinite;
-  }
-
-  @keyframes blink {
-    0%,
-    45% {
-      opacity: 1;
-    }
-    50%,
-    100% {
-      opacity: 0;
-    }
-  }
-
   img {
     height: auto;
   }
@@ -365,8 +340,10 @@
     margin: 0;
   }
 
-  h4 {
+  h6 {
     margin: 0;
+    font-family: $sans-ui-mono;
+    font-weight: 400;
   }
 
   .projects-wrapper {
@@ -449,11 +426,11 @@
       font-size: clamped(24px, 32px, 480px, 1920px);
       font-family: $sans-ui-mono;
       font-weight: 400;
-      font-variation-settings: 'wght' 500;
       white-space: nowrap;
       color: $secondary;
       font-variant-numeric: tabular-nums;
       /* Monospace numbers for consistent width */
+      letter-spacing: 0.02em;
     }
   }
 
@@ -470,12 +447,16 @@
       flex-shrink: 0;
       /* Prevent shrinking to maintain consistent layout */
       transform-origin: center;
-      transition: transform 0.3s ease-out;
+      scale: 1;
+      transition: scale 0.3s ease-out;
       /* Smooth scale transitions */
       cursor: default;
+      backface-visibility: hidden;
+      transform: translate3d(0, 0, 0); /* Use 3D for better hardware accel */
+      isolation: isolate; /* Create a sandbox for better compositing */
 
       &--open {
-        transform: scale(1.08);
+        scale: (1.06);
       }
 
       &__image-container {
@@ -483,9 +464,25 @@
       }
 
       &__info {
-        margin: $px-8-spacer $px-16-spacer;
+        margin: $px-16-spacer $px-16-spacer;
         pointer-events: none;
-        cursor: default;
+        font-family: $sans-ui-mono;
+        text-transform: uppercase;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+
+        /* Force an independent text layer */
+        transform: translate3d(0, 0, 0);
+
+        span {
+          position: relative;
+          margin: 0;
+          color: $secondary;
+          font-weight: 500;
+          display: inline-block;
+          backface-visibility: hidden;
+        }
       }
 
       &__title {
@@ -494,17 +491,9 @@
         justify-content: space-between;
       }
 
-      &__tags {
-        position: relative;
-        width: 80%;
-        overflow-wrap: break-word;
-        margin: 0;
-        color: $secondary;
-        font-family: $sans-ui;
-        font-size: 13px;
-        font-weight: 400;
-        font-variation-settings: 'wght' 400;
-        backface-visibility: hidden;
+      &__meta {
+        font-size: round(clamped(10px, 11px, 480px, 1920px), 1px);
+        top: -4px;
       }
 
       &__image {
@@ -519,7 +508,6 @@
         image-rendering: optimize-contrast;
         image-rendering: auto;
         backface-visibility: hidden;
-        will-change: transform;
 
         @include this-and-above('sm') {
           width: 75vw;

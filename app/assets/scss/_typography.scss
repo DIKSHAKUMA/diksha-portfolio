@@ -27,17 +27,18 @@ a:visited {
 h1 {
     padding: 0;
     margin: 0;
-    font-weight: 600;
+    font-weight: 500;
     font-family: variables.$sans-ui;
 }
 
 h2,
 h3,
 h4,
-h5 {
+h5,
+h6 {
     padding: 0;
     margin: 0;
-    font-weight: 600;
+    font-weight: 550;
     font-family: variables.$sans-ui;
 }
 
@@ -73,6 +74,14 @@ h5 {
     letter-spacing: .8px;
 }
 
+h6 {
+    font-size: functions.clamped(10px, 14px, 380px, 1920px);
+    margin-bottom: 0.2rem;
+    color: variables.$secondary;
+    letter-spacing: .6px;
+}
+
 p {
     line-height: 1.5;
+    font-weight:300;
 }
