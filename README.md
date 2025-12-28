@@ -1,5 +1,4 @@
-![Image](https://github.com/user-attachments/assets/a194e918-3277-4a3b-9411-e6e82eceb108)
-![Image](https://github.com/user-attachments/assets/8ff45b18-4616-417d-bf08-5537ec6d9b58)
+![Image](https://github.com/user-attachments/assets/9b768684-e11e-4eac-bb5b-c2df75293a3a)
 
 <br />
 <br />
@@ -13,6 +12,8 @@
 This project has been a labor of love in a blazing Barcelona summer.
 
 From the outset, I wanted to pull together many creative ideas and libraries. Motion is key, and so I am making use of P5js, Pixi, and GSAP. The motion parts are there to enhance the content parts. Halfway through the project, I decided to add a blog. I will be posting more about the integration between Hygraph and Nuxt MDC later on, on the blog.
+
+Glad for the positive reception, with an award over at CSSWinner and a Kudos Award at CSS Design Awards. Coming soon to a screen near you on the GSAP showcase as well, I hear.
 
 :innocent: 2026. Given time, as I want to work on some other personal projects, I will be adding prefers-reduced-motion option early 2026.
 
@@ -30,7 +31,7 @@ Have a coffee and a slow visit. :penguin: .T
   Now using Google for body and mono fonts; using the nice TWKEverett font for UI and headings in CommonAbstractt component. TWKEverett is hosted on my Cloudflare R2, set as custom provider, and loaded via .env path.
 
   - **Visal tuning**  
-  Some fixes and optimizations and visual fine tunings.
+    Some fixes and optimizations and visual fine tunings.
 
 ## Upgrades 3/12/2025
 
