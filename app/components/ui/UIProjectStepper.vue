@@ -346,7 +346,7 @@
 
     &__synop {
       margin-left: $px-16-spacer;
-      font-family: $sans-text;
+      font-family: $sans-ui;
       font-size: clamped(12px, 14px, 380px, 1920px);
     }
 

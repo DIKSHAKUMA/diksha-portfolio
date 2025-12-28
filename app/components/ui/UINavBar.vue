@@ -604,7 +604,7 @@ just use a simple modal and be done with it. */
       transition: color 0.3s;
       padding-right: 0px;
       color: $primary;
-      font-weight: 700;
+      font-weight: 500;
       font-variation-settings: 'wght' 700;
 
       &:hover {

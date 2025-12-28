@@ -308,10 +308,10 @@
 
             <div class="projects__project__info">
               <div class="projects__project__title">
-                <h6 class="split-proj-w">
+                <p class="split-proj-w">
                   {{ project.name }}
-                </h6>
-                <h6 class="split-proj-w">{{ project.date.split(' ')[1] }}</h6>
+                </p>
+                <p class="split-proj-w">{{ project.date.split(' ')[1] }}</p>
               </div>
               <span
                 v-if="project.tags && project.tags.length > 0"
@@ -489,6 +489,9 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+             font-weight: 500;
+        font-variation-settings: 'wght' 500;
+        font-size: clamped(14px, 16px, 480px, 1920px) !important;
       }
 
       &__meta {
