@@ -1,8 +1,5 @@
 ![Image](https://github.com/user-attachments/assets/9b768684-e11e-4eac-bb5b-c2df75293a3a)
-
 <br />
-<br />
-
 ## V1
 
 [www.thomasthorstensson.com](https://www.thomasthorstensson.com)
