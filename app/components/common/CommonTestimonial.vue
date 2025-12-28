@@ -22,25 +22,26 @@
     /* Simple fade-in animation for better performance */
     ctx = $gsap.context(() => {
       const testimonialElements = $gsap.utils.toArray('.testimonial-fade')
-      
+
       testimonialElements.forEach((element: any) => {
         $gsap.set(element, {
           opacity: 0,
-          y: 20
+          y: 20,
         })
-        
+
         $gsap.to(element, {
           opacity: 1,
           y: 0,
           duration: 0.6,
           ease: 'power2.out',
+          force3D: false,
           scrollTrigger: {
             trigger: element,
             start: 'top 85%',
             end: 'top 50%',
             toggleActions: 'play none none reverse',
-            preventOverlaps: false
-          }
+            preventOverlaps: false,
+          },
         })
       })
     })
@@ -66,7 +67,7 @@
 <style scoped lang="scss">
   .testimonial-wrapper {
     position: relative;
-          margin: 0 $px-32-spacer;
+    margin: 0 $px-32-spacer;
 
     @include this-and-above('sm') {
       flex-direction: row;
@@ -107,7 +108,7 @@
     .testimonial__cite {
       margin-top: $px-16-spacer;
       text-align: center;
-      
+
       @include this-and-above('md') {
         text-align: right;
       }

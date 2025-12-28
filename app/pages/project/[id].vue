@@ -189,14 +189,13 @@
               duration: 0.3,
               force3D: true,
               ease: 'power2.out',
-              overwrite: 'auto',
               scrollTrigger: {
                 trigger: mediaContainer,
                 start: 'top 90%',
                 end: 'top 35%',
                 toggleActions: 'play none none reverse',
-                preventOverlaps: false, // Prevents fighting between triggers
-                fastScrollEnd: true, // Forces completion on fast scrolls
+                preventOverlaps: false,
+                fastScrollEnd: true,
                 invalidateOnRefresh: false,
               },
             })
@@ -779,8 +778,9 @@
       &__a,
       &__b {
         flex: 1 0 50%;
-        word-wrap: normal;
-        word-break: break-all;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
         height: fit-content;
 
         p {

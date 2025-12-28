@@ -110,7 +110,6 @@
 <style lang="scss" scoped>
   .split-code-w {
     will-change: transform;
-    will-change: transform;
     // Fixes the "shimmer" and blur during/after transform
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

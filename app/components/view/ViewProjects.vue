@@ -450,7 +450,6 @@
       scale: 1;
       transition: scale 0.3s ease-out;
       /* Smooth scale transitions */
-      cursor: default;
       backface-visibility: hidden;
       transform: translate3d(0, 0, 0); /* Use 3D for better hardware accel */
       isolation: isolate; /* Create a sandbox for better compositing */
@@ -500,7 +499,7 @@
       }
 
       &__image {
-        cursor: grab;
+        cursor: pointer;
         width: 85vw;
         /* Mobile-first: larger than viewport for immersive feel */
         height: auto;
