@@ -238,7 +238,7 @@
                   0,
                   p.height - reservedBottomSpace
                 ) /* Avoid bottom 200px */,
-                size: p.random(16, 48),
+                size: p.random(48, 144),
                 offsetX: p.random(0, p.TWO_PI),
                 offsetY: p.random(0, p.TWO_PI),
                 speed: p.random(0.001, 0.003),
