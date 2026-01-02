@@ -17,9 +17,9 @@
 
   /**
    * Responsive navbar for those who like BEM with &.
-   * Turns full modal on smaller devices. Hides on scroll down.
-   * The code here is quite extensive as it integrates with the folio.
-   * Could be much simpler, I have gone overboard.
+   * 💡 Self critique: this navbar does way too much.
+   * Next navbar I do will be navbar, period. Not manage this much,
+   * Single responsibility principle!
    *
    * As per usual I try my best to follow this order:
    * 1. Reactive state
@@ -58,6 +58,7 @@
       'nav-wrapper--contact-burger-white':
         navbarStore.isContactPage && !isMobileActive.value,
       'nav-wrapper--no-blur': isDown.value,
+      'nav-wrapper--mobile-open': isMobileActive.value,
     }
   })
 
@@ -125,12 +126,12 @@
   const onScroll = () => {
     const now = Date.now()
     const throttleDelay = 8 // Faster than 16ms for better responsiveness
-    
+
     // Throttle to prevent excessive calls
     if (now - lastUpdateTime < throttleDelay) {
       return
     }
-    
+
     currScrollPos = window.scrollY
 
     // Clamp scroll position to prevent iOS bounce from affecting navbar
@@ -147,36 +148,37 @@
     // Only update if scroll position changed significantly
     if (Math.abs(prevScrollPos - clampedScrollPos) > 5) {
       const currentDirection = prevScrollPos >= clampedScrollPos ? 'up' : 'down'
-      
+
       // Prevent jitter: only change direction if enough time has passed since last change
       const directionChangeDelay = 100 // Minimum time between direction changes
-      const canChangeDirection = !lastDirection || 
-        currentDirection === lastDirection || 
-        (now - lastDirectionChange > directionChangeDelay)
-      
+      const canChangeDirection =
+        !lastDirection ||
+        currentDirection === lastDirection ||
+        now - lastDirectionChange > directionChangeDelay
+
       if (canChangeDirection) {
         if (prevScrollPos >= clampedScrollPos) {
           isDown.value = false
         } else {
           isDown.value = true
         }
-        
+
         // Track direction changes to prevent jitter
         if (lastDirection !== currentDirection) {
           lastDirection = currentDirection
           lastDirectionChange = now
         }
-        
+
         prevScrollPos = clampedScrollPos
         lastUpdateTime = now
       }
     }
-    
+
     // Clear any pending timeout
     if (scrollTimeout) {
       clearTimeout(scrollTimeout)
     }
-    
+
     // Set timeout for cleanup only (much longer delay)
     scrollTimeout = setTimeout(() => {
       // Optional: Reset direction tracking after inactivity
@@ -315,12 +317,15 @@
           </NuxtLink>
 
           <div
-            v-if="!navbarStore.isContactPage"
+            :class="{
+              'nav__item--off': navbarStore.isContactPage,
+            }"
             class="nav__item action"
             data-name="menu"
             data-text="Mode"
           >
             <UIColorSwitch
+              class="ui-color-switch"
               :is-mobile="isMobileActive"
               v-model="isLightMode"
               ref="colorSwitch"
@@ -440,19 +445,24 @@ just use a simple modal and be done with it. */
 
     &--contact-open {
       background-color: unset !important;
-
-      .logo {
-        color: $secondary-static !important;
-      }
-
-      @include this-and-above('md') {
-        // Force text color on contact page for desktop nav items
-        color: $secondary-static !important;
-
+      
+      // Only apply white styling when NOT in mobile overlay
+      &:not(.nav-wrapper--mobile-open) {
+        .logo {
+          color: $secondary-static !important;
+        }
+        
         .nav__item {
           color: $secondary-static !important;
         }
+      }
+      
+      // Mobile menu override
+      &.nav-wrapper--mobile-open .nav__item {
+        color: $primary !important;
+      }
 
+      @include this-and-above('md') {
         @include this-and-above('lg') {
           backdrop-filter: blur(0px);
         }
@@ -529,18 +539,22 @@ just use a simple modal and be done with it. */
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    outline: none !important;
+    outline: none;
 
     &:focus,
     &:active {
-      outline: none !important;
+      outline: none;
       -webkit-tap-highlight-color: transparent !important;
-      filter: blur(0px) !important;
+      filter: blur(0px);
     }
 
     /* Force blur on touch end for mobile */
     &:focus-visible {
-      outline: none !important;
+      outline: none;
+    }
+
+    .nav-wrapper--mobile-open & {
+      color: $primary !important; // or whatever the inverted color should be
     }
   }
 
@@ -616,8 +630,35 @@ just use a simple modal and be done with it. */
         opacity: 0.5;
         cursor: default;
       }
-    }
 
+      :deep(.ui-color-switch) {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+        // Prevent mobile touch states
+        // Disable all mobile touch feedback
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+
+        &:active,
+        &:focus,
+        &:hover {
+          outline: none;
+          filter: none !important;
+          color: inherit !important;
+          -webkit-tap-highlight-color: transparent;
+        }
+      }
+      &--off {
+        pointer-events: none;
+        cursor: default;
+        // Off state overrides the default
+        :deep(.ui-color-switch) {
+          opacity: 0.5;
+        }
+      }
+    }
     &__item {
       &::before {
         content: '•';

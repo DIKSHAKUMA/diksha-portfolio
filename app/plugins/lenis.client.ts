@@ -10,12 +10,17 @@ export default defineNuxtPlugin((nuxtApp) => {
   // 1. Configure GSAP to ignore the iOS address bar resize
   ScrollTrigger.config({ ignoreMobileResize: true })
 
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   const lenis = new Lenis({
     // Disable autoRaf so we can sync it perfectly with GSAP
     autoRaf: false,
-    touchMultiplier: 1,
-    wheelMultiplier: 1,
+    touchMultiplier: 1.2,
+    wheelMultiplier: 1.2,
     syncTouch: true, // Fixes the iOS direction-change jump
+
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    lerp: isMobile ? 0.12 : 0.075, // Smoother on mobile
+    duration: isMobile ? 1.2 : 1, // Longer duration on mobile
   })
 
   // 2. Synchronize ScrollTrigger with Lenis

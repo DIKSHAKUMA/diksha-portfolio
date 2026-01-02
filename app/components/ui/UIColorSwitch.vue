@@ -34,8 +34,13 @@
     transform: scale(1.001);
     vector-effect: non-scaling-stroke;
     bottom: 1px;
+    color: inherit; // Default color
   }
 
+  // When mobile-mode class is on the parent <i> element
+  .mobile-mode .icon {
+    color: $primary; // Inherit from navbar context
+  }
   .icon--right {
     right: 6px;
   }

@@ -36,7 +36,9 @@
   })
 
   onMounted(() => {
-    showRaindrops.value = true
+    setTimeout(() => {
+      showRaindrops.value = true
+    }, 800)
   })
 
   onUnmounted(() => {
@@ -46,7 +48,7 @@
 
 <template>
   <div class="rain-wrapper">
-    <div class="window"></div>
+    <div class="window" :class="{'window--show': showRaindrops}"></div>
 
     <ClientOnly>
       <div class="raindrops" v-if="showRaindrops">
@@ -94,6 +96,12 @@
     background-size: cover;
     background-position: 80% 50%;
     background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1s;
+
+    &--show {
+      opacity: 1;
+    }
 
     @supports (background-image: url('/img/vector.webp')) {
       background-image: url('/img/vector.webp');

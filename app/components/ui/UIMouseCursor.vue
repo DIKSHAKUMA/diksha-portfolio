@@ -52,34 +52,45 @@
     'cursor__shape--yo': isOver.value && dataName.value === 'yo',
   }))
 
+  /**
+   * So the flow is:
+   * Mouse moves → setFromEvent() → GSAP starts tweening pos object → pos.x/y
+   * gradually change from old to new values → loop() reads these changing values each frame
+   */
   const setFromEvent = () => {
     let x = xpos.value
     let y = ypos.value
+    // Tween pos object towards mouse position (composable) value
     $gsap.to(pos, {
       x: x,
       y: y,
       ease: 'power4.out',
       duration: 0.2,
       onUpdate: () => {
-        /* we are tweening pos object, thus we can approximate towards mouse position */
+        // And this allows us to calculate velocity as distance between mouse and pos shrinks
         vel.x = x! - pos.x
         vel.y = y! - pos.y
       },
     })
-
     if (!loopStarted.value) {
       $gsap.ticker.add(loop)
     }
   }
 
   const loop = () => {
-    /* Calculate angle and scale based on velocity */
+    /* Calculate angle and scale based on velocity, higher vel, bigger scale */
     let scale = getScale(vel.x, vel.y)
 
     /* Set transform data to Jelly Blob - optimized for Firefox */
     if (shape.value) {
       /* Cache getBoundingClientRect to avoid repeated calls */
       const rect = shape.value.getBoundingClientRect()
+
+      /**
+       * Center blob to approximating mouse position
+       * The pos object is the "lagging" position that creates the stretch effect as it tries to catch up to the real mouse position.
+       * Math.round() is used to ensure smooth movement.
+       */
       $gsap.set(shape.value, {
         x: Math.round(pos.x - rect.width / 2),
         y: Math.round(pos.y - rect.height / 2),
@@ -92,10 +103,18 @@
 
   /* The Blob! Thanks to https://codepen.io/GreenSock/pen/YzQabVQ */
   const getScale = (diffX: number, diffY: number) => {
-    /* Pow  static method returns the value of a base raised to a power. That is 2 in this case
-     * So we multiply itself by pow 2, then get out what the square root of that sum is (ex for 9 its 3) */
+    /**
+     * Pythagorean Theorem: a^2 + b^2 = c^2
+     * diffX (Side a): The horizontal distance between them.
+     * diffY (Side b): The vertical distance between them.
+     * Distance (Side c): If you draw these two lines,
+     * they form a right triangle. The "straight-line distance"
+     * is the hypotenuse—the diagonal line connecting the two points.
+     *
+     * TODO:Modern way that I could write this: const distance = Math.hypot(diffX, diffY);
+     */
     const distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2))
-    /* The Math.min() static method returns the smallest of the numbers given as input parameters */
+    /* Cap the scale at 0.2 or else blob goes wild */
     return Math.min(distance / 50, 0.2)
   }
 
