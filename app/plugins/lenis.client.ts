@@ -15,11 +15,11 @@ export default defineNuxtPlugin((nuxtApp) => {
     // Disable autoRaf so we can sync it perfectly with GSAP
     autoRaf: false,
     touchMultiplier: 1.2,
-    wheelMultiplier: 1.2,
+    wheelMultiplier: 1,
     syncTouch: true, // Fixes the iOS direction-change jump
 
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    lerp: isMobile ? 0.12 : 0.075, // Smoother on mobile
+    lerp: isMobile ? 0.12 : 0.12, // Smoother on mobile
     duration: isMobile ? 1.2 : 1, // Longer duration on mobile
   })
 
