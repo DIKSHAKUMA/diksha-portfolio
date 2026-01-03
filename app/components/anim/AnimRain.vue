@@ -37,7 +37,7 @@
   })
 
   onMounted(() => {
-    isMounted.value = true;
+    isMounted.value = true
     setTimeout(() => {
       showRaindrops.value = true
     }, 3000) // Increased from 800ms to 3000ms for smoother page load

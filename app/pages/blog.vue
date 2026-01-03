@@ -6,19 +6,13 @@
       mode: 'out-in',
     },
   })
-
-  onMounted(() => {
-
-  })
-
-  onUnmounted(() => {})
 </script>
 
 <template>
   <div>
     <UIMouseCursor />
     <div class="blog-outer-wrapper">
-      <ViewHeroBlog/>
+      <ViewHeroBlog />
       <ViewBlogExcerpts />
     </div>
   </div>
