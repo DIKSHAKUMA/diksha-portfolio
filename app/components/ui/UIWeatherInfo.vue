@@ -1,8 +1,11 @@
 <script setup lang="ts">
   /*
-    Weather Widget (Refactored into its own component Nov 7th 2025).
-    Clean minimal layout.
-  */
+   * Weather Widget (Refactored into its own component Nov 7th 2025).
+   * Clean minimal layout.
+   */
+
+  /* Trying to adhere to ref use for timers as best practice */
+  const timer = ref<NodeJS.Timeout | null>(null)
 
   /* Local Madrid time with CET/CEST timezone */
   const localTime = ref('')
@@ -20,17 +23,19 @@
     localTime.value = new Date().toLocaleTimeString('en-GB', options)
   }
 
-  /* Client Side Call to Openweather API */
+  /**
+   * FIX: was holding up contact page.
+   * Client Side Call to Openweather API - lazy loading to prevent blocking
+   * Alternative: use fetch with async onMounted, but useFetch is proper way in components.
+   */
   const {
     data: weatherData,
     pending: weatherPending,
     error: weatherError,
-  } = useFetch('/api/weather', {
+  } = await useFetch('/api/weather', {
     server: false,
+    lazy: true, // Don't block navigation
   })
-
-  /* Trying to adhere to ref use for timers as best practice */
-  const timer = ref<NodeJS.Timeout | null>(null)
 
   onMounted(() => {
     updateLocalTime()

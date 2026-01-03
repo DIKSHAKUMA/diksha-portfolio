@@ -157,13 +157,13 @@
       const centerY = cachedHeight / 2 + (index - 2.5) * 20
       const segmentSize = 8
 
-      /*
-      x * wave.frequency determines the wave's position in its cycle
-      + wave.phase shifts the wave left/right
-      * wave.amplitude scales the height
-      + centerY positions the wave vertically
-        The wave is not moving in x; the phase is changing over time
-      */
+      /**
+       * wave.frequency determines the wave's position in its cycle
+       *wave.phase shifts the wave left/right
+       * wave.amplitude scales the height
+       * centerY positions the wave vertically
+       * The wave is not moving in x; the phase is changing over time
+       */
 
       const points = []
       for (let x = 0; x <= cachedWidth; x += segmentSize) {
@@ -270,7 +270,7 @@
         if (!pixiDestroyed && app) {
           animateWaves()
         }
-      }, 1200)
+      }, 2000)
 
       /* Setup IntersectionObserver for parallax section */
       observer = new IntersectionObserver(
@@ -349,9 +349,9 @@
 </script>
 
 <template>
-    <div class="waves-container">
-      <canvas class="waves-canvas" ref="pixi" id="pixi"></canvas>
-    </div>
+  <div class="waves-container">
+    <canvas class="waves-canvas" ref="pixi" id="pixi"></canvas>
+  </div>
 </template>
 
 <style lang="scss" scoped>

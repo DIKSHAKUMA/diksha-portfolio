@@ -65,8 +65,7 @@
 
   const { $lenis } = useNuxtApp()
 
-  onMounted(() => {
-  })
+  onMounted(() => {})
 </script>
 
 <template>
@@ -75,10 +74,11 @@
     <div class="home-wrapper">
       <ViewHeroHome />
       <ViewParallaxHome />
-      <ViewProjectsHome />
+      <LazyViewProjectsHome hydrate-on-idle />
       <LazyViewKnowledgeSub hydrate-on-idle />
       <LazyViewTechSub hydrate-on-idle />
-      <LazyViewFooterSub hydrate-on-idle
+      <LazyViewFooterSub
+        hydrate-on-idle
         label="Projects"
         link="/projects"
         target="_self"

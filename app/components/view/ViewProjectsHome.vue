@@ -140,7 +140,7 @@
               x: 0,
               y: 0,
               duration: 0.3,
-              ease: 'power2.out',
+              ease: 'power2.inOut',
               force3D: true,
             })
           })
@@ -285,23 +285,6 @@
 <style lang="scss" scoped>
   p {
     margin: 0;
-  }
-
-  @media (hover: hover) and (min-width: 768px) {
-    .projects__abstract__item:hover .blinking-dot {
-      animation: blink 0.8s steps(1, end) infinite;
-    }
-  }
-
-  @keyframes blink {
-    0%,
-    45% {
-      opacity: 1;
-    }
-    50%,
-    100% {
-      opacity: 0;
-    }
   }
 
   img {
