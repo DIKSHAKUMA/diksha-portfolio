@@ -18,9 +18,11 @@ export default defineNuxtPlugin((nuxtApp) => {
     wheelMultiplier: 1,
     syncTouch: true, // Fixes the iOS direction-change jump
 
+    duration: isMobile ? 1 : 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    lerp: isMobile ? 0.12 : 0.12, // Smoother on mobile
-    duration: isMobile ? 1.2 : 1, // Longer duration on mobile
+    orientation: 'vertical',
+    gestureOrientation: 'vertical',
+    smoothWheel: true,
   })
 
   // 2. Synchronize ScrollTrigger with Lenis

@@ -156,13 +156,15 @@
         z-index: 1;
       }
 
-      &:hover {
-        &::before {
-          height: 100%;
-        }
+      @media (hover: hover) {
+        &:hover {
+          &::before {
+            height: 100%;
+          }
 
-        .excerpts__item__title {
-          color: $accent1;
+          .excerpts__item__title {
+            color: $accent1;
+          }
         }
       }
 

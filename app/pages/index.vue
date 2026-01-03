@@ -76,9 +76,9 @@
       <ViewHeroHome />
       <ViewParallaxHome />
       <ViewProjectsHome />
-      <ViewKnowledgeSub />
-      <ViewTechSub />
-      <ViewFooterSub
+      <LazyViewKnowledgeSub hydrate-on-idle />
+      <LazyViewTechSub hydrate-on-idle />
+      <LazyViewFooterSub hydrate-on-idle
         label="Projects"
         link="/projects"
         target="_self"

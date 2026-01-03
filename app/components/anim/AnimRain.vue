@@ -3,6 +3,7 @@
     Refactored. Rain is now rain and Weather sits in separate component. SRP.
   */
   const showRaindrops = ref(false)
+  const isMounted = ref(false)
 
   const getRaindrops = computed(() => {
     const drops = []
@@ -36,9 +37,10 @@
   })
 
   onMounted(() => {
+    isMounted.value = true;
     setTimeout(() => {
       showRaindrops.value = true
-    }, 800)
+    }, 3000) // Increased from 800ms to 3000ms for smoother page load
   })
 
   onUnmounted(() => {
@@ -48,7 +50,7 @@
 
 <template>
   <div class="rain-wrapper">
-    <div class="window" :class="{'window--show': showRaindrops}"></div>
+    <div class="window" :class="{ 'window--show': isMounted }"></div>
 
     <ClientOnly>
       <div class="raindrops" v-if="showRaindrops">

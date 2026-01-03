@@ -106,7 +106,7 @@
   }
 
   .quote {
-    font-size: clamped(50px, 60px, 480px, 1920px);
+    font-size: clamped(40px, 60px, 480px, 1920px);
     font-weight: 400;
     opacity: 0;
     position: absolute;

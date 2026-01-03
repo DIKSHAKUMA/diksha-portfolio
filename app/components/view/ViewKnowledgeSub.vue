@@ -1,16 +1,12 @@
 <script setup lang="ts">
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '../../../stores/useFolioStore'
-  import SplitType from 'split-type'
   import { ref, onMounted } from 'vue'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
   const { $gsap } = useNuxtApp()
   let ctx: gsap.Context
-  const splitInstances: SplitType[] = []
-
-  const canLine = ref<HTMLElement | null>(null)
 
   onMounted(() => {
     $gsap.registerPlugin(ScrollTrigger)
@@ -41,14 +37,6 @@
   onUnmounted(() => {
     /* Clean up GSAP context */
     ctx?.revert()
-
-    /* Clean up SplitType instances */
-    splitInstances.forEach((instance) => {
-      instance.revert()
-    })
-
-    /* Clear the array */
-    splitInstances.length = 0
   })
 </script>
 
@@ -83,28 +71,28 @@
       <section class="know__demo">
         <div class="know__demo-wrapper">
           <div class="know__demo-block">
-            <h2 class="know__demo-title split-skills-w">
+            <h2 class="know__demo-title">
               {{ store.data.intro?.knowOneTitle }}
             </h2>
-            <p class="know__demo-desc split-skills-w">
+            <p class="know__demo-desc">
               {{ store.data.intro?.knowOneDesc }}
             </p>
             <AnimSkills class="know__demo-comp" />
           </div>
           <div class="know__demo-block">
-            <h2 class="know__demo-title split-skills-w">
+            <h2 class="know__demo-title">
               {{ store.data.intro?.knowTwoTitle }}
             </h2>
-            <p class="know__demo-desc split-skills-w">
+            <p class="know__demo-desc">
               {{ store.data.intro?.knowTwoDesc }}
             </p>
             <AnimDynamic class="know__demo-comp" />
           </div>
           <div class="know__demo-block">
-            <h2 class="know__demo-title split-skills-w">
+            <h2 class="know__demo-title">
               {{ store.data.intro?.knowThreeTitle }}
             </h2>
-            <p class="know__demo-desc split-skills-w">
+            <p class="know__demo-desc">
               {{ store.data.intro?.knowThreeDesc }}
             </p>
             <AnimUX class="know__demo-comp" />

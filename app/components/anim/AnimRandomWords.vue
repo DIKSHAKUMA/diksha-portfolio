@@ -227,6 +227,8 @@
 
             /* Create word objects with floating properties
              * Reserve minimal space for CommonAbstract (about 120px from bottom) */
+            /* Mobile detection for responsive word sizing */
+            const isMobile = window.innerWidth <= 768
             const reservedBottomSpace = 120
             wordObjects = []
             for (let i = 0; i < wordCount; i++) {
@@ -238,7 +240,7 @@
                   0,
                   p.height - reservedBottomSpace
                 ) /* Avoid bottom 200px */,
-                size: p.random(48, 144),
+                size: p.random(isMobile ? 20 : 48, isMobile ? 61 : 144),
                 offsetX: p.random(0, p.TWO_PI),
                 offsetY: p.random(0, p.TWO_PI),
                 speed: p.random(0.001, 0.003),

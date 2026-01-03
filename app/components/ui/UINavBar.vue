@@ -125,7 +125,7 @@
 
   const onScroll = () => {
     const now = Date.now()
-    const throttleDelay = 8 // Faster than 16ms for better responsiveness
+    const throttleDelay = 16 // Changed from 8ms to 16ms for better mobile stability
 
     // Throttle to prevent excessive calls
     if (now - lastUpdateTime < throttleDelay) {
@@ -150,7 +150,7 @@
       const currentDirection = prevScrollPos >= clampedScrollPos ? 'up' : 'down'
 
       // Prevent jitter: only change direction if enough time has passed since last change
-      const directionChangeDelay = 100 // Minimum time between direction changes
+      const directionChangeDelay = 50 // Reduced from 100ms to match throttle timing
       const canChangeDirection =
         !lastDirection ||
         currentDirection === lastDirection ||
@@ -445,18 +445,18 @@ just use a simple modal and be done with it. */
 
     &--contact-open {
       background-color: unset !important;
-      
+
       // Only apply white styling when NOT in mobile overlay
       &:not(.nav-wrapper--mobile-open) {
         .logo {
           color: $secondary-static !important;
         }
-        
+
         .nav__item {
           color: $secondary-static !important;
         }
       }
-      
+
       // Mobile menu override
       &.nav-wrapper--mobile-open .nav__item {
         color: $primary !important;
@@ -477,6 +477,8 @@ just use a simple modal and be done with it. */
   }
 
   .nav-wrapper__inner {
+    /* Disables browser-specific gestures like pull-to-refresh on mobile */
+    touch-action: none;
     position: relative;
     display: flex;
     align-items: center;
@@ -488,6 +490,11 @@ just use a simple modal and be done with it. */
 
     &--moveup {
       top: -60px;
+    }
+
+    /* parent selector fix: you could scroll header on mobile overlay ! */
+    .nav-wrapper--mobile-open & {
+      top: 0px !important;
     }
 
     @include this-and-above('md') {
@@ -554,7 +561,7 @@ just use a simple modal and be done with it. */
     }
 
     .nav-wrapper--mobile-open & {
-      color: $primary !important; // or whatever the inverted color should be
+      color: $primary !important;
     }
   }
 

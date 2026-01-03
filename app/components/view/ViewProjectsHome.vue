@@ -398,6 +398,10 @@
         }
       }
 
+      &__title{
+        margin-bottom:2px;
+      }
+
       &__info {
         margin: $px-16-spacer $px-16-spacer;
         pointer-events: none;
@@ -407,7 +411,7 @@
 
         span {
           position: relative;
-          margin: 0;
+   
           color: $secondary;
           font-weight: 500;
         }

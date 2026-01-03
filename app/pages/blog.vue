@@ -18,7 +18,7 @@
   <div>
     <UIMouseCursor />
     <div class="blog-outer-wrapper">
-      <ViewHeroBlog />
+      <ViewHeroBlog/>
       <ViewBlogExcerpts />
     </div>
   </div>
