@@ -145,7 +145,7 @@
     }
 
     &__demo-wrapper {
-      height: 2100px; // 3 blocks × 700px each (600px + 100px gap)
+      height: 2100px; 
       display: flex;
       flex-direction: column;
       gap: 100px;

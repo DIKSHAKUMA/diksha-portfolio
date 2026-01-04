@@ -203,7 +203,7 @@ b
       }
 
       @include this-and-above('md') {
-        width: 80%;
+        width: 75%;
       }
     }
 

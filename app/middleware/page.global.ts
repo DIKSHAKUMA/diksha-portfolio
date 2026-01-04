@@ -73,7 +73,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
   to.meta.pageTransition.onEnter = (el: Element, done: () => void) => {
     let tl = $gsap.timeline({
       onComplete() {
-        console.log("value here", store.isTransitionFinished)
         $gsap.set(blinds, {
           clearProps: 'transform,opacity',
         })
