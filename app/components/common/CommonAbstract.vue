@@ -224,7 +224,7 @@ b
       text-transform: none;
       font-weight: 500;
       font-variation-settings: 'wght' 500;
-      line-height: 1.1;
+      line-height: 1.2;
 
       &--hero {
         margin-bottom: 0;
