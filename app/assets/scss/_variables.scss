@@ -12,8 +12,8 @@ $secondary-static: #e6e6e6;
 .light-mode {
     --primary: #fafafa;
     --secondary: #18181b;
-    --accent1: #2c2a38;
-    --accent2: #bec1c6;
+    --accent1: #a1a1aa;
+    --accent2: #27272a;
     --color-scheme: light;
 }
 
@@ -33,7 +33,7 @@ $sans-ui-opt: auto;
 $sans-ui-stl: normal;
 
 $sans-text:
-    "Inter",
+    "Lato",
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;

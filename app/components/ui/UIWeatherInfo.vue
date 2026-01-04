@@ -89,8 +89,8 @@
     z-index: 100;
     font-family: $sans-ui-mono;
     font-size: clamped(12px, 16px, 480px, 1920px);
-    font-weight: 300;
-    font-variation-settings: 'wght' 300;
+    font-weight: 400;
+    font-variation-settings: 'wght' 400;
     color: $secondary-static;
     text-transform: uppercase;
 

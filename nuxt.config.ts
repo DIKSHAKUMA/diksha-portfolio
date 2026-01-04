@@ -94,18 +94,17 @@ export default defineNuxtConfig({
     '@stefanobartoletti/nuxt-social-share',
   ],
 
-  // Font configuration with optimized loading
   fonts: {
     families: [
       {
         name: 'Roboto Mono',
-        provider: 'google',
+        provider: 'fontsource',
         weights: ['400 600'],
       },
 
       {
-        name: 'Inter',
-        provider: 'google',
+        name: 'Lato',
+        provider: 'fontsource',
         weights: ['400'],
       },
 

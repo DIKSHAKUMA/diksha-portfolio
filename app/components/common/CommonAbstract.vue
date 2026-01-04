@@ -171,8 +171,12 @@ b
     color: $secondary;
     margin: 0;
     height: fit-content;
-    width: 80%;
+    width: 100%;
     margin-bottom: $px-32-spacer;
+
+    @include this-and-above('sm') {
+      width: 80%;
+    }
 
     &--hero {
       width: 90%;
@@ -220,6 +224,7 @@ b
       text-transform: none;
       font-weight: 500;
       font-variation-settings: 'wght' 500;
+      line-height: 1.1;
 
       &--hero {
         margin-bottom: 0;

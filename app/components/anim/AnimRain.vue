@@ -96,7 +96,7 @@
     height: 100%;
     background-image: url('/img/vector.jpg');
     background-size: cover;
-    background-position: 80% 50%;
+    background-position: 90% 50%;
     background-repeat: no-repeat;
     opacity: 0;
     transition: opacity 1s;
@@ -107,6 +107,10 @@
 
     @supports (background-image: url('/img/vector.webp')) {
       background-image: url('/img/vector.webp');
+    }
+
+    @include this-and-above('sm') {
+      background-position: 80% 50%;
     }
   }
 

@@ -163,7 +163,7 @@
         :is-two-lines="false"
       />
       <CommonInfoLabel
-        :label="'Byte Me'"
+        :label="'Code + Paper'"
         :class-name="'meta-label'"
         :hpos="'center'"
         :hover-label="''"
