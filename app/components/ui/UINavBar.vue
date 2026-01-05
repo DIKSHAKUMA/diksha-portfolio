@@ -424,7 +424,8 @@ just use a simple modal and be done with it. */
       background-color: transparent;
     }
 
-    @include this-and-above('lg') {
+    // Only apply backdrop-filter when NOT in mobile overlay
+    &:not(.nav-wrapper--mobile-open) {
       background-color: rgba(24, 24, 27, 0.3);
       backdrop-filter: blur(10px);
       transition: backdrop-filter 0.3s ease, background-color 0.4s ease;
@@ -432,11 +433,11 @@ just use a simple modal and be done with it. */
       .light-mode & {
         background-color: rgba(250, 250, 250, 0.3);
       }
+    }
 
-      &.nav-wrapper--no-blur {
-        backdrop-filter: blur(0px);
-        background-color: unset;
-      }
+    &.nav-wrapper--no-blur:not(.nav-wrapper--mobile-open) {
+      backdrop-filter: blur(0px);
+      background-color: unset;
     }
 
     &--projects-open {
@@ -448,6 +449,7 @@ just use a simple modal and be done with it. */
 
       // Only apply white styling when NOT in mobile overlay
       &:not(.nav-wrapper--mobile-open) {
+        backdrop-filter: blur(0px) !important;
         .logo {
           color: $secondary-static !important;
         }

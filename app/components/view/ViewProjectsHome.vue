@@ -239,7 +239,7 @@
                 provider="hygraph"
                 alt="Project image"
                 format="webp"
-                sizes="sm:100vw md:45vw lg:45vw xl:34vw"
+                sizes="100vw sm:46vw md:50vw lg:42vw xl:38vw 2xl:34vw"
                 densities="x1 x2"
                 quality="100"
               ></NuxtImg>
@@ -331,7 +331,7 @@
     .projects__abstract {
       display: flex;
       flex-direction: column;
-      row-gap: $px-128-spacer;
+      row-gap: $px-64-spacer;
       width: 100%;
       align-self: flex-start;
 
@@ -376,13 +376,13 @@
           }
         }
 
-        @include this-and-above('sm') {
+        @include this-and-above('xl') {
           aspect-ratio: 16/9;
         }
       }
 
-      &__title{
-        margin-bottom:2px;
+      &__title {
+        margin-bottom: 2px;
       }
 
       &__info {
@@ -394,7 +394,7 @@
 
         span {
           position: relative;
-   
+
           color: $secondary;
           font-weight: 500;
         }
@@ -417,9 +417,9 @@
         top: -4px;
       }
 
-      @include this-and-above('md') {
+      @include this-and-above('sm') {
         /* now we give luft to rows */
-        row-gap: $px-256-spacer;
+        row-gap: $px-128-spacer;
 
         :nth-child(odd) {
           align-self: flex-end;
@@ -429,6 +429,11 @@
           align-self: flex-start;
         }
       }
+
+      @include this-and-above('xl') {
+        row-gap: $px-256-spacer;
+      }
+
     }
   }
 </style>

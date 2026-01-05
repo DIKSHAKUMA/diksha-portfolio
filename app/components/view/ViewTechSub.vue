@@ -216,7 +216,7 @@
   h4,
   h5 {
     color: #fafafa;
-    font-family:$sans-ui-mono;
+    font-family: $sans-ui-mono;
   }
 
   .meta-wrapper {
@@ -227,6 +227,7 @@
     padding: $px-128-spacer $px-16-spacer;
     height: 100dvh;
     min-height: 100vh;
+    margin-bottom: 64px;
 
     @include this-and-above('sm') {
       padding: $px-128-spacer $px-32-spacer;

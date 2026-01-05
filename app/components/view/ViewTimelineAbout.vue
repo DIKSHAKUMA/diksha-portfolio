@@ -243,7 +243,7 @@
 
         &:nth-child(odd) {
           justify-content: flex-start;
-          margin: $px-256-spacer 0;
+          margin: $px-128-spacer 0;
           text-align: right;
 
           .timeline__item__content {
@@ -253,11 +253,15 @@
           .timeline__item__meta {
             justify-content: flex-end;
           }
+
+          @include this-and-above('md') {
+            margin: $px-256-spacer 0;
+          }
         }
 
         &:nth-child(even) {
           justify-content: flex-end;
-          margin: $px-256-spacer 0;
+          margin: $px-128-spacer 0;
 
           .timeline__item__content {
             margin-left: calc(50% + 30px);
@@ -265,6 +269,9 @@
 
           .timeline__item__meta {
             justify-content: flex-start;
+          }
+          @include this-and-above('md') {
+            margin: $px-256-spacer 0;
           }
         }
       }
