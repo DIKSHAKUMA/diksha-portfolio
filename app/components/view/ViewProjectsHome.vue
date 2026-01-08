@@ -248,7 +248,10 @@
                 class="projects__abstract__image--lab"
                 title="Lab Project"
               >
-                <LabSVG class="projects__abstract__image--lab-svg" />
+                <Icon
+                  name="mdi:link-box-variant"
+                  class="projects__abstract__image--lab-svg"
+                />
               </div>
             </div>
 
@@ -359,20 +362,20 @@
         }
 
         &--lab {
-          position: relative;
-          bottom: 25px;
-          left: 5px;
-          font-size: 16px;
-          width: 34px;
-          height: 34px;
+          position: absolute;
+          top: 8px;
+          right: 8px;
 
           &-svg {
             position: relative;
-            top: -15px;
-            left: 10px;
-            width: 24px;
-            height: 24px;
-            fill: #faf8ff;
+              width: 32px;
+        height: 32px;
+            color: #fff;
+            opacity: 0.5;
+            @include this-and-above('md') {
+              width: 48px;
+              height: 48px;
+            }
           }
         }
 
@@ -433,7 +436,6 @@
       @include this-and-above('xl') {
         row-gap: $px-256-spacer;
       }
-
     }
   }
 </style>

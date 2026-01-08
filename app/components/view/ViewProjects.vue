@@ -114,6 +114,14 @@
         filter: 'blur(2px)',
         ease: 'power2.out',
       })
+
+      /* Counter-transform lab icon position during drag */
+      const iconOffset = skewAmount < 0 ? Math.abs(skewAmount) * 1.8 : -Math.abs(skewAmount) * 4.2
+      $gsap.set('.projects__lab-indicator', {
+        x: iconOffset,
+        duration: 0.4,
+        ease: 'power2.out',
+      })
     }
 
     const handleDragEnd = function () {
@@ -121,6 +129,13 @@
       $gsap.to('.projects__project__image', {
         skewX: 0,
         filter: 'blur(0px)',
+        duration: 0.3,
+        ease: 'power2.out',
+      })
+
+      /* Reset lab icon position */
+      $gsap.to('.projects__lab-indicator', {
+        x: 0,
         duration: 0.3,
         ease: 'power2.out',
       })
@@ -302,8 +317,12 @@
                 v-if="project.labUrl"
                 class="projects__lab-indicator"
                 title="Lab Project"
-                ><LabSVG class="projects__lab-indicator-svg"
-              /></span>
+                >
+               <Icon
+                  name="mdi:link-box-variant"
+                  class="projects__lab-indicator-svg"
+                />
+            </span>
             </div>
 
             <div class="projects__project__info">
@@ -451,7 +470,6 @@
       transition: scale 0.3s ease-out;
       /* Smooth scale transitions */
       backface-visibility: hidden;
-      transform: translate3d(0, 0, 0); /* Use 3D for better hardware accel */
       isolation: isolate; /* Create a sandbox for better compositing */
 
       &--open {
@@ -472,7 +490,6 @@
         -moz-osx-font-smoothing: grayscale;
 
         /* Force an independent text layer */
-        transform: translate3d(0, 0, 0);
 
         span {
           position: relative;
@@ -562,26 +579,23 @@
 
     &__lab-indicator {
       position: absolute;
-      bottom: -16px;
-      left: 4px;
-      font-size: 16px;
-      width: 34px;
-      height: 34px;
+      top: 8px;
+      right: 8px;
 
       &-svg {
-        position: relative;
-        top: -15px;
-        left: 10px;
-        width: 24px;
-        height: 24px;
-        fill: #faf8ff;
+      position: relative;
+            width: 32px;
+            height: 32px;
+            color: #FFF;
+            opacity:.5;
+
+               @include this-and-above('md') {
+        width: 48px;
+        height: 48px;
+      }
       }
 
-      @include this-and-above('md') {
-        font-size: 18px;
-        width: 38px;
-        height: 38px;
-      }
+
     }
   }
 
