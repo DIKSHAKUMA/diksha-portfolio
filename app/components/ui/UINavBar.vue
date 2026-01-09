@@ -77,9 +77,9 @@
     if (isMobileActive.value) {
       $gsap.fromTo(
         '.nav__item',
-        { opacity: 0, x: -40, letterSpacing: '20px' },
+        { opacity: 0, x: -80},
         {
-          duration: 0.2,
+          duration: 0.3,
           opacity: 1,
           x: 0,
           letterSpacing: '1px',
@@ -218,10 +218,13 @@
       if (newPath !== oldPath) {
         // Add a small delay to let the transition start
         setTimeout(() => {
-          isDown.value = false
           navbarStore.setProjectsOpen(newPath === '/projects')
           navbarStore.setContactOpen(newPath === '/contact')
-        }, 1200) // Small delay to ensure the transition has started
+        }, 1500)
+
+        setTimeout(() => {
+          isDown.value = false
+        }, 3000)
       }
     },
     { immediate: true }
