@@ -77,12 +77,11 @@
     if (isMobileActive.value) {
       $gsap.fromTo(
         '.nav__item',
-        { opacity: 0, x: -80},
+        { opacity: 0, x: -80 },
         {
-          duration: 0.3,
+          duration: 0.2,
           opacity: 1,
           x: 0,
-          letterSpacing: '1px',
           stagger: 0.1,
           ease: 'cubic-bezier(0.23, 1, 0.32, 1)',
           delay: 0.5,
@@ -115,6 +114,9 @@
         isMobileActive.value = false
         /* Reset GSAP animations when switching back to desktop */
         $gsap.set('.nav__item', { opacity: 1, x: 0 })
+        $gsap.set('.nav__item', {
+          clearProps: 'all',
+        })
       }
     }
   }
@@ -125,6 +127,7 @@
   let lastDirection: 'up' | 'down' | null = null
 
   const onScroll = () => {
+    console.log('onScroll')
     const now = Date.now()
     const throttleDelay = 16 // Changed from 8ms to 16ms for better mobile stability
 
@@ -216,15 +219,12 @@
     (newPath, oldPath) => {
       // Only update if we're actually changing routes
       if (newPath !== oldPath) {
+        isDown.value = false
         // Add a small delay to let the transition start
         setTimeout(() => {
           navbarStore.setProjectsOpen(newPath === '/projects')
           navbarStore.setContactOpen(newPath === '/contact')
         }, 1500)
-
-        setTimeout(() => {
-          isDown.value = false
-        }, 3000)
       }
     },
     { immediate: true }
@@ -405,9 +405,6 @@ just use a simple modal and be done with it. */
   .iconify {
     width: 24px;
     height: 24px;
-  }
-  .magnet {
-    transition: transform 0.1s linear;
   }
 
   .modal-open {

@@ -31,10 +31,11 @@
   .icon {
     z-index: 999;
     position: relative;
-    transform: scale(1.001);
-    vector-effect: non-scaling-stroke;
-    bottom: 1px;
     color: inherit; // Default color
+      margin-left: auto; 
+      bottom:2px;
+  display: flex;
+  align-items: center;
   }
 
   // When mobile-mode class is on the parent <i> element
