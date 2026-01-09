@@ -221,6 +221,7 @@
   }
 
   onMounted(async () => {
+    
     if (process.client) {
       import('@/pages/project/[id].vue')
     }
@@ -378,7 +379,7 @@
     padding: 0 $px-16-spacer;
 
     width: 100%;
-    height: 100%;
+    height: 100dvh;
 
     @include this-and-above('lg') {
       padding: 0 $px-64-spacer;

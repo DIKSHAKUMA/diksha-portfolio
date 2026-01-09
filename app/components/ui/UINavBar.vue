@@ -129,7 +129,11 @@
     const throttleDelay = 16 // Changed from 8ms to 16ms for better mobile stability
 
     // Throttle to prevent excessive calls
-    if (now - lastUpdateTime < throttleDelay || isProjectsActive.value || navbarStore.isContactPage) {
+    if (
+      now - lastUpdateTime < throttleDelay ||
+      isProjectsActive.value ||
+      navbarStore.isContactPage
+    ) {
       return
     }
 
@@ -214,6 +218,7 @@
       if (newPath !== oldPath) {
         // Add a small delay to let the transition start
         setTimeout(() => {
+          isDown.value = false
           navbarStore.setProjectsOpen(newPath === '/projects')
           navbarStore.setContactOpen(newPath === '/contact')
         }, 1200) // Small delay to ensure the transition has started
