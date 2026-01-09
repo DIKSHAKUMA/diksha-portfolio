@@ -152,9 +152,9 @@
   }
 
   .hero-wrapper {
-    position: relative;
+    position: fixed;
     width: 100%;
-    min-height: 100vh;
+    height:100%;
     touch-action: none;
     -webkit-overflow-scrolling: none;
     overflow: hidden;

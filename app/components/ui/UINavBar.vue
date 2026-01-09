@@ -129,7 +129,7 @@
     const throttleDelay = 16 // Changed from 8ms to 16ms for better mobile stability
 
     // Throttle to prevent excessive calls
-    if (now - lastUpdateTime < throttleDelay) {
+    if (now - lastUpdateTime < throttleDelay || isProjectsActive.value || navbarStore.isContactPage) {
       return
     }
 
@@ -671,10 +671,10 @@ just use a simple modal and be done with it. */
     &__item {
       &::before {
         content: '•';
-        margin-left: -15px;
-        font-size: 38px;
+        margin-right: -10px;
+        font-size: 34px;
         color: inherit;
-        bottom: -5px;
+        bottom: -6px;
         position: relative;
         opacity: 0;
         transition: opacity 0.2s ease;
@@ -767,11 +767,11 @@ just use a simple modal and be done with it. */
           content: '•';
           position: absolute;
           left: -8px;
-          font-size: 14px;
+          font-size: 17px;
           opacity: 0;
           transition: opacity 0.2s ease;
           margin-left: 0;
-          bottom: -1px;
+          bottom: -3px;
         }
 
         &.nav--link-active::before {
