@@ -369,20 +369,19 @@
   }
 
   .projects-wrapper {
-    position: relative;
+    overscroll-behavior: none;
+    position: fixed; /* Crucial for iOS Safari */
+    top: 0; /* Ensure it starts at the very top */
+    left: 0;
     width: 100%;
-    min-height: 100vh;
-
     overflow: hidden;
     padding: 0 $px-16-spacer;
 
+    width: 100%;
+    height: 100%;
+
     @include this-and-above('lg') {
       padding: 0 $px-64-spacer;
-    }
-
-    /*The “small” viewport units assume that any dynamic toolbars are expanded and visible, and calculates the viewport’s size accordingly.*/
-    @supports (height: 100dvh) {
-      min-height: 100dvh;
     }
   }
 
@@ -429,9 +428,6 @@
   .front-header {
     position: absolute;
     bottom: 0px;
-    &--ios-safari {
-      bottom: 80px;
-    }
   }
 
   .progress {

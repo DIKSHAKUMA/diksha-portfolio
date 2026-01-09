@@ -77,12 +77,12 @@
     if (isMobileActive.value) {
       $gsap.fromTo(
         '.nav__item',
-        { opacity: 0, x: -40, letterSpacing:'20px' },
+        { opacity: 0, x: -40, letterSpacing: '20px' },
         {
           duration: 0.2,
           opacity: 1,
           x: 0,
-          letterSpacing:'1px',
+          letterSpacing: '1px',
           stagger: 0.1,
           ease: 'cubic-bezier(0.23, 1, 0.32, 1)',
           delay: 0.5,
@@ -519,8 +519,8 @@ just use a simple modal and be done with it. */
     position: absolute;
     bottom: $px-16-spacer;
     width: 80%;
-    height: -moz-fit-content;
     align-items: flex-end;
+    align-self: flex-end;
   }
 
   .social-icon {
@@ -573,7 +573,7 @@ just use a simple modal and be done with it. */
     top: 0;
     right: 0;
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     transition: left 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 
     &--closed {
@@ -586,7 +586,6 @@ just use a simple modal and be done with it. */
       left: 0%;
       touch-action: none;
       -webkit-overflow-scrolling: none;
-      overflow: hidden;
       overscroll-behavior: none;
       display: flex;
       justify-content: flex-end;
