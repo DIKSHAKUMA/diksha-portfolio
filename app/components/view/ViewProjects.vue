@@ -116,7 +116,10 @@
       })
 
       /* Counter-transform lab icon position during drag */
-      const iconOffset = skewAmount < 0 ? Math.abs(skewAmount) * 1.8 : -Math.abs(skewAmount) * 4.2
+      const iconOffset =
+        skewAmount < 0
+          ? Math.abs(skewAmount) * 1.8
+          : -Math.abs(skewAmount) * 4.2
       $gsap.set('.projects__lab-indicator', {
         x: iconOffset,
         duration: 0.4,
@@ -317,12 +320,12 @@
                 v-if="project.labUrl"
                 class="projects__lab-indicator"
                 title="Lab Project"
-                >
-               <Icon
+              >
+                <Icon
                   name="mdi:link-box-variant"
                   class="projects__lab-indicator-svg"
                 />
-            </span>
+              </span>
             </div>
 
             <div class="projects__project__info">
@@ -505,7 +508,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-             font-weight: 500;
+        font-weight: 500;
         font-variation-settings: 'wght' 500;
         font-size: clamped(14px, 16px, 480px, 1920px) !important;
       }
@@ -583,19 +586,16 @@
       right: 8px;
 
       &-svg {
-      position: relative;
-            width: 32px;
-            height: 32px;
-            color: #FFF;
-            opacity:.5;
+        position: relative;
+        width: 32px;
+        height: 32px;
+        color: #fff;
 
-               @include this-and-above('md') {
-        width: 48px;
-        height: 48px;
+        @include this-and-above('md') {
+          width: 48px;
+          height: 48px;
+        }
       }
-      }
-
-
     }
   }
 

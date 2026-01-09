@@ -74,9 +74,9 @@
     <div class="home-wrapper">
       <ViewHeroHome />
       <ViewParallaxHome />
-      <LazyViewProjectsHome hydrate-on-idle />
-      <LazyViewKnowledgeSub hydrate-on-idle />
-      <LazyViewTechSub hydrate-on-idle />
+      <ViewProjectsHome />
+      <ViewKnowledgeSub />
+      <ViewTechSub />
       <LazyViewFooterSub
         hydrate-on-idle
         label="Projects"

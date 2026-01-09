@@ -97,13 +97,13 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       {
-        name: 'Roboto Mono',
+        name: 'Cascadia Mono',
         provider: 'fontsource',
         weights: ['400 600'],
       },
 
       {
-        name: 'Lato',
+        name: 'Be Vietnam Pro',
         provider: 'fontsource',
         weights: ['400'],
       },
@@ -140,7 +140,7 @@ export default defineNuxtConfig({
   },
 
   colorMode: {
-    preference: 'dark',
+    preference: 'light',
   },
 
   mdc: {

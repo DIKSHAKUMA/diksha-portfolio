@@ -368,10 +368,9 @@
 
           &-svg {
             position: relative;
-              width: 32px;
-        height: 32px;
+            width: 32px;
+            height: 32px;
             color: #fff;
-            opacity: 0.5;
             @include this-and-above('md') {
               width: 48px;
               height: 48px;

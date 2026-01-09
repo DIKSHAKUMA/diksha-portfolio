@@ -5,7 +5,7 @@
   const isDown = ref(false)
   const isMobileActive = ref(false)
   const isAnimating = ref(false)
-  const isLightMode = ref<boolean>(false)
+  const isLightMode = ref<boolean>(true)
   const route = useRoute()
   const navbarStore = useNavbarStore()
   const { $gsap } = useNuxtApp()
@@ -77,13 +77,14 @@
     if (isMobileActive.value) {
       $gsap.fromTo(
         '.nav__item',
-        { opacity: 0, x: -40 },
+        { opacity: 0, x: -40, letterSpacing:'20px' },
         {
           duration: 0.2,
           opacity: 1,
           x: 0,
+          letterSpacing:'1px',
           stagger: 0.1,
-          ease: 'power2.out',
+          ease: 'cubic-bezier(0.23, 1, 0.32, 1)',
           delay: 0.5,
           onComplete: () => {
             isAnimating.value = false
@@ -573,7 +574,7 @@ just use a simple modal and be done with it. */
     right: 0;
     width: 100%;
     height: 100vh;
-    transition: left 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition: left 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 
     &--closed {
       .footer-wrapper {

@@ -4,7 +4,7 @@
   }>()
 
   /* Lets have light mode as true and recall to update the ref in UINavBar */
-  const model = defineModel({ default: false })
+  const model = defineModel({ default: true })
 </script>
 
 <template>

@@ -4,11 +4,15 @@
   import SplitType from 'split-type'
   import SpecialKudos from '@/assets/svg/cssda-special-kudos-yellow.svg'
   import SOTD from '@/assets/svg/csswinner-sotd-white.svg'
+  import { nextTick } from 'vue'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
   const { $gsap } = useNuxtApp()
   let ctx: gsap.Context
+
+  const animRainRef = ref(null)
+  const showAnimRain = ref(false)
 
   onMounted(() => {
     $gsap.registerPlugin(ScrollTrigger)
@@ -36,6 +40,10 @@
         })
       })
     })
+
+    nextTick(() => {
+      showAnimRain.value = true
+    })
   })
 
   onUnmounted(() => {
@@ -45,7 +53,10 @@
 
 <template>
   <main class="hero-wrapper">
-    <AnimRain />
+    <AnimRain 
+      ref="animRainRef" 
+      :class="{ 'fade-in': showAnimRain }"
+    />
     <UIWeatherInfo />
     <div class="contact">
       <div class="contact__label split-label-w">
@@ -182,7 +193,7 @@
     color: $secondary-static;
     z-index: 200;
     font-family: $sans-ui-mono;
-    font-weight: 400;
+    font-weight: 300;
 
     &__label {
       font-size: clamped(16px, 20px, 480px, 1920px);
@@ -196,6 +207,15 @@
       &:hover {
         color: $accent2;
       }
+    }
+  }
+
+  .anim-rain {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+    
+    &.fade-in {
+      opacity: 1;
     }
   }
 </style>

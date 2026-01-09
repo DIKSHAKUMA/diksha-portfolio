@@ -220,14 +220,14 @@
 
     &__path {
       fill: none;
-      stroke: $accent1;
+      stroke: $primary;
       stroke-width: 10;
       stroke-linecap: square;
     }
 
     &__perc {
       margin-top: 20px;
-      color: $accent1;
+      color: $primary;
       font-size: 1.2rem;
       font-weight: 600;
       font-family: $sans-ui-mono;

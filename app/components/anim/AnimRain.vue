@@ -3,7 +3,6 @@
     Refactored. Rain is now rain and Weather sits in separate component. SRP.
   */
   const showRaindrops = ref(false)
-  const isMounted = ref(false)
 
   const getRaindrops = computed(() => {
     const drops = []
@@ -37,7 +36,6 @@
   })
 
   onMounted(() => {
-    isMounted.value = true
     setTimeout(() => {
       showRaindrops.value = true
     }, 3000) // Increased from 800ms to 3000ms for smoother page load
@@ -50,7 +48,7 @@
 
 <template>
   <div class="rain-wrapper">
-    <div class="window" :class="{ 'window--show': isMounted }"></div>
+    <div class="window"></div>
 
     <ClientOnly>
       <div class="raindrops" v-if="showRaindrops">
@@ -98,12 +96,7 @@
     background-size: cover;
     background-position: 90% 50%;
     background-repeat: no-repeat;
-    opacity: 0;
     transition: opacity 1s;
-
-    &--show {
-      opacity: 1;
-    }
 
     @supports (background-image: url('/img/vector.webp')) {
       background-image: url('/img/vector.webp');

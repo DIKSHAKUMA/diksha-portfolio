@@ -14,7 +14,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const lenis = new Lenis({
     // Disable autoRaf so we can sync it perfectly with GSAP
     autoRaf: false,
-    touchMultiplier: 1.2,
+    touchMultiplier: 1.3,
     wheelMultiplier: 1,
     syncTouch: true, // Fixes the iOS direction-change jump
 
