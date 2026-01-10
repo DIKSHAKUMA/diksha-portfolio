@@ -32,10 +32,10 @@
     z-index: 999;
     position: relative;
     color: inherit; // Default color
-      margin-left: auto; 
-      bottom:2px;
-  display: flex;
-  align-items: center;
+    margin-left: auto;
+    bottom: 2px;
+    display: flex;
+    align-items: center;
   }
 
   // When mobile-mode class is on the parent <i> element

@@ -2,7 +2,6 @@
   import SplitType from 'split-type'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '../../../stores/useFolioStore'
-  import LabSVG from '@/assets/svg/lab-indicator.svg'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
@@ -60,30 +59,32 @@
           /* Simple opacity fade for Firefox - no clipPath */
           $gsap.to(item, {
             opacity: 1,
+            y: 0,
             clipPath: 'none',
-            duration: 0.4,
-            ease: 'power1.out',
+            ease: 'none',
+            force3D: true,
             scrollTrigger: {
-              trigger: item,
+              trigger: item.parentElement,
               start: 'top 90%',
-              toggleActions: 'play none none reverse',
-              invalidateOnRefresh: false,
+              end: 'top 80%',
+              scrub: 1,
+              invalidateOnRefresh: true,
             },
           })
         } else {
           /* Full clipPath reveal for Chrome/Safari/Edge */
           $gsap.to(item, {
             opacity: 1,
+            y: 0,
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-            duration: 0.5,
-            ease: 'power1.out',
+            ease: 'none',
             force3D: true,
             scrollTrigger: {
-              trigger: item,
+              trigger: item.parentElement,
               start: 'top 90%',
-              end: 'top 60%',
-              toggleActions: 'play none none reverse',
-              invalidateOnRefresh: false,
+              end: 'top 80%',
+              scrub: 1,
+              invalidateOnRefresh: true, // CHANGE: Keeps positions accurate on resize
             },
           })
         }
@@ -339,6 +340,7 @@
       align-self: flex-start;
 
       &__item {
+        transform: translateY(50px);
         opacity: 0;
         pointer-events: none;
         clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);

@@ -36,43 +36,45 @@
 
 <template>
   <div class="excerpts-wrapper">
-    <CommonAbstract
-      class="blog__header"
-      :label="store.data.intro?.blogDesc"
-      :desc="''"
-      :class-name="'blog-intro'"
-      :is-secondary="true"
-      :delay="0"
-      :is-full-width="false"
-      :is-hero="false"
-      :is-page-header="false"
-      :author="''"
-      :date="''"
-      :is-page-title="false"
-      :is-two-lines="false"
-    />
+    <div>
+      <CommonAbstract
+        class="blog__header"
+        :label="store.data.intro?.blogDesc"
+        :desc="''"
+        :class-name="'blog-intro'"
+        :is-secondary="true"
+        :delay="0"
+        :is-full-width="false"
+        :is-hero="false"
+        :is-page-header="false"
+        :author="''"
+        :date="''"
+        :is-page-title="false"
+        :is-two-lines="false"
+      />
 
-    <main class="excerpts">
-      <div class="excerpts__info" v-for="post in dateSorted" :key="post.id">
-        <NuxtLink :to="`/blog-post/${post.slug}`">
-          <div class="excerpts__item action" data-name="menu">
-            <div class="excerpts__item__title">{{ post.date }}</div>
-            <div class="excerpts__item__title">{{ post.title }}</div>
-            <div
-              class="excerpts__item__title excerpts__item__title-subject"
-              v-if="isDesktop"
-            >
-              {{ post.subject }}
+      <main class="excerpts">
+        <div class="excerpts__info" v-for="post in dateSorted" :key="post.id">
+          <NuxtLink :to="`/blog-post/${post.slug}`">
+            <div class="excerpts__item action" data-name="menu">
+              <div class="excerpts__item__title">{{ post.date }}</div>
+              <div class="excerpts__item__title">{{ post.title }}</div>
+              <div
+                class="excerpts__item__title excerpts__item__title-subject"
+                v-if="isDesktop"
+              >
+                {{ post.subject }}
+              </div>
+              <div class="excerpts__item__title">{{ post.length }}</div>
             </div>
-            <div class="excerpts__item__title">{{ post.length }}</div>
-          </div>
-        </NuxtLink>
-      </div>
-      <div class="excerpts__quote">
-        <q>{{ store.data.intro?.blogExcerptsQuote.split('—')[0] }}</q>
-        <span>—</span> {{ store.data.intro?.blogExcerptsQuote.split('—')[1] }}
-      </div>
-    </main>
+          </NuxtLink>
+        </div>
+        <div class="excerpts__quote">
+          <q>{{ store.data.intro?.blogExcerptsQuote.split('—')[0] }}</q>
+          <span>—</span> {{ store.data.intro?.blogExcerptsQuote.split('—')[1] }}
+        </div>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -82,6 +84,8 @@
   }
 
   .excerpts-wrapper {
+    display:flex;
+    align-items:center;
     position: relative;
     background-color: $primary;
     padding: $px-128-spacer $px-16-spacer;
@@ -105,7 +109,7 @@
     }
 
     &__quote {
-      position: absolute;
+      position: relative;
       margin-top: $px-32-spacer;
       width: 100%;
       left: 50%;

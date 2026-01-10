@@ -145,10 +145,8 @@ export default defineNuxtConfig({
 
   mdc: {
     highlight: {
-      theme: {
-        default: 'everforest-dark',
-        dark: 'everforest-dark',
-      },
+      theme: 'everforest-dark',
+
       langs: [
         'js',
         'javascript',
