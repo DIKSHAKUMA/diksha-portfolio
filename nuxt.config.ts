@@ -146,6 +146,7 @@ export default defineNuxtConfig({
   mdc: {
     highlight: {
       theme: 'everforest-dark',
+      shikiEngine: 'javascript',
 
       langs: [
         'js',
@@ -189,7 +190,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['gsap', 'shiki'],
+    transpile: ['gsap', 'shiki', '@nuxtjs/mdc'],
   },
 
   svgo: {

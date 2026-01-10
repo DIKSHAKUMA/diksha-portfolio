@@ -36,7 +36,7 @@
 
 <template>
   <div class="excerpts-wrapper">
-    <div>
+    <div class="excerpts-wrapper__inner">
       <CommonAbstract
         class="blog__header"
         :label="store.data.intro?.blogDesc"
@@ -84,13 +84,17 @@
   }
 
   .excerpts-wrapper {
-    display:flex;
-    align-items:center;
+    display: flex;
+    align-items: center;
     position: relative;
     background-color: $primary;
     padding: $px-128-spacer $px-16-spacer;
     min-height: 100dvh;
     height: 100vh;
+
+    &__inner {
+      width: 100%;
+    }
 
     @include this-and-above('lg') {
       padding: $px-128-spacer $px-64-spacer;
