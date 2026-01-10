@@ -226,6 +226,8 @@ export default defineNuxtConfig({
     experimental: {
       wasm: true,
     },
+    // ADD THIS: This forces Netlify to bundle Shiki's internal assets
+    traceInclude: ['node_modules/shiki/**', 'node_modules/@shikijs/**'],
   },
 
   plugins: [
