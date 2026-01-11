@@ -146,8 +146,8 @@ export default defineNuxtConfig({
   mdc: {
     highlight: {
       theme: {
-        default: 'github-dark',
-        dark: 'github-dark',
+        default: 'everforest-dark',
+        dark: 'everforest-dark',
       },
       langs: [
         'js',
