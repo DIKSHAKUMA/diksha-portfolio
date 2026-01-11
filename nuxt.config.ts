@@ -2,10 +2,10 @@
 import { defineNuxtConfig } from 'nuxt/config'
 const fontBase = process.env.NUXT_EVERETT_FONT_URL
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2024-04-03',
 
   experimental: {
-    rolldown: true,
+    rolldown: false,
   },
 
   app: {
@@ -145,13 +145,7 @@ export default defineNuxtConfig({
 
   mdc: {
     highlight: {
-      theme: {
-        default: 'everforest-dark',
-        dark: 'everforest-dark',
-        light: 'github-light', // Or another light fallback
-      },
-      shikiEngine: 'javascript',
-
+      theme: 'everforest-dark',
       langs: [
         'js',
         'javascript',
@@ -227,6 +221,7 @@ export default defineNuxtConfig({
 
   /* Hygraph fix rate limit when testing */
   nitro: {
+    preset: 'netlify',
     experimental: {
       wasm: true,
     },
