@@ -237,13 +237,11 @@
                 class="mdc-content"
                 :class="{ 'mdc-content--hidden': !mdcContentReady }"
               >
-                <ClientOnly>
-                  <MDC
-                    :value="post.content"
-                    ref="mdc"
-                    @vue:mounted="setupMDCLinks"
-                  />
-                </ClientOnly>
+                <MDC
+                  :value="post.content"
+                  ref="mdc"
+                  @vue:mounted="setupMDCLinks"
+                />
               </div>
             </div>
           </div>

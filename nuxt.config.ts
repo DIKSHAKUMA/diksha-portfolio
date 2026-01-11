@@ -2,7 +2,7 @@
 import { defineNuxtConfig } from 'nuxt/config'
 const fontBase = process.env.NUXT_EVERETT_FONT_URL
 export default defineNuxtConfig({
-  compatibilityDate: '2024-04-03',
+  compatibilityDate: '2026-01-11', // Update to today's date
 
   experimental: {
     rolldown: false,
