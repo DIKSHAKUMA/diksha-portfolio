@@ -22,11 +22,12 @@
 
 <style lang="scss" scoped>
   .logo {
+    font-family: $sans-ui;
     font-size: clamped(18px, 20px, 480px, 1920px);
     font-variation-settings: 'wght' 500;
     font-weight: 500;
     letter-spacing: 1px;
-    z-index:1000;
+    z-index: 1000;
     [is-mobile='true'] & {
       font-weight: 500;
       font-variation-settings: 'wght' 500;

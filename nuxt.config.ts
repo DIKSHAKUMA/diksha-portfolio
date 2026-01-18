@@ -145,6 +145,7 @@ export default defineNuxtConfig({
 
   mdc: {
     highlight: {
+      shikiEngine: 'javascript',
       theme: {
         default: 'everforest-dark',
         dark: 'everforest-dark',
