@@ -1,20 +1,20 @@
-$primary-static: #171717;
-$secondary-static: #e6e6e6;
+$primary-static: #18181b;
+$secondary-static: #fafafa;
 
 .dark-mode {
-    --primary: #18181b; /* Rich Zinc background */
-    --secondary: #fafafa; /* Crisp white text */
-    --accent1: #27272a; /* Subtle borders or secondary surfaces */
-    --accent2: #a1a1aa; /* Sophisticated muted gray accent */
-    --color-scheme: dark;
+  --primary: #18181b; /* Rich Zinc background */
+  --secondary: #fafafa; /* Crisp white text */
+  --accent1: #27272a; /* Subtle borders or secondary surfaces */
+  --accent2: #a1a1aa; /* Sophisticated muted gray accent */
+  --color-scheme: dark;
 }
 
 .light-mode {
-    --primary: #fafafa;
-    --secondary: #18181b;
-    --accent1: #a1a1aa;
-    --accent2: #27272a;
-    --color-scheme: light;
+  --primary: #fafafa;
+  --secondary: #18181b;
+  --accent1: #a1a1aa;
+  --accent2: #27272a;
+  --color-scheme: light;
 }
 
 $primary: var(--primary);
@@ -25,22 +25,22 @@ $color-scheme: var(--color-scheme);
 
 /* Fonts */
 $sans-ui:
-    "TWK Everett",
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
+  'TWK Everett',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
 $sans-ui-opt: auto;
 $sans-ui-stl: normal;
 
 $sans-text:
-    "Be Vietnam Pro",
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
+  'Be Vietnam Pro',
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
 $sans-text-opt: auto;
 $sans-text-stl: normal;
 
-$sans-ui-mono: "Cascadia Mono", "Courier New", Courier, monospace;
+$sans-ui-mono: 'Cascadia Mono', 'Courier New', Courier, monospace;
 $sans-ui-mono-opt: auto;
 $sans-ui-mono-stl: normal;
 

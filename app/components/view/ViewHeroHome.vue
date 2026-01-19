@@ -51,8 +51,8 @@
       :is-two-lines="true"
       :author="''"
       :date="''"
-    />ttest
-    
+    />
+    <AnimAvailableForWork class="work-badge" />
   </main>
 </template>
 

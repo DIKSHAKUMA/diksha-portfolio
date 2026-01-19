@@ -17,7 +17,7 @@
 
   const getProjectTags = (project: any) => {
     if (!project?.tags || !Array.isArray(project.tags)) return ''
-    return project.tags.map((tag) => `[ ${tag} ]`).join(' ')
+    return project.tags.map((tag: string) => `[ ${tag} ]`).join(' ')
   }
   const dateSorted = computed(() => {
     if (!store.data?.projects) return []
@@ -75,7 +75,6 @@
           /* Full clipPath reveal for Chrome/Safari/Edge */
           $gsap.to(item, {
             opacity: 1,
-            y: 0,
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
             ease: 'none',
             force3D: true,
@@ -340,7 +339,6 @@
       align-self: flex-start;
 
       &__item {
-        transform: translateY(50px);
         opacity: 0;
         pointer-events: none;
         clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);

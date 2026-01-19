@@ -3,3 +3,17 @@
 @forward 'reset';
 @forward 'functions';
 @forward 'mixins';
+/* Hardware acceleration for animated elements */
+.projects__abstract__image,
+.split-proj-w,
+.split-skills-w,
+.split-label-w,
+.testimonial-fade,
+.project-stepper-image-reveal,
+.cursor,
+.waves-canvas {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}

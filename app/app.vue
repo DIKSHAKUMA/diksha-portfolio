@@ -183,6 +183,7 @@
 
   body {
     height: 100%;
+    background-color: transparent;
     transition: background-color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
@@ -205,7 +206,9 @@
     z-index: 10000;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
+    transition:
+      opacity 0.3s,
+      visibility 0.3s;
 
     &.is-visible {
       opacity: 1;

@@ -179,7 +179,7 @@ b
     }
 
     &--hero {
-      width: 90%;
+      width: 80%;
       margin-bottom: $px-16-spacer;
 
       &--with-desc {
