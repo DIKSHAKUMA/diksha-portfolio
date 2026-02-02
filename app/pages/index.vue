@@ -75,6 +75,7 @@
       <ViewHeroHome />
       <ViewParallaxHome />
       <ViewProjectsHome />
+      <ViewAwardsHome />
       <ViewKnowledgeSub />
       <ViewTechSub />
       <LazyViewFooterSub

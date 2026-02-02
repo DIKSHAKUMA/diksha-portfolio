@@ -106,6 +106,17 @@ export const useFolioStore = defineStore('folio', {
                         address
                         addressTitle
                     }
+                    awards {
+                      awardTitle
+                      awardDesc
+                      awardLinks
+                       awardSvg {
+                        id
+                        handle
+                        fileName
+                        url
+                      }
+                    }
                 }
             `,
           },

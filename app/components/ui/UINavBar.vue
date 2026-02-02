@@ -5,7 +5,7 @@
   const isDown = ref(false)
   const isMobileActive = ref(false)
   const isAnimating = ref(false)
-  const isLightMode = ref<boolean>(true)
+  const isLightMode = ref<boolean>(false)
   const route = useRoute()
   const navbarStore = useNavbarStore()
   const { $gsap } = useNuxtApp()
@@ -30,7 +30,7 @@
    * 6. Define/Expose
    */
 
-  /* 
+  /*
     Check if current route is in blog section
     The below computed properties helps to add active class to subroutes
    */
@@ -127,7 +127,6 @@
   let lastDirection: 'up' | 'down' | null = null
 
   const onScroll = () => {
-    console.log('onScroll')
     const now = Date.now()
     const throttleDelay = 16 // Changed from 8ms to 16ms for better mobile stability
 
@@ -434,7 +433,9 @@ just use a simple modal and be done with it. */
     &:not(.nav-wrapper--mobile-open) {
       background-color: rgba(24, 24, 27, 0.3);
       backdrop-filter: blur(10px);
-      transition: backdrop-filter 0.3s ease, background-color 0.4s ease;
+      transition:
+        backdrop-filter 0.3s ease,
+        background-color 0.4s ease;
 
       .light-mode & {
         background-color: rgba(250, 250, 250, 0.3);

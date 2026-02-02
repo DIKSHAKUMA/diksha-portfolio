@@ -2,8 +2,6 @@
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '../../../stores/useFolioStore'
   import SplitType from 'split-type'
-  import SpecialKudos from '@/assets/svg/cssda-special-kudos-yellow.svg'
-  import SOTD from '@/assets/svg/csswinner-sotd-white.svg'
   import { nextTick } from 'vue'
 
   /* PINIA 🍍 */
@@ -53,10 +51,7 @@
 
 <template>
   <main class="hero-wrapper">
-    <AnimRain 
-      ref="animRainRef" 
-      :class="{ 'fade-in': showAnimRain }"
-    />
+    <AnimRain ref="animRainRef" :class="{ 'fade-in': showAnimRain }" />
     <UIWeatherInfo />
     <div class="contact">
       <div class="contact__label split-label-w">
@@ -85,30 +80,6 @@
       :date="''"
       :is-two-lines="false"
     />
-    <div class="awards">
-      <NuxtLink
-        class="no-blur-link"
-        to="https://www.cssdesignawards.com/sites/thomas-thorstensson/48276"
-        target="_blank"
-      >
-        <SpecialKudos
-          class="awards__award action"
-          data-name="proj"
-          data-text="CSSDA"
-        />
-      </NuxtLink>
-      <NuxtLink
-        class="no-blur-link"
-        to="https://www.csswinner.com/details/thomas-thorstensson-creative-dev/18925"
-        target="_blank"
-      >
-        <SOTD
-          class="awards__award action"
-          data-name="proj"
-          data-text="CSSWinner"
-        />
-      </NuxtLink>
-    </div>
   </main>
 </template>
 
@@ -119,44 +90,12 @@
     -webkit-filter: none !important;
   }
 
-  .awards {
-    position: absolute;
-    display: flex;
-    flex-flow: row nowrap;
-    column-gap: $px-16-spacer;
-    justify-content: flex-end;
-    align-items: center;
-    bottom: $px-128-spacer;
-    right: $px-16-spacer;
-    &__award {
-      width: 50px;
-      height: auto;
-      z-index: 900;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-
-      &:hover {
-        transform: scale(1.1) rotate(5deg);
-        animation-play-state: paused;
-        opacity: 0.9;
-      }
-
-      @include this-and-above('sm') {
-        width: 80px;
-      }
-    }
-
-    @include this-and-above('sm') {
-      bottom: $px-64-spacer;
-      right: $px-64-spacer;
-    }
-  }
-
   .hero-wrapper {
     position: fixed;
     width: 100%;
-    height:100%;
-    left:0;
-    top:0;
+    height: 100%;
+    left: 0;
+    top: 0;
     touch-action: none;
     -webkit-overflow-scrolling: none;
     overflow: hidden;
@@ -215,7 +154,7 @@
   .anim-rain {
     opacity: 0;
     transition: opacity 1s ease-out;
-    
+
     &.fade-in {
       opacity: 1;
     }

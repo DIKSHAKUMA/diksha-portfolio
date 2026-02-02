@@ -3,6 +3,7 @@
     Refactored. Rain is now rain and Weather sits in separate component. SRP.
   */
   const showRaindrops = ref(false)
+  const showBackground = ref(false)
 
   const getRaindrops = computed(() => {
     const drops = []
@@ -36,6 +37,10 @@
   })
 
   onMounted(() => {
+    // Show background immediately with fade-in
+    showBackground.value = true
+
+    // Show raindrops after delay
     setTimeout(() => {
       showRaindrops.value = true
     }, 3000) // Increased from 800ms to 3000ms for smoother page load
@@ -43,12 +48,13 @@
 
   onUnmounted(() => {
     showRaindrops.value = false
+    showBackground.value = false
   })
 </script>
 
 <template>
   <div class="rain-wrapper">
-    <div class="window"></div>
+    <div class="window" :class="{ 'fade-in': showBackground }"></div>
 
     <ClientOnly>
       <div class="raindrops" v-if="showRaindrops">
@@ -96,7 +102,8 @@
     background-size: cover;
     background-position: 90% 50%;
     background-repeat: no-repeat;
-    transition: opacity 1s;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
 
     @supports (background-image: url('/img/vector.webp')) {
       background-image: url('/img/vector.webp');
@@ -104,6 +111,10 @@
 
     @include this-and-above('sm') {
       background-position: 80% 50%;
+    }
+
+    &.fade-in {
+      opacity: 1;
     }
   }
 
