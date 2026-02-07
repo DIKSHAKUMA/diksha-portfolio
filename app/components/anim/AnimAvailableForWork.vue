@@ -56,7 +56,7 @@
   .work-badge {
     position: absolute;
     /* Use your primary variable to drive the color */
-    color: var(--secondary);
+    color: var(--accent2);
     /* Link will handle pointer events */
 
     &--hidden {

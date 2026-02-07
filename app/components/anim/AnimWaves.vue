@@ -79,8 +79,8 @@
       const travelingLight =
         baseLight +
         lightnessOffset +
-        /* 
-        Using Math.sin(angle), the function expects the angle to repeat its behavior every 2pi radians. 
+        /*
+        Using Math.sin(angle), the function expects the angle to repeat its behavior every 2pi radians.
         Sometimes called a periodic effect. Great for creating smooth, continuous motion. And for notebook.
         */
         Math.sin(segmentRatio * Math.PI * 2 + time * colorSpeed) * 16

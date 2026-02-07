@@ -4,7 +4,7 @@
 
   onMounted(() => {
     if (!import.meta.client) return
-    
+
     const triad_tl = $gsap.timeline({ repeat: -1 })
 
     ctx = $gsap.context((self) => {

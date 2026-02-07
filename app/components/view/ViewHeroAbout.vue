@@ -29,7 +29,7 @@
 <template>
   <div>
     <main ref="main" class="hero-wrapper">
-      <AnimP5Rings />
+      <AnimThreeFlower />
       <CommonAbstract
         class="front-header"
         :label="store.data.about?.aboutHeroTitle"

@@ -216,7 +216,7 @@ b
   .abstract {
     &__header {
       position: relative;
-      font-size: clamped(54px, 120px, 480px, 1920px);
+      font-size: clamped(54px, 110px, 480px, 1920px);
       flex-wrap: wrap;
       height: max-content;
       margin-bottom: $px-32-spacer;

@@ -13,6 +13,7 @@
     "vite": "npm:rolldown-vite@latest"
   },
   "dependencies": {
+    "@fontsource-variable/instrument-sans": "^5.2.8",
     "@mux/blurup": "^1.0.2",
     "@mux/mux-player": "^3.5.3",
     "@nuxt/fonts": "^0.11.0",
@@ -36,6 +37,7 @@
     "pixi-filters": "^6.1.0",
     "pixi.js": "^8.8.1",
     "split-type": "^0.3.4",
+    "three": "^0.182.0",
     "vue": "latest",
     "vue-router": "latest"
   },
@@ -44,6 +46,7 @@
     "@iconify-json/mdi": "^1.2.3",
     "@types/node": "^22.10.7",
     "@types/p5": "^1.7.6",
+    "@types/three": "^0.182.0",
     "sass": "^1.83.4"
   }
 }

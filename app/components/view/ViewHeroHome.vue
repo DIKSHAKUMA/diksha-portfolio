@@ -36,7 +36,7 @@
 
 <template>
   <main class="hero-wrapper">
-    <AnimWaves />
+    <AnimThreeRibbon />
     <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
     <CommonAbstract
       class="front-header"
