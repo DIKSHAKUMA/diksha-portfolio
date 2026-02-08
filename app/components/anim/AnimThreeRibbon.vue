@@ -80,7 +80,6 @@
   // --- Reactive Logic ---
   const generateColors = () => {
     const isLight = colorMode.value === 'light'
-    console.log('Logic thinks light is:', isLight)
     const warm1 = isLight ? greenLight1 : silverWarm1
     const warm2 = isLight ? greenLight2 : silverWarm2
     const cool1 = isLight ? greenDark1 : silverCool1
@@ -101,16 +100,8 @@
       colors[i3 + 1] = mixedColor.g
       colors[i3 + 2] = mixedColor.b
     }
-    if (geometry.value) {
-      console.log(
-        'Updating geometry colors, needsUpdate:',
-        geometry.value.attributes.color?.needsUpdate
-      )
-      if (geometry.value.attributes.color) {
-        geometry.value.attributes.color.needsUpdate = true
-      }
-    } else {
-      console.log('geometry.value is null, cannot update colors')
+    if (geometry.value?.attributes?.color) {
+      geometry.value.attributes.color.needsUpdate = true
     }
   }
 

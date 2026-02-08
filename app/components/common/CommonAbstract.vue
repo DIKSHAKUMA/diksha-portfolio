@@ -84,11 +84,11 @@ b
         splitInstances.push(splitTxt)
         $gsap.set(splitTxt.words, {
           autoAlpha: 0,
-          clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
+          clipPath: 'polygon(0% 0%, 0% 0%, 0% 110%, 0% 100%)',
         })
         $gsap.to(splitTxt.words, {
           autoAlpha: 1,
-          clipPath: 'polygon(0% 0%, 110% 0%, 100% 100%, 0% 100%)',
+          clipPath: 'polygon(0% 0%, 110% 0%, 100% 110%, 0% 100%)',
           delay: props.delay,
           scrollTrigger: {
             trigger: sec,
@@ -224,11 +224,11 @@ b
       text-transform: none;
       font-weight: 500;
       font-variation-settings: 'wght' 500;
-      line-height: 1.2;
+      line-height: 1;
 
       &--hero {
         margin-bottom: 0;
-        line-height: 1.2;
+        line-height: 1;
         text-box-trim: both; /* Trims the leading from the top and bottom of the box */
         text-box-edge: cap alphabetic;
       }
@@ -251,7 +251,7 @@ b
         margin-bottom: $px-64-spacer;
 
         &.abstract__header--hero {
-          margin-bottom: 0;
+          margin-bottom: $px-16-spacer;
         }
 
         &--full-width {

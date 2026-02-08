@@ -331,7 +331,7 @@
       const material = new THREE.SpriteMaterial({
         map: texture,
         transparent: true,
-        opacity: 0.9,
+        opacity: 0.5,
         depthTest: true,
         depthWrite: false,
       })
@@ -342,7 +342,7 @@
 
       // Fix aspect ratio to match canvas texture proportions
       const aspect = texture.image.width / texture.image.height
-      const baseHeight = 0.8 // Adjust this to change word size globally
+      const baseHeight = 0.96 // Adjust this to change word size globally (20% larger)
       sprite.scale.set(baseHeight * aspect, baseHeight, 1)
 
       scene.value.add(sprite)

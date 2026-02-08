@@ -65,6 +65,16 @@
         :is-two-lines="false"
       />
     </main>
+    <CommonInfoLabel
+      :label="'THE MOON'"
+      :class-name="'project-label'"
+      :hpos="'right'"
+      :hover-label="''"
+      :force-white="true"
+      :vpos="'flex-start'"
+      :link="''"
+      style="z-index: 100"
+    />
   </div>
 </template>
 

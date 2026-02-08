@@ -24,13 +24,14 @@
   .logo {
     font-family: $sans-ui;
     font-size: clamped(18px, 20px, 480px, 1920px);
-    font-variation-settings: 'wght' 500;
-    font-weight: 500;
+    font-weight: 450;
+    font-variation-settings: 'wght' 450;
+    font-weight: 400;
     letter-spacing: 1px;
     z-index: 1000;
     [is-mobile='true'] & {
-      font-weight: 500;
-      font-variation-settings: 'wght' 500;
+      font-weight: 400;
+      font-variation-settings: 'wght' 400;
     }
   }
 </style>

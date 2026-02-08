@@ -9,8 +9,8 @@
   const { $gsap } = useNuxtApp()
   let ctx: gsap.Context
 
-  const animRainRef = ref(null)
-  const showAnimRain = ref(false)
+  const animPixiRef = ref(null)
+  const showAnimPixi = ref(false)
 
   onMounted(() => {
     $gsap.registerPlugin(ScrollTrigger)
@@ -40,7 +40,7 @@
     })
 
     nextTick(() => {
-      showAnimRain.value = true
+      showAnimPixi.value = true
     })
   })
 
@@ -51,7 +51,7 @@
 
 <template>
   <main class="hero-wrapper">
-    <AnimRain ref="animRainRef" :class="{ 'fade-in': showAnimRain }" />
+    <AnimPixiMoon ref="aniPixiRef" :class="{ 'fade-in': showAnimPixi }" />
     <UIWeatherInfo />
     <div class="contact">
       <div class="contact__label split-label-w">

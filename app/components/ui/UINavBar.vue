@@ -634,7 +634,7 @@ just use a simple modal and be done with it. */
       padding-right: 0px;
       color: $primary;
       font-weight: 500;
-      font-variation-settings: 'wght' 700;
+      font-variation-settings: 'wght' 500;
 
       &:hover {
         color: $accent1;
@@ -741,8 +741,8 @@ just use a simple modal and be done with it. */
         opacity: 1;
         transition: transform 0.1s linear;
         font-family: $sans-ui;
-        font-weight: 500;
-        font-variation-settings: 'wght' 500;
+        font-weight: 450;
+        font-variation-settings: 'wght' 450;
         -webkit-tap-highlight-color: transparent !important;
         -webkit-touch-callout: none;
         -webkit-user-select: none;

@@ -118,7 +118,7 @@
       font-family: $sans-ui;
       font-size: clamped(36px, 52px, 480px, 1920px);
       font-weight: 500;
-      font-variation-settings: 'wght' 700;
+      font-variation-settings: 'wght' 500;
 
       a {
         color: $secondary;
@@ -127,7 +127,8 @@
         text-underline-offset: 15px;
         text-decoration-thickness: 2px;
         text-decoration-color: $secondary;
-        transition: background-size 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67),
+        transition:
+          background-size 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67),
           text-decoration-color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
         line-height: 1.2;
       }

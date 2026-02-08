@@ -40,31 +40,31 @@ export default defineNuxtConfig({
       const staticPages = [
         {
           loc: '/',
-          lastmod: '2025-11-02' /* Update when homepage content changes */,
+          lastmod: '2026-02-08' /* Update when homepage content changes */,
           changefreq: 'weekly',
           priority: 1.0,
         },
         {
           loc: '/about',
-          lastmod: '2025-11-02' /* Update when about page changes */,
+          lastmod: '2026-02-08' /* Update when about page changes */,
           changefreq: 'monthly',
           priority: 0.8,
         },
         {
           loc: '/projects',
-          lastmod: '2025-11-20' /* Update when projects list changes */,
+          lastmod: '2026-02-08' /* Update when projects list changes */,
           changefreq: 'weekly',
           priority: 0.9,
         },
         {
           loc: '/blog',
-          lastmod: '2025-11-01' /* Update when blog structure changes */,
+          lastmod: '2026-02-08' /* Update when blog structure changes */,
           changefreq: 'weekly',
           priority: 0.8,
         },
         {
           loc: '/contact',
-          lastmod: '2025-10-16' /* Update when contact info changes */,
+          lastmod: '2026-02-08' /* Update when contact info changes */,
           changefreq: 'monthly',
           priority: 0.7,
         },

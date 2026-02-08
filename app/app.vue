@@ -20,6 +20,9 @@
   const percText = ref(null)
 
   let cachedBlinds: any[] = []
+  const topLine = ref<SVGLineElement | null>(null)
+  const bottomLine = ref<SVGLineElement | null>(null)
+  const loadingText = ref<SVGTextElement | null>(null)
 
   /*
     The simplistic approach with not turning venice blinds into a component works the fastest.
@@ -36,6 +39,9 @@
     cachedBlinds = $gsap.utils.toArray('.venice__blind')
     $gsap.set(cachedBlinds, { scaleX: 0 })
 
+    // SVG elements are now available via template refs
+    // No need for querySelector
+
     /* Show intro animation on homepage */
     const isHomepage = route.path === '/'
     const tl = $gsap.timeline()
@@ -43,37 +49,31 @@
     if (isHomepage) {
       showIntroAnimation.value = true
 
-      // Set initial state for circle
-      $gsap.set([circle.value, percText.value], {
-        strokeDasharray: 283, // 2 * π * r (2 * 3.14159 * 45)
-        strokeDashoffset: 283,
-        strokeOpacity: 0,
-        opacity: 0,
-      })
+      // Set initial state for SVG lines (completely hidden)
+      if (topLine.value && bottomLine.value) {
+        topLine.value.style.strokeDasharray = '0 250'
+        bottomLine.value.style.strokeDasharray = '0 250'
+      }
+      if (loadingText.value) {
+        loadingText.value.style.opacity = '0'
+      }
 
-      // Animate the circle
-      tl.set('.circle-preloader', { autoAlpha: 1 })
-        .to(
-          [circle.value, percText.value],
-          {
-            strokeDashoffset: 0,
-            strokeOpacity: 1, // Fade in as it draws
-            opacity: 1, // Fade in the text
-            duration: 2.5,
-            ease: 'cubic-bezier(0.33, 1, 0.68, 1)',
-          },
-          0
-        ) // Start at the same time as other animations
+      // Animate the preloader
+      tl.set('.preloader', { autoAlpha: 1 })
+        .add(createRandomDashAnimation(), 0)
         .to(
           percNum,
           {
             value: 100,
             duration: 2.5,
             ease: 'cubic-bezier(0.33, 1, 0.68, 1)',
+            onUpdate: function () {
+              updateDashPattern(this.progress())
+            },
           },
-          '<'
+          0
         )
-        .to('.circle-preloader', {
+        .to('.preloader', {
           autoAlpha: 0,
           duration: 0.5,
           ease: 'power2.out',
@@ -119,6 +119,94 @@
     })
     $gsap.set('.venice', { visibility: 'hidden', opacity: 0 })
   }
+
+  /**
+   * Create random dash pattern animation for SVG lines
+   */
+  const createRandomDashAnimation = () => {
+    const tl = $gsap.timeline()
+
+    // Animate text opacity
+    if (loadingText.value) {
+      tl.to(
+        loadingText.value,
+        {
+          opacity: 1,
+          duration: 0.5,
+          ease: 'power2.out',
+        },
+        0.2
+      ).to(
+        loadingText.value,
+        {
+          opacity: 0,
+          duration: 0.3,
+          ease: 'power2.in',
+        },
+        2.2
+      )
+    }
+
+    return tl
+  }
+
+  /**
+   * Update dash pattern based on loading progress
+   */
+  const updateDashPattern = (progress: number) => {
+    if (!topLine.value || !bottomLine.value) return
+
+    // Calculate how many segments should be visible based on progress
+    const totalSegments = 24 // Increased to account for removed segments
+    const visibleSegments = Math.floor(progress * totalSegments)
+
+    // Create random dash pattern
+    let dashArray = ''
+    const segmentLength = 250 / totalSegments
+
+    for (let i = 0; i < totalSegments; i++) {
+      // Skip first 2 and last 2 segments (remove 2 dashes on each side)
+      const isFirstTwo = i < 2
+      const isLastTwo = i >= totalSegments - 2
+
+      if (isFirstTwo || isLastTwo) {
+        // Always gap for removed segments
+        dashArray += `0 ${segmentLength} `
+      } else if (i - 2 < visibleSegments) {
+        // Adjust index for removed segments
+        // Randomly decide if this segment should be visible or not
+        const shouldShow = Math.random() < 0.7 || i === totalSegments - 3
+
+        if (shouldShow) {
+          // Show segment (dash)
+          dashArray += `${segmentLength * 0.8} ${segmentLength * 0.2} `
+        } else {
+          // Hide segment (gap)
+          dashArray += `0 ${segmentLength} `
+        }
+      } else {
+        // Not reached yet - all gap
+        dashArray += `0 ${segmentLength} `
+      }
+    }
+
+    // Apply to both lines with slight variation
+    topLine.value.style.strokeDasharray = dashArray.trim()
+
+    // Bottom line gets slightly different pattern for organic feel
+    const bottomDashArray = dashArray
+      .split(' ')
+      .map((val, index) => {
+        if (index % 2 === 0) {
+          // dash values
+          return Math.random() > 0.3 ? val : `${parseFloat(val) * 0.7}`
+        }
+        return val
+      })
+      .join(' ')
+
+    bottomLine.value.style.strokeDasharray = bottomDashArray
+  }
 </script>
 
 <template>
@@ -139,20 +227,50 @@
     <div class="venice__blind"></div>
     <div class="venice__blind"></div>
   </div>
-  <div class="circle-preloader" :class="{ 'is-visible': showIntroAnimation }">
-    <svg class="circle-preloader__svg" viewBox="0 0 100 100">
-      <circle
-        ref="circle"
-        class="circle-preloader__path"
-        cx="50"
-        cy="50"
-        r="45"
-        stroke-opacity="0"
+  <div class="preloader" :class="{ 'is-visible': showIntroAnimation }">
+    <svg class="preloader__svg" viewBox="0 0 800 100">
+      <!-- Top line -->
+      <line
+        class="preloader__line preloader__line--top"
+        ref="topLine"
+        x1="150"
+        y1="20"
+        x2="650"
+        y2="20"
+        stroke="currentColor"
+        stroke-width="1"
+        stroke-linecap="round"
+      />
+
+      <!-- Centered text -->
+      <text
+        class="preloader__text"
+        ref="loadingText"
+        x="400"
+        y="54"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        fill="currentColor"
+        font-family="'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif"
+        font-size="12"
+        letter-spacing="2"
+      >
+        LOADING V2
+      </text>
+
+      <!-- Bottom line -->
+      <line
+        class="preloader__line preloader__line--bottom"
+        ref="bottomLine"
+        x1="150"
+        y1="80"
+        x2="650"
+        y2="80"
+        stroke="currentColor"
+        stroke-width="1"
+        stroke-linecap="round"
       />
     </svg>
-    <div ref="percText" class="circle-preloader__perc" style="opacity: 0">
-      {{ Math.round(percNum) }}%
-    </div>
   </div>
   <UINavBar />
   <NuxtLayout>
@@ -192,23 +310,23 @@
   }
 
   /*SVG intro*/
-  .circle-preloader {
+  .preloader {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    background-color: $secondary;
+    justify-content: center;
+    background-color: $primary;
     z-index: 10000;
     opacity: 0;
     visibility: hidden;
     transition:
       opacity 0.3s,
       visibility 0.3s;
+    pointer-events: none;
 
     &.is-visible {
       opacity: 1;
@@ -216,24 +334,19 @@
     }
 
     &__svg {
-      width: 100px;
+      width: 80%;
+      max-width: 400px;
       height: 100px;
-      transform: rotate(-90deg);
+      color: $secondary;
     }
 
-    &__path {
-      fill: none;
-      stroke: $primary;
-      stroke-width: 10;
-      stroke-linecap: square;
+    &__line {
+      stroke-dasharray: 0 250; /* Start with no visible line (all gap) */
+      stroke-dashoffset: 0;
     }
 
-    &__perc {
-      margin-top: 20px;
-      color: $primary;
-      font-size: 1.2rem;
-      font-weight: 600;
-      font-family: $sans-ui-mono;
+    &__text {
+      opacity: 0;
     }
   }
 
@@ -290,6 +403,76 @@
     }
   }
 
+  .preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $primary;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s,
+      visibility 0.3s;
+
+    &.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &__container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      width: 80%;
+      max-width: 800px;
+    }
+
+    &__line {
+      display: flex;
+      width: 100%;
+      height: 2px;
+      gap: 2px;
+
+      &--top {
+        margin-bottom: 1rem;
+      }
+
+      &--bottom {
+        margin-top: 1rem;
+      }
+    }
+
+    &__segment {
+      flex: 1;
+      height: 100%;
+      background-color: transparent;
+      border-radius: 1px;
+      transition: background-color 0.3s ease;
+
+      &.filled {
+        background-color: $secondary;
+      }
+    }
+
+    &__text {
+      font-family: $sans-text;
+      font-size: 1.5rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: $secondary;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+  }
+
   .venice {
     position: fixed;
     top: 0;
@@ -317,7 +500,7 @@
       overflow: hidden;
       flex: 1;
       height: 100%;
-      background-color: $secondary;
+      background-color: $primary;
       margin-left: -1px;
       will-change: transform, opacity;
       transform: translateZ(0); /* Force hardware acceleration */
