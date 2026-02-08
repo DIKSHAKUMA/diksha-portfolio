@@ -12,7 +12,7 @@
 
 <template>
   <main ref="main" class="hero-wrapper">
-    <AnimRandomWords />
+    <AnimThreeWords />
     <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
     <CommonAbstract
       class="front-header"

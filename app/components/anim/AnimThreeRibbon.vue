@@ -24,10 +24,11 @@
   const silverWarm2 = new THREE.Color(0.98, 0.96, 0.94)
   const silverCool1 = new THREE.Color(0.9, 0.92, 0.96)
   const silverCool2 = new THREE.Color(0.96, 0.98, 1.0)
-  const blackWarm1 = new THREE.Color(0x2f / 255, 0x45 / 255, 0x4b / 255)
-  const blackWarm2 = new THREE.Color(0x37 / 255, 0x4d / 255, 0x53 / 255)
-  const blackCool1 = new THREE.Color(0x2b / 255, 0x41 / 255, 0x47 / 255)
-  const blackCool2 = new THREE.Color(0x33 / 255, 0x49 / 255, 0x4f / 255)
+  // #43655a variations for light mode (R=67, G=101, B=90)
+  const greenLight1 = new THREE.Color(0x43 / 255, 0x65 / 255, 0x5a / 255) // #43655a
+  const greenLight2 = new THREE.Color(0x4a / 255, 0x6e / 255, 0x62 / 255) // Lighter variation
+  const greenDark1 = new THREE.Color(0x3b / 255, 0x5c / 255, 0x52 / 255) // Darker variation
+  const greenDark2 = new THREE.Color(0x34 / 255, 0x53 / 255, 0x4a / 255) // Even darker
 
   /**
    * Three.js
@@ -80,10 +81,10 @@
   const generateColors = () => {
     const isLight = colorMode.value === 'light'
     console.log('Logic thinks light is:', isLight)
-    const warm1 = isLight ? blackWarm1 : silverWarm1
-    const warm2 = isLight ? blackWarm2 : silverWarm2
-    const cool1 = isLight ? blackCool1 : silverCool1
-    const cool2 = isLight ? blackCool2 : silverCool2
+    const warm1 = isLight ? greenLight1 : silverWarm1
+    const warm2 = isLight ? greenLight2 : silverWarm2
+    const cool1 = isLight ? greenDark1 : silverCool1
+    const cool2 = isLight ? greenDark2 : silverCool2
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3

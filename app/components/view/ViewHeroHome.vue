@@ -52,7 +52,6 @@
       :author="''"
       :date="''"
     />
-    <AnimAvailableForWork class="work-badge" />
   </main>
 </template>
 

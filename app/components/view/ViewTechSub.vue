@@ -45,7 +45,7 @@
         height: 600,
       })
 
-      const image = await Assets.load('/img/key.jpg')
+      const image = await Assets.load('/img/orchid-tech.jpg')
       imageSprite = PIXI.Sprite.from(image)
 
       /* Make imageSprite fill the 800x600 canvas */

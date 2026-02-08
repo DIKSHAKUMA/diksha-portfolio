@@ -148,7 +148,7 @@
     contain: layout style paint;
     /* CSS containment for better performance */
     image-rendering: optimizeSpeed;
-    background-image: url('/img/flower.jpg');
+    background-image: url('/img/starfish-parallax.jpg');
 
     /* Firefox-specific optimizations */
     @-moz-document url-prefix() {
@@ -156,8 +156,8 @@
       image-rendering: optimizeSpeed;
     }
 
-    @supports (background-image: url('/img/flower.webp')) {
-      background-image: url('/img/flower.webp');
+    @supports (background-image: url('/img/starfish-parallax.webp')) {
+      background-image: url('/img/starfish-parallax.webp');
     }
 
     /* Responsive background positioning */

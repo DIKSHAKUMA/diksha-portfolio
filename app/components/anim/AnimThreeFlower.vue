@@ -13,30 +13,37 @@
   let observer: IntersectionObserver | null = null
 
   // --- Data Buffers (Shared Scope) ---
-  const count = 30000
-  const flowerRadius = 1.0
+  const count = 65000
+  const flowerRadius = 3.0
+  const spiralStrength = 0.8 // Controls spiral bending
+  const bulgeRadius = 0.25 // Central bulge size (fraction of flowerRadius)
+
   const positions = new Float32Array(count * 3)
   const colors = new Float32Array(count * 3)
   const petalLayers = new Float32Array(count)
 
-  // Color palettes (same as AnimThreeRibbon)
-  const silverWarm1 = new THREE.Color(0.94, 0.92, 0.9)
-  const silverWarm2 = new THREE.Color(0.98, 0.96, 0.94)
-  const silverCool1 = new THREE.Color(0.9, 0.92, 0.96)
-  const silverCool2 = new THREE.Color(0.96, 0.98, 1.0)
-  const blackWarm1 = new THREE.Color(0x2f / 255, 0x45 / 255, 0x4b / 255)
-  const blackWarm2 = new THREE.Color(0x37 / 255, 0x4d / 255, 0x53 / 255)
-  const blackCool1 = new THREE.Color(0x2b / 255, 0x41 / 255, 0x47 / 255)
-  const blackCool2 = new THREE.Color(0x33 / 255, 0x49 / 255, 0x4f / 255)
+  // Color palettes with radial brightness gradient
+  // Bright center colors (near bulge)
+  const silverCenterWarm = new THREE.Color(0.98, 0.97, 0.96)
+  const silverCenterCool = new THREE.Color(0.96, 0.98, 1.0)
+  // Dim edge colors (outer arms)
+  const silverEdgeWarm = new THREE.Color(0.82, 0.84, 0.86)
+  const silverEdgeCool = new THREE.Color(0.84, 0.86, 0.88)
+  // #43655a variations for light mode - exact same as AnimThreeRibbon
+  const greenLight1 = new THREE.Color(0x43 / 255, 0x65 / 255, 0x5a / 255) // #43655a
+  const greenLight2 = new THREE.Color(0x4a / 255, 0x6e / 255, 0x62 / 255) // Lighter variation
+  const greenDark1 = new THREE.Color(0x3b / 255, 0x5c / 255, 0x52 / 255) // Darker variation
+  const greenDark2 = new THREE.Color(0x34 / 255, 0x53 / 255, 0x4a / 255) // Even darker
 
   /**
    * Three.js
-   * Flower Petal Animation
+   * Galaxy
    */
 
   const vertexShader = `
     uniform float uTime;
     uniform float uFlowerRadius;
+    uniform float uSpiralStrength;
     attribute float aScale;
     attribute vec3 aRandomness;
     attribute float aPetal;
@@ -47,30 +54,35 @@
     void main() {
       vec3 pos = position;
 
-      // Top view of rose - circular petal arrangement
+      // Continuous spiral galaxy arms - from code sample
       float layer = aPetal; // Which concentric layer (0-1 from center to edge)
-      float angle = atan(pos.z, pos.x);
+      float originalAngle = atan(pos.z, pos.x);
       float dist = length(pos.xz);
 
-      // Create petal shapes in circular arrangement
-      float petalCount = 12.0; // Number of petals
-      float petalAngle = floor(angle * petalCount / 6.283) * 6.283 / petalCount;
-      float petalOffset = angle - petalAngle;
+      // Bulge radius
+      float bulgeRadius = 0.25 * uFlowerRadius;
 
-      // Petal shape - wider at base, narrower at tip
-      float petalWidth = 0.3 + layer * 0.4; // Wider petals toward outside
-      float petalShape = cos(petalOffset * 3.0) * petalWidth;
-      dist *= 1.0 + petalShape;
+      // Apply logarithmic spiral to all particles
+      float spinAngle = log(dist + 1.0) * uSpiralStrength * 0.8;
+      float armAngle = originalAngle + spinAngle;
 
-      // Reposition with petal shape
-      pos.x = cos(petalAngle) * dist;
-      pos.z = sin(petalAngle) * dist;
+      // Arm concentration by angular offset (not radius)
+      // Arms penetrate bulge but reduce strength near center
+      float armStrength = smoothstep(0.0, bulgeRadius * 1.5, dist);
+      float armCount = 12.0;
+      float armWidth = mix(0.06, 0.15, layer) * armStrength;
+      float armOffset = sin(armAngle * armCount) * armWidth;
+      float finalAngle = armAngle + armOffset;
+
+      // Position with final angle (same radius, modulated angle)
+      pos.x = cos(finalAngle) * dist;
+      pos.z = sin(finalAngle) * dist;
 
       // Gentle vertical movement for 3D effect
       float wave = sin(uTime * 0.3 + aPhase * 6.283 + layer * 5.0) * 0.05;
       pos.y += wave * (0.5 + layer * 0.5);
 
-      // Add subtle rotation
+      // Add galaxy rotation
       float rotation = uTime * 0.05;
       float cosR = cos(rotation);
       float sinR = sin(rotation);
@@ -85,19 +97,19 @@
       vec4 viewPosition = viewMatrix * vec4(pos, 1.0);
       gl_Position = projectionMatrix * viewPosition;
 
-      // Point size - smaller toward center, larger toward petal edges
+      // Point size - smaller toward center, larger in outer layers
       float centerDist = length(pos.xz);
-      float sizeFactor = 0.3 + layer * 0.7; // Larger particles in outer layers
-      float edgeFactor = 1.0 - abs(petalOffset * 3.0); // Highlight petal edges
-      gl_PointSize = 40.0 * aScale * sizeFactor * edgeFactor * (1.0 / -viewPosition.z);
+      float sizeFactor = 0.3 + layer * 0.7;
+      gl_PointSize = 40.0 * aScale * sizeFactor * (1.0 / -viewPosition.z);
 
       vColor = color;
 
-      // Alpha - more transparent toward center, opaque at petal edges
+      // Alpha - dramatic decrease from center to edge for visible gradient
       float pulse = sin(uTime * 0.8 + aPhase * 6.283 + layer * 3.0) * 0.15 + 0.85;
-      float petalEdgeAlpha = 0.5 + abs(petalOffset * 2.0); // Highlight petal edges
-      float centerAlpha = 1.0 - clamp(centerDist / uFlowerRadius, 0.0, 0.7);
-      vAlpha = 0.9 * pulse * petalEdgeAlpha * centerAlpha;
+      // Reduced alpha drop by 20%: 1.0 at center → 0.28 at edge (was 0.1)
+      float centerAlpha = 1.0 - clamp(centerDist / uFlowerRadius, 0.0, 0.72);
+      // Increase overall alpha by 30%
+      vAlpha = pulse * centerAlpha * 1.3;
     }
   `
 
@@ -116,17 +128,17 @@
 
       if (strength < 0.01) discard;
 
-      gl_FragColor = vec4(vColor, strength * vAlpha);
+      gl_FragColor = vec4(vColor * strength * 1.5, strength * vAlpha * 0.95);
     }
   `
 
   // --- Reactive Logic ---
   const generateColors = () => {
     const isLight = colorMode.value === 'light'
-    const warm1 = isLight ? blackWarm1 : silverWarm1
-    const warm2 = isLight ? blackWarm2 : silverWarm2
-    const cool1 = isLight ? blackCool1 : silverCool1
-    const cool2 = isLight ? blackCool2 : silverCool2
+    const warm1 = isLight ? greenLight1 : silverCenterWarm
+    const warm2 = isLight ? greenLight2 : silverEdgeWarm
+    const cool1 = isLight ? greenDark1 : silverCenterCool
+    const cool2 = isLight ? greenDark2 : silverEdgeCool
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
@@ -139,16 +151,32 @@
       const distance = Math.sqrt(x * x + z * z)
       const t = Math.min(distance / flowerRadius, 1)
 
-      // Color based on layer and position
+      // Color based on position (arms penetrate bulge)
       const layerValue = petalLayers[i] || 0
-      const angle = Math.atan2(z, x)
-      const petalIndex =
-        Math.floor(((angle + Math.PI) / (Math.PI * 2)) * 12) % 12
-      const useWarm = petalIndex % 2 === 0
+      const isInBulgeRegion = distance < bulgeRadius * flowerRadius
 
-      const mixedColor = useWarm
-        ? warm1.clone().lerp(warm2, t * 0.7 + layerValue * 0.3)
-        : cool1.clone().lerp(cool2, t * 0.7 + layerValue * 0.3)
+      // For coloring, treat all particles as arms if they're in arm structure
+      // This creates continuity between bulge and arms
+      const angle = Math.atan2(z, x)
+      const spinAngle = Math.log(distance + 1) * spiralStrength * 0.8
+      const armAngle = angle + spinAngle
+      const armWidth = 0.06 + layerValue * 0.09
+      const armOffset = Math.sin(armAngle * 12) * armWidth
+      const finalAngle = armAngle + armOffset
+      const armIndex =
+        Math.floor(((finalAngle + Math.PI) / (Math.PI * 2)) * 12) % 12
+      const useWarm = armIndex % 2 === 0
+
+      // Radial brightness gradient: bright at center, dim at edge
+      // For light mode, apply extra contrast boost
+      let mixedColor = useWarm
+        ? silverCenterWarm.clone().lerp(silverEdgeWarm, t)
+        : silverCenterCool.clone().lerp(silverEdgeCool, t)
+
+      // Darken colors for light mode to increase contrast against white background
+      if (isLight) {
+        mixedColor.multiplyScalar(0.5) // Darken by 50% for better contrast
+      }
 
       colors[i3] = mixedColor.r
       colors[i3 + 1] = mixedColor.g
@@ -185,46 +213,82 @@
     const randomness = new Float32Array(count * 3)
     const phases = new Float32Array(count)
 
-    // Create top view of rose - circular petal arrangement
-    const petalCount = 12
+    // Create galaxy with central bulge and spiral arms
+    const armCount = 12
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
 
-      // Layer from center (0) to edge (1)
-      const layer = Math.pow(Math.random(), 0.7)
+      // 1. CENTER-WEIGHTED DISTRIBUTION: More particles near center
+      const layer = Math.pow(Math.random(), 3.0)
       petalLayers[i] = layer
 
-      // Angle around center
-      const angle = Math.random() * Math.PI * 2
-
-      // Distance from center - petals are denser toward center
+      // Distance from center - maintain edge-to-edge coverage
       const baseDistance = layer * flowerRadius
       const distanceVariation = (Math.random() - 0.5) * 0.2 * flowerRadius
       const distance = Math.max(0.1, baseDistance + distanceVariation)
 
-      // Determine which petal this particle belongs to
-      const petalIndex = Math.floor((angle / (Math.PI * 2)) * petalCount)
-      const petalCenterAngle = (petalIndex / petalCount) * Math.PI * 2
-      const angleOffset = angle - petalCenterAngle
+      // Determine particle type: some in bulge are arms that penetrate sphere
+      // Probability of being an arm particle increases with distance
+      const isInBulgeRegion = distance < bulgeRadius * flowerRadius
+      const armProbability = Math.min(
+        1.0,
+        distance / (bulgeRadius * flowerRadius)
+      )
+      const isArmParticle = Math.random() < armProbability
 
-      // Petal shape - wider at base, curves inward
-      const petalWidth = 0.3 + layer * 0.4
-      const petalShape = Math.cos(angleOffset * 3) * petalWidth
-      const shapedDistance = distance * (1 + petalShape)
+      // Initialize armAngle variable (used for scale calculation)
+      let armAngle = 0
 
-      // Position in 3D space
-      positions[i3] = Math.cos(angle) * shapedDistance
-      positions[i3 + 1] = (Math.random() - 0.5) * 0.15 // Very slight vertical variation
-      positions[i3 + 2] = Math.sin(angle) * shapedDistance
+      if (isInBulgeRegion && !isArmParticle) {
+        // CENTRAL BULGE CORE: Pure spherical distribution (background)
+        // Random angle in 3D for spherical distribution
+        const theta = Math.random() * Math.PI * 2
+        const phi = Math.acos(2 * Math.random() - 1)
+        const bulgeDistance = distance * 0.7 // Slightly compressed for ellipsoidal shape
+
+        positions[i3] = Math.sin(phi) * Math.cos(theta) * bulgeDistance
+        positions[i3 + 1] = Math.cos(phi) * bulgeDistance * 0.6 // Flatten slightly
+        positions[i3 + 2] = Math.sin(phi) * Math.sin(theta) * bulgeDistance
+      } else {
+        // SPIRAL ARMS: Penetrate into bulge region (no gap)
+        // Use original distance, arms go into center
+        const armDistance = distance
+
+        // ARM DENSITY FUNCTION: Concentrate particles in arms
+        const armIndex = Math.floor(Math.random() * armCount)
+        const baseAngle = (armIndex / armCount) * Math.PI * 2
+        const angleSpread = (Math.random() - 0.5) * 0.35
+
+        // Apply logarithmic spiral
+        const spinAngle = Math.log(armDistance + 1) * spiralStrength * 0.8
+        armAngle = baseAngle + spinAngle + angleSpread
+
+        // Arm concentration by angular offset
+        // Reduce arm modulation near center so bulge remains visible
+        const armStrength = Math.min(
+          1.0,
+          distance / (bulgeRadius * flowerRadius * 0.5)
+        )
+        const armWidth = (0.06 + layer * 0.09) * armStrength
+        const armOffset = Math.sin(armAngle * armCount) * armWidth
+        const finalAngle = armAngle + armOffset
+
+        // Position with final angle
+        positions[i3] = Math.cos(finalAngle) * armDistance
+        positions[i3 + 1] = (Math.random() - 0.5) * 0.15
+        positions[i3 + 2] = Math.sin(finalAngle) * armDistance
+      }
 
       // Randomness for organic look
       randomness[i3] = (Math.random() - 0.5) * 0.015
       randomness[i3 + 1] = (Math.random() - 0.5) * 0.015
       randomness[i3 + 2] = (Math.random() - 0.5) * 0.015
 
-      // Scale - larger particles in outer layers and at petal edges
-      const edgeFactor = 1.0 - Math.abs(angleOffset * 3)
-      scales[i] = 0.2 + layer * 0.6 + edgeFactor * 0.2
+      // Scale - larger particles in outer layers
+      // Include spiral factor for all particles (creates continuity)
+      const spiralFactor = 0.7 + 0.3 * Math.cos(armAngle * armCount * 0.5)
+      const scale = 0.2 + layer * 0.6 + spiralFactor * 0.2
+      scales[i] = scale
 
       // Animation phase
       phases[i] = Math.random()
@@ -239,8 +303,8 @@
       0.1,
       100
     )
-    camera.position.z = 3.5
-    camera.position.y = 0.5
+    camera.position.z = 5.0
+    camera.position.y = 1.5
     camera.lookAt(0, 0, 0)
 
     renderer.value = new THREE.WebGLRenderer({
@@ -277,6 +341,7 @@
       uniforms: {
         uTime: { value: 0 },
         uFlowerRadius: { value: flowerRadius },
+        uSpiralStrength: { value: spiralStrength },
       },
       transparent: true,
     })
