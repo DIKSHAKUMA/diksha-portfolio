@@ -1,7 +1,7 @@
-![Image](https://github.com/user-attachments/assets/9b768684-e11e-4eac-bb5b-c2df75293a3a)
+![Image](https://github.com/user-attachments/assets/e61bba62-016a-4a72-baa7-6cee225755ea)
 <br />
 
-## V1
+## V2 08/02/2025
 
 [www.thomasthorstensson.com](https://www.thomasthorstensson.com)
 
