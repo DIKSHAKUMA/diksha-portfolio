@@ -48,7 +48,9 @@ b
 
   const headerClassObj = computed(() => {
     return {
-      'abstract__header--hero': props.isHero,
+      'abstract__header--hero': props.isHero && props.desc.trim().length > 0,
+      'abstract__header--hero-solo':
+        props.isHero && props.desc.trim().length == 0,
       'abstract__header--secondary': props.isSecondary,
       'abstract__header--full-width': props.isFullWidth,
       'abstract__header--page-header': props.isPageHeader,
@@ -227,10 +229,14 @@ b
       line-height: 1;
 
       &--hero {
-        margin-bottom: 0;
+        margin-bottom: $px-16-spacer;
         line-height: 1;
         text-box-trim: both; /* Trims the leading from the top and bottom of the box */
         text-box-edge: cap alphabetic;
+      }
+
+      &--hero-solo {
+        margin-bottom: 0;
       }
 
       /* When we need a sub header (smaller) */
@@ -252,6 +258,10 @@ b
 
         &.abstract__header--hero {
           margin-bottom: $px-16-spacer;
+        }
+
+        &.abstract__header--hero-solo {
+          margin-bottom: 0;
         }
 
         &--full-width {

@@ -15,11 +15,12 @@
         ScrollTrigger.create({
           trigger: '.hero-wrapper',
           start: 'top top',
-          endTrigger: '.about-wrapper',
+          endTrigger: (() => document.querySelector('.about-wrapper')) as any,
           end: 'top 5%',
           pin: true,
           pinSpacing: false,
           anticipatePin: 1,
+          invalidateOnRefresh: true,
         })
       })
     }

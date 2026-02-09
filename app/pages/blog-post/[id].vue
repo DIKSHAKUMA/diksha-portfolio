@@ -159,15 +159,7 @@
         link.classList.add('action')
       })
 
-      // Small delay to ensure skeleton is visible
-      setTimeout(() => {
-        mdcContentReady.value = true
-
-        // Refresh Lenis after content is loaded to recalculate scroll bounds
-        if (($lenis as any).refresh) {
-          ;($lenis as any).refresh()
-        }
-      }, 300) // Additional delay to show skeleton
+      mdcContentReady.value = true
     }, 500)
   }
 
@@ -248,7 +240,7 @@
         </main>
 
         <div class="share-buttons">
-          <SocialShare
+          <LazySocialShare
             class="action"
             data-name="menu"
             v-for="network in ['bluesky', 'pocket', 'linkedin', 'pinterest']"
@@ -285,7 +277,7 @@
 
       <!-- Word of the Day Sidebar - Desktop Only -->
       <aside class="word-sidebar">
-        <UIWordOfDay v-if="showSidebar" />
+        <LazyUIWordOfDay v-if="showSidebar" />
         <div v-else class="word-sidebar-placeholder"></div>
       </aside>
 

@@ -177,8 +177,14 @@
   }
 
   onMounted(async () => {
-    /* Register the custom Hygraph loader */
-    Assets.loader.parsers.push(hygraphLDR as any)
+    /* Register the custom Hygraph loader only if not already registered */
+    const parserExists = Assets.loader.parsers.some(
+      (parser: any) => parser.name === 'hygraphLDR'
+    )
+
+    if (!parserExists) {
+      Assets.loader.parsers.push(hygraphLDR as any)
+    }
 
     ctx = $gsap.context(() => {
       $gsap.registerPlugin(ScrollTrigger)

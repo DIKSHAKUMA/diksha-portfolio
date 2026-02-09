@@ -27,7 +27,7 @@
   })
 
   /* Suppress Annoying Mux Player shadow DOM warnings */
-  if (process.client) {
+  if (import.meta.client) {
     const originalWarn = console.warn
     /* Drop any warnings into a spread array */
     console.warn = (...args) => {
@@ -778,8 +778,10 @@
       &__a,
       &__b {
         flex: 1 0 50%;
-        word-wrap: break-word;
+        max-width: 100%;
+        display: inline-block;
         overflow-wrap: break-word;
+        word-break: break-word;
         hyphens: auto;
         height: fit-content;
 

@@ -13,7 +13,7 @@
   let observer: IntersectionObserver | null = null
 
   // --- Data Buffers (Shared Scope) ---
-  const count = 65000
+  const count = 90000
   const flowerRadius = 3.0
   const spiralStrength = 0.8 // Controls spiral bending
   const bulgeRadius = 0.25 // Central bulge size (fraction of flowerRadius)
@@ -26,9 +26,9 @@
   // Bright center colors (near bulge)
   const silverCenterWarm = new THREE.Color(0.98, 0.97, 0.96)
   const silverCenterCool = new THREE.Color(0.96, 0.98, 1.0)
-  // Dim edge colors (outer arms)
-  const silverEdgeWarm = new THREE.Color(0.82, 0.84, 0.86)
-  const silverEdgeCool = new THREE.Color(0.84, 0.86, 0.88)
+  // Bright edge colors (outer arms) - boosted to match ribbon brightness
+  const silverEdgeWarm = new THREE.Color(0.9, 0.92, 0.94)
+  const silverEdgeCool = new THREE.Color(0.92, 0.94, 0.96)
   // #43655a variations for light mode - exact same as AnimThreeRibbon
   const greenLight1 = new THREE.Color(0x43 / 255, 0x65 / 255, 0x5a / 255) // #43655a
   const greenLight2 = new THREE.Color(0x4a / 255, 0x6e / 255, 0x62 / 255) // Lighter variation
@@ -104,12 +104,12 @@
 
       vColor = color;
 
-      // Alpha - dramatic decrease from center to edge for visible gradient
+      // Alpha - reduced drop from center to edge for more radiance
       float pulse = sin(uTime * 0.8 + aPhase * 6.283 + layer * 3.0) * 0.15 + 0.85;
-      // Reduced alpha drop by 20%: 1.0 at center → 0.28 at edge (was 0.1)
-      float centerAlpha = 1.0 - clamp(centerDist / uFlowerRadius, 0.0, 0.72);
-      // Increase overall alpha by 30%
-      vAlpha = pulse * centerAlpha * 1.3;
+      // Reduced alpha drop: 1.0 at center → 0.5 at edge (was 0.28)
+      float centerAlpha = 1.0 - clamp(centerDist / uFlowerRadius, 0.0, 0.5);
+      // Increase overall alpha by 50%
+      vAlpha = pulse * centerAlpha * 1.5;
     }
   `
 
@@ -121,14 +121,14 @@
       vec2 uv = gl_PointCoord - 0.5;
       float dist = length(uv);
 
-      // Simple circular point
+      // Simple circular point with sharper falloff for more intensity
       float strength = 1.0 - dist * 2.0;
       strength = clamp(strength, 0.0, 1.0);
-      strength = pow(strength, 2.0);
+      strength = pow(strength, 3.0);
 
       if (strength < 0.01) discard;
 
-      gl_FragColor = vec4(vColor * strength * 1.5, strength * vAlpha * 0.95);
+      gl_FragColor = vec4(vColor * strength * 2.0, strength * vAlpha * 0.95);
     }
   `
 
@@ -175,7 +175,7 @@
 
       // Darken colors for light mode to increase contrast against white background
       if (isLight) {
-        mixedColor.multiplyScalar(0.5) // Darken by 50% for better contrast
+        mixedColor.multiplyScalar(0.8) // Reduced darkening for more radiance (was 0.5)
       }
 
       colors[i3] = mixedColor.r
