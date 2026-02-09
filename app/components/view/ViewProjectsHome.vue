@@ -362,10 +362,8 @@
           width: 100%;
           height: 100%;
           pointer-events: none;
-          box-shadow:
-            inset 0 0 60px 30px rgba(0, 0, 0, 0.3),
-            /* Inner dark */ inset 0 0 100px 60px rgba(0, 0, 0, 0.2),
-            /* Middle gradient */ inset 0 0 140px 90px rgba(0, 0, 0, 0.1);
+          filter: brightness(0.95) contrast(1.05);
+          background: rgba(0, 0, 0, 0.08);
         }
 
         img {
