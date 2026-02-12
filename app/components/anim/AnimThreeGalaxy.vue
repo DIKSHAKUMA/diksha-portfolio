@@ -11,10 +11,11 @@
   const rafId = shallowRef<number>(0)
   const isVisible = shallowRef(true)
   let observer: IntersectionObserver | null = null
+  let camera: THREE.PerspectiveCamera | null = null
 
   // --- Data Buffers (Shared Scope) ---
   const count = 90000
-  const flowerRadius = 3.0
+  const flowerRadius = 2.55 // 85% of 3.0 (3.0 * 0.85)
   const spiralStrength = 1.2 // Controls spiral bending (increased for linear spiral)
   const brightnessBoost = 1.3 // Generic brightness multiplier for all particles
   const bulgeRadius = 0.25 // Central bulge size (fraction of flowerRadius)
@@ -182,8 +183,19 @@
   }
 
   const onResize = () => {
-    if (renderer.value) {
-      renderer.value.setSize(window.innerWidth, window.innerHeight)
+    if (renderer.value && canvasRef.value) {
+      // Get actual canvas dimensions from element (after CSS is applied)
+      const canvasWidth = canvasRef.value.clientWidth
+      const canvasHeight = canvasRef.value.clientHeight
+      renderer.value.setSize(canvasWidth, canvasHeight)
+    }
+
+    if (camera && canvasRef.value) {
+      // Use actual canvas dimensions for aspect ratio
+      const canvasWidth = canvasRef.value.clientWidth
+      const canvasHeight = canvasRef.value.clientHeight
+      camera.aspect = canvasWidth / canvasHeight
+      camera.updateProjectionMatrix()
     }
   }
 
@@ -258,8 +270,8 @@
 
         // Clean spiral positioning with arms that widen toward edges
         // Base width near center + gradual widening based on distance
-        const baseWidth = 0.04
-        const widthGrowth = 0.04
+        const baseWidth = 0.036 // 10% thinner at center (0.04 * 0.9)
+        const widthGrowth = 0.2 // Halved from 0.4 for more moderate expansion
         const armWidth = baseWidth + armDistance * widthGrowth
 
         // Add slight angular spread for natural arm thickness
@@ -292,10 +304,10 @@
 
     const scene = new THREE.Scene()
 
-    // Perspective camera for 3D effect
-    const camera = new THREE.PerspectiveCamera(
+    // Perspective camera for 3D effect - use actual canvas dimensions
+    camera = new THREE.PerspectiveCamera(
       45,
-      window.innerWidth / window.innerHeight,
+      canvasRef.value.clientWidth / canvasRef.value.clientHeight,
       0.1,
       100
     )
@@ -308,7 +320,10 @@
       alpha: true,
       antialias: true,
     })
-    renderer.value.setSize(window.innerWidth, window.innerHeight)
+    // Get actual canvas dimensions from element (after CSS is applied)
+    const canvasWidth = canvasRef.value.clientWidth
+    const canvasHeight = canvasRef.value.clientHeight
+    renderer.value.setSize(canvasWidth, canvasHeight)
     renderer.value.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
     geometry.value = new THREE.BufferGeometry()
@@ -397,8 +412,9 @@
   }
 
   .flower-canvas {
-    width: 100%;
+    width: 85%;
     height: 100%;
     display: block;
+    margin: 0 auto;
   }
 </style>
