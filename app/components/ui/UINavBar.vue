@@ -84,7 +84,7 @@
           x: 0,
           stagger: 0.1,
           ease: 'cubic-bezier(0.23, 1, 0.32, 1)',
-          delay: 0.5,
+          delay: 0.6,
           onComplete: () => {
             isAnimating.value = false
           },

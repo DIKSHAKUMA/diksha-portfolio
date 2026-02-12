@@ -12,6 +12,10 @@
   const animPixiRef = ref(null)
   const showAnimPixi = ref(false)
 
+  const onPixiLoaded = () => {
+    showAnimPixi.value = true
+  }
+
   onMounted(() => {
     $gsap.registerPlugin(ScrollTrigger)
 
@@ -38,10 +42,6 @@
         })
       })
     })
-
-    nextTick(() => {
-      showAnimPixi.value = true
-    })
   })
 
   onUnmounted(() => {
@@ -51,7 +51,11 @@
 
 <template>
   <main class="hero-wrapper">
-    <AnimPixiMoon ref="aniPixiRef" :class="{ 'fade-in': showAnimPixi }" />
+    <AnimPixiMoon
+      ref="aniPixiRef"
+      :class="{ 'fade-in': showAnimPixi }"
+      @loaded="onPixiLoaded"
+    />
     <UIWeatherInfo />
     <div class="contact">
       <div class="contact__label split-label-w">

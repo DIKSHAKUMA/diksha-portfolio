@@ -190,11 +190,11 @@
   const silverWarm2 = new THREE.Color(0.98, 0.96, 0.94)
   const silverCool1 = new THREE.Color(0.9, 0.92, 0.96)
   const silverCool2 = new THREE.Color(0.96, 0.98, 1.0)
-  // #43655a variations for light mode (R=67, G=101, B=90)
-  const greenLight1 = new THREE.Color(0x43 / 255, 0x65 / 255, 0x5a / 255) // #43655a
-  const greenLight2 = new THREE.Color(0x4a / 255, 0x6e / 255, 0x62 / 255) // Lighter variation
-  const greenDark1 = new THREE.Color(0x3b / 255, 0x5c / 255, 0x52 / 255) // Darker variation
-  const greenDark2 = new THREE.Color(0x34 / 255, 0x53 / 255, 0x4a / 255) // Even darker
+  // #18181b variations for light mode (R=24, G=24, B=27)
+  const greenLight1 = new THREE.Color(0x18 / 255, 0x18 / 255, 0x1b / 255) // #18181b
+  const greenLight2 = new THREE.Color(0x20 / 255, 0x20 / 255, 0x23 / 255) // Lighter variation
+  const greenDark1 = new THREE.Color(0x10 / 255, 0x10 / 255, 0x13 / 255) // Darker variation
+  const greenDark2 = new THREE.Color(0x08 / 255, 0x08 / 255, 0x0b / 255) // Even darker
 
   const canvasRef = shallowRef<HTMLCanvasElement | null>(null)
   const renderer = shallowRef<THREE.WebGLRenderer | null>(null)

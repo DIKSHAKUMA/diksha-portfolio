@@ -226,7 +226,7 @@ b
       text-transform: none;
       font-weight: 500;
       font-variation-settings: 'wght' 500;
-      line-height: 1;
+      line-height: 1.1;
 
       &--hero {
         margin-bottom: $px-16-spacer;

@@ -20,10 +20,10 @@
   const strands = new Float32Array(count)
 
   // Color palettes
-  const silverWarm1 = new THREE.Color(0.94, 0.92, 0.9)
-  const silverWarm2 = new THREE.Color(0.98, 0.96, 0.94)
-  const silverCool1 = new THREE.Color(0.9, 0.92, 0.96)
-  const silverCool2 = new THREE.Color(0.96, 0.98, 1.0)
+  const silverWarm1 = new THREE.Color(1.0, 0.98, 0.96)
+  const silverWarm2 = new THREE.Color(1.0, 1.0, 0.98)
+  const silverCool1 = new THREE.Color(0.96, 0.98, 1.0)
+  const silverCool2 = new THREE.Color(1.0, 1.0, 1.0)
   // #43655a variations for light mode (R=67, G=101, B=90)
   const greenLight1 = new THREE.Color(0x43 / 255, 0x65 / 255, 0x5a / 255) // #43655a
   const greenLight2 = new THREE.Color(0x4a / 255, 0x6e / 255, 0x62 / 255) // Lighter variation
@@ -73,7 +73,7 @@
       float strength = 1.0 - length(uv);
       strength = pow(strength, 4.0);
       if (strength < 0.01) discard;
-      gl_FragColor = vec4(vColor * strength * 1.5, strength * vAlpha * 0.95);
+      gl_FragColor = vec4(vColor * strength * 2.0, strength * vAlpha * 1.0);
     }
   `
 

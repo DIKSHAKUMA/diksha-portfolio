@@ -5,6 +5,10 @@
   const pixiCtx = useTemplateRef<any>('pixi')
   const { $gsap } = useNuxtApp()
 
+  const emit = defineEmits<{
+    loaded: []
+  }>()
+
   let app: PIXI.Application
   let displaceSprite: PIXI.Sprite
   let imageSprite: PIXI.Sprite
@@ -122,6 +126,9 @@
       const imageMap = await Assets.load('/img/displacemap.png')
       displaceSprite = PIXI.Sprite.from(imageMap)
 
+      // Emit loaded event when both images are ready
+      emit('loaded')
+
       app.stage.addChild(imageSprite)
       app.stage.addChild(displaceSprite)
 
@@ -196,5 +203,11 @@
     left: 0;
     width: 100%;
     height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-out;
+
+    &.fade-in {
+      opacity: 1;
+    }
   }
 </style>

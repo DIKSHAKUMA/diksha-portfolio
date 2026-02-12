@@ -31,11 +31,11 @@
   // Bright edge colors (outer arms) - boosted to match ribbon brightness
   const silverEdgeWarm = new THREE.Color(0.9, 0.92, 0.94)
   const silverEdgeCool = new THREE.Color(0.92, 0.94, 0.96)
-  // #43655a variations for light mode - exact same as AnimThreeRibbon
-  const greenLight1 = new THREE.Color(0x43 / 255, 0x65 / 255, 0x5a / 255) // #43655a
-  const greenLight2 = new THREE.Color(0x4a / 255, 0x6e / 255, 0x62 / 255) // Lighter variation
-  const greenDark1 = new THREE.Color(0x3b / 255, 0x5c / 255, 0x52 / 255) // Darker variation
-  const greenDark2 = new THREE.Color(0x34 / 255, 0x53 / 255, 0x4a / 255) // Even darker
+  // Grass green variations for light mode - more vibrant and clear
+  const greenLight1 = new THREE.Color(0x2e / 255, 0x8b / 255, 0x57 / 255) // #2e8b57 - Sea Green
+  const greenLight2 = new THREE.Color(0x3c / 255, 0xb3 / 255, 0x71 / 255) // #3cb371 - Medium Sea Green
+  const greenDark1 = new THREE.Color(0x22 / 255, 0x8b / 255, 0x22 / 255) // #228b22 - Forest Green
+  const greenDark2 = new THREE.Color(0x00 / 255, 0x64 / 255, 0x00 / 255) // #006400 - Dark Green
 
   /**
    * Three.js
@@ -46,6 +46,7 @@
     uniform float uTime;
     uniform float uFlowerRadius;
     uniform float uSpiralStrength;
+    uniform float uIsLight; // 1.0 for light mode, 0.0 for dark mode
     attribute float aScale;
     attribute vec3 aRandomness;
     attribute float aPetal;
@@ -102,8 +103,10 @@
       float pulse = sin(uTime * 0.8 + aPhase * 6.283 + layer * 3.0) * 0.15 + 0.85;
       // Reduced alpha drop: 1.0 at center → 0.5 at edge (was 0.28)
       float centerAlpha = 1.0 - clamp(centerDist / uFlowerRadius, 0.0, 0.5);
-      // Increase overall alpha by 50%
-      vAlpha = pulse * centerAlpha * 1.5;
+
+      // Adjust alpha based on color mode: much higher opacity for light mode (dark particles)
+      float alphaMultiplier = mix(1.5, 3.0, uIsLight); // 1.5 for dark mode, 3.0 for light mode
+      vAlpha = pulse * centerAlpha * alphaMultiplier;
     }
   `
 
@@ -122,7 +125,7 @@
 
       if (strength < 0.01) discard;
 
-      gl_FragColor = vec4(vColor * strength * 2.0, strength * vAlpha * 0.95);
+      gl_FragColor = vec4(vColor * strength * 1.0, strength * vAlpha);
     }
   `
 
@@ -164,13 +167,13 @@
         ? silverCenterWarm.clone().lerp(silverEdgeWarm, t)
         : silverCenterCool.clone().lerp(silverEdgeCool, t)
 
-      // Darken colors for light mode to increase contrast against white background
-      if (isLight) {
-        mixedColor.multiplyScalar(0.8) // Reduced darkening for more radiance (was 0.5)
-      }
+      // No need to darken colors for light mode since we're using dark #18181b tone
+      // This provides good contrast against white background
 
-      // Apply generic brightness boost while maintaining radial gradient
-      mixedColor.multiplyScalar(brightnessBoost)
+      // Apply brightness boost for dark mode, but not for light mode (dark particles need contrast)
+      if (!isLight) {
+        mixedColor.multiplyScalar(brightnessBoost)
+      }
 
       colors[i3] = mixedColor.r
       colors[i3 + 1] = mixedColor.g
@@ -204,6 +207,11 @@
     () => colorMode.value,
     () => {
       generateColors()
+      // Update uIsLight uniform in shader material
+      if (material.value?.uniforms.uIsLight) {
+        material.value.uniforms.uIsLight.value =
+          colorMode.value === 'light' ? 1.0 : 0.0
+      }
     },
     {
       immediate: true,
@@ -353,6 +361,7 @@
         uTime: { value: 0 },
         uFlowerRadius: { value: flowerRadius },
         uSpiralStrength: { value: spiralStrength },
+        uIsLight: { value: colorMode.value === 'light' ? 1.0 : 0.0 },
       },
       transparent: true,
     })
