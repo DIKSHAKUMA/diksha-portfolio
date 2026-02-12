@@ -15,7 +15,8 @@
   // --- Data Buffers (Shared Scope) ---
   const count = 90000
   const flowerRadius = 3.0
-  const spiralStrength = 0.8 // Controls spiral bending
+  const spiralStrength = 1.2 // Controls spiral bending (increased for linear spiral)
+  const brightnessBoost = 1.3 // Generic brightness multiplier for all particles
   const bulgeRadius = 0.25 // Central bulge size (fraction of flowerRadius)
 
   const positions = new Float32Array(count * 3)
@@ -62,21 +63,13 @@
       // Bulge radius
       float bulgeRadius = 0.25 * uFlowerRadius;
 
-      // Apply logarithmic spiral to all particles
-      float spinAngle = log(dist + 1.0) * uSpiralStrength * 0.8;
+      // Apply linear spiral like CodePen example: clean uniform bending
+      float spinAngle = dist * uSpiralStrength;
       float armAngle = originalAngle + spinAngle;
 
-      // Arm concentration by angular offset (not radius)
-      // Arms penetrate bulge but reduce strength near center
-      float armStrength = smoothstep(0.0, bulgeRadius * 1.5, dist);
-      float armCount = 12.0;
-      float armWidth = mix(0.06, 0.15, layer) * armStrength;
-      float armOffset = sin(armAngle * armCount) * armWidth;
-      float finalAngle = armAngle + armOffset;
-
-      // Position with final angle (same radius, modulated angle)
-      pos.x = cos(finalAngle) * dist;
-      pos.z = sin(finalAngle) * dist;
+      // Clean spiral positioning without sine wave modulation
+      pos.x = cos(armAngle) * dist;
+      pos.z = sin(armAngle) * dist;
 
       // Gentle vertical movement for 3D effect
       float wave = sin(uTime * 0.3 + aPhase * 6.283 + layer * 5.0) * 0.05;
@@ -158,13 +151,10 @@
       // For coloring, treat all particles as arms if they're in arm structure
       // This creates continuity between bulge and arms
       const angle = Math.atan2(z, x)
-      const spinAngle = Math.log(distance + 1) * spiralStrength * 0.8
+      const spinAngle = distance * spiralStrength
       const armAngle = angle + spinAngle
-      const armWidth = 0.06 + layerValue * 0.09
-      const armOffset = Math.sin(armAngle * 12) * armWidth
-      const finalAngle = armAngle + armOffset
       const armIndex =
-        Math.floor(((finalAngle + Math.PI) / (Math.PI * 2)) * 12) % 12
+        Math.floor(((armAngle + Math.PI) / (Math.PI * 2)) * 6) % 6
       const useWarm = armIndex % 2 === 0
 
       // Radial brightness gradient: bright at center, dim at edge
@@ -177,6 +167,9 @@
       if (isLight) {
         mixedColor.multiplyScalar(0.8) // Reduced darkening for more radiance (was 0.5)
       }
+
+      // Apply generic brightness boost while maintaining radial gradient
+      mixedColor.multiplyScalar(brightnessBoost)
 
       colors[i3] = mixedColor.r
       colors[i3 + 1] = mixedColor.g
@@ -214,7 +207,7 @@
     const phases = new Float32Array(count)
 
     // Create galaxy with central bulge and spiral arms
-    const armCount = 12
+    const armCount = 6
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
 
@@ -257,32 +250,35 @@
         // ARM DENSITY FUNCTION: Concentrate particles in arms
         const armIndex = Math.floor(Math.random() * armCount)
         const baseAngle = (armIndex / armCount) * Math.PI * 2
-        const angleSpread = (Math.random() - 0.5) * 0.35
+        const initialAngleSpread = (Math.random() - 0.5) * 0.35
 
-        // Apply logarithmic spiral
-        const spinAngle = Math.log(armDistance + 1) * spiralStrength * 0.8
-        armAngle = baseAngle + spinAngle + angleSpread
+        // Apply linear spiral like CodePen example
+        const spinAngle = armDistance * spiralStrength
+        armAngle = baseAngle + spinAngle + initialAngleSpread
 
-        // Arm concentration by angular offset
-        // Reduce arm modulation near center so bulge remains visible
-        const armStrength = Math.min(
-          1.0,
-          distance / (bulgeRadius * flowerRadius * 0.5)
-        )
-        const armWidth = (0.06 + layer * 0.09) * armStrength
-        const armOffset = Math.sin(armAngle * armCount) * armWidth
-        const finalAngle = armAngle + armOffset
+        // Clean spiral positioning with arms that widen toward edges
+        // Base width near center + gradual widening based on distance
+        const baseWidth = 0.04
+        const widthGrowth = 0.04
+        const armWidth = baseWidth + armDistance * widthGrowth
 
-        // Position with final angle
-        positions[i3] = Math.cos(finalAngle) * armDistance
+        // Add slight angular spread for natural arm thickness
+        const widthAngleSpread = (Math.random() - 0.5) * armWidth
+
+        // Add subtle radial randomness to break up perfection (10% of arm width)
+        const radialRandomness = (Math.random() - 0.5) * armWidth * 0.1
+        const finalDistance = armDistance + radialRandomness
+
+        positions[i3] = Math.cos(armAngle + widthAngleSpread) * finalDistance
         positions[i3 + 1] = (Math.random() - 0.5) * 0.15
-        positions[i3 + 2] = Math.sin(finalAngle) * armDistance
+        positions[i3 + 2] =
+          Math.sin(armAngle + widthAngleSpread) * finalDistance
       }
 
       // Randomness for organic look
-      randomness[i3] = (Math.random() - 0.5) * 0.015
-      randomness[i3 + 1] = (Math.random() - 0.5) * 0.015
-      randomness[i3 + 2] = (Math.random() - 0.5) * 0.015
+      randomness[i3] = (Math.random() - 0.5) * 0.02
+      randomness[i3 + 1] = (Math.random() - 0.5) * 0.02
+      randomness[i3 + 2] = (Math.random() - 0.5) * 0.02
 
       // Scale - larger particles in outer layers
       // Include spiral factor for all particles (creates continuity)

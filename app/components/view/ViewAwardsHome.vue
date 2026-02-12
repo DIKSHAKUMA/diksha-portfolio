@@ -213,7 +213,7 @@
     }
 
     @include this-and-above('xl') {
-      height: 300px;
+      height: 220px;
       min-width: 250px;
       padding: 20px;
     }

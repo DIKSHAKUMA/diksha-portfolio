@@ -49,24 +49,32 @@
     return `https://eu-west-2.graphassets.com/cm4tev3k1008n01uo6egngvzu/${post.value.coverImage.handle}`
   })
 
-  /* SEO Meta Tags */
-  useSeoMeta({
-    title: () =>
-      post.value ? `${post.value.title} • Thomas Thorstensson` : 'Blog Post',
-    description: () =>
-      post.value?.subject || 'Read this blog post by Thomas Thorstensson',
-    ogTitle: () => post.value?.title,
-    ogDescription: () => post.value?.subject,
-    ogImage: () => coverImageUrl.value,
-    ogType: 'article',
-    articleAuthor: () => post.value?.authors?.[0]?.name,
-    articlePublishedTime: () => post.value?.date,
-    articleTag: () => post.value?.tags,
-    twitterCard: 'summary_large_image',
-    twitterTitle: () => post.value?.title,
-    twitterDescription: () => post.value?.subject,
-    twitterImage: () => coverImageUrl.value,
+  /**
+   * Improvement
+   * Pass the whole computed object to the composable, one watcher not one for each tag
+   */
+  const seoData = computed(() => {
+    // If post isn't loaded yet, return minimal data to avoid errors
+    if (!post.value) return { title: 'Loading...' }
+
+    return {
+      title: `${post.value.title} • Thomas Thorstensson`,
+      description:
+        post.value.subject || 'Read this blog post by Thomas Thorstensson',
+      ogTitle: post.value.title,
+      ogDescription: post.value.subject,
+      ogImage: coverImageUrl.value,
+      ogType: 'article',
+      articleAuthor: post.value.authors?.[0]?.name,
+      articlePublishedTime: post.value.date,
+      articleTag: post.value.tags,
+      twitterCard: 'summary_large_image',
+      twitterTitle: post.value.title,
+      twitterDescription: post.value.subject,
+      twitterImage: coverImageUrl.value,
+    }
   })
+  useSeoMeta(seoData)
 
   /* Canonical URL */
   useHead({
@@ -79,32 +87,43 @@
     ],
   })
 
-  /* Structured Data for SEO */
-  useSchemaOrg([
-    defineArticle({
-      headline: () => post.value?.title,
-      description: () => post.value?.subject,
-      image: () => coverImageUrl.value,
-      datePublished: () => post.value?.date,
-      dateModified: () => post.value?.updatedAt || post.value?.date,
-      author: {
-        name: () => post.value?.authors?.[0]?.name || 'Thomas Thorstensson',
-        url: 'https://thomasthorstensson.com/about',
-      },
-      publisher: {
-        name: 'Thomas Thorstensson',
-        url: 'https://thomasthorstensson.com',
-      },
-    }),
-    defineBreadcrumb([
-      { name: 'Home', item: '/' },
-      { name: 'Blog', item: '/blog' },
-      {
-        name: () => post.value?.title,
-        item: () => `/blog-post/${post.value?.slug}`,
-      },
-    ]),
-  ])
+  /**
+   * Same improvement as above, one computed property
+   */
+  const articleSchema = computed(() => {
+    // 1. Guard: If no post data, return empty to keep it fast
+    if (!post.value) return []
+
+    // 2. Return the data directly (no inner arrow functions)
+    return [
+      defineArticle({
+        headline: post.value.title,
+        description: post.value.subject,
+        image: coverImageUrl.value,
+        datePublished: post.value.date,
+        dateModified: post.value.updatedAt || post.value.date,
+        author: {
+          name: post.value.authors?.[0]?.name || 'Thomas Thorstensson',
+          url: 'https://thomasthorstensson.com/about',
+        },
+        publisher: {
+          name: 'Thomas Thorstensson',
+          url: 'https://thomasthorstensson.com',
+        },
+      }),
+      defineBreadcrumb([
+        { name: 'Home', item: '/' },
+        { name: 'Blog', item: '/blog' },
+        {
+          name: post.value.title,
+          item: `/blog-post/${post.value.slug}`,
+        },
+      ]),
+    ]
+  })
+
+  // 3. Pass the computed variable
+  useSchemaOrg(articleSchema)
 
   const runTrigger = () => {
     $gsap.context(() => {
@@ -142,25 +161,19 @@
 
   /* Function to add classes to MDC links after content loads */
   const setupMDCLinks = () => {
-    const { $lenis } = useNuxtApp()
+    const contentContainer = document.querySelector('.blog__post-content')
+    if (!contentContainer) return
 
-    setTimeout(() => {
-      const contentContainer = document.querySelector('.blog__post-content')
-      if (!contentContainer) return
+    const links = contentContainer.querySelectorAll('a')
+    const allPageLinks = document.querySelectorAll('a')
 
-      const links = contentContainer.querySelectorAll('a')
-      const allElements = contentContainer.querySelectorAll('*')
+    links.forEach((link: Element) => {
+      link.setAttribute('target', '_blank')
+      link.setAttribute('data-name', 'menu')
+      link.classList.add('action')
+    })
 
-      const allPageLinks = document.querySelectorAll('a')
-
-      links.forEach((link: Element) => {
-        link.setAttribute('target', '_blank')
-        link.setAttribute('data-name', 'menu')
-        link.classList.add('action')
-      })
-
-      mdcContentReady.value = true
-    }, 500)
+    mdcContentReady.value = true
   }
 
   onUnmounted(() => {
@@ -229,7 +242,7 @@
                 class="mdc-content"
                 :class="{ 'mdc-content--hidden': !mdcContentReady }"
               >
-                <MDC
+                <LazyMDC
                   :value="post.content"
                   ref="mdc"
                   @vue:mounted="setupMDCLinks"
@@ -239,17 +252,19 @@
           </div>
         </main>
 
-        <div class="share-buttons">
-          <LazySocialShare
-            class="action"
-            data-name="menu"
-            v-for="network in ['bluesky', 'pocket', 'linkedin', 'pinterest']"
-            :key="network"
-            :network="network"
-            :styled="true"
-            :label="false"
-          />
-        </div>
+        <ClientOnly>
+          <div class="share-buttons">
+            <LazySocialShare
+              class="action"
+              data-name="menu"
+              v-for="network in ['bluesky', 'pocket', 'linkedin', 'pinterest']"
+              :key="network"
+              :network="network"
+              :styled="true"
+              :label="false"
+            />
+          </div>
+        </ClientOnly>
 
         <div class="blog__related-posts" v-if="relatedPosts.length > 0">
           <h1>Related Posts</h1>
@@ -276,10 +291,12 @@
       </div>
 
       <!-- Word of the Day Sidebar - Desktop Only -->
-      <aside class="word-sidebar">
-        <LazyUIWordOfDay v-if="showSidebar" />
-        <div v-else class="word-sidebar-placeholder"></div>
-      </aside>
+      <ClientOnly>
+        <aside class="word-sidebar">
+          <LazyUIWordOfDay v-if="showSidebar" />
+          <div v-else class="word-sidebar-placeholder"></div>
+        </aside>
+      </ClientOnly>
 
       <UIBackButton
         class="blog__back-button-bottom action"

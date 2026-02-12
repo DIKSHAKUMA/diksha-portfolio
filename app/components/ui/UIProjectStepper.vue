@@ -4,10 +4,6 @@
   import { Assets, DisplacementFilter } from 'pixi.js'
   import { useHygraphParser } from '@/composables/useHygraphParser'
 
-  /**
-   * We Swedes like neat and tidy interface typing
-   * Two sugars, black.
-   */
   interface Props {
     prevImg: string
     nextImg: string
@@ -40,6 +36,10 @@
   let nextDisplaceSprite: PIXI.Sprite
   let prevImageSprite: PIXI.Sprite
   let nextImageSprite: PIXI.Sprite
+
+  /* Computed properties for full project paths */
+  const prevPath = computed(() => `/project/${props.prev}`)
+  const nextPath = computed(() => `/project/${props.next}`)
 
   /* Template refs */
   const prevCanvas = useTemplateRef<HTMLCanvasElement>('prevCanvas')
@@ -236,7 +236,12 @@
     <main class="project-stepper">
       <div class="project-stepper__prev">
         <div class="project-stepper-image-reveal">
-          <NuxtLink :to="prev" class="action" data-name="proj" data-text="Prev">
+          <NuxtLink
+            :to="prevPath"
+            class="action"
+            data-name="proj"
+            data-text="Prev"
+          >
             <NuxtImg
               :src="prevImg"
               provider="hygraph"
@@ -256,7 +261,12 @@
       </div>
       <div class="project-stepper__next">
         <div class="project-stepper-image-reveal">
-          <NuxtLink :to="next" class="action" data-name="proj" data-text="Next">
+          <NuxtLink
+            :to="nextPath"
+            class="action"
+            data-name="proj"
+            data-text="Next"
+          >
             <NuxtImg
               :src="nextImg"
               provider="hygraph"
@@ -317,7 +327,6 @@
   }
 
   .project-stepper-wrapper {
-    height: 100vh;
     position: relative;
     padding: $px-32-spacer 0;
 

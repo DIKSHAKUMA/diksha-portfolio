@@ -6,6 +6,11 @@ import { nextTick } from 'vue' // Add this import
 export default defineNuxtPlugin((nuxtApp) => {
   if (import.meta.server) return
 
+  // Disable the browser's automatic scroll behavior
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual'
+  }
+
   gsap.registerPlugin(ScrollTrigger)
   ScrollTrigger.config({ ignoreMobileResize: true })
 
@@ -32,16 +37,26 @@ export default defineNuxtPlugin((nuxtApp) => {
   gsap.ticker.add(rafUpdate)
   gsap.ticker.lagSmoothing(0)
 
-  // 4. Nuxt Lifecycle Hook: Handle route changes
+  /**
+   * Solved: prevent collision with native scroll on back navigation,
+   * preventing the classic 'page up jump'
+   */
   nuxtApp.hook('page:finish', async () => {
-    await nextTick() // Wait for Vue to update the DOM
+    // Wait for Vue to finish the DOM update
+    await nextTick()
+    // Wait one more tick for Nuxt's internal transition/suspense to settle
+    await nextTick()
 
-    // Use requestAnimationFrame to wait for the browser to paint
-    requestAnimationFrame(() => {
+    if (!history.state.scroll) {
       lenis.scrollTo(0, { immediate: true })
-      ScrollTrigger.refresh()
-      lenis.resize()
-    })
+    } else {
+      // On BACK navigation:
+      // Force Lenis to the saved position immediately so it doesn't "jump" from top
+      lenis.scrollTo(history.state.scroll.top, { immediate: true })
+    }
+
+    ScrollTrigger.refresh()
+    lenis.resize()
   })
 
   return {

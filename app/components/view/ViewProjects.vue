@@ -3,7 +3,6 @@
   import { Draggable } from 'gsap/Draggable'
   import { InertiaPlugin } from 'gsap/InertiaPlugin'
   import { useFolioStore } from '../../../stores/useFolioStore'
-  import LabSVG from '@/assets/svg/lab-indicator.svg'
 
   /* PINIA 🍍 */
   const store = useFolioStore()
@@ -221,7 +220,6 @@
   }
 
   onMounted(async () => {
-    
     if (process.client) {
       import('@/pages/project/[id].vue')
     }

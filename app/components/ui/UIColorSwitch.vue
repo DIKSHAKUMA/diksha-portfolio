@@ -27,6 +27,8 @@
   </div>
 </template>
 
+/* TODO: for now I give up on trying to get iconify loaded svgs to align without
+ugly adjusts */
 <style lang="scss" scoped>
   .icon {
     z-index: 999;
@@ -53,6 +55,7 @@
     z-index: 99;
     width: 20px;
     height: 20px;
+    vertical-align: text-top;
 
     input {
       display: none;

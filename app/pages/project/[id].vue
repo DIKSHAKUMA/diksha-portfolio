@@ -314,6 +314,12 @@
 
     <div class="project-wrapper" v-if="proj">
       <main class="project">
+        <UIBackButton
+          class="project__back-button action"
+          data-name="menu"
+          data-text="Back"
+          :to="''"
+        />
         <CommonAbstract
           :label="proj.name"
           :desc="proj.synop?.[0] || proj.client || ''"
