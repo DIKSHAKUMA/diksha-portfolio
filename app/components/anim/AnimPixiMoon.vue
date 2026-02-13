@@ -39,6 +39,9 @@
 
   /**
    * Create a ripple effect at a random position
+   * In a **DisplacementFilter** in Pixi.js:
+   * - **`filter.scale.x`** controls the **horizontal distortion intensity**
+   * - **`filter.scale.y`** controls the **vertical distortion intensity**
    */
   const createRipple = () => {
     if (!displaceSprite || !filter || !app || !app.screen) return

@@ -163,12 +163,14 @@ export default defineNuxtConfig({
     },
   },
 
+  /* Because mux player is a web component */
   vue: {
     compilerOptions: {
       isCustomElement: (tag) => tag === 'mux-player',
     },
   },
 
+  /* GSAP can do with some transpiling, source to source conversion for SSR */
   build: {
     transpile: ['gsap'],
   },
@@ -178,6 +180,7 @@ export default defineNuxtConfig({
     defaultImport: 'component',
   },
 
+  /* The secret stays on the server with server/api proxy */
   runtimeConfig: {
     openWeatherApiKey:
       '' /* Will be populated from NUXT_OPEN_WEATHER_API_KEY env var */,
@@ -201,7 +204,7 @@ export default defineNuxtConfig({
     },
   },
 
-  /* Hygraph fix rate limit when testing */
+  /* Hygraph fix rate limit when testing and enable web assemly binary format need for speed */
   nitro: {
     preset: 'netlify',
     experimental: {

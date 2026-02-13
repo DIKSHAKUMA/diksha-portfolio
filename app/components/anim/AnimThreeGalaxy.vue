@@ -14,7 +14,7 @@
   let camera: THREE.PerspectiveCamera | null = null
 
   // --- Data Buffers (Shared Scope) ---
-  const count = 90000
+  const count = 150000
   const flowerRadius = 2.55 // 85% of 3.0 (3.0 * 0.85)
   const spiralStrength = 1.2 // Controls spiral bending (increased for linear spiral)
   const brightnessBoost = 1.3 // Generic brightness multiplier for all particles
@@ -25,12 +25,12 @@
   const petalLayers = new Float32Array(count)
 
   // Color palettes with radial brightness gradient
-  // Bright center colors (near bulge)
-  const silverCenterWarm = new THREE.Color(0.98, 0.97, 0.96)
+  // Bright center colors (near bulge) - using ribbon colors
+  const silverCenterWarm = new THREE.Color(1.0, 0.98, 0.96)
   const silverCenterCool = new THREE.Color(0.96, 0.98, 1.0)
-  // Bright edge colors (outer arms) - boosted to match ribbon brightness
-  const silverEdgeWarm = new THREE.Color(0.9, 0.92, 0.94)
-  const silverEdgeCool = new THREE.Color(0.92, 0.94, 0.96)
+  // Bright edge colors (outer arms) - using ribbon colors
+  const silverEdgeWarm = new THREE.Color(1.0, 1.0, 0.98)
+  const silverEdgeCool = new THREE.Color(1.0, 1.0, 1.0)
   // Grass green variations for light mode - more vibrant and clear
   const greenLight1 = new THREE.Color(0x2e / 255, 0x8b / 255, 0x57 / 255) // #2e8b57 - Sea Green
   const greenLight2 = new THREE.Color(0x3c / 255, 0xb3 / 255, 0x71 / 255) // #3cb371 - Medium Sea Green
@@ -99,14 +99,8 @@
 
       vColor = color;
 
-      // Alpha - reduced drop from center to edge for more radiance
-      float pulse = sin(uTime * 0.8 + aPhase * 6.283 + layer * 3.0) * 0.15 + 0.85;
-      // Reduced alpha drop: 1.0 at center → 0.5 at edge (was 0.28)
-      float centerAlpha = 1.0 - clamp(centerDist / uFlowerRadius, 0.0, 0.5);
-
-      // Adjust alpha based on color mode: much higher opacity for light mode (dark particles)
-      float alphaMultiplier = mix(1.5, 3.0, uIsLight); // 1.5 for dark mode, 3.0 for light mode
-      vAlpha = pulse * centerAlpha * alphaMultiplier;
+      // Alpha - simplified to be more consistent with ribbon brightness
+      vAlpha = 0.6 + 0.9 * sin(uTime * 2.0 + aPhase * 6.283 + layer * 3.0 + aScale * 10.0);
     }
   `
 
@@ -421,9 +415,10 @@
   }
 
   .flower-canvas {
-    width: 85%;
+    width: 100%;
     height: 100%;
     display: block;
     margin: 0 auto;
+    margin-bottom: 10vh;
   }
 </style>
