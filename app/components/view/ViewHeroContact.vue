@@ -137,7 +137,7 @@
     bottom: unset;
     color: $secondary-static;
     z-index: 200;
-    font-family: $sans-ui-mono;
+    font-family: $sans-text;
     font-weight: 300;
 
     &__label {

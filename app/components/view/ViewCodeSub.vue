@@ -108,17 +108,6 @@
 </template>
 
 <style lang="scss" scoped>
-  .split-code-w {
-    will-change: transform;
-    // Fixes the "shimmer" and blur during/after transform
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-
-    // Forces the element to stay on the pixel grid
-    backface-visibility: hidden;
-    transform: translateZ(0);
-  }
-
   /* same margins as other home (sub) components; ViewParallaxHome varies slightly due to parallax */
   .code-wrapper {
     position: relative;
@@ -188,6 +177,9 @@
       margin-bottom: 1.5em;
       font-size: clamped(16px, 20px, 380px, 1920px);
 
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: subpixel-antialiased;
+
       @include this-and-above('md') {
         width: 60%;
         min-width: 300px;
@@ -205,6 +197,7 @@
         width: 60%;
         min-width: 300px;
         height: 42vh;
+        min-height: round(42vh, 1px);
       }
     }
   }

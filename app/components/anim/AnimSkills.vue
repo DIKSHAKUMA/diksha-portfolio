@@ -2,7 +2,6 @@
   import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 
   const { $gsap } = useNuxtApp()
-
   const scrambleChars = 'upperAndLowerCase'
   let ctx: gsap.Context
 
@@ -75,12 +74,13 @@
       <span class="quote">Svelte</span>
       <span class="quote">SvelteKit</span>
       <span class="quote">SSR</span>
-      <span class="quote">PixiJS</span>
-      <span class="quote">P5JS</span>
+      <span class="quote">Pixi.js</span>
+      <span class="quote">Three.js</span>
       <span class="quote">GraphQL</span>
       <span class="quote">GSAP</span>
       <span class="quote">UI/UX</span>
       <span class="quote">Figma</span>
+      <span class="quote">Turborepo</span>
       <span class="quote">Web Performance</span>
       <span class="quote">Problem Solving</span>
     </div>
@@ -88,8 +88,6 @@
 </template>
 
 <style scoped lang="scss">
-
-
   .text {
     display: flex;
     position: absolute;

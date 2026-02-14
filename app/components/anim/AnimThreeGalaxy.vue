@@ -372,7 +372,8 @@
 
     const animate = (time: number) => {
       rafId.value = requestAnimationFrame(animate)
-      if (!isVisible.value || !material.value || !renderer.value) return
+      if (!isVisible.value || !material.value || !renderer.value || !camera)
+        return
 
       if (material.value?.uniforms.uTime) {
         material.value.uniforms.uTime.value = time * 0.001
