@@ -4,10 +4,6 @@ const fontBase = process.env.NUXT_EVERETT_FONT_URL
 export default defineNuxtConfig({
   compatibilityDate: '2026-01-11', // Update to today's date
 
-  experimental: {
-    rolldown: false,
-  },
-
   app: {
     baseURL: '/',
     head: {
@@ -68,7 +64,7 @@ export default defineNuxtConfig({
           changefreq: 'monthly',
           priority: 0.7,
         },
-      ]
+      ] as any
 
       return staticPages
     },
@@ -208,7 +204,7 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'netlify',
     experimental: {
-      wasm: true,
+      wasm: false,
     },
   },
 
@@ -228,12 +224,10 @@ export default defineNuxtConfig({
   robots: {
     blockNonSeoBots: true,
     sitemap: 'https://thomasthorstensson.com/sitemap.xml',
-    rules: [
+    groups: [
       {
         userAgent: '*',
         allow: '/',
-        host: 'thomasthorstensson.com', // Add this line
-        sitemap: 'https://thomasthorstensson.com/sitemap.xml',
       },
     ],
   },

@@ -320,6 +320,19 @@
     hyphens: auto;
   }
 
+  /* Target the P wrapper to handle centering/layout */
+  :deep(p:has(img)) {
+    display: flex;
+    width: 100%;
+  }
+
+  :deep(.prose img),
+  :deep(p img) {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
   :deep(figure) {
     margin: $px-32-spacer 0;
 
@@ -347,6 +360,11 @@
 
   :deep(em) {
     font-size: clamped(16px, 20px, 380px, 1920px);
+  }
+
+  :deep(img) {
+    max-width: 100%;
+    height: auto;
   }
 
   .blog-post-wrapper {
