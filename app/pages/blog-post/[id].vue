@@ -122,8 +122,8 @@
     ]
   })
 
-  // 3. Pass the computed variable
-  useSchemaOrg(articleSchema)
+  // 3. Pass the computed variable - deferred to avoid blocking navigation
+  nextTick(() => useSchemaOrg(articleSchema))
 
   const runTrigger = () => {
     $gsap.context(() => {

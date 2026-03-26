@@ -205,7 +205,7 @@
             if (childImage) {
               $gsap.fromTo(
                 childImage,
-                { scale: 1.2 }, // Start zoomed in
+                { scale: 1.03 }, // Start zoomed in
                 {
                   scale: 1, // Scale down to original size
                   ease: 'none', // Scrubbing feels most natural with 'none'
