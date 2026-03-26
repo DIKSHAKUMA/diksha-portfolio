@@ -19,20 +19,23 @@
     if (!project?.tags || !Array.isArray(project.tags)) return ''
     return project.tags.map((tag: string) => `[ ${tag} ]`).join(' ')
   }
+
   const dateSorted = computed(() => {
     if (!store.data?.projects) return []
 
-    return [...store.data.projects].sort((a, b) => {
-      /* Convert "Month YYYY" format to proper Date objects */
-      const parseDate = (dateStr: string) => {
-        const [month, year] = dateStr.split(' ')
-        /* Create date with month name and year */
-        return new Date(`${month} 1, ${year}`)
-      }
+    return [...store.data.projects]
+      .sort((a, b) => {
+        /* Convert "Month YYYY" format to proper Date objects */
+        const parseDate = (dateStr: string) => {
+          const [month, year] = dateStr.split(' ')
+          /* Create date with month name and year */
+          return new Date(`${month} 1, ${year}`)
+        }
 
-      /* Sort by date descending (newest first) */
-      return parseDate(b.date).getTime() - parseDate(a.date).getTime()
-    })
+        /* Sort by date descending (newest first) */
+        return parseDate(b.date).getTime() - parseDate(a.date).getTime()
+      })
+      .slice(0, 7)
   })
 
   const handleProjectClick = (project: any) => {

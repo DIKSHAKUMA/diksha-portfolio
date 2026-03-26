@@ -53,28 +53,28 @@
    * Improvement
    * Pass the whole computed object to the composable, one watcher not one for each tag
    */
-  const seoData = computed(() => {
-    // If post isn't loaded yet, return minimal data to avoid errors
-    if (!post.value) return { title: 'Loading...' }
+  useSeoMeta({
+    // Use a getter function for reactive properties
+    title: () =>
+      post.value ? `${post.value.title} • Thomas Thorstensson` : 'Loading...',
 
-    return {
-      title: `${post.value.title} • Thomas Thorstensson`,
-      description:
-        post.value.subject || 'Read this blog post by Thomas Thorstensson',
-      ogTitle: post.value.title,
-      ogDescription: post.value.subject,
-      ogImage: coverImageUrl.value,
-      ogType: 'article',
-      articleAuthor: post.value.authors?.[0]?.name,
-      articlePublishedTime: post.value.date,
-      articleTag: post.value.tags,
-      twitterCard: 'summary_large_image',
-      twitterTitle: post.value.title,
-      twitterDescription: post.value.subject,
-      twitterImage: coverImageUrl.value,
-    }
+    description: () =>
+      post.value?.subject || 'Read this blog post by Thomas Thorstensson',
+
+    ogTitle: () => post.value?.title,
+    ogDescription: () => post.value?.subject,
+    ogImage: () => coverImageUrl.value,
+    ogType: 'article',
+
+    articleAuthor: () => post.value?.authors?.[0]?.name,
+    articlePublishedTime: () => post.value?.date,
+    articleTag: () => post.value?.tags,
+
+    twitterCard: 'summary_large_image',
+    twitterTitle: () => post.value?.title,
+    twitterDescription: () => post.value?.subject,
+    twitterImage: () => coverImageUrl.value,
   })
-  useSeoMeta(seoData)
 
   /* Canonical URL */
   useHead({
@@ -90,13 +90,12 @@
   /**
    * Same improvement as above, one computed property
    */
-  const articleSchema = computed(() => {
-    // 1. Guard: If no post data, return empty to keep it fast
-    if (!post.value) return []
+  useSchemaOrg([
+    () => {
+      // 1. Guard: If no post, return nothing to avoid schema errors
+      if (!post.value) return null
 
-    // 2. Return the data directly (no inner arrow functions)
-    return [
-      defineArticle({
+      return defineArticle({
         headline: post.value.title,
         description: post.value.subject,
         image: coverImageUrl.value,
@@ -110,20 +109,21 @@
           name: 'Thomas Thorstensson',
           url: 'https://thomasthorstensson.com',
         },
-      }),
-      defineBreadcrumb([
+      })
+    },
+    () => {
+      if (!post.value) return null
+
+      return defineBreadcrumb([
         { name: 'Home', item: '/' },
         { name: 'Blog', item: '/blog' },
         {
           name: post.value.title,
           item: `/blog-post/${post.value.slug}`,
         },
-      ]),
-    ]
-  })
-
-  // 3. Pass the computed variable - deferred to avoid blocking navigation
-  nextTick(() => useSchemaOrg(articleSchema))
+      ])
+    },
+  ])
 
   const runTrigger = () => {
     $gsap.context(() => {
