@@ -18,8 +18,8 @@
 
   const footerMessage = computed(() => {
     return isMobile.value
-      ? '© 2025 Thomas Thorstensson'
-      : '© 2025 Thomas Thorstensson • Fork me on GitHub'
+      ? '2026 Thomas Thorstensson'
+      : '2026 Thomas Thorstensson • Fork on GitHub'
   })
 
   const onResizeCheck = () => {

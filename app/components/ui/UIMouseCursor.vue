@@ -101,20 +101,25 @@
     }
   }
 
-  /* The Blob! Thanks to https://codepen.io/GreenSock/pen/YzQabVQ */
+  /*
+   * The Blob Scale Logic:
+   * We use the Pythagorean Theorem (a² + b² = c²) to find the distance.
+   *
+   *       (Current Mouse)
+   *             /|
+   *            / |
+   *  Hypotenuse  | diffY (Side b)
+   *    (Side c)  |
+   *          /   |
+   *         /____|
+   *   (Last Pos)  diffX (Side a)
+   *
+   * 1. Square the sides: diffX² + diffY²
+   * 2. Square root the sum: √sum = Hypotenuse (Distance)
+   */
   const getScale = (diffX: number, diffY: number) => {
-    /**
-     * Pythagorean Theorem: a^2 + b^2 = c^2
-     * diffX (Side a): The horizontal distance between them.
-     * diffY (Side b): The vertical distance between them.
-     * Distance (Side c): If you draw these two lines,
-     * they form a right triangle. The "straight-line distance"
-     * is the hypotenuse—the diagonal line connecting the two points.
-     *
-     * TODO:Modern way that I could write this: const distance = Math.hypot(diffX, diffY);
-     */
     const distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2))
-    /* Cap the scale at 0.2 or else blob goes wild */
+    /* And this distance is what we use for scale calc. Cap the scale at 0.2 or else blob goes wild */
     return Math.min(distance / 50, 0.2)
   }
 
@@ -188,9 +193,19 @@
     )
   })
 
-  /* Magnet effect on links on mouse over */
+  /*
+   * Magnet Effect Calculation:
+   * 1. (x / width)           -> Mouse position as a % (0.0 to 1.0)
+   * 2. * (move * 2)          -> Scales it to the total range (0.0 to 20.0)
+   * 3. - move                -> Shifts the range to center it (-10.0 to 10.0)
+   *
+   * Result:
+   * Left edge  = -10px
+   * Center     =   0px
+   * Right edge = +10px
+   */
   const magnetMove = (e: any) => {
-    /* deconstructing to X, recall that offsetX is the distance from the left of the element to the cursor */
+    /* Deconstructing to X, recall that offsetX is the distance from the left of the element to the cursor */
     const { offsetX: x, offsetY: y } = e,
       { offsetWidth: width, offsetHeight: height } = e.currentTarget,
       move = 10,
