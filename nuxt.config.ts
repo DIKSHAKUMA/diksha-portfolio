@@ -91,23 +91,25 @@ export default defineNuxtConfig({
   ],
 
   fonts: {
+    defaults: {
+      styles: ['normal'],
+      subsets: ['latin'],
+    },
     families: [
       {
         name: 'Cascadia Mono',
         provider: 'fontsource',
-        weights: ['400 600'],
+        weights: [400, 600],
       },
-
       {
         name: 'Be Vietnam Pro',
         provider: 'fontsource',
-        weights: ['400'],
+        weights: [400],
       },
-
       {
         name: 'Instrument Sans',
         provider: 'fontsource',
-        weights: ['400 900'],
+        weights: [400, 900],
       },
     ],
   },
@@ -137,7 +139,7 @@ export default defineNuxtConfig({
         'json',
       ],
       wrapperStyle: true,
-      preload: ['js', 'javascript', 'ts', 'typescript', 'vue'],
+      /* No preload: grammars load on-demand, preventing cold-cache block on all blog posts */
     },
     headings: {
       anchorLinks: false,
@@ -150,6 +152,9 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    build: {
+      cssCodeSplit: true,
+    },
     css: {
       preprocessorOptions: {
         scss: {

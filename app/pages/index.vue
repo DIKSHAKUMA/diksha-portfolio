@@ -73,11 +73,11 @@
     <UIMouseCursor />
     <div class="home-wrapper">
       <ViewHeroHome />
-      <ViewParallaxHome />
-      <ViewProjectsHome />
-      <ViewAwardsHome />
-      <ViewKnowledgeSub />
-      <ViewTechSub />
+      <LazyViewParallaxHome />
+      <LazyViewProjectsHome />
+      <LazyViewAwardsHome />
+      <LazyViewKnowledgeSub />
+      <LazyViewTechSub />
       <LazyViewFooterSub
         hydrate-on-idle
         label="Projects"

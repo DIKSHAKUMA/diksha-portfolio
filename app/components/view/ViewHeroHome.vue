@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import * as PIXI from 'pixi.js'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useFolioStore } from '../../../stores/useFolioStore'
   /* PINIA */

@@ -3,6 +3,7 @@
   import { useBlogStore } from '../../../stores/useBlogStore'
 
   const mdcContentReady = ref(false)
+  const showMDC = ref(false)
   const store = useBlogStore()
   const route = useRoute()
   const { $gsap } = useNuxtApp()
@@ -153,6 +154,11 @@
     $gsap.set('.blog__post-cover img', { opacity: 0 })
     $gsap.delayedCall(1, runTrigger)
 
+    /* Defer MDC (and Shiki) to after page transition completes */
+    nextTick(() => {
+      showMDC.value = true
+    })
+
     /* Show sidebar after page transition completes */
     $gsap.delayedCall(2, () => {
       showSidebar.value = true
@@ -239,6 +245,7 @@
 
               <!-- Always render MDC but hide it until ready -->
               <div
+                v-if="showMDC"
                 class="mdc-content"
                 :class="{ 'mdc-content--hidden': !mdcContentReady }"
               >
