@@ -59,8 +59,8 @@
     position: relative;
     padding: 0 $px-16-spacer;
     overflow: hidden;
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
 
     @include this-and-above('md') {
       padding: 0 $px-64-spacer;

@@ -316,6 +316,7 @@
     left: 0;
     width: 100%;
     height: 100vh;
+    height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -409,6 +410,7 @@
     left: 0;
     width: 100%;
     height: 100vh;
+    height: 100dvh;
     z-index: 10000;
     display: flex;
     align-items: center;
@@ -479,6 +481,7 @@
     left: 0;
     width: 100%;
     height: 100vh;
+    height: 100dvh;
     position: fixed;
     z-index: 9999;
     pointer-events: none;

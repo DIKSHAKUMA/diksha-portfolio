@@ -382,6 +382,7 @@
     z-index: inherit;
     margin: 0 auto;
     padding: 0 $px-16-spacer;
+    font-weight: 300;
 
     @include this-and-above('md') {
       padding: 0 $px-64-spacer;

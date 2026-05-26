@@ -222,6 +222,7 @@
   .ribbon-container {
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     position: relative;
     left: 50%;
     right: 50%;
@@ -235,7 +236,6 @@
 
   .ribbon-canvas {
     width: 100%;
-    height: 100%;
     display: block;
   }
 </style>
