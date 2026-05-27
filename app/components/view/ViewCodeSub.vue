@@ -175,7 +175,7 @@
       min-width: 300px;
       color: $secondary;
       margin-bottom: 1.5em;
-      font-size: clamped(16px, 20px, 380px, 1920px);
+      font-size: clamped(16px, 18px, 380px, 1920px);
 
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: subpixel-antialiased;
