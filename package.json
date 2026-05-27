@@ -14,8 +14,6 @@
   },
   "dependencies": {
     "@fontsource-variable/albert-sans": "^5.2.8",
-    "@fontsource-variable/geist": "^5.2.9",
-    "@fontsource-variable/instrument-sans": "^5.2.8",
     "@mux/blurup": "^1.0.2",
     "@mux/mux-player": "^3.5.3",
     "@nuxt/fonts": "^0.11.0",
