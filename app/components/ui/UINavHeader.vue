@@ -23,7 +23,7 @@
 <style lang="scss" scoped>
   .logo {
     font-family: $sans-ui;
-    font-size: clamped(18px, 20px, 480px, 1920px);
+    font-size: clamped(16px, 18px, 480px, 1920px);
     font-weight: 450;
     font-variation-settings: 'wght' 450;
     font-weight: 400;

@@ -21,14 +21,14 @@
 
   // Color palettes
   const silverWarm1 = new THREE.Color(1.0, 0.98, 0.96)
-  const silverWarm2 = new THREE.Color(1.0, 1.0, 0.98)
-  const silverCool1 = new THREE.Color(0.96, 0.98, 1.0)
+  const silverWarm2 = new THREE.Color(0.96, 0.98, 1.0)
+  const silverCool1 = new THREE.Color(1.0, 1.0, 0.98)
   const silverCool2 = new THREE.Color(1.0, 1.0, 1.0)
   // #43655a variations for light mode (R=67, G=101, B=90)
-  const greenLight1 = new THREE.Color(0x43 / 255, 0x65 / 255, 0x5a / 255) // #43655a
-  const greenLight2 = new THREE.Color(0x4a / 255, 0x6e / 255, 0x62 / 255) // Lighter variation
-  const greenDark1 = new THREE.Color(0x3b / 255, 0x5c / 255, 0x52 / 255) // Darker variation
-  const greenDark2 = new THREE.Color(0x34 / 255, 0x53 / 255, 0x4a / 255) // Even darker
+  const greenLight1 = new THREE.Color(0x2e / 255, 0x8b / 255, 0x57 / 255) // #2e8b57 - Sea Green
+  const greenLight2 = new THREE.Color(0x3c / 255, 0xb3 / 255, 0x71 / 255) // #3cb371 - Medium Sea Green
+  const greenDark1 = new THREE.Color(0x22 / 255, 0x8b / 255, 0x22 / 255) // #228b22 - Forest Green
+  const greenDark2 = new THREE.Color(0x00 / 255, 0x64 / 255, 0x00 / 255) // #006400 - Dark Green
 
   /**
    * Three.js

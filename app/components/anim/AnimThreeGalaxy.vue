@@ -23,6 +23,7 @@
   const positions = new Float32Array(count * 3)
   const colors = new Float32Array(count * 3)
   const petalLayers = new Float32Array(count)
+  const coreFlags = new Float32Array(count)
 
   // Color palettes with radial brightness gradient
   // Bright center colors (near bulge) - using ribbon colors
@@ -92,15 +93,13 @@
       vec4 viewPosition = viewMatrix * vec4(pos, 1.0);
       gl_Position = projectionMatrix * viewPosition;
 
-      // Point size - smaller toward center, larger in outer layers
-      float centerDist = length(pos.xz);
-      float sizeFactor = 0.3 + layer * 0.7;
-      gl_PointSize = 40.0 * aScale * sizeFactor * (1.0 / -viewPosition.z);
+      // Point size - sharp dots matching Ribbon
+      gl_PointSize = 32.0 * aScale * (1.0 / -viewPosition.z);
 
       vColor = color;
 
       // Alpha - simplified to be more consistent with ribbon brightness
-      vAlpha = 0.6 + 0.9 * sin(uTime * 2.0 + aPhase * 6.283 + layer * 3.0 + aScale * 10.0);
+      vAlpha = 0.6 + 0.4 * sin(uTime * 2.0 + aPhase * 6.283 + layer * 3.0 + aScale * 10.0);
     }
   `
 
@@ -119,7 +118,7 @@
 
       if (strength < 0.01) discard;
 
-      gl_FragColor = vec4(vColor * strength * 1.0, strength * vAlpha);
+      gl_FragColor = vec4(vColor * strength * 2.0, strength * vAlpha);
     }
   `
 
@@ -158,8 +157,14 @@
       // Radial brightness gradient: bright at center, dim at edge
       // For light mode, apply extra contrast boost
       let mixedColor = useWarm
-        ? silverCenterWarm.clone().lerp(silverEdgeWarm, t)
-        : silverCenterCool.clone().lerp(silverEdgeCool, t)
+        ? warm1.clone().lerp(warm2, t)
+        : cool1.clone().lerp(cool2, t)
+
+      // Dim only the spherical bulge core, not the arm paths
+      if (coreFlags[i] > 0.5) {
+        const coreT = Math.min(distance / (bulgeRadius * flowerRadius), 1.0)
+        mixedColor.lerp(new THREE.Color(0.02, 0.02, 0.02), 1.0 - coreT)
+      }
 
       // No need to darken colors for light mode since we're using dark #18181b tone
       // This provides good contrast against white background
@@ -256,8 +261,10 @@
         positions[i3] = Math.sin(phi) * Math.cos(theta) * bulgeDistance
         positions[i3 + 1] = Math.cos(phi) * bulgeDistance * 0.6 // Flatten slightly
         positions[i3 + 2] = Math.sin(phi) * Math.sin(theta) * bulgeDistance
+        coreFlags[i] = 1.0
       } else {
         // SPIRAL ARMS: Penetrate into bulge region (no gap)
+        coreFlags[i] = 0.0
         // Use original distance, arms go into center
         const armDistance = distance
 
@@ -297,7 +304,7 @@
       // Scale - larger particles in outer layers
       // Include spiral factor for all particles (creates continuity)
       const spiralFactor = 0.7 + 0.3 * Math.cos(armAngle * armCount * 0.5)
-      const scale = 0.2 + layer * 0.6 + spiralFactor * 0.2
+      const scale = 0.1 + layer * 0.6 + spiralFactor * 0.2
       scales[i] = scale
 
       // Animation phase
@@ -344,6 +351,10 @@
       new THREE.BufferAttribute(petalLayers, 1)
     )
     geometry.value.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1))
+    geometry.value.setAttribute(
+      'aCoreFlag',
+      new THREE.BufferAttribute(coreFlags, 1)
+    )
 
     material.value = new THREE.ShaderMaterial({
       depthWrite: false,
@@ -382,6 +393,9 @@
       renderer.value.render(scene, camera)
     }
     rafId.value = requestAnimationFrame(animate)
+
+    // Regenerate colors now that coreFlags are populated
+    generateColors()
   })
 
   // Cleanup on unmount

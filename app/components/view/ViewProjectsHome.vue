@@ -212,6 +212,7 @@
 
 <template>
   <div class="projects-home-wrapper">
+    <CommonLine :pos="'absolute'" :width="''" />
     <main class="projects">
       <CommonAbstract
         class="projects__header"
@@ -311,7 +312,7 @@
     /* or else info label get confused */
     position: relative;
     height: 100%;
-    padding: $px-128-spacer $px-16-spacer;
+    padding: $px-64-spacer $px-16-spacer;
 
     @include this-and-above('sm') {
       padding: $px-128-spacer $px-32-spacer;

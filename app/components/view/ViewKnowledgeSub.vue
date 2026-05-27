@@ -112,7 +112,7 @@
   .know-wrapper {
     position: relative;
     background-color: $primary;
-    padding: $px-128-spacer $px-16-spacer;
+    padding: $px-64-spacer $px-16-spacer;
     min-height: 100dvh;
     min-height: 100vh;
 
@@ -145,7 +145,7 @@
     }
 
     &__demo-wrapper {
-      height: 2100px; 
+      height: 2100px;
       display: flex;
       flex-direction: column;
       gap: 100px;
@@ -183,7 +183,7 @@
       min-width: 300px;
       color: $secondary;
       margin-bottom: 1.5em;
-      font-size: clamped(16px, 20px, 380px, 1920px);
+      font-size: clamped(16px, 18px, 380px, 1920px);
 
       @include this-and-above('md') {
         width: 60%;

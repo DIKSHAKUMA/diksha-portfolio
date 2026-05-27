@@ -5,7 +5,7 @@
   const isDown = ref(false)
   const isMobileActive = ref(false)
   const isAnimating = ref(false)
-  const isLightMode = ref<boolean>(false)
+  const isLightMode = ref<boolean>(true)
   const route = useRoute()
   const navbarStore = useNavbarStore()
   const { $gsap } = useNuxtApp()
@@ -734,7 +734,7 @@ just use a simple modal and be done with it. */
         position: relative;
         margin: 0;
         /*FONT SIZE OF NAVBAR ITEMS DESKTOP, RETURNED AS REM*/
-        font-size: clamped(18px, 20px, 480px, 1920px);
+        font-size: clamped(16px, 18px, 480px, 1920px);
         line-height: unset;
         padding-right: 25px;
         color: $secondary;

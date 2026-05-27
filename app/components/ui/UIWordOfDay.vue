@@ -53,6 +53,8 @@
     }
 
     &__title {
+      font-size: clamped(12px, 16px, 480px, 1920px);
+      font-weight: bold;
       font-variation-settings: 'wght' 600;
       color: $secondary;
       margin: 0 0 $px-8-spacer 0;
@@ -67,13 +69,15 @@
 
     &__word {
       font-variation-settings: 'wght' 700;
+      font-weight: bold;
       color: $secondary;
+      font-size: clamped(12px, 16px, 480px, 1920px);
       margin: 0 0 $px-16-spacer 0;
       text-transform: capitalize;
     }
 
     &__definition {
-      font-size: clamped(10px, 14px, 480px, 1920px);
+      font-size: clamped(10px, 12px, 480px, 1920px);
       color: $secondary;
       line-height: 1.5;
       margin: 0;

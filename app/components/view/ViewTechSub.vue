@@ -221,10 +221,9 @@
 
   .meta-wrapper {
     position: relative;
-    padding: 0 $px-16-spacer;
     overflow: hidden;
     background-color: $primary;
-    padding: $px-128-spacer $px-16-spacer;
+    padding: $px-64-spacer $px-16-spacer;
     height: 100dvh;
     min-height: 100vh;
     margin-bottom: 64px;

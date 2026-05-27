@@ -120,7 +120,7 @@
       transform: translateX(-50%);
       text-align: center;
       color: $secondary;
-      font-size: clamped(18px, 24px, 480px, 1920px);
+      font-size: clamped(16px, 18px, 480px, 1920px);
       font-style: italic;
       font-weight: 400;
       font-variation-settings: 'wght' 400;
@@ -141,7 +141,7 @@
       height: 70px;
       align-items: center;
       width: 100%;
-      border-bottom: 2px solid $accent2;
+      border-bottom: 2px solid rgb(0 0 0 / 0.1);
       overflow: hidden;
       cursor: pointer;
       font-weight: 400;
@@ -182,7 +182,7 @@
         color: $secondary;
         padding: 0 10px;
         transition: all 0.3s ease;
-        font-size: clamped(14px, 20px, 480px, 1920px);
+        font-size: clamped(14px, 18px, 480px, 1920px);
         backface-visibility: hidden;
         transform: translateZ(0);
         font-family: $sans-ui;

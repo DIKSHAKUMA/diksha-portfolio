@@ -102,21 +102,23 @@ export default defineNuxtConfig({
         weights: [400, 600],
       },
       {
-        name: 'Be Vietnam Pro',
+        name: 'Albert Sans',
         provider: 'fontsource',
         weights: [400],
       },
       {
-        name: 'Instrument Sans',
-        provider: 'fontsource',
-        weights: [400, 900],
+        name: 'TWK Everett',
+        provider: 'none',
+        src: `${fontBase}TWKEverett-Regular.woff2`,
+        weight: 400,
+        style: 'normal',
       },
     ],
   },
 
   colorMode: {
-    preference: 'dark',
-    fallback: 'dark',
+    preference: 'light',
+    fallback: 'light',
   },
 
   mdc: {

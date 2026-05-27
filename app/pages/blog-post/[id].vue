@@ -330,6 +330,7 @@
   /* Target the P wrapper to handle centering/layout */
   :deep(p:has(img)) {
     display: flex;
+    justify-content: center;
     width: 100%;
   }
 
@@ -366,7 +367,7 @@
   }
 
   :deep(em) {
-    font-size: clamped(16px, 20px, 380px, 1920px);
+    font-size: clamped(16px, 18px, 380px, 1920px);
   }
 
   :deep(img) {
@@ -444,7 +445,7 @@
     &__post-content {
       margin-top: $px-64-spacer;
       color: $secondary;
-      font-size: clamped(16px, 20px, 380px, 1920px);
+      font-size: clamped(16px, 18px, 380px, 1920px);
       max-width: 100vw;
       opacity: 1; /* Always visible so spinner shows */
 

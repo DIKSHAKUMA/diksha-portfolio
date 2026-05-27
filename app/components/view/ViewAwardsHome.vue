@@ -180,7 +180,8 @@
     width: max-content; // CRITICAL: Forces container to width of all logos + gaps
     animation: marquee-scroll 20s linear infinite;
     align-items: center;
-    filter: invert(1);
+    margin-top: 15px;
+    filter: invert(0);
     &--light {
       filter: invert(0);
     }
@@ -196,7 +197,7 @@
   }
 
   .award-cell {
-    height: 170px;
+    height: 200px;
     width: auto;
     min-width: 120px;
     display: flex;
