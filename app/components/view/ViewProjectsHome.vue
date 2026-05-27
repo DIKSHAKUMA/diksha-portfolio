@@ -24,6 +24,7 @@
     if (!store.data?.projects) return []
 
     return [...store.data.projects]
+      .filter((proj: any) => proj.selectedproj)
       .sort((a, b) => {
         /* Convert "Month YYYY" format to proper Date objects */
         const parseDate = (dateStr: string) => {
