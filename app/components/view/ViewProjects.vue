@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { Draggable } from 'gsap/Draggable'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Draggable } from 'gsap/Draggable'
   import { InertiaPlugin } from 'gsap/InertiaPlugin'
   import { useFolioStore } from '../../../stores/useFolioStore'
 
