@@ -8,16 +8,20 @@
   const renderer = shallowRef<THREE.WebGLRenderer | null>(null)
   const material = shallowRef<THREE.ShaderMaterial | null>(null)
   const geometry = shallowRef<THREE.BufferGeometry | null>(null)
+  const pointsObj = shallowRef<THREE.Points | null>(null)
+  const sceneObj = shallowRef<THREE.Scene | null>(null)
   const rafId = shallowRef<number>(0)
   const isVisible = shallowRef(true)
   let observer: IntersectionObserver | null = null
 
   // --- Data Buffers (Shared Scope) ---
-  const count = 40000
+  const count = shallowRef(40000)
+  const getDesiredCount = (width: number) =>
+    Math.max(8000, Math.round(40000 * (width / 1920)))
   const radius = 1.2
-  const positions = new Float32Array(count * 3)
-  const colors = new Float32Array(count * 3)
-  const strands = new Float32Array(count)
+  let positions = new Float32Array(count.value * 3)
+  let colors = new Float32Array(count.value * 3)
+  let strands = new Float32Array(count.value)
 
   // Color palettes
   const silverWarm1 = new THREE.Color(1.0, 0.98, 0.96)
@@ -85,7 +89,7 @@
     const cool1 = isLight ? greenDark1 : silverCool1
     const cool2 = isLight ? greenDark2 : silverCool2
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count.value; i++) {
       const i3 = i * 3
       const strand = strands[i]
       const r = Math.sqrt(
@@ -105,8 +109,56 @@
     }
   }
 
+  const rebuildParticles = () => {
+    const n = count.value
+
+    // Allocate fresh arrays
+    positions = new Float32Array(n * 3)
+    colors = new Float32Array(n * 3)
+    strands = new Float32Array(n)
+    const scales = new Float32Array(n)
+    const randomness = new Float32Array(n * 3)
+    const radii = new Float32Array(n)
+
+    for (let i = 0; i < n; i++) {
+      const i3 = i * 3
+      strands[i] = i % 2
+      const x = (Math.random() - 0.5) * 24
+      const r = Math.pow(Math.random(), 2) * radius
+      const angle = Math.random() * Math.PI * 2
+      positions[i3] = x
+      positions[i3 + 1] = Math.cos(angle) * r
+      positions[i3 + 2] = Math.sin(angle) * r
+      randomness[i3] = (Math.random() - 0.5) * 0.1
+      randomness[i3 + 1] = (Math.random() - 0.5) * 0.1
+      randomness[i3 + 2] = (Math.random() - 0.5) * 0.1
+      radii[i] = 0.5 + Math.random() * 0.5
+      scales[i] = 0.5 + Math.random() * 0.5
+    }
+
+    generateColors()
+
+    // Swap geometry
+    const oldGeom = geometry.value
+    geometry.value = new THREE.BufferGeometry()
+    geometry.value.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geometry.value.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+    geometry.value.setAttribute('aScale', new THREE.BufferAttribute(scales, 1))
+    geometry.value.setAttribute('aRandomness', new THREE.BufferAttribute(randomness, 3))
+    geometry.value.setAttribute('aRadius', new THREE.BufferAttribute(radii, 1))
+    geometry.value.setAttribute('aStrand', new THREE.BufferAttribute(strands, 1))
+
+    if (pointsObj.value) pointsObj.value.geometry = geometry.value
+    oldGeom?.dispose()
+  }
+
   const onResize = () => {
     if (renderer.value) renderer.value.setSize(window.innerWidth, 300)
+    const desired = getDesiredCount(window.innerWidth)
+    if (desired !== count.value) {
+      count.value = desired
+      rebuildParticles()
+    }
   }
 
   /* Watch for color mode changes and recreate waves */
@@ -124,11 +176,11 @@
     if (!canvasRef.value) return
 
     // Init Geometry Buffers
-    const scales = new Float32Array(count)
-    const randomness = new Float32Array(count * 3)
-    const radii = new Float32Array(count)
+    const scales = new Float32Array(count.value)
+    const randomness = new Float32Array(count.value * 3)
+    const radii = new Float32Array(count.value)
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count.value; i++) {
       const i3 = i * 3
       strands[i] = i % 2
       const x = (Math.random() - 0.5) * 24
@@ -182,7 +234,9 @@
       uniforms: { uTime: { value: 0 } },
     })
 
-    scene.add(new THREE.Points(geometry.value, material.value))
+    pointsObj.value = new THREE.Points(geometry.value!, material.value!)
+    scene.add(pointsObj.value)
+    sceneObj.value = scene
     // I try to use guards for three so as to save cpu
     observer = new IntersectionObserver(([e]) => {
       if (e) isVisible.value = e.isIntersecting
@@ -196,9 +250,12 @@
       if (material.value?.uniforms.uTime) {
         material.value.uniforms.uTime.value = time * 0.001
       }
-      renderer.value.render(scene, camera)
+      renderer.value.render(sceneObj.value!, camera)
     }
     rafId.value = requestAnimationFrame(animate)
+
+    // Apply correct count for current screen width
+    onResize()
   })
 
   // REGISTER UNMOUNTED TOP-LEVEL
@@ -207,6 +264,7 @@
     observer?.disconnect()
     window.removeEventListener('resize', onResize)
     geometry.value?.dispose()
+    pointsObj.value?.geometry?.dispose()
     material.value?.dispose()
     renderer.value?.dispose()
   })

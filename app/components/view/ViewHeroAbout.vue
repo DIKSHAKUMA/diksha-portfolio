@@ -30,7 +30,7 @@
 <template>
   <div>
     <main ref="main" class="hero-wrapper">
-      <AnimThreeGalaxy />
+      <AnimShellsThree />
       <CommonAbstract
         class="front-header"
         :label="store.data.about?.aboutHeroTitle"

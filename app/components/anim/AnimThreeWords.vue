@@ -248,17 +248,10 @@
 
     // Clear and draw text
     context.clearRect(0, 0, canvas.width, canvas.height)
-    context.font = `${fontSize}px 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif`
+    context.font = `${fontSize}px 'Albert Sans Variable', -apple-system, BlinkMacSystemFont, sans-serif`
     context.fillStyle = color
     context.textAlign = 'center'
     context.textBaseline = 'middle'
-    context.fillText(text, canvas.width / 2, canvas.height / 2)
-
-    // Add subtle shadow for depth
-    context.shadowColor = 'rgba(0, 0, 0, 0.3)'
-    context.shadowBlur = 4
-    context.shadowOffsetX = 2
-    context.shadowOffsetY = 2
     context.fillText(text, canvas.width / 2, canvas.height / 2)
 
     return new THREE.CanvasTexture(canvas)
