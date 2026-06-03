@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { Draggable } from 'gsap/Draggable'
   import { InertiaPlugin } from 'gsap/InertiaPlugin'
   import { useFolioStore } from '../../../stores/useFolioStore'
@@ -15,10 +14,6 @@
 
   let ctx: gsap.Context
   let draggableInstance: Draggable[] | null = null
-
-  const centeredProject = computed(() => {
-    return dateSorted.value[clampedIndex.value]
-  })
 
   const dateSorted = computed(() => {
     if (!store.data?.projects) return []
@@ -36,8 +31,22 @@
     })
   })
 
+  const activeFilter = ref<'All' | 'Client' | 'Personal'>('All')
+
+  const filteredProjects = computed(() => {
+    const all = dateSorted.value
+    const key = activeFilter.value.toLowerCase()
+    if (key === 'all') return all
+    if (key === 'personal') return all.filter((p) => p.labUrl)
+    return all.filter((p) => !p.labUrl)
+  })
+
+  const centeredProject = computed(() => {
+    return filteredProjects.value[clampedIndex.value]
+  })
+
   const progressIndex = computed(() => {
-    const totalProjects = dateSorted.value.length || 1
+    const totalProjects = filteredProjects.value.length || 1
     return { current: clampedIndex.value + 1, total: totalProjects }
   })
 
@@ -56,7 +65,7 @@
 
   /* Function to setup/update Draggable configuration */
   const setupDraggable = () => {
-    const numProjects = store.data?.projects.length || 0
+    const numProjects = filteredProjects.value.length || 0
 
     if (
       !projectsReel.value ||
@@ -242,6 +251,11 @@
 
     /* Add resize listener */
     window.addEventListener('resize', handleResize)
+
+    watch(activeFilter, () => {
+      clampedIndex.value = 0
+      nextTick(() => setupDraggable())
+    })
   })
 
   onUnmounted(() => {
@@ -289,10 +303,23 @@
         {{ progressIndex.current }}/{{ progressIndex.total }}
       </div>
     </div>
-
+    <div class="project-filter">
+      <button
+        v-for="opt in (['All', 'Client', 'Personal'] as const)"
+        :key="opt"
+        :class="{ 'project-filter--active': activeFilter === opt }"
+        class="project-filter__btn action"
+        data-name="filter"
+        :data-text="opt"
+        @click="activeFilter = opt"
+      >
+        <span class="project-filter__word">{{ opt }}</span
+        ><template v-if="opt !== 'Personal'"> /</template>
+      </button>
+    </div>
     <div class="projects">
       <div class="projects__reel" ref="projectsReel">
-        <div v-for="(project, index) in dateSorted" :key="project.id">
+        <div v-for="(project, index) in filteredProjects" :key="project.id">
           <div
             class="projects__project"
             ref="projectItem"
@@ -429,6 +456,25 @@
     bottom: 0px;
   }
 
+  .project-filter {
+    position: absolute;
+    z-index: 10;
+    font-family: $sans-ui-mono;
+    color: $secondary;
+    margin: $px-64-spacer 0;
+    display: flex;
+    gap: $px-8-spacer;
+
+    &--active {
+      border-color: $secondary;
+    }
+
+    &--active &__word {
+      background: $secondary;
+      color: $primary;
+    }
+  }
+
   .progress {
     position: absolute;
     margin: $px-16-spacer $px-16-spacer;
@@ -467,7 +513,6 @@
       scale: 1;
       transition: scale 0.3s ease-out;
       /* Smooth scale transitions */
-      backface-visibility: hidden;
       isolation: isolate; /* Create a sandbox for better compositing */
 
       &--open {
@@ -484,8 +529,7 @@
         font-family: $sans-ui-mono;
         text-transform: uppercase;
         text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        transform: translateZ(0);
 
         /* Force an independent text layer */
 
