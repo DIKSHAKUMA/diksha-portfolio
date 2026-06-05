@@ -150,7 +150,7 @@
       transition: color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 
       &:hover {
-        color: $accent2;
+        color: $accent1;
       }
     }
   }

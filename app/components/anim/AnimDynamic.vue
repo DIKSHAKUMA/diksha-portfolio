@@ -115,7 +115,8 @@
 
   onUnmounted(() => {
     if (rafId) cancelAnimationFrame(rafId)
-    particles?.material?.dispose()
+    particles?.material instanceof THREE.Material &&
+      particles.material.dispose()
     particles?.geometry?.dispose()
     renderer?.dispose()
     renderer?.domElement?.remove()

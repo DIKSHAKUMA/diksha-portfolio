@@ -238,7 +238,7 @@
     const fontSize = Math.floor(baseSize * lengthFactor)
 
     // Set canvas size based on text
-    context.font = `${fontSize}px 'Albert Sans Variable', -apple-system, BlinkMacSystemFont, sans-serif`
+    context.font = `${fontSize}px 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif`
     const metrics = context.measureText(text)
 
     // Add generous padding to ensure text fits naturally
@@ -248,7 +248,7 @@
 
     // Clear and draw text
     context.clearRect(0, 0, canvas.width, canvas.height)
-    context.font = `${fontSize}px 'Albert Sans Variable', -apple-system, BlinkMacSystemFont, sans-serif`
+    context.font = `${fontSize}px 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif`
     context.fillStyle = color
     context.textAlign = 'center'
     context.textBaseline = 'middle'
