@@ -102,7 +102,7 @@ export default defineNuxtConfig({
         weights: ['400 600'],
       },
       {
-        name: 'Switzer-Variable',
+        name: 'Switzer',
         provider: 'none',
         src: `${fontBase}Switzer-Variable.woff2`,
         weights: ['400 600'],
