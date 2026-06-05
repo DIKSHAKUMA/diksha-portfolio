@@ -99,17 +99,25 @@ export default defineNuxtConfig({
       {
         name: 'Cascadia Mono',
         provider: 'fontsource',
-        weights: [400, 600],
+        weights: ['400 600'],
       },
       {
-        name: 'Albert Sans',
-        provider: 'fontsource',
-        weights: [400],
+        name: 'Switzer-Variable',
+        provider: 'none',
+        src: `${fontBase}Switzer-Variable.woff2`,
+        weights: ['400 600'],
       },
       {
         name: 'TWK Everett',
         provider: 'none',
         src: `${fontBase}TWKEverett-Regular.woff2`,
+        weight: 400,
+        style: 'normal',
+      },
+      {
+        name: 'TWK Everett',
+        provider: 'none',
+        src: `${fontBase}TWKEverett-Medium.woff2`,
         weight: 400,
         style: 'normal',
       },
@@ -154,6 +162,9 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    optimizeDeps: {
+      include: ['@mux/mux-player', 'lenis', 'split-type', 'three'],
+    },
     build: {
       cssCodeSplit: true,
     },

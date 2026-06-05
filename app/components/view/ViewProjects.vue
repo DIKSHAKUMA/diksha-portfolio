@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Draggable } from 'gsap/Draggable'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  import { Draggable } from 'gsap/Draggable'
   import { InertiaPlugin } from 'gsap/InertiaPlugin'
   import { useFolioStore } from '../../../stores/useFolioStore'
 
@@ -53,7 +53,7 @@ import { Draggable } from 'gsap/Draggable'
 
   const getProjectTags = (project: any) => {
     if (!project?.tags || !Array.isArray(project.tags)) return ''
-    return project.tags.map((tag) => `[ ${tag} ]`).join(' ')
+    return project.tags.map((tag: string) => `[ ${tag} ]`).join(' ')
   }
 
   const handleProjectClick = (project: any) => {
@@ -306,12 +306,11 @@ import { Draggable } from 'gsap/Draggable'
     </div>
     <div class="project-filter">
       <button
-        v-for="opt in (['All', 'Client', 'Personal'] as const)"
+        v-for="opt in ['All', 'Client', 'Personal'] as const"
         :key="opt"
         :class="{ 'project-filter--active': activeFilter === opt }"
         class="project-filter__btn action"
-        data-name="filter"
-        :data-text="opt"
+        data-name="menu"
         @click="activeFilter = opt"
       >
         <span class="project-filter__word">{{ opt }}</span
@@ -460,11 +459,19 @@ import { Draggable } from 'gsap/Draggable'
   .project-filter {
     position: absolute;
     z-index: 10;
-    font-family: $sans-ui-mono;
+    font-family: $sans-ui;
     color: $secondary;
     margin: $px-64-spacer 0;
     display: flex;
     gap: $px-8-spacer;
+    font-size: 14px;
+
+    &__word {
+      padding: 2px;
+      transition:
+        background 0.35s ease,
+        color 0.35s ease;
+    }
 
     &--active {
       border-color: $secondary;
