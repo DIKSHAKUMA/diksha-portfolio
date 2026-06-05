@@ -1,100 +1,159 @@
 <script setup lang="ts">
-  const { $gsap } = useNuxtApp()
-  let ctx: gsap.Context
+  import { shallowRef, onMounted, onUnmounted, watch, nextTick } from 'vue'
+  import * as THREE from 'three'
 
-  onMounted(() => {
-    if (!import.meta.client) return
+  const colorMode = useColorMode()
+  const containerRef = shallowRef<HTMLDivElement | null>(null)
 
-    const triad_tl = $gsap.timeline({ repeat: -1 })
+  let renderer: THREE.WebGLRenderer | null = null
+  let scene: THREE.Scene | null = null
+  let camera: THREE.PerspectiveCamera | null = null
+  let particles: THREE.Points | null = null
+  let rafId: number | null = null
 
-    ctx = $gsap.context((self) => {
-      const createTriad = () => {
-        $gsap.set('.circle1', { xPercent: 0, yPercent: -25 })
-        $gsap.set('.circle2', { xPercent: -25, yPercent: 25 })
-        $gsap.set('.circle3', { xPercent: 25, yPercent: 25 })
+  const ParticleCount = 400
+  const CubeSize = 2.5
 
-        triad_tl
+  const getParticleColor = (): THREE.Color => {
+    return new THREE.Color('#fafafa')
+  }
 
-          .set('.circle', { transformOrigin: '50% 50%' })
-          .from('.circle', { scale: 0, duration: 0.8, ease: 'power2' })
-          .to('.circle1', { xPercent: 25, yPercent: 25 }, '-=0.2')
-          .to('.circle2', { xPercent: 0, yPercent: -25 }, '<')
-          .to('.circle3', { xPercent: -25, yPercent: 25 }, '<')
+  const buildCube = () => {
+    if (!scene || particles) return
 
-          .to('.circle1', {
-            scale: 0,
-            duration: 0.4,
-            ease: 'power1.in',
-            transformOrigin: '25% 25%',
-          })
-          .to(
-            '.circle2',
-            {
-              scale: 0,
-              duration: 0.4,
-              ease: 'power1.in',
-              transformOrigin: '50% 75%',
-            },
-            '-=80%'
-          )
-          .to(
-            '.circle3',
-            {
-              scale: 0,
-              duration: 0.4,
-              ease: 'power1.in',
-              transformOrigin: '75% 25%',
-            },
-            '-=80%'
-          )
+    const count = ParticleCount
+    const positions = new Float32Array(count * 3)
+
+    // Distribute particles on cube surface
+    for (let i = 0; i < count; i++) {
+      const face = Math.floor(Math.random() * 3) // X, Y, or Z face
+      const sign = Math.random() > 0.5 ? 1 : -1
+      const a = (Math.random() - 0.5) * CubeSize
+      const b = (Math.random() - 0.5) * CubeSize
+
+      const i3 = i * 3
+      if (face === 0) {
+        positions[i3] = (sign * CubeSize) / 2
+        positions[i3 + 1] = a
+        positions[i3 + 2] = b
+      } else if (face === 1) {
+        positions[i3] = a
+        positions[i3 + 1] = (sign * CubeSize) / 2
+        positions[i3 + 2] = b
+      } else {
+        positions[i3] = a
+        positions[i3 + 1] = b
+        positions[i3 + 2] = (sign * CubeSize) / 2
       }
+    }
 
-      createTriad()
+    const geom = new THREE.BufferGeometry()
+    geom.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+
+    const mat = new THREE.PointsMaterial({
+      color: getParticleColor(),
+      size: 0.06,
+      sizeAttenuation: true,
+      transparent: true,
+      opacity: 0.7,
+      blending: THREE.NormalBlending,
+    })
+
+    particles = new THREE.Points(geom, mat)
+    scene.add(particles)
+  }
+
+  const updateColors = () => {
+    if (particles && particles.material instanceof THREE.PointsMaterial) {
+      particles.material.color = getParticleColor()
+    }
+  }
+
+  onMounted(async () => {
+    if (!containerRef.value) return
+
+    await nextTick()
+
+    const width = containerRef.value.clientWidth || window.innerWidth
+    const height = containerRef.value.clientHeight || window.innerHeight
+
+    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
+    renderer.setSize(width, height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    containerRef.value.appendChild(renderer.domElement)
+
+    scene = new THREE.Scene()
+    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10)
+    camera.position.z = 5
+
+    buildCube()
+
+    const animate = () => {
+      rafId = requestAnimationFrame(animate)
+      if (particles) {
+        particles.rotation.x += 0.003
+        particles.rotation.y += 0.005
+        particles.rotation.z += 0.002
+      }
+      if (renderer && scene && camera) renderer.render(scene, camera)
+    }
+    rafId = requestAnimationFrame(animate)
+
+    window.addEventListener('resize', () => {
+      if (!containerRef.value) return
+      const w = containerRef.value.clientWidth
+      const h = containerRef.value.clientHeight
+      if (camera) {
+        camera.aspect = w / h
+        camera.updateProjectionMatrix()
+      }
+      if (renderer) renderer.setSize(w, h)
     })
   })
 
+  watch(() => colorMode.value, updateColors)
+
   onUnmounted(() => {
-    ctx.revert()
+    if (rafId) cancelAnimationFrame(rafId)
+    particles?.material?.dispose()
+    particles?.geometry?.dispose()
+    renderer?.dispose()
+    renderer?.domElement?.remove()
   })
 </script>
 
 <template>
-  <div class="anim-wrapper">
-    <div class="anim">
-      <div class="circle circle1"></div>
-      <div class="circle circle2"></div>
-      <div class="circle circle3"></div>
-    </div>
+  <div ref="containerRef" class="anim-wrapper">
+    <div class="anim-bg" />
   </div>
 </template>
 
 <style scoped lang="scss">
-  .anim {
-    display: flex;
-    position: absolute;
-    justify-content: center;
-    align-items: center;
+  .anim-wrapper {
+    position: relative;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+
+    :deep(canvas) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 2;
+    }
+  }
+
+  .anim-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     background: radial-gradient(
       125% 125% at 50% 100%,
       $secondary 40%,
       $accent2 100%
     );
-  }
-
-  .circle {
-    opacity: 0.9;
-    border-radius: 50%;
-    background: $primary;
-    width: 100px;
-    height: 100px;
-    place-self: center;
-    position: absolute;
-
-    @include this-and-above('md') {
-      width: 200px;
-      height: 200px;
-    }
+    pointer-events: none;
   }
 </style>
