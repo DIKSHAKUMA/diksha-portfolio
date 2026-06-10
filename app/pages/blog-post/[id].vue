@@ -233,16 +233,16 @@
               ></NuxtImg>
             </div>
             <div class="blog__post-content">
-              <!-- Show spinner while content is loading -->
-              <div v-show="!mdcContentReady" class="mdc-loading">
-                <div class="mdc-spinner">
-                  <div class="mdc-spinner__circle"></div>
+              <ClientOnly>
+                <div v-if="!mdcContentReady" class="mdc-loading">
+                  <div class="mdc-spinner">
+                    <div class="mdc-spinner__circle"></div>
+                  </div>
+                  <p class="mdc-loading-text">Loading content...</p>
                 </div>
-                <p class="mdc-loading-text">Loading content...</p>
-              </div>
+              </ClientOnly>
 
-              <!-- Always render MDC but hide it until ready -->
-              <div v-show="showMDC" class="mdc-content">
+              <div v-if="showMDC" class="mdc-content">
                 <LazyMDC
                   :value="post.content"
                   ref="mdc"
