@@ -18,10 +18,18 @@ export default defineNuxtConfig({
 
   site: {
     url: 'https://thomasthorstensson.com',
-    name: 'Thomas Thorstensson • Creative Dev.',
+    name: 'Thomas Thorstensson • Portfolio',
     description:
-      'Creative developer and designer crafting digital experiences with modern web technologies.',
+      'Interactive developer crafting bespoke websites focused on motion, design, and UX',
     defaultLocale: 'en',
+  },
+
+  gtag: {
+    id: 'G-257GERX7EP',
+  },
+
+  routeRules: {
+    '/blog-post/**': { isr: 3600 },
   },
 
   /* Enhanced SEO Configuration */
@@ -36,31 +44,31 @@ export default defineNuxtConfig({
       const staticPages = [
         {
           loc: '/',
-          lastmod: '2026-02-08' /* Update when homepage content changes */,
-          changefreq: 'weekly',
+          lastmod: '2026-06-10' /* Update when homepage content changes */,
+          changefreq: 'monthly',
           priority: 1.0,
         },
         {
           loc: '/about',
-          lastmod: '2026-02-08' /* Update when about page changes */,
+          lastmod: '2026-00-05' /* Update when about page changes */,
           changefreq: 'monthly',
           priority: 0.8,
         },
         {
           loc: '/projects',
-          lastmod: '2026-02-08' /* Update when projects list changes */,
-          changefreq: 'weekly',
+          lastmod: '2026-00-05' /* Update when projects list changes */,
+          changefreq: 'monthly',
           priority: 0.9,
         },
         {
           loc: '/blog',
-          lastmod: '2026-02-08' /* Update when blog structure changes */,
+          lastmod: '2026-00-05' /* Update when blog structure changes */,
           changefreq: 'weekly',
           priority: 0.8,
         },
         {
           loc: '/contact',
-          lastmod: '2026-02-08' /* Update when contact info changes */,
+          lastmod: '2026-00-05' /* Update when contact info changes */,
           changefreq: 'monthly',
           priority: 0.7,
         },
@@ -77,17 +85,19 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@pinia/nuxt', // State first
-    'pinia-plugin-persistedstate/nuxt',
-    '@vueuse/nuxt', // Utilities
-    '@nuxt/fonts', // UI/Assets
+    // State first
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt', // Utilities
+    '@vueuse/nuxt', // UI/Assets
+    '@nuxt/fonts',
     '@nuxt/image',
     '@nuxt/icon',
-    'nuxt-svgo',
-    '@nuxtjs/seo', // SEO (replaces individual robots/sitemap)
+    'nuxt-svgo', // SEO (replaces individual robots/sitemap)
+    '@nuxtjs/seo',
     '@nuxtjs/color-mode',
     '@nuxtjs/mdc',
     '@stefanobartoletti/nuxt-social-share',
+    'nuxt-gtag',
   ],
 
   fonts: {
@@ -163,7 +173,7 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: ['@mux/mux-player', 'lenis', 'split-type', 'three'],
+      include: ['@mux/mux-player', 'lenis', 'pixi.js', 'split-type', 'three'],
     },
     build: {
       cssCodeSplit: true,

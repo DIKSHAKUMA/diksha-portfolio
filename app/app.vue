@@ -7,10 +7,13 @@
 
   /* Pinia 🍍 */
   const store = useFolioStore()
-  await callOnce('projects', () => store.fetchData())
-
   const blogStore = useBlogStore()
-  await callOnce('blog', () => blogStore.fetchData())
+
+  /* Parallell */
+  await Promise.all([
+    callOnce('projects', () => store.fetchData()),
+    callOnce('blog', () => blogStore.fetchData()),
+  ])
 
   const isLoaded = ref(false)
   const showIntroAnimation = ref(false)

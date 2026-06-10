@@ -1,15 +1,17 @@
 <script setup lang="ts">
   import { shallowRef, onMounted, onUnmounted, watch } from 'vue'
-  import * as THREE from 'three'
+  import type * as T from 'three'
+
+  let THREE: typeof T
 
   const colorMode = useColorMode()
 
   const canvasRef = shallowRef<HTMLCanvasElement | null>(null)
-  const renderer = shallowRef<THREE.WebGLRenderer | null>(null)
-  const material = shallowRef<THREE.ShaderMaterial | null>(null)
-  const geometry = shallowRef<THREE.BufferGeometry | null>(null)
-  const pointsObj = shallowRef<THREE.Points | null>(null)
-  const sceneObj = shallowRef<THREE.Scene | null>(null)
+  const renderer = shallowRef<T.WebGLRenderer | null>(null)
+  const material = shallowRef<T.ShaderMaterial | null>(null)
+  const geometry = shallowRef<T.BufferGeometry | null>(null)
+  const pointsObj = shallowRef<T.Points | null>(null)
+  const sceneObj = shallowRef<T.Scene | null>(null)
   const rafId = shallowRef<number>(0)
   const isVisible = shallowRef(true)
   let observer: IntersectionObserver | null = null
@@ -23,16 +25,26 @@
   let colors = new Float32Array(count.value * 3)
   let strands = new Float32Array(count.value)
 
-  // Color palettes
-  const silverWarm1 = new THREE.Color(1.0, 0.98, 0.96)
-  const silverWarm2 = new THREE.Color(0.96, 0.98, 1.0)
-  const silverCool1 = new THREE.Color(1.0, 1.0, 0.98)
-  const silverCool2 = new THREE.Color(1.0, 1.0, 1.0)
-  // #43655a variations for light mode (R=67, G=101, B=90)
-  const greenLight1 = new THREE.Color(0x2e / 255, 0x8b / 255, 0x57 / 255) // #2e8b57 - Sea Green
-  const greenLight2 = new THREE.Color(0x3c / 255, 0xb3 / 255, 0x71 / 255) // #3cb371 - Medium Sea Green
-  const greenDark1 = new THREE.Color(0x22 / 255, 0x8b / 255, 0x22 / 255) // #228b22 - Forest Green
-  const greenDark2 = new THREE.Color(0x00 / 255, 0x64 / 255, 0x00 / 255) // #006400 - Dark Green
+  // Color palettes — initialized after Three.js loads
+  let silverWarm1: T.Color
+  let silverWarm2: T.Color
+  let silverCool1: T.Color
+  let silverCool2: T.Color
+  let greenLight1: T.Color
+  let greenLight2: T.Color
+  let greenDark1: T.Color
+  let greenDark2: T.Color
+
+  const initPalettes = (T3: typeof T) => {
+    silverWarm1 = new T3.Color(1.0, 0.98, 0.96)
+    silverWarm2 = new T3.Color(0.96, 0.98, 1.0)
+    silverCool1 = new T3.Color(1.0, 1.0, 0.98)
+    silverCool2 = new T3.Color(1.0, 1.0, 1.0)
+    greenLight1 = new T3.Color(0x2e / 255, 0x8b / 255, 0x57 / 255)
+    greenLight2 = new T3.Color(0x3c / 255, 0xb3 / 255, 0x71 / 255)
+    greenDark1 = new T3.Color(0x22 / 255, 0x8b / 255, 0x22 / 255)
+    greenDark2 = new T3.Color(0x00 / 255, 0x64 / 255, 0x00 / 255)
+  }
 
   /**
    * Three.js
@@ -141,12 +153,21 @@
     // Swap geometry
     const oldGeom = geometry.value
     geometry.value = new THREE.BufferGeometry()
-    geometry.value.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geometry.value.setAttribute(
+      'position',
+      new THREE.BufferAttribute(positions, 3)
+    )
     geometry.value.setAttribute('color', new THREE.BufferAttribute(colors, 3))
     geometry.value.setAttribute('aScale', new THREE.BufferAttribute(scales, 1))
-    geometry.value.setAttribute('aRandomness', new THREE.BufferAttribute(randomness, 3))
+    geometry.value.setAttribute(
+      'aRandomness',
+      new THREE.BufferAttribute(randomness, 3)
+    )
     geometry.value.setAttribute('aRadius', new THREE.BufferAttribute(radii, 1))
-    geometry.value.setAttribute('aStrand', new THREE.BufferAttribute(strands, 1))
+    geometry.value.setAttribute(
+      'aStrand',
+      new THREE.BufferAttribute(strands, 1)
+    )
 
     if (pointsObj.value) pointsObj.value.geometry = geometry.value
     oldGeom?.dispose()
@@ -164,98 +185,108 @@
   /* Watch for color mode changes and recreate waves */
   const stopColorModeWatching = watch(
     () => colorMode.value,
-    (newVal, oldVal) => {
+    () => {
       generateColors()
-    },
-    {
-      immediate: true,
     }
   )
 
   onMounted(() => {
-    if (!canvasRef.value) return
+    setTimeout(async () => {
+      THREE = (await import('three')) as unknown as typeof T
+      initPalettes(THREE)
 
-    // Init Geometry Buffers
-    const scales = new Float32Array(count.value)
-    const randomness = new Float32Array(count.value * 3)
-    const radii = new Float32Array(count.value)
+      if (!canvasRef.value) return
 
-    for (let i = 0; i < count.value; i++) {
-      const i3 = i * 3
-      strands[i] = i % 2
-      const x = (Math.random() - 0.5) * 24
-      const r = Math.pow(Math.random(), 2) * radius
-      const angle = Math.random() * Math.PI * 2
-      positions[i3] = x
-      positions[i3 + 1] = Math.cos(angle) * r
-      positions[i3 + 2] = Math.sin(angle) * r
-      randomness[i3] = (Math.random() - 0.5) * 0.1
-      randomness[i3 + 1] = (Math.random() - 0.5) * 0.1
-      randomness[i3 + 2] = (Math.random() - 0.5) * 0.1
-      radii[i] = 0.5 + Math.random() * 0.5
-      scales[i] = 0.5 + Math.random() * 0.5
-    }
+      // Init Geometry Buffers
+      const scales = new Float32Array(count.value)
+      const randomness = new Float32Array(count.value * 3)
+      const radii = new Float32Array(count.value)
 
-    const scene = new THREE.Scene()
-    const camera = new THREE.OrthographicCamera(-12, 12, 2, -2, 0.1, 100)
-    camera.position.z = 10
-
-    renderer.value = new THREE.WebGLRenderer({
-      canvas: canvasRef.value,
-      alpha: true,
-      antialias: false,
-    })
-    renderer.value.setSize(window.innerWidth, 300)
-    renderer.value.setPixelRatio(1)
-
-    geometry.value = new THREE.BufferGeometry()
-    geometry.value.setAttribute(
-      'position',
-      new THREE.BufferAttribute(positions, 3)
-    )
-    geometry.value.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-    geometry.value.setAttribute('aScale', new THREE.BufferAttribute(scales, 1))
-    geometry.value.setAttribute(
-      'aRandomness',
-      new THREE.BufferAttribute(randomness, 3)
-    )
-    geometry.value.setAttribute('aRadius', new THREE.BufferAttribute(radii, 1))
-    geometry.value.setAttribute(
-      'aStrand',
-      new THREE.BufferAttribute(strands, 1)
-    )
-
-    material.value = new THREE.ShaderMaterial({
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      vertexColors: true,
-      vertexShader,
-      fragmentShader,
-      uniforms: { uTime: { value: 0 } },
-    })
-
-    pointsObj.value = new THREE.Points(geometry.value!, material.value!)
-    scene.add(pointsObj.value)
-    sceneObj.value = scene
-    // I try to use guards for three so as to save cpu
-    observer = new IntersectionObserver(([e]) => {
-      if (e) isVisible.value = e.isIntersecting
-    })
-    observer.observe(canvasRef.value)
-    window.addEventListener('resize', onResize)
-
-    const animate = (time: number) => {
-      rafId.value = requestAnimationFrame(animate)
-      if (!isVisible.value || !material.value || !renderer.value) return
-      if (material.value?.uniforms.uTime) {
-        material.value.uniforms.uTime.value = time * 0.001
+      for (let i = 0; i < count.value; i++) {
+        const i3 = i * 3
+        strands[i] = i % 2
+        const x = (Math.random() - 0.5) * 24
+        const r = Math.pow(Math.random(), 2) * radius
+        const angle = Math.random() * Math.PI * 2
+        positions[i3] = x
+        positions[i3 + 1] = Math.cos(angle) * r
+        positions[i3 + 2] = Math.sin(angle) * r
+        randomness[i3] = (Math.random() - 0.5) * 0.1
+        randomness[i3 + 1] = (Math.random() - 0.5) * 0.1
+        randomness[i3 + 2] = (Math.random() - 0.5) * 0.1
+        radii[i] = 0.5 + Math.random() * 0.5
+        scales[i] = 0.5 + Math.random() * 0.5
       }
-      renderer.value.render(sceneObj.value!, camera)
-    }
-    rafId.value = requestAnimationFrame(animate)
 
-    // Apply correct count for current screen width
-    onResize()
+      const scene = new THREE.Scene()
+      const camera = new THREE.OrthographicCamera(-12, 12, 2, -2, 0.1, 100)
+      camera.position.z = 10
+
+      renderer.value = new THREE.WebGLRenderer({
+        canvas: canvasRef.value,
+        alpha: true,
+        antialias: false,
+      })
+      renderer.value.setSize(window.innerWidth, 300)
+      renderer.value.setPixelRatio(1)
+
+      geometry.value = new THREE.BufferGeometry()
+      geometry.value.setAttribute(
+        'position',
+        new THREE.BufferAttribute(positions, 3)
+      )
+      geometry.value.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+      geometry.value.setAttribute(
+        'aScale',
+        new THREE.BufferAttribute(scales, 1)
+      )
+      geometry.value.setAttribute(
+        'aRandomness',
+        new THREE.BufferAttribute(randomness, 3)
+      )
+      geometry.value.setAttribute(
+        'aRadius',
+        new THREE.BufferAttribute(radii, 1)
+      )
+      geometry.value.setAttribute(
+        'aStrand',
+        new THREE.BufferAttribute(strands, 1)
+      )
+
+      material.value = new THREE.ShaderMaterial({
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexColors: true,
+        vertexShader,
+        fragmentShader,
+        uniforms: { uTime: { value: 0 } },
+      })
+
+      pointsObj.value = new THREE.Points(geometry.value!, material.value!)
+      scene.add(pointsObj.value)
+      sceneObj.value = scene
+      // I try to use guards for three so as to save cpu
+      observer = new IntersectionObserver(([e]) => {
+        if (e) isVisible.value = e.isIntersecting
+      })
+      observer.observe(canvasRef.value)
+      window.addEventListener('resize', onResize)
+
+      const animate = (time: number) => {
+        rafId.value = requestAnimationFrame(animate)
+        if (!isVisible.value || !material.value || !renderer.value) return
+        if (material.value?.uniforms.uTime) {
+          material.value.uniforms.uTime.value = time * 0.001
+        }
+        renderer.value.render(sceneObj.value!, camera)
+      }
+      rafId.value = requestAnimationFrame(animate)
+
+      generateColors()
+
+      // Apply correct count for current screen width
+      onResize()
+    })
   })
 
   // REGISTER UNMOUNTED TOP-LEVEL

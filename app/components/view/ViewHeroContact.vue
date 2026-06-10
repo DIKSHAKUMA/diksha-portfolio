@@ -12,6 +12,15 @@
   const animPixiRef = ref(null)
   const showAnimPixi = ref(false)
 
+  const copied = ref(false)
+  const email = computed(() => store.data.contact?.email ?? '')
+
+  const copyEmail = async () => {
+    await navigator.clipboard.writeText(email.value)
+    copied.value = true
+    setTimeout(() => (copied.value = false), 2000)
+  }
+
   const onPixiLoaded = () => {
     showAnimPixi.value = true
   }
@@ -61,13 +70,16 @@
       <div class="contact__label split-label-w">
         {{ store.data.contact?.emailTitle }}
       </div>
-      <a
-        class="contact__email action split-label-w"
+      <span class="contact__email split-label-w">{{ email }}</span>
+      <button
+        class="contact__copy action"
         data-name="menu"
-        data-text="Tell me!"
-        :href="`mailto:${store.data.contact?.email}`"
-        >{{ store.data.contact?.email }}</a
+        data-text="Copy"
+        :title="copied ? 'Copied!' : 'Copy email'"
+        @click="copyEmail"
       >
+        <Icon :name="copied ? 'ph:check' : 'ph:copy'" size="20" />
+      </button>
     </div>
     <!--:className here is for gsap is-hero changes bottom margins for wrapper and header-->
     <CommonAbstract
@@ -147,10 +159,19 @@
       font-size: clamped(16px, 32px, 480px);
       color: $secondary-static;
       text-decoration: none;
-      transition: color 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    }
+
+    &__copy {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 8px;
+      color: $secondary-static;
+      vertical-align: middle;
+      transition: opacity 0.2s ease;
+      opacity: 0.6;
 
       &:hover {
-        color: $accent1;
+        opacity: 1;
       }
     }
   }

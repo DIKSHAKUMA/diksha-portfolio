@@ -2,7 +2,7 @@
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { useBlogStore } from '../../../stores/useBlogStore'
 
-  const mdcContentReady = ref(false)
+  const mdcContentReady = ref(import.meta.server)
   const showMDC = ref(false)
   const store = useBlogStore()
   const route = useRoute()
@@ -193,9 +193,7 @@
 
 <template>
   <div>
-    <div v-if="mdcContentReady">
-      <UIMouseCursor />
-    </div>
+    <UIMouseCursor />
     <div class="blog-post-wrapper">
       <div class="blog">
         <main class="blog__post">
@@ -236,7 +234,7 @@
             </div>
             <div class="blog__post-content">
               <!-- Show spinner while content is loading -->
-              <div v-if="!mdcContentReady" class="mdc-loading">
+              <div v-show="!mdcContentReady" class="mdc-loading">
                 <div class="mdc-spinner">
                   <div class="mdc-spinner__circle"></div>
                 </div>
@@ -244,11 +242,7 @@
               </div>
 
               <!-- Always render MDC but hide it until ready -->
-              <div
-                v-if="showMDC"
-                class="mdc-content"
-                :class="{ 'mdc-content--hidden': !mdcContentReady }"
-              >
+              <div v-show="showMDC" class="mdc-content">
                 <LazyMDC
                   :value="post.content"
                   ref="mdc"
@@ -383,7 +377,6 @@
     z-index: inherit;
     margin: 0 auto;
     padding: 0 $px-16-spacer;
-    font-weight: 300;
 
     @include this-and-above('md') {
       padding: 0 $px-64-spacer;

@@ -11,9 +11,6 @@ importers:
       '@fontsource-variable/cascadia-mono':
         specifier: ^5.2.2
         version: 5.2.2
-      '@fontsource-variable/instrument-sans':
-        specifier: ^5.2.8
-        version: 5.2.8
       '@mux/blurup':
         specifier: ^1.0.2
         version: 1.0.2
@@ -62,6 +59,9 @@ importers:
       nuxt-graphql-client:
         specifier: ^0.2.43
         version: 0.2.46(@parcel/watcher@2.5.6)(@types/node@22.19.19)(crossws@0.3.5)(graphql-tag@2.12.6(graphql@16.14.1))(magicast@0.5.3)
+      nuxt-gtag:
+        specifier: 4.1.0
+        version: 4.1.0(magicast@0.5.3)
       nuxt-svgo:
         specifier: ^4.0.12
         version: 4.2.6(magicast@0.5.3)(vue@3.5.35)
@@ -989,9 +989,6 @@ packages:
 
   '@fontsource-variable/cascadia-mono@5.2.2':
     resolution: {integrity: sha512-IjtyQuB9IiV8O/q2WWh+aZaRP8Q8rKl3d7J4aw1jUOt0BRjIQu1uSufUw0W5pZr6gpgGcol+Yjq6zWP8GM0auQ==}
-
-  '@fontsource-variable/instrument-sans@5.2.8':
-    resolution: {integrity: sha512-mTCaukbdIjjoipj2E3Q5XoZM3ZxJWdzyHevf/LG/0PHlfF9Q85pxOM7B7A9MerFyxmRzz5kVlumgIvgDSG4CPg==}
 
   '@graphql-codegen/add@5.0.3':
     resolution: {integrity: sha512-SxXPmramkth8XtBlAHu4H4jYcYXM/o3p01+psU+0NADQowA8jtYkK6MW5rV6T+CxkEaNZItfSmZRPgIuypcqnA==}
@@ -4751,6 +4748,9 @@ packages:
   nuxt-graphql-client@0.2.46:
     resolution: {integrity: sha512-O8YJynN+R0oobALwE+GfpoUr165Ki5l301yWb/1ooPlfz0wOn+hdT/g7zm5lj7/m04P9iMJLYdGP/au1NkztMw==}
 
+  nuxt-gtag@4.1.0:
+    resolution: {integrity: sha512-2TL7RUA8N8NYGbY4UZ9IqKyMZMgO9cCGu6yqadUU8RF+Y81PXI+k+1giIA11XXStaJoGXaXeNsBUIJXn1tUy3A==}
+
   nuxt-link-checker@4.3.9:
     resolution: {integrity: sha512-iYJU+A/xUhk62v4tol9cdjJS1+ZOSl0+tdUObgifdeSts6IqAUByUAiX4H6yOY2tdQYKjahMFbQr1GJ+/4LYnQ==}
 
@@ -7139,8 +7139,6 @@ snapshots:
   '@fingerprintjs/botd@2.0.0': {}
 
   '@fontsource-variable/cascadia-mono@5.2.2': {}
-
-  '@fontsource-variable/instrument-sans@5.2.8': {}
 
   '@graphql-codegen/add@5.0.3(graphql@16.14.1)':
     dependencies:
@@ -11856,6 +11854,15 @@ snapshots:
       - supports-color
       - typescript
       - utf-8-validate
+
+  nuxt-gtag@4.1.0(magicast@0.5.3):
+    dependencies:
+      '@nuxt/kit': 4.4.7(magicast@0.5.3)
+      defu: 6.1.7
+      pathe: 2.0.3
+      ufo: 1.6.4
+    transitivePeerDependencies:
+      - magicast
 
   nuxt-link-checker@4.3.9(db0@0.3.4)(ioredis@5.11.1)(magicast@0.5.3)(vite@7.3.5(@types/node@22.19.19)(jiti@2.7.0)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0))(vue@3.5.35):
     dependencies:
