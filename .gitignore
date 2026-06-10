@@ -23,6 +23,8 @@ logs
 .env.*
 !.env.example
 
+.netlify/
+
 # Agent / project memos
 AGENTS.md
 MEMO.md
