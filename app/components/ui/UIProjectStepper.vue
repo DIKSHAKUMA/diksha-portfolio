@@ -1,8 +1,5 @@
 <script setup lang="ts">
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
-  import * as PIXI from 'pixi.js'
-  import { Assets, DisplacementFilter } from 'pixi.js'
-  import { useHygraphParser } from '@/composables/useHygraphParser'
 
   interface Props {
     prevImg: string
@@ -27,173 +24,113 @@
   })
 
   const { $gsap } = useNuxtApp()
-  const { hygraphLDR } = useHygraphParser()
 
   let ctx: gsap.Context
-  let prevPixiApp: PIXI.Application
-  let nextPixiApp: PIXI.Application
-  let prevDisplaceSprite: PIXI.Sprite
-  let nextDisplaceSprite: PIXI.Sprite
-  let prevImageSprite: PIXI.Sprite
-  let nextImageSprite: PIXI.Sprite
+  let rafID: number | null = null
 
   /* Computed properties for full project paths */
   const prevPath = computed(() => `/project/${props.prev}`)
   const nextPath = computed(() => `/project/${props.next}`)
 
-  /* Template refs */
-  const prevCanvas = useTemplateRef<HTMLCanvasElement>('prevCanvas')
-  const nextCanvas = useTemplateRef<HTMLCanvasElement>('nextCanvas')
+  /* Track parallax state for each item */
+  const itemStates = new Map<
+    Element,
+    {
+      isHovered: boolean
+      currentX: number
+      currentY: number
+      targetX: number
+      targetY: number
+    }
+  >()
 
-  /* Setup PIXI displacement effect for stepper images */
-  const setupPixiEffect = async (
-    canvasElement: HTMLCanvasElement,
-    imageHandle: string,
-    isNext: boolean = false
-  ) => {
-    const app = new PIXI.Application()
-    const pixelRatio = window.devicePixelRatio || 1
+  const setupParallax = () => {
+    const items = document.querySelectorAll('.project-stepper-image-reveal')
 
-    /* Get the actual image dimensions from the img element in the same container */
-    const parentElement = canvasElement.parentElement as HTMLElement
-    const imgElement = parentElement.querySelector('img') as HTMLImageElement
-    const containerWidth = imgElement.offsetWidth
-    const containerHeight = imgElement.offsetHeight
+    items.forEach((item: any) => {
+      const image = item.querySelector('img')
+      const state = {
+        isHovered: false,
+        currentX: 0,
+        currentY: 0,
+        targetX: 0,
+        targetY: 0,
+      }
+      itemStates.set(item, state)
 
-    await app.init({
-      backgroundAlpha: 0,
-      canvas: canvasElement,
-      width: containerWidth,
-      height: containerHeight,
-      resolution: pixelRatio,
-      autoDensity: true,
-      resizeTo:
-        parentElement ||
-        window /* Enable auto-resize to parent container or window */,
+      /* Mouse enter - scale up */
+      item.addEventListener('mouseenter', () => {
+        state.isHovered = true
+        $gsap.to(image, {
+          scale: 1.05,
+          duration: 0.25,
+          ease: 'power1.out',
+          force3D: true,
+        })
+      })
+
+      /* Mouse leave - reset position */
+      item.addEventListener('mouseleave', () => {
+        state.isHovered = false
+        state.targetX = 0
+        state.targetY = 0
+
+        $gsap.to(image, {
+          scale: 1,
+          x: 0,
+          y: 0,
+          duration: 0.3,
+          ease: 'power2.inOut',
+          force3D: true,
+        })
+      })
+
+      /* Mouse move - parallax effect */
+      item.addEventListener('mousemove', (e: MouseEvent) => {
+        if (!state.isHovered) return
+
+        const rect = item.getBoundingClientRect()
+        const centerX = rect.left + rect.width / 2
+        const centerY = rect.top + rect.height / 2
+
+        /* Calculate distance from center (normalized) */
+        const deltaX = (e.clientX - centerX) / (rect.width / 2)
+        const deltaY = (e.clientY - centerY) / (rect.height / 2)
+
+        /* Set target position (opposite direction, limited range) */
+        state.targetX = -deltaX * 10
+        state.targetY = -deltaY * 8
+      })
     })
 
-    /* Construct proper Hygraph image URL */
-    const imageUrl = `https://eu-west-2.graphassets.com/cm4tev3k1008n01uo6egngvzu/${imageHandle}`
-    const image = await Assets.load(imageUrl)
-    const imageSprite = PIXI.Sprite.from(image)
+    /* Smooth parallax animation using RAF */
+    const animateParallax = () => {
+      itemStates.forEach((state, item) => {
+        const image = item.querySelector('img')
 
-    /* Make imageSprite fill the canvas using container dimensions */
-    imageSprite.width = containerWidth
-    imageSprite.height = containerHeight
-    imageSprite.position.set(0, 0)
-    imageSprite.anchor.set(0, 0)
+        /* Smooth easing towards target position */
+        state.currentX += (state.targetX - state.currentX) * 0.1
+        state.currentY += (state.targetY - state.currentY) * 0.1
 
-    const displacementTexture = await Assets.load({
-      src: '/img/displacemap-2.jpg',
-      format: 'jpg',
-    })
-    const displaceSprite = PIXI.Sprite.from(displacementTexture)
+        $gsap.set(image, {
+          x: state.currentX,
+          y: state.currentY,
+        })
+      })
 
-    app.stage.interactive = true
-    app.stage.addChild(imageSprite)
-    app.stage.addChild(displaceSprite)
-
-    const filter = new DisplacementFilter(displaceSprite)
-    app.stage.filters = [filter]
-    filter.scale.set(0) /* Start with no displacement */
-    displaceSprite.anchor.set(0.5)
-    displaceSprite.setSize(containerWidth, containerHeight)
-
-    let hasMouseMoved = false
-
-    const activateDisplacement = (e: any) => {
-      /* Activate displacement on first interaction */
-      if (!hasMouseMoved) {
-        filter.scale.set(100)
-        hasMouseMoved = true
-      }
-      displaceSprite.position.set(e.data.global.x - 25, e.data.global.y)
+      rafID = requestAnimationFrame(animateParallax)
     }
-
-    const resetDisplacement = () => {
-      /* Reset displacement when mouse leaves */
-      if (hasMouseMoved) {
-        filter.scale.set(0)
-        hasMouseMoved = false
-      }
-    }
-
-    app.stage
-      .on('mousemove', activateDisplacement)
-      .on('mouseout', resetDisplacement)
-      .on('mouseleave', resetDisplacement)
-
-    /* Store references */
-    if (isNext) {
-      nextPixiApp = app
-      nextDisplaceSprite = displaceSprite
-      nextImageSprite = imageSprite
-    } else {
-      prevPixiApp = app
-      prevDisplaceSprite = displaceSprite
-      prevImageSprite = imageSprite
-    }
-
-    return { app, displaceSprite }
+    animateParallax()
   }
 
-  /* Debounced resize handler */
-  const handleResize = () => {
-    if (prevPixiApp && prevImageSprite && prevCanvas.value) {
-      const prevParent = prevCanvas.value.parentElement as HTMLElement
-      const prevImg = prevParent?.querySelector('img') as HTMLImageElement
-
-      if (prevImg) {
-        const newWidth = prevImg.offsetWidth
-        const newHeight = prevImg.offsetHeight
-
-        prevPixiApp.renderer.resize(newWidth, newHeight)
-        prevImageSprite.width = newWidth
-        prevImageSprite.height = newHeight
-        prevDisplaceSprite.setSize(newWidth, newHeight)
-      }
-    }
-
-    if (nextPixiApp && nextImageSprite && nextCanvas.value) {
-      const nextParent = nextCanvas.value.parentElement as HTMLElement
-      const nextImg = nextParent?.querySelector('img') as HTMLImageElement
-
-      if (nextImg) {
-        const newWidth = nextImg.offsetWidth
-        const newHeight = nextImg.offsetHeight
-
-        nextPixiApp.renderer.resize(newWidth, newHeight)
-        nextImageSprite.width = newWidth
-        nextImageSprite.height = newHeight
-        nextDisplaceSprite.setSize(newWidth, newHeight)
-      }
-    }
-  }
-
-  let resizeTimeout: NodeJS.Timeout
-  const debouncedResize = () => {
-    clearTimeout(resizeTimeout)
-    resizeTimeout = setTimeout(handleResize, 150)
-  }
-
-  onMounted(async () => {
-    /* Register the custom Hygraph loader only if not already registered */
-    const parserExists = Assets.loader.parsers.some(
-      (parser: any) => parser.name === 'hygraphLDR'
-    )
-
-    if (!parserExists) {
-      Assets.loader.parsers.push(hygraphLDR as any)
-    }
-
+  onMounted(() => {
     ctx = $gsap.context(() => {
       $gsap.registerPlugin(ScrollTrigger)
 
-      /* Vertical blind reveal effect for stepper images */
+      /* Vertical reveal effect for stepper images */
       $gsap.utils
         .toArray('.project-stepper-image-reveal')
         .forEach((imageContainer: any) => {
-          /* Animate the mask position on scroll */
           $gsap.from(imageContainer, {
             opacity: 0,
             duration: 0.5,
@@ -208,25 +145,12 @@
         })
     })
 
-    /* Setup PIXI effects immediately - DOM should be ready by onMounted */
-    nextTick(async () => {
-      if (prevCanvas.value && nextCanvas.value) {
-        /* Run both PIXI setups in parallel instead of sequential */
-        await Promise.all([
-          setupPixiEffect(prevCanvas.value, props.prevImg, false),
-          setupPixiEffect(nextCanvas.value, props.nextImg, true),
-        ])
-      }
-    })
-
-    window.addEventListener('resize', debouncedResize)
+    setupParallax()
   })
 
   onUnmounted(() => {
     ctx?.revert()
-    if (prevPixiApp) prevPixiApp.destroy()
-    if (nextPixiApp) nextPixiApp.destroy()
-    window.removeEventListener('resize', debouncedResize)
+    if (rafID) cancelAnimationFrame(rafID)
   })
 </script>
 
@@ -250,10 +174,6 @@
               sizes="sm:100vw md:40vw lg:35vw xl:80vw"
               densities="x1 x2"
             />
-            <canvas
-              ref="prevCanvas"
-              class="prev-pixi-canvas pixi-overlay"
-            ></canvas>
           </NuxtLink>
         </div>
         <h3 class="project-stepper__name">{{ prevName }}</h3>
@@ -275,10 +195,6 @@
               sizes="sm:100vw md:40vw lg:35vw xl:80vw"
               densities="x1 x2"
             />
-            <canvas
-              ref="nextCanvas"
-              class="next-pixi-canvas pixi-overlay"
-            ></canvas>
           </NuxtLink>
         </div>
         <h4 class="project-stepper__name">{{ nextName }}</h4>
@@ -289,11 +205,19 @@
 </template>
 
 <style scoped lang="scss">
-  /* Fiddling here, mmargins work great some layouts but for cards they never do, BEM or Tailwind 2026? */
-
   h3,
   h4 {
     margin-bottom: 0;
+  }
+
+  a {
+    display: block;
+    overflow: hidden;
+    filter: none !important;
+  }
+
+  a:hover {
+    filter: none !important;
   }
 
   img {
@@ -305,25 +229,9 @@
     pointer-events: auto;
     touch-action: pan-y;
     font-size: 0;
-  }
-
-  /* Position canvas absolutely to prevent layout interference */
-  .pixi-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 100% !important;
-    z-index: 9999;
-    -o-object-fit: cover;
-    object-fit: cover;
-    pointer-events: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  canvas {
-    pointer-events: none;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
   .project-stepper-wrapper {

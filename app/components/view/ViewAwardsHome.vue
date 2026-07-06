@@ -181,7 +181,7 @@
     animation: marquee-scroll 20s linear infinite;
     align-items: center;
     margin-top: 15px;
-    filter: invert(0);
+    filter: invert(1);
     &--light {
       filter: invert(0);
     }
@@ -197,7 +197,7 @@
   }
 
   .award-cell {
-    height: 200px;
+    height: 150px;
     width: auto;
     min-width: 120px;
     display: flex;

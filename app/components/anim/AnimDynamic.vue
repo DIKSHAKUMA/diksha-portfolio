@@ -15,7 +15,8 @@
   const CubeSize = 2.5
 
   const getParticleColor = (): THREE.Color => {
-    return new THREE.Color('#fafafa')
+    const isLight = colorMode.value === 'light'
+    return new THREE.Color(isLight ? '#fafafa' : '#18181b')
   }
 
   const buildCube = () => {

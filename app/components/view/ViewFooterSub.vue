@@ -1,6 +1,5 @@
 <script setup lang="ts">
   const archiveWrapper = ref<HTMLElement>()
-  const isMobile = ref(false)
 
   interface Props {
     label: string
@@ -14,27 +13,6 @@
     link: '',
     linkLabel: '',
     target: '_self',
-  })
-
-  const footerMessage = computed(() => {
-    return isMobile.value
-      ? '2026 Thomas Thorstensson'
-      : '2026 Thomas Thorstensson • Fork on GitHub'
-  })
-
-  const onResizeCheck = () => {
-    isMobile.value = window.innerWidth < 768
-  }
-
-  onMounted(() => {
-    if (import.meta.client) {
-      window.addEventListener('resize', onResizeCheck)
-      onResizeCheck()
-    }
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener('resize', onResizeCheck)
   })
 </script>
 
@@ -53,7 +31,7 @@
       </div>
     </footer>
     <CommonInfoLabel
-      :label="footerMessage"
+      label="2026 by Thomas"
       :class-name="'photo-label'"
       :hpos="'flex-end'"
       :vpos="'flex-end'"

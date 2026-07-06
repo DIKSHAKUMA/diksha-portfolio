@@ -51,11 +51,6 @@
     return { current: clampedIndex.value + 1, total: totalProjects }
   })
 
-  const getProjectTags = (project: any) => {
-    if (!project?.tags || !Array.isArray(project.tags)) return ''
-    return project.tags.map((tag: string) => `[ ${tag} ]`).join(' ')
-  }
-
   const handleProjectClick = (project: any) => {
     if (project.labUrl) {
       window.open(project.labUrl, '_blank')
@@ -167,7 +162,7 @@
         : 0
       const snapDistance = currentProjectWidth + currentGapWidth
       const snapIndex = Math.round((initialOffset - endValue) / snapDistance)
-      return initialOffset - snapIndex * snapDistance
+      return Math.round(initialOffset - snapIndex * snapDistance)
     }
 
     const handleThrowComplete = function (this: any) {
@@ -209,7 +204,7 @@
         dragResistance: 0.3,
         edgeResistance: 0.5 /* Smooth resistance at bounds */,
         allowEventDefault: false /* Prevent default touch behaviors */,
-
+        force3D: true,
         onDrag: handleDrag,
         onDragEnd: handleDragEnd,
         onThrowComplete: handleThrowComplete,
@@ -317,61 +312,58 @@
         ><template v-if="opt !== 'Personal'"> /</template>
       </button>
     </div>
-    <div class="projects">
-      <div class="projects__reel" ref="projectsReel">
-        <div v-for="(project, index) in filteredProjects" :key="project.id">
-          <div
-            class="projects__project"
-            ref="projectItem"
-            :class="{
-              'projects__project--open': index === clampedIndex && !isDragging,
-            }"
-          >
+    <Transition name="fade">
+      <div class="projects" :key="activeFilter">
+        <div class="projects__reel" ref="projectsReel">
+          <div v-for="(project, index) in filteredProjects" :key="project.id">
             <div
-              class="projects__project__image-container action"
-              data-name="reel"
+              class="projects__project"
+              ref="projectItem"
+              :class="{
+                'projects__project--open':
+                  index === clampedIndex && !isDragging,
+              }"
             >
-              <NuxtLink @click="handleProjectClick(project)">
-                <NuxtImg
-                  :src="project.coverImage?.handle"
-                  provider="hygraph"
-                  alt="Project image"
-                  format="webp"
-                  sizes="sm:100vw"
-                  densities="x1 x2"
-                  class="projects__project__image"
-                ></NuxtImg>
-              </NuxtLink>
-              <span
-                v-if="project.labUrl"
-                class="projects__lab-indicator"
-                title="Lab Project"
+              <div
+                class="projects__project__image-container action"
+                data-name="reel"
               >
-                <Icon
-                  name="mdi:link-box-variant"
-                  class="projects__lab-indicator-svg"
-                />
-              </span>
-            </div>
-
-            <div class="projects__project__info">
-              <div class="projects__project__title">
-                <p class="split-proj-w">
-                  {{ project.name }}
-                </p>
-                <p class="split-proj-w">{{ project.date.split(' ')[1] }}</p>
+                <NuxtLink @click="handleProjectClick(project)">
+                  <NuxtImg
+                    :src="project.coverImage?.handle"
+                    provider="hygraph"
+                    alt="Project image"
+                    format="webp"
+                    sizes="sm:100vw"
+                    densities="x1 x2"
+                    class="projects__project__image"
+                  ></NuxtImg>
+                </NuxtLink>
+                <span
+                  v-if="project.labUrl"
+                  class="projects__lab-indicator"
+                  title="Lab Project"
+                >
+                  <Icon
+                    name="mdi:external-link"
+                    class="projects__lab-indicator-svg"
+                  />
+                </span>
               </div>
-              <span
-                v-if="project.tags && project.tags.length > 0"
-                class="projects__project__meta split-proj-w"
-              >
-                {{ getProjectTags(project) }}
-              </span>
+
+              <div class="projects__project__info">
+                <div class="projects__project__title">
+                  <p class="split-proj-w">
+                    {{ project.name }}
+                  </p>
+                  <p class="split-proj-w">{{ project.date.split(' ')[1] }}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Transition>
   </main>
 </template>
 
@@ -386,12 +378,6 @@
 
   p {
     margin: 0;
-  }
-
-  h6 {
-    margin: 0;
-    font-family: $sans-ui-mono;
-    font-weight: 400;
   }
 
   .projects-wrapper {
@@ -495,12 +481,11 @@
 
     &__text {
       font-size: clamped(24px, 32px, 480px, 1920px);
-      font-family: $sans-ui-mono;
+      font-family: $sans-ui;
       font-weight: 400;
       white-space: nowrap;
       color: $secondary;
       font-variant-numeric: tabular-nums;
-      /* Monospace numbers for consistent width */
       letter-spacing: 0.02em;
     }
   }
@@ -517,14 +502,12 @@
       /* For absolute positioning of lab indicator */
       flex-shrink: 0;
       /* Prevent shrinking to maintain consistent layout */
-      transform-origin: center;
-      scale: 1;
-      transition: scale 0.3s ease-out;
-      /* Smooth scale transitions */
-      isolation: isolate; /* Create a sandbox for better compositing */
+      opacity: 0.65;
+      transition: opacity 0.3s ease-out;
+      /* Smooth opacity transitions */
 
       &--open {
-        scale: (1.06);
+        opacity: 1;
       }
 
       &__image-container {
@@ -532,12 +515,11 @@
       }
 
       &__info {
-        margin: $px-16-spacer $px-16-spacer;
+        margin: $px-8-spacer $px-16-spacer;
         pointer-events: none;
-        font-family: $sans-ui-mono;
+        font-family: $sans-ui;
         text-transform: uppercase;
         text-rendering: optimizeLegibility;
-        transform: translateZ(0);
 
         /* Force an independent text layer */
 
@@ -547,7 +529,6 @@
           color: $secondary;
           font-weight: 500;
           display: inline-block;
-          backface-visibility: hidden;
         }
       }
 
@@ -557,7 +538,7 @@
         justify-content: space-between;
         font-weight: 500;
         font-variation-settings: 'wght' 500;
-        font-size: clamped(14px, 16px, 480px, 1920px) !important;
+        font-size: round(clamped(14px, 16px, 480px, 1920px), 1px) !important;
       }
 
       &__meta {
@@ -634,16 +615,30 @@
 
       &-svg {
         position: relative;
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
         color: #fff;
 
         @include this-and-above('md') {
-          width: 48px;
-          height: 48px;
+          width: 32px;
+          height: 32px;
         }
       }
     }
+  }
+
+  /* Fade transition for filter changes */
+  .fade-enter-active {
+    transition: opacity 0.6s ease-in;
+  }
+
+  .fade-leave-active {
+    transition: opacity 0.4s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
   }
 
   /* Moving light animation */

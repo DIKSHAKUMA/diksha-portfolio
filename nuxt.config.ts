@@ -44,31 +44,31 @@ export default defineNuxtConfig({
       const staticPages = [
         {
           loc: '/',
-          lastmod: '2026-06-10' /* Update when homepage content changes */,
+          lastmod: '2026-06-10',
           changefreq: 'monthly',
           priority: 1.0,
         },
         {
           loc: '/about',
-          lastmod: '2026-00-05' /* Update when about page changes */,
+          lastmod: '2026-00-05',
           changefreq: 'monthly',
           priority: 0.8,
         },
         {
           loc: '/projects',
-          lastmod: '2026-00-05' /* Update when projects list changes */,
+          lastmod: '2026-00-05',
           changefreq: 'monthly',
           priority: 0.9,
         },
         {
           loc: '/blog',
-          lastmod: '2026-00-05' /* Update when blog structure changes */,
+          lastmod: '2026-00-05',
           changefreq: 'weekly',
           priority: 0.8,
         },
         {
           loc: '/contact',
-          lastmod: '2026-00-05' /* Update when contact info changes */,
+          lastmod: '2026-00-05',
           changefreq: 'monthly',
           priority: 0.7,
         },
@@ -97,7 +97,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxtjs/mdc',
     '@stefanobartoletti/nuxt-social-share',
-    'nuxt-gtag',
+    'nuxt-gtag', // Analytics
   ],
 
   fonts: {
@@ -135,8 +135,8 @@ export default defineNuxtConfig({
   },
 
   colorMode: {
-    preference: 'light',
-    fallback: 'light',
+    preference: 'dark',
+    fallback: 'dark',
   },
 
   mdc: {
@@ -209,14 +209,12 @@ export default defineNuxtConfig({
     openWeatherApiKey:
       '' /* Will be populated from NUXT_OPEN_WEATHER_API_KEY env var */,
     gqlHost: '' /* Will be populated from NUXT_GQL_HOST env var */,
-    public: {
-      /* Public runtime config - exposed to client-side */
-    },
+    public: {},
   },
 
   /* Hygraph base URL for assets */
   image: {
-    provider: 'ipx', // Keep this to protect your local/asset images
+    provider: 'ipx', // Keep this to protect local/asset images
     providers: {
       hygraph: {
         provider: 'hygraph',
@@ -228,7 +226,7 @@ export default defineNuxtConfig({
     },
   },
 
-  /* Hygraph fix rate limit when testing and enable web assemly binary format need for speed */
+  /* Hygraph fix rate limit when testing*/
   nitro: {
     preset: 'netlify',
     experimental: {

@@ -266,9 +266,12 @@
       scene.add(pointsObj.value)
       sceneObj.value = scene
       // I try to use guards for three so as to save cpu
-      observer = new IntersectionObserver(([e]) => {
-        if (e) isVisible.value = e.isIntersecting
-      })
+      observer = new IntersectionObserver(
+        ([e]) => {
+          if (e) isVisible.value = e.isIntersecting
+        },
+        { threshold: 0.5 }
+      )
       observer.observe(canvasRef.value)
       window.addEventListener('resize', onResize)
 

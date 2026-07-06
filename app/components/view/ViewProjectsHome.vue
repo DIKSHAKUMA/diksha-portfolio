@@ -267,12 +267,6 @@
                 </p>
                 <p class="split-proj-w">{{ proj.date.split(' ')[1] }}</p>
               </div>
-              <span
-                v-if="proj.tags && proj.tags.length > 0"
-                class="projects__abstract__meta split-proj-w"
-              >
-                {{ getProjectTags(proj) }}
-              </span>
             </div>
           </div>
         </div>
@@ -407,13 +401,12 @@
       &__info {
         margin: $px-16-spacer $px-16-spacer;
         pointer-events: none;
-        font-family: $sans-ui-mono;
+        font-family: $sans-ui;
         text-transform: uppercase;
         color: $secondary;
 
         span {
           position: relative;
-
           color: $secondary;
           font-weight: 500;
         }
@@ -424,7 +417,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        font-family: $sans-ui-mono;
+
         font-weight: 500;
         font-variation-settings: 'wght' 500;
         font-size: clamped(14px, 16px, 480px, 1920px);

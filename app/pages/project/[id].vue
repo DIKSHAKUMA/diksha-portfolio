@@ -203,20 +203,21 @@
             const childImage = mediaContainer.querySelector('img')
 
             if (childImage) {
+              $gsap.set(childImage, { scale: 1.12 }) // Scale up to allow parallax movement
               $gsap.fromTo(
                 childImage,
-                { scale: 1.03 }, // Start zoomed in
+                { y: 40 }, // Start lower
                 {
-                  scale: 1, // Scale down to original size
-                  ease: 'none', // Scrubbing feels most natural with 'none'
+                  y: -40, // Move up as you scroll
+                  ease: 'none',
                   force3D: true,
                   scrollTrigger: {
                     trigger: mediaContainer,
-                    start: 'top bottom', // Start scaling as soon as it enters the bottom
-                    end: 'top 20%', // Finish scaling when it's near the top
-                    scrub: 1.5,
-                    preventOverlaps: false, // Prevents fighting between triggers
-                    fastScrollEnd: true, // Forces completion on fast scrolls
+                    start: 'top bottom',
+                    end: 'top 20%',
+                    scrub: 5.5,
+                    preventOverlaps: false,
+                    fastScrollEnd: true,
                     invalidateOnRefresh: false,
                   },
                 }

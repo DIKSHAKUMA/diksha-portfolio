@@ -18,7 +18,16 @@
 
   const checkScreenSize = () => {
     if (import.meta.client) {
+      const wasDesktop = isDesktop.value
       isDesktop.value = window.innerWidth >= 768
+
+      /* Force repaint when breakpoint changes */
+      if (wasDesktop !== isDesktop.value) {
+        nextTick(() => {
+          /* Force reflow to recalculate CSS custom properties */
+          void document.body.offsetHeight
+        })
+      }
     }
   }
 
@@ -57,15 +66,21 @@
         <div class="excerpts__info" v-for="post in dateSorted" :key="post.id">
           <NuxtLink :to="`/blog-post/${post.slug}`">
             <div class="excerpts__item action" data-name="menu">
-              <div class="excerpts__item__title">{{ post.date }}</div>
-              <div class="excerpts__item__title">{{ post.title }}</div>
+              <div class="excerpts__item__title excerpts__item__title--date">
+                {{ post.date }}
+              </div>
+              <div class="excerpts__item__title excerpts__item__title--title">
+                {{ post.title }}
+              </div>
               <div
-                class="excerpts__item__title excerpts__item__title-subject"
+                class="excerpts__item__title excerpts__item__title--subject"
                 v-if="isDesktop"
               >
                 {{ post.subject }}
               </div>
-              <div class="excerpts__item__title">{{ post.length }}</div>
+              <div class="excerpts__item__title excerpts__item__title--length">
+                {{ post.length }}
+              </div>
             </div>
           </NuxtLink>
         </div>
@@ -183,30 +198,24 @@
         padding: 0 10px;
         transition: all 0.3s ease;
         font-size: clamped(14px, 18px, 480px, 1920px);
-        backface-visibility: hidden;
-        transform: translateZ(0);
         font-family: $sans-ui;
 
-        /* Column-specific alignment */
-        &:first-child {
+        /* Column-specific alignment using BEM modifiers */
+        &--date {
           text-align: left;
-          /* Date */
           font-weight: 500;
         }
 
-        &:nth-child(2) {
+        &--title {
           text-align: left;
-          /* Title */
         }
 
-        &:nth-child(3) {
+        &--subject {
           text-align: left;
-          /* Subject */
         }
 
-        &:last-child {
+        &--length {
           text-align: right;
-          /* Length */
         }
       }
     }

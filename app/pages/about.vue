@@ -32,8 +32,7 @@
     ],
   })
 
-  onMounted(() => {
-  })
+  onMounted(() => {})
 
   onUnmounted(() => {})
 </script>

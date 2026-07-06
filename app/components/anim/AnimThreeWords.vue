@@ -378,11 +378,11 @@
           camera.value!.position
         )
 
-        // Fade based on distance
-        const fadeDistance = 50
+        // Fade based on distance — camera orbits at radius 10
+        const fadeDistance = 12
         const opacity = Math.min(
-          1,
-          Math.max(0.5, 1 - distanceToCamera / fadeDistance)
+          0.7,
+          Math.max(0.05, 1 - distanceToCamera / fadeDistance)
         )
         if (wordMaterials[i]) {
           wordMaterials[i].opacity = opacity
