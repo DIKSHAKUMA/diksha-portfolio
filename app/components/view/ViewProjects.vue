@@ -345,7 +345,7 @@
                   title="Lab Project"
                 >
                   <Icon
-                    name="mdi:external-link"
+                    name="mdi:link-box-variant"
                     class="projects__lab-indicator-svg"
                   />
                 </span>

@@ -379,12 +379,12 @@
 
           &-svg {
             position: relative;
-            width: 32px;
-            height: 32px;
+            width: 24px;
+            height: 24px;
             color: #fff;
             @include this-and-above('md') {
-              width: 48px;
-              height: 48px;
+              width: 32px;
+              height: 32px;
             }
           }
         }
