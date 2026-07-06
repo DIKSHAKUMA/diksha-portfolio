@@ -502,13 +502,6 @@
       /* For absolute positioning of lab indicator */
       flex-shrink: 0;
       /* Prevent shrinking to maintain consistent layout */
-      opacity: 0.65;
-      transition: opacity 0.3s ease-out;
-      /* Smooth opacity transitions */
-
-      &--open {
-        opacity: 1;
-      }
 
       &__image-container {
         position: relative;
