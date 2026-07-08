@@ -157,7 +157,7 @@
     contain: layout style paint;
     /* CSS containment for better performance */
     image-rendering: optimizeSpeed;
-    background-image: url('/img/mooncurve-parallax.jpg');
+    background-image: url('/img/moontime-parallax.jpg');
 
     /* Firefox-specific optimizations */
     @-moz-document url-prefix() {
@@ -165,8 +165,8 @@
       image-rendering: optimizeSpeed;
     }
 
-    @supports (background-image: url('/img/mooncurve-parallax.webp')) {
-      background-image: url('/img/mooncurve-parallax.webp');
+    @supports (background-image: url('/img/moontime-parallax.webp')) {
+      background-image: url('/img/moontime-parallax.webp');
     }
 
     /* Very small mobile screens - extra aggressive left positioning */

@@ -379,10 +379,14 @@
         )
 
         // Fade based on distance — camera orbits at radius 10
-        const fadeDistance = 12
+        // Light mode: slower falloff and higher floor so dark text is readable
+        const isLight = colorMode.value === 'light'
+        const fadeDistance = isLight ? 18 : 12
+        const minOpacity = isLight ? 0.15 : 0.05
+        const maxOpacity = isLight ? 0.95 : 0.8
         const opacity = Math.min(
-          0.7,
-          Math.max(0.05, 1 - distanceToCamera / fadeDistance)
+          maxOpacity,
+          Math.max(minOpacity, 1 - distanceToCamera / fadeDistance)
         )
         if (wordMaterials[i]) {
           wordMaterials[i].opacity = opacity
