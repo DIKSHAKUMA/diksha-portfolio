@@ -152,70 +152,22 @@
         $gsap.utils
           .toArray('.project__media')
           .forEach((mediaContainer: any) => {
-            /* Set initial state - hidden with scale */
-            $gsap.set(mediaContainer, {
-              opacity: 0,
-              scale: 1.05,
-              force3D: true,
-            })
-
-            /* Check if this is the first media (data-media="0") or video (data-video="0") */
-            const isFirstMedia =
-              mediaContainer.getAttribute('data-media')?.trim() === '0'
-            const isFirstVideo =
-              mediaContainer.getAttribute('data-video')?.trim() === '0'
-
-            let delay = 0
-            /* Only the very first element should have delay:
-             * - If we have video, only video gets delay (not the first image)
-             * - If no video, first image gets delay */
-            if (
-              proj.value?.video &&
-              proj.value.video.length > 0 &&
-              proj.value.video[0].playbackId
-            ) {
-              /* We have video - only video gets delay */
-              delay = isFirstVideo ? 1 : 0
-            } else {
-              /* No video - first image gets delay */
-              delay = isFirstMedia ? 1.5 : 0
-            }
-
-            /* Animate the media container */
-            $gsap.to(mediaContainer, {
-              opacity: 1,
-              delay: delay,
-              scale: 1,
-              duration: 0.3,
-              force3D: true,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: mediaContainer,
-                start: 'top 90%',
-                end: 'top 35%',
-                toggleActions: 'play none none reverse',
-                preventOverlaps: false,
-                fastScrollEnd: true,
-                invalidateOnRefresh: false,
-              },
-            })
-
             const childImage = mediaContainer.querySelector('img')
 
             if (childImage) {
-              $gsap.set(childImage, { scale: 1.12 }) // Scale up to allow parallax movement
+              /* Scale image from 1.12 to 1 on scroll */
               $gsap.fromTo(
                 childImage,
-                { y: 40 }, // Start lower
+                { scale: 1.06 },
                 {
-                  y: -40, // Move up as you scroll
+                  scale: 1,
                   ease: 'none',
                   force3D: true,
                   scrollTrigger: {
                     trigger: mediaContainer,
                     start: 'top bottom',
                     end: 'top 20%',
-                    scrub: 5.5,
+                    scrub: 1.5,
                     preventOverlaps: false,
                     fastScrollEnd: true,
                     invalidateOnRefresh: false,

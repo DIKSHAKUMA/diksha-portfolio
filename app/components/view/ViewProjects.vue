@@ -38,8 +38,8 @@
     const all = dateSorted.value
     const key = activeFilter.value.toLowerCase()
     if (key === 'all') return all
-    if (key === 'personal') return all.filter((p) => p.labUrl)
-    return all.filter((p) => !p.labUrl)
+    if (key === 'personal') return all.filter((p) => p.labUrl || p.projlab)
+    return all.filter((p) => !p.labUrl && !p.projlab)
   })
 
   const centeredProject = computed(() => {
@@ -52,7 +52,9 @@
   })
 
   const handleProjectClick = (project: any) => {
-    if (project.labUrl) {
+    if (project.projlab) {
+      navigateTo(`/project/${project.slug}`)
+    } else if (project.labUrl) {
       window.open(project.labUrl, '_blank')
     } else {
       navigateTo(`/project/${project.slug}`)

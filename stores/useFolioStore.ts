@@ -97,6 +97,7 @@ export const useFolioStore = defineStore('folio', {
                         coverImage { id handle fileName }
                         clientHistory
                         selectedproj
+                        projlab
                     }
                     contact(where: { slug: "contact" }) {
                         id
