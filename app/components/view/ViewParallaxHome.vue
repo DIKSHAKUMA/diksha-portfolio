@@ -149,7 +149,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     /* Mobile: Move camera far left to ensure visibility on narrow screens */
-    background-position: 25% top;
+    background-position: 45% top;
     transform: translateZ(0);
     /* Force hardware acceleration */
     backface-visibility: hidden;
@@ -174,12 +174,12 @@
     /* Responsive background positioning */
     @include this-and-above('sm') {
       /* Tablet: Move camera slightly more right */
-      background-position: 25% top;
+      background-position: 45% top;
     }
 
     @include this-and-above('md') {
       /* Desktop: Move camera more to the right */
-      background-position: 20% top;
+      background-position: 45% top;
     }
 
     @include this-and-above('lg') {

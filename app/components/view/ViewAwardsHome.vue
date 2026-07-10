@@ -162,7 +162,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 40vh;
+    min-height: 50vh;
     width: 100%;
     @include this-and-above('md') {
       min-height: 50vh;
@@ -197,7 +197,7 @@
   }
 
   .award-cell {
-    height: 150px;
+    height: 180px;
     width: auto;
     min-width: 120px;
     display: flex;
