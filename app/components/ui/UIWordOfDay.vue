@@ -27,7 +27,7 @@
         <p class="word-of-day__definition">{{ wordData.definition }}</p>
       </div>
 
-      <div class="word-of-day__loading" v-else>
+      <div class="word-of-day__loading" v-else role="status" aria-live="polite">
         <div class="loading-spinner"></div>
       </div>
     </div>

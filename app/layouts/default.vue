@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <div class="folio-wrapper">
+    <div class="folio-wrapper" id="main-content">
       <slot />
     </div>
   </div>

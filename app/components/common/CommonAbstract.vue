@@ -1,4 +1,3 @@
-b
 <script setup lang="ts">
   import SplitType from 'split-type'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -16,6 +15,7 @@ b
     isPageHeader: boolean
     author: string
     date: string
+    headingLevel?: 'h1' | 'h2'
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -30,6 +30,7 @@ b
     isPageHeader: false,
     author: '',
     date: '',
+    headingLevel: 'h2',
   })
 
   const { $gsap } = useNuxtApp()
@@ -125,13 +126,14 @@ b
 <template>
   <div class="abstract-wrapper" :class="abstractClassObj">
     <div class="abstract">
-      <header
+      <component
+        :is="headingLevel"
         v-if="label && label.trim()"
         class="abstract__header"
         :class="[props.className, headerClassObj]"
       >
-        <span>{{ label }}</span>
-      </header>
+        {{ label }}
+      </component>
       <div v-if="desc && desc.trim()">
         <div
           v-for="(sentence, index) in descriptionSentences"
@@ -163,9 +165,9 @@ b
 
 <style lang="scss" scoped>
   /**
- * For semantic distionction, this component feels like a display case of typography
- * so I a not using h1-h6 tags.
- */
+   * Uses dynamic heading element via headingLevel prop for proper
+   * semantic document outline (h1 for page titles, h2 for sections).
+   */
   .abstract-wrapper {
     display: flex;
     flex-flow: column;

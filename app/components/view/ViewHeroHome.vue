@@ -45,6 +45,7 @@
       :desc="store.data.intro?.heroIntroDesc"
       :class-name="'home-intro'"
       :is-hero="true"
+      heading-level="h1"
       :is-full-width="false"
       :is-secondary="false"
       :is-two-lines="true"

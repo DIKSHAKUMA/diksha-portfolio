@@ -242,7 +242,7 @@
               <NuxtImg
                 :src="proj.coverImage?.handle"
                 provider="hygraph"
-                alt="Project image"
+                :alt="proj.name"
                 format="webp"
                 sizes="100vw sm:46vw md:50vw lg:42vw xl:38vw 2xl:34vw"
                 densities="x1 x2"

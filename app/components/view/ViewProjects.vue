@@ -288,6 +288,7 @@
       :desc="''"
       :class-name="'abstract__projects'"
       :is-hero="true"
+      heading-level="h1"
       :is-full-width="false"
       :is-secondary="false"
       :author="''"

@@ -38,6 +38,7 @@
         :desc="''"
         :class-name="'about-intro'"
         :is-hero="true"
+        heading-level="h1"
         :is-full-width="false"
         :is-secondary="false"
         :is-page-header="false"

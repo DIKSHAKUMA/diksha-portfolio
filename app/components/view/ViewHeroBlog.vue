@@ -22,6 +22,7 @@
       :delay="0"
       :class-name="'blog-intro'"
       :is-hero="true"
+      heading-level="h1"
       :is-full-width="false"
       :is-secondary="false"
       :author="''"

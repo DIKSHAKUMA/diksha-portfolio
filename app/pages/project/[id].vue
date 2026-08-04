@@ -282,6 +282,7 @@
           :is-hero="false"
           :is-secondary="false"
           :is-page-header="true"
+          heading-level="h1"
           :author="''"
           :date="''"
           :is-two-lines="true"

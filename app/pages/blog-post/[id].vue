@@ -216,6 +216,7 @@
               :is-secondary="false"
               :is-two-lines="false"
               :is-page-header="true"
+              heading-level="h1"
             />
 
             <div class="blog__post-cover">
@@ -234,7 +235,12 @@
             </div>
             <div class="blog__post-content">
               <ClientOnly>
-                <div v-if="!mdcContentReady" class="mdc-loading">
+                <div
+                  v-if="!mdcContentReady"
+                  class="mdc-loading"
+                  role="status"
+                  aria-live="polite"
+                >
                   <div class="mdc-spinner">
                     <div class="mdc-spinner__circle"></div>
                   </div>

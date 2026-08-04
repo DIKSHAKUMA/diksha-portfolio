@@ -169,7 +169,7 @@
             <NuxtImg
               :src="prevImg"
               provider="hygraph"
-              alt="Project image"
+              :alt="prevName"
               format="png"
               sizes="sm:100vw md:40vw lg:35vw xl:80vw"
               densities="x1 x2"
@@ -190,7 +190,7 @@
             <NuxtImg
               :src="nextImg"
               provider="hygraph"
-              alt="Project image"
+              :alt="nextName"
               format="png"
               sizes="sm:100vw md:40vw lg:35vw xl:80vw"
               densities="x1 x2"

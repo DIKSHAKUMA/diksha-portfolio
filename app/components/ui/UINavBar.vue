@@ -270,12 +270,18 @@
         </template>
       </UINavHeader>
 
-      <div class="nav" :class="[isMobileActive ? 'nav--open' : 'nav--closed']">
+      <nav
+        id="main-nav"
+        class="nav"
+        :class="[isMobileActive ? 'nav--open' : 'nav--closed']"
+        aria-label="Main navigation"
+      >
         <div class="nav__list">
           <NuxtLink
             to="/projects"
             data-name="menu"
             class="nav__item action magnet"
+            :aria-current="isProjectsActive ? 'page' : undefined"
             :class="{
               'nav--link-active': isProjectsActive,
               'nav__item--disabled': isAnimating,
@@ -289,6 +295,7 @@
             to="/blog"
             data-name="menu"
             class="nav__item action magnet"
+            :aria-current="isBlogActive ? 'page' : undefined"
             :class="{
               'nav--link-active': isBlogActive,
               'nav__item--disabled': isAnimating,
@@ -302,6 +309,7 @@
             to="/about"
             data-name="menu"
             class="nav__item action magnet"
+            :aria-current="route.path === '/about' ? 'page' : undefined"
             :class="[
               { 'nav--link-active': route.path === '/about' },
               { 'nav__item--disabled': isAnimating },
@@ -315,6 +323,7 @@
             to="/contact"
             data-name="menu"
             class="nav__item action magnet"
+            :aria-current="route.path === '/contact' ? 'page' : undefined"
             :class="[
               { 'nav--link-active': route.path === '/contact' },
               { 'nav__item--disabled': isAnimating },
@@ -373,26 +382,33 @@
             >
           </template>
         </UINavFooter>
-      </div>
+      </nav>
 
       <div
         class="burger action"
         data-name="menu"
+        role="button"
+        tabindex="0"
+        :aria-label="isMobileActive ? 'Close menu' : 'Open menu'"
+        :aria-expanded="isMobileActive"
+        aria-controls="main-nav"
         @click="toggleMenu"
+        @keydown.enter="toggleMenu"
+        @keydown.space.prevent="toggleMenu"
         :class="{
           'burger--anim': isMobileActive,
           'burger--disabled': isAnimating,
         }"
       >
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
       </div>
     </div>
   </div>
@@ -555,18 +571,10 @@ just use a simple modal and be done with it. */
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    outline: none;
 
-    &:focus,
     &:active {
-      outline: none;
       -webkit-tap-highlight-color: transparent !important;
       filter: blur(0px);
-    }
-
-    /* Force blur on touch end for mobile */
-    &:focus-visible {
-      outline: none;
     }
 
     .nav-wrapper--mobile-open & {
@@ -657,9 +665,7 @@ just use a simple modal and be done with it. */
         user-select: none;
 
         &:active,
-        &:focus,
         &:hover {
-          outline: none;
           filter: none !important;
           color: inherit !important;
           -webkit-tap-highlight-color: transparent;
@@ -750,7 +756,6 @@ just use a simple modal and be done with it. */
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        outline: none !important;
 
         /* Lighter font weight in dark mode */
         .dark-mode & {
@@ -759,10 +764,6 @@ just use a simple modal and be done with it. */
 
         &:hover {
           color: $accent2;
-        }
-
-        &:focus-visible {
-          outline: none !important;
         }
 
         &:last-child {

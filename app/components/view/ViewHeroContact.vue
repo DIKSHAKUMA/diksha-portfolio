@@ -90,6 +90,7 @@
       :desc="''"
       :class-name="'contact-intro'"
       :is-hero="true"
+      heading-level="h1"
       :is-full-width="false"
       :is-secondary="false"
       :author="''"

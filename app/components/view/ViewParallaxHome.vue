@@ -85,6 +85,10 @@
 
   .about__label {
     color: $secondary-static;
+
+    :deep(h2) {
+      color: $secondary-static;
+    }
   }
 
   .about {

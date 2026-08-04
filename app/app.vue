@@ -275,6 +275,7 @@
       />
     </svg>
   </div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
   <UINavBar />
   <NuxtLayout>
     <NuxtPage />
@@ -306,6 +307,24 @@
     height: 100%;
     background-color: transparent;
     transition: background-color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  /* Skip-to-content link — visually hidden until focused */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    z-index: 10001;
+    padding: 8px 16px;
+    background: $primary;
+    color: $secondary;
+    font-family: $sans-text;
+    font-size: 14px;
+    text-decoration: none;
+
+    &:focus {
+      top: 0;
+    }
   }
 
   * {

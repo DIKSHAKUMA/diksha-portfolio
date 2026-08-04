@@ -81,6 +81,10 @@
       color: $secondary-static;
       position: relative;
       z-index: 100;
+
+      :deep(h2) {
+        color: $secondary-static;
+      }
     }
   }
 

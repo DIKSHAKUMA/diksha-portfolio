@@ -8,8 +8,18 @@
 
 <template>
   <div>
-    <label class="ios-switch action" data-name="menu">
-      <input type="checkbox" name="checkbox" v-model="model" ref="myInput" />
+    <label
+      class="ios-switch action"
+      data-name="menu"
+      :aria-label="model ? 'Switch to dark mode' : 'Switch to light mode'"
+    >
+      <input
+        type="checkbox"
+        name="checkbox"
+        v-model="model"
+        ref="myInput"
+        aria-hidden="true"
+      />
       <i :class="{ 'mobile-mode': props.isMobile }">
         <Icon
           class="icon"
