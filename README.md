@@ -15,6 +15,11 @@ Glad for the positive reception, with Site of The Day Awards at CSSWinner and De
 
 Have a coffee and a slow visit. :penguin: .T
 
+## Upgrades 08/04/2026
+
+- **WCAG accessibility pass**
+  Added semantic landmarks (`<nav>`, headings, skip-to-content), restored keyboard focus indicators, made burger and color toggle keyboard-accessible, added `aria-current` on active links, descriptive image alt text, and `aria-live` on loading spinners. Light/dark parallax heading contrast fixed.
+
 ## Upgrades 08/02/2025
 
 Removed P5.js and focusing all motion on WebGL with Three.js and Pixi.js. New shiny 3D motion element, DNA and Galaxy.
