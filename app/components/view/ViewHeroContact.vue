@@ -139,6 +139,11 @@
     position: absolute;
     bottom: 0px;
     color: $secondary-static;
+
+    :deep(h1) {
+      color: $secondary-static;
+    }
+
     &--ios-safari {
       bottom: 80px;
     }
