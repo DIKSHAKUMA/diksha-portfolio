@@ -3,7 +3,7 @@
     isMobile: boolean
   }>()
 
-  const model = defineModel({ default: true })
+  const model = defineModel({ default: false })
 </script>
 
 <template>
