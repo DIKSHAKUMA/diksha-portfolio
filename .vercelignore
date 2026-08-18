@@ -1,0 +1,14 @@
+# Local diagnostics and generated scratch files
+check-page.mjs
+probe-entry.mjs
+probe-hydration.mjs
+shot.png
+dev-log.txt
+install-log.txt
+repair-node-modules.ps1
+tmp-shiki/
+
+# Local development/build output
+.nuxt/
+.output/
+node_modules/

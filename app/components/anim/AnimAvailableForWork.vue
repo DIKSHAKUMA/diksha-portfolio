@@ -5,7 +5,7 @@
       isMobile ? 'work-badge--hidden' : 'work-badge--desktop',
     ]"
   >
-    <a href="mailto:thomas.thorstensson@gmail.com" class="work-badge__link">
+    <a href="mailto:sdiksha.work@gmail.com" class="work-badge__link">
       <svg
         class="work-badge__svg"
         viewBox="0 0 250 250"

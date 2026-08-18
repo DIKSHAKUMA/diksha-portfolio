@@ -264,7 +264,7 @@
               data-text="Home"
               class="logo action"
               @click="closeMenu"
-              >Thomas
+              >Diksha
             </NuxtLink>
           </ClientOnly>
         </template>
@@ -353,32 +353,32 @@
         <UINavFooter class="footer-wrapper">
           <template #social>
             <a
-              href="https://www.flickr.com/photos/thomasthorstensson"
+              href="https://github.com/DIKSHAKUMA"
               target="_blank"
               data-name="menu"
-              data-text="Flickr"
+              data-text="GitHub"
               class="social-icon action"
-              aria-label="Flickr"
+              aria-label="GitHub"
             >
-              <Icon name="fa6-brands:flickr" />
+              <Icon name="fa6-brands:github" />
             </a>
             <a
-              href="https://bsky.app/profile/thorstensson.bsky.social"
+              href="https://www.linkedin.com/in/dikshavibe"
               target="_blank"
               data-name="menu"
-              data-text="Bluesky"
+              data-text="LinkedIn"
               class="social-icon action"
-              aria-label="Bluesky"
+              aria-label="LinkedIn"
             >
-              <Icon name="fa6-brands:bluesky" />
+              <Icon name="fa6-brands:linkedin" />
             </a>
           </template>
           <template #contact>
             <a
               data-name="menu"
               class="contact action magnet"
-              href="mailto:someone@example.com"
-              >hello@thomasthorstensson.com</a
+              href="mailto:sdiksha.work@gmail.com"
+              >sdiksha.work@gmail.com</a
             >
           </template>
         </UINavFooter>

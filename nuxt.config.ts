@@ -1,6 +1,6 @@
 /* https://nuxt.com/docs/api/configuration/nuxt-config */
 import { defineNuxtConfig } from 'nuxt/config'
-const fontBase = process.env.NUXT_EVERETT_FONT_URL
+
 export default defineNuxtConfig({
   compatibilityDate: '2026-01-11', // Update to today's date
 
@@ -20,19 +20,16 @@ export default defineNuxtConfig({
   },
 
   site: {
-    url: 'https://thomasthorstensson.com',
-    name: 'Thomas Thorstensson • Portfolio',
+    url: 'https://dikshakumari.dev',
+    name: 'Diksha Kumari • Full-Stack Developer',
     description:
-      'Interactive developer crafting bespoke websites focused on motion, design, and UX',
+      'Full-stack developer building AI-powered products with React, Next.js, Node and Python.',
     defaultLocale: 'en',
   },
 
-  gtag: {
-    id: 'G-257GERX7EP',
-  },
-
+  /* Fully static: prerender every route at build time. No server, no CMS. */
   routeRules: {
-    '/blog-post/**': { isr: 3600 },
+    '/**': { prerender: true },
   },
 
   /* Enhanced SEO Configuration */
@@ -47,33 +44,15 @@ export default defineNuxtConfig({
       const staticPages = [
         {
           loc: '/',
-          lastmod: '2026-06-10',
+          lastmod: new Date().toISOString().slice(0, 10),
           changefreq: 'monthly',
           priority: 1.0,
         },
         {
-          loc: '/about',
-          lastmod: '2026-00-05',
-          changefreq: 'monthly',
-          priority: 0.8,
-        },
-        {
           loc: '/projects',
-          lastmod: '2026-00-05',
+          lastmod: new Date().toISOString().slice(0, 10),
           changefreq: 'monthly',
           priority: 0.9,
-        },
-        {
-          loc: '/blog',
-          lastmod: '2026-00-05',
-          changefreq: 'weekly',
-          priority: 0.8,
-        },
-        {
-          loc: '/contact',
-          lastmod: '2026-00-05',
-          changefreq: 'monthly',
-          priority: 0.7,
         },
       ] as any
 
@@ -100,9 +79,14 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxtjs/mdc',
     '@stefanobartoletti/nuxt-social-share',
-    'nuxt-gtag', // Analytics
   ],
 
+  /**
+   * Fonts.
+   * The original used licensed fonts (Switzer, TWK Everett) self-hosted on the
+   * author's private Cloudflare R2 via an env var. Those URLs are not available
+   * here, so we use freely available equivalents from Google/Fontsource.
+   */
   fonts: {
     defaults: {
       styles: ['normal'],
@@ -115,24 +99,14 @@ export default defineNuxtConfig({
         weights: ['400 600'],
       },
       {
-        name: 'Switzer',
-        provider: 'none',
-        src: `${fontBase}Switzer-Variable.woff2`,
-        weights: ['400 600'],
+        name: 'Inter',
+        provider: 'google',
+        weights: ['400', '500', '600'],
       },
       {
-        name: 'TWK Everett',
-        provider: 'none',
-        src: `${fontBase}TWKEverett-Regular.woff2`,
-        weight: 400,
-        style: 'normal',
-      },
-      {
-        name: 'TWK Everett',
-        provider: 'none',
-        src: `${fontBase}TWKEverett-Medium.woff2`,
-        weight: 400,
-        style: 'normal',
+        name: 'Space Grotesk',
+        provider: 'google',
+        weights: ['400', '500', '700'],
       },
     ],
   },
@@ -170,13 +144,32 @@ export default defineNuxtConfig({
   },
 
   socialShare: {
-    baseUrl: 'https://thomasthorstensson.com' /* required! */,
-    /* other optional module options */
+    baseUrl: 'https://dikshakumari.dev' /* required! */,
   },
 
   vite: {
+    /**
+     * Pre-bundle every heavy dep up front.
+     *
+     * Without this, Vite discovers three/addons, pixi and mux-player *during*
+     * the first page load, re-bundles, and reloads the page. Because the
+     * black `.venice` blinds only animate away once the client bundle has
+     * executed, each of those reloads shows as a black screen — first paint
+     * was measuring ~190s. Listing them here front-loads the work into
+     * server start instead.
+     */
     optimizeDeps: {
-      include: ['@mux/mux-player', 'lenis', 'pixi.js', 'split-type', 'three'],
+      include: [
+        '@mux/mux-player',
+        'lenis',
+        'pixi.js',
+        'split-type',
+        'three',
+        'three/addons/postprocessing/AfterimagePass.js',
+        'three/addons/postprocessing/EffectComposer.js',
+        'three/addons/postprocessing/OutputPass.js',
+        'three/addons/postprocessing/RenderPass.js',
+      ],
     },
     build: {
       cssCodeSplit: true,
@@ -207,33 +200,57 @@ export default defineNuxtConfig({
     defaultImport: 'component',
   },
 
-  /* The secret stays on the server with server/api proxy */
+  /* No CMS and no API keys — content is local. Kept for optional weather widget. */
   runtimeConfig: {
     openWeatherApiKey:
-      '' /* Will be populated from NUXT_OPEN_WEATHER_API_KEY env var */,
-    gqlHost: '' /* Will be populated from NUXT_GQL_HOST env var */,
+      '' /* Optional: NUXT_OPEN_WEATHER_API_KEY. Widget degrades gracefully if unset. */,
     public: {},
   },
 
-  /* Hygraph base URL for assets */
+  /**
+   * Images are local files in /public now, not on a CMS.
+   *
+   * The components still say provider="hygraph" (left untouched so the markup
+   * matches the original exactly), so we keep that provider *name* registered
+   * and point it at `none`, which serves the file straight from /public.
+   *
+   * Why not ipx? ipx resizes through `sharp`, a native module. sharp 0.32
+   * (pulled in transitively) has no prebuilt binary for Node 22 on Windows and
+   * there are no C++ build tools here, so every /_ipx/... request returned 500
+   * and the static prerender aborted. The images are local and already sized,
+   * so there is nothing to gain from resizing them at build time.
+   *
+   * If you later add large screenshots and want automatic resizing/webp,
+   * upgrade sharp to ^0.34 (it ships prebuilt binaries, no compile step) and
+   * change `provider` back to 'ipx'.
+   */
   image: {
-    provider: 'ipx', // Keep this to protect local/asset images
+    provider: 'none',
     providers: {
       hygraph: {
-        provider: 'hygraph',
-        options: {
-          baseURL:
-            'https://eu-west-2.graphassets.com/cm4tev3k1008n01uo6egngvzu',
-        },
+        provider: 'none',
       },
     },
   },
 
-  /* Hygraph fix rate limit when testing*/
+  /* Static site generation: `pnpm generate` outputs .output/public */
   nitro: {
-    preset: 'netlify',
+    preset: 'static',
     experimental: {
       wasm: false,
+    },
+    prerender: {
+      /*
+       * Project cards navigate with navigateTo() on click rather than an <a>,
+       * so the crawler cannot discover the detail pages. List them explicitly.
+       * Keep in sync with the slugs in app/data/content.ts.
+       */
+      routes: [
+        '/project/scytle',
+        '/project/thanku',
+        '/project/sniket',
+        '/project/brainstorm-ai',
+      ],
     },
   },
 
@@ -252,7 +269,7 @@ export default defineNuxtConfig({
 
   robots: {
     blockNonSeoBots: true,
-    sitemap: 'https://thomasthorstensson.com/sitemap.xml',
+    sitemap: 'https://dikshakumari.dev/sitemap.xml',
     groups: [
       {
         userAgent: '*',

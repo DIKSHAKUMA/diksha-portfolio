@@ -12,33 +12,33 @@
     description:
       'Creative developer and designer crafting digital experiences with modern web technologies. Specializing in Vue.js, Nuxt.js, and interactive code.',
     keywords:
-      'Thomas Thorstensson, creative developer, web designer, Vue.js, Nuxt.js, Svelte, APIs, frontend developer, portfolio, interactive design',
-    author: 'Thomas Thorstensson',
+      'Diksha Kumari, creative developer, web designer, Vue.js, Nuxt.js, Svelte, APIs, frontend developer, portfolio, interactive design',
+    author: 'Diksha Kumari',
     robots: 'index, follow',
     viewport: 'width=device-width, initial-scale=1.0, viewport-fit=cover',
 
     /* Open Graph */
-    ogTitle: 'Thomas Thorstensson • Creative Dev.',
+    ogTitle: 'Diksha Kumari • Creative Dev.',
     ogDescription:
       'Creative developer and designer crafting digital experiences with modern web technologies.',
     ogImage: '/og-image.jpg',
-    ogImageAlt: 'Thomas Thorstensson Portfolio',
+    ogImageAlt: 'Diksha Kumari Portfolio',
     ogType: 'website',
-    ogUrl: 'https://thomasthorstensson.com',
-    ogSiteName: 'Thomas Thorstensson • Creative Dev.',
+    ogUrl: 'https://dikshakumari.dev',
+    ogSiteName: 'Diksha Kumari • Creative Dev.',
   })
 
   /* Structured Data*/
   useSchemaOrg([
     {
       '@type': 'Person',
-      name: 'Thomas Thorstensson',
+      name: 'Diksha Kumari',
       jobTitle: 'Creative Developer & Designer',
-      url: 'https://thomasthorstensson.com',
+      url: 'https://dikshakumari.dev',
       sameAs: [
-        'https://https://github.com/thorstensson',
-        'https://linkedin.com/in/thomasthorstensson',
-        'https://bsky.app/profile/thorstensson.bsky.social',
+        'https://github.com/DIKSHAKUMA',
+        'https://www.linkedin.com/in/dikshavibe',
+        'https://www.linkedin.com/in/dikshavibe',
       ],
       knowsAbout: [
         'Web Development',
@@ -52,13 +52,13 @@
     },
     {
       '@type': 'WebSite',
-      name: 'Thomas Thorstensson Portfolio',
-      url: 'https://thomasthorstensson.com',
+      name: 'Diksha Kumari Portfolio',
+      url: 'https://dikshakumari.dev',
       description:
         'Creative developer. I express content through motion and interactivity.',
       author: {
         '@type': 'Person',
-        name: 'Thomas Thorstensson',
+        name: 'Diksha Kumari',
       },
     },
   ])

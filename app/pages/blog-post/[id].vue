@@ -57,10 +57,10 @@
   useSeoMeta({
     // Use a getter function for reactive properties
     title: () =>
-      post.value ? `${post.value.title} • Thomas Thorstensson` : 'Loading...',
+      post.value ? `${post.value.title} • Diksha Kumari` : 'Loading...',
 
     description: () =>
-      post.value?.subject || 'Read this blog post by Thomas Thorstensson',
+      post.value?.subject || 'Read this blog post by Diksha Kumari',
 
     ogTitle: () => post.value?.title,
     ogDescription: () => post.value?.subject,
@@ -83,7 +83,7 @@
       {
         rel: 'canonical',
         href: () =>
-          `https://thomasthorstensson.com/blog-post/${post.value?.slug}`,
+          `https://dikshakumari.dev/blog-post/${post.value?.slug}`,
       },
     ],
   })
@@ -103,12 +103,12 @@
         datePublished: post.value.date,
         dateModified: post.value.updatedAt || post.value.date,
         author: {
-          name: post.value.authors?.[0]?.name || 'Thomas Thorstensson',
-          url: 'https://thomasthorstensson.com/about',
+          name: post.value.authors?.[0]?.name || 'Diksha Kumari',
+          url: 'https://dikshakumari.dev/about',
         },
         publisher: {
-          name: 'Thomas Thorstensson',
-          url: 'https://thomasthorstensson.com',
+          name: 'Diksha Kumari',
+          url: 'https://dikshakumari.dev',
         },
       })
     },

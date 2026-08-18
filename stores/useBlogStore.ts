@@ -1,56 +1,30 @@
 import { defineStore } from 'pinia'
+import { blogPosts } from '~/data/blog'
 
+/**
+ * Blog store.
+ *
+ * Originally backed by Hygraph over GraphQL. Now reads from a local file
+ * (`app/data/blog.ts`). The shape matches the original `posts` query, so the
+ * blog components and pages are unchanged.
+ */
 export const useBlogStore = defineStore('blog', {
-  // 1. Move state inside the function (SSR Safe)
   state: () => ({
     data: null as any,
     error: null as Error | string | null,
   }),
 
-  persist: true,
+  persist: false,
 
   actions: {
-    // 2. Regular function (ensures 'this' works)
     async fetchData() {
       try {
-        const response = (await $fetch('/api/graphql', {
-          method: 'POST',
-          body: {
-            query: `
-                            query blog {
-                                posts {
-                                    content
-                                    slug
-                                    title
-                                    subject
-                                    date
-                                    length
-                                    tags
-                                    authors {
-                                        name
-                                    }
-                                    coverImage {
-                                        id
-                                        handle
-                                        fileName
-                                    }
-                                }
-                            }
-                        `,
-          },
-        })) as any
-
-        // 3. Assign directly to 'this'
-        this.data = response.data
-        this.error = response.errors || null
-
-        if (response.errors) {
-          console.log('store error:', response.errors)
-        }
+        // Original GraphQL response shape was { posts: [...] }
+        this.data = { posts: blogPosts }
+        this.error = null
       } catch (error: unknown) {
-        // 4. Type-safe error handling for 2025
         this.error = error instanceof Error ? error.message : String(error)
-        console.log('fetch error:', error)
+        console.error('content load error:', error)
       }
     },
   },

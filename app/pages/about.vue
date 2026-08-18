@@ -9,15 +9,15 @@
 
   /* SEO Meta Tags */
   useSeoMeta({
-    title: 'About Thomas Thorstensson • Full-Stack Developer',
+    title: 'About Diksha Kumari • Full-Stack Developer',
     description:
-      'Learn about Thomas Thorstensson, a full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
-    ogTitle: 'About Thomas Thorstensson',
+      'Learn about Diksha Kumari, a full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
+    ogTitle: 'About Diksha Kumari',
     ogDescription:
       'Full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
     ogType: 'profile',
     twitterCard: 'summary_large_image',
-    twitterTitle: 'About Thomas Thorstensson',
+    twitterTitle: 'About Diksha Kumari',
     twitterDescription:
       'Full-stack developer specializing in modern web technologies, creative coding, and innovative digital experiences.',
   })
@@ -27,7 +27,7 @@
     link: [
       {
         rel: 'canonical',
-        href: 'https://thomasthorstensson.com/about',
+        href: 'https://dikshakumari.dev/about',
       },
     ],
   })
@@ -48,7 +48,7 @@
       <ViewKnowledgeSub />
       <ViewFooterSub
         label="Photography"
-        link="https://thomasthorstensson.photography"
+        link="https://github.com/DIKSHAKUMA"
         target="_blank"
         link-label="Explore!"
       />

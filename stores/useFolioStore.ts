@@ -1,12 +1,23 @@
 import { defineStore } from 'pinia'
+import { folioContent } from '~/data/content'
 
+/**
+ * Folio store.
+ *
+ * The original pulled content from Hygraph over GraphQL. This version reads
+ * from a local file (`app/data/content.ts`) instead — no CMS, no API key, no
+ * network request. The returned shape is identical to the old GraphQL
+ * response, so every component that consumes it is untouched.
+ */
 export const useFolioStore = defineStore('folio', {
   state: () => ({
     data: null as any,
-    error: null as Error | string | null, // Explicitly allows errors or null
+    error: null as Error | string | null,
   }),
 
-  persist: true,
+  // Content is local, so there is nothing worth persisting — and persisting it
+  // would leave stale copies in localStorage after a content edit.
+  persist: false,
 
   actions: {
     clearCache() {
@@ -14,127 +25,14 @@ export const useFolioStore = defineStore('folio', {
       this.error = null
     },
 
+    // Kept async so existing `await fetchData()` call sites are unaffected.
     async fetchData() {
       try {
-        const response = (await $fetch('/api/graphql', {
-          method: 'POST',
-          body: {
-            query: `
-                query folio {
-                    about(where: { slug: "thomas-thorstensson" }) {
-                        name
-                        bioTitle
-                        bio
-                        aboutHeroTitle
-                        aboutHeroDesc
-                        aboutTitle
-                        aboutDesc
-                        jobTitle
-                        job
-                        timelineItem
-                        codeTitle
-                        codeOneTitle
-                        codeOneDesc
-                        codeTwoTitle
-                        codeTwoDesc
-                        codeThreeTitle
-                        codeThreeDesc
-                        picture { id }
-                    }
-                    intro(where: { slug: "intros" }) {
-                        heroIntroTitle
-                        heroIntroDesc
-                        aboutIntroTitle
-                        aboutIntroDesc
-                        projIntroTitle
-                        projIntroDesc
-                        knowIntroTitle
-                        knowIntroDesc
-                        knowOneTitle
-                        knowOneDesc
-                        knowTwoTitle
-                        knowTwoDesc
-                        knowThreeTitle
-                        knowThreeDesc
-                        metaIntroTitle
-                        metaIntroDesc
-                        metaTechTitle
-                        metaTechDesc
-                        metaCreativeTitle
-                        metaCreativeDesc
-                        metaIdeTitle
-                        metaIdeDesc
-                        metaPublishTitle
-                        metaPublishDesc
-                        metaRepoTitle
-                        metaRepoUrl
-                        blogTitle
-                        blogDesc
-                        blogExcerptsTitle
-                        blogExcerptsDesc
-                        blogExcerptsQuote
-                    }
-                    projects {
-                        name
-                        client
-                        endclient
-                        date
-                        duration
-                        type
-                        demo
-                        description
-                        id
-                        sourceCode
-                        slug
-                        tags
-                        synop
-                        testimonialName
-                        testimonialAgency
-                        testimonialText
-                        labUrl
-                        video
-                        image { id handle fileName }
-                        coverImage { id handle fileName }
-                        clientHistory
-                        selectedproj
-                        projlab
-                    }
-                    contact(where: { slug: "contact" }) {
-                        id
-                        viewHeroTitle
-                        viewHeroCta
-                        emailTitle
-                        email
-                        address
-                        addressTitle
-                    }
-                    awards {
-                      awardTitle
-                      awardDesc
-                      awardLinks
-                       awardSvg {
-                        id
-                        handle
-                        fileName
-                        url
-                      }
-                    }
-                }
-            `,
-          },
-        })) as any
-
-        // IMPORTANT FIXES BELOW:
-        this.data = response.data
-        this.error = response.errors || null
-
-        if (response.errors) {
-          console.log('store error:', response.errors)
-        }
+        this.data = folioContent
+        this.error = null
       } catch (error: unknown) {
-        // IMPORTANT FIX BELOW:
         this.error = error instanceof Error ? error.message : String(error)
-        console.log('fetch error:', error)
+        console.error('content load error:', error)
       }
     },
   },

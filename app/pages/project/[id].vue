@@ -58,10 +58,10 @@
   /* SEO Meta Tags */
   useSeoMeta({
     title: () =>
-      proj.value ? `${proj.value.name} • Thomas Thorstensson` : 'Project',
+      proj.value ? `${proj.value.name} • Diksha Kumari` : 'Project',
     description: () =>
       proj.value?.description ||
-      `${proj.value?.name} - A project by Thomas Thorstensson`,
+      `${proj.value?.name} - A project by Diksha Kumari`,
     ogTitle: () => proj.value?.name,
     ogDescription: () => proj.value?.description,
     ogImage: () => proj.value?.coverImage?.handle,
@@ -79,7 +79,7 @@
       {
         rel: 'canonical',
         href: () =>
-          `https://thomasthorstensson.com/project/${proj.value?.slug}`,
+          `https://dikshakumari.dev/project/${proj.value?.slug}`,
       },
     ],
   })
@@ -92,8 +92,8 @@
       image: () => proj.value?.coverImage?.handle,
       datePublished: () => proj.value?.date,
       author: {
-        name: 'Thomas Thorstensson',
-        url: 'https://thomasthorstensson.com/about',
+        name: 'Diksha Kumari',
+        url: 'https://dikshakumari.dev/about',
       },
       keywords: () => proj.value?.tags?.join(', '),
       about: () => proj.value?.type,

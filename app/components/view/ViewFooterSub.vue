@@ -31,11 +31,11 @@
       </div>
     </footer>
     <CommonInfoLabel
-      label="2026 by Thomas"
+      label="2026 by Diksha"
       :class-name="'photo-label'"
       :hpos="'flex-end'"
       :vpos="'flex-end'"
-      :link="'https://github.com/thorstensson'"
+      :link="'https://github.com/DIKSHAKUMA'"
       :force-white="false"
       :hover-label="'Moi'"
     />

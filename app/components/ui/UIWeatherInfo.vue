@@ -7,13 +7,13 @@
   /* Trying to adhere to ref use for timers as best practice */
   const timer = ref<NodeJS.Timeout | null>(null)
 
-  /* Local Madrid time with CET/CEST timezone */
+  /* Local India time (IST) */
   const localTime = ref('')
 
   /* Updates every six seconds */
   const updateLocalTime = () => {
     const options = {
-      timeZone: 'Europe/Madrid',
+      timeZone: 'Asia/Kolkata',
       hour: '2-digit' as const,
       minute: '2-digit' as const,
       hour12: false,
@@ -67,11 +67,19 @@
           fill="currentColor"
         />
       </svg>
-      <span class="weather-info__location-info__text">Barcelona</span>
+      <span class="weather-info__location-info__text">Ballari</span>
     </div>
-    <div class="weather-info__item">CET: {{ localTime }}</div>
-    <div class="weather-info__item">T: {{ weatherData.temperature }}°C</div>
-    <div class="weather-info__item">
+    <div class="weather-info__item">IST: {{ localTime }}</div>
+    <div
+      v-if="weatherData.temperature !== null"
+      class="weather-info__item"
+    >
+      T: {{ weatherData.temperature }}°C
+    </div>
+    <div
+      v-if="(weatherData as any).humidity !== null"
+      class="weather-info__item"
+    >
       RH: {{ (weatherData as any).humidity }}%
     </div>
   </div>
