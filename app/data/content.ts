@@ -84,17 +84,18 @@ export const folioContent = {
   },
 
   intro: {
-    heroIntroTitle: 'Diksha Kumari',
+    heroIntroTitle: 'Software engineer building dependable products.',
     heroIntroDesc:
-      'Full-stack developer. React, Next.js, Node, Python — and AI that actually works in production.',
+      'I turn complex product problems into reliable software, from AI powered interfaces and real time collaboration to cross platform desktop systems. My work spans React, TypeScript, Node.js and Python.',
     aboutIntroTitle: 'About',
     aboutIntroDesc:
-      'A 2026 CS (AI/ML) graduate who builds and ships. Three roles, four shipped products, one live AI editor.',
+      'Hi, I’m Diksha, a software engineer and 2026 BE CSE graduate. I enjoy learning through building and working on products that solve real problems. My current focus is AI product engineering, with a growing interest in reliable systems and thoughtful user experiences. I am looking for a team where I can contribute, learn quickly and take ownership.',
     projIntroTitle: 'Selected work',
     projIntroDesc:
       'Four projects that are real products, not tutorials. Every one has source code you can read.',
-    knowIntroTitle: 'What I bring',
-    knowIntroDesc: 'Full-stack engineering with a genuine specialism in applied AI.',
+    knowIntroTitle: 'What I build',
+    knowIntroDesc:
+      'Software engineering focused on dependable systems, useful interfaces and applied AI.',
     knowOneTitle: 'Frontend',
     knowOneDesc:
       'React, Next.js, TypeScript, Tailwind CSS, Zustand. Responsive, mobile-first interfaces with careful loading, error and empty states.',

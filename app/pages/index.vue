@@ -10,22 +10,22 @@
   /* SEO Meta Tags for Home Page */
   useSeoMeta({
     description:
-      'Creative developer and designer crafting digital experiences with modern web technologies. Specializing in Vue.js, Nuxt.js, and interactive code.',
+      'Diksha Kumari is a software engineer building dependable AI products, real time systems and cross platform applications with React, TypeScript, Node.js and Python.',
     keywords:
-      'Diksha Kumari, creative developer, web designer, Vue.js, Nuxt.js, Svelte, APIs, frontend developer, portfolio, interactive design',
+      'Diksha Kumari, software engineer, AI engineer, React, TypeScript, Node.js, Python, real time systems, desktop applications, portfolio',
     author: 'Diksha Kumari',
     robots: 'index, follow',
     viewport: 'width=device-width, initial-scale=1.0, viewport-fit=cover',
 
     /* Open Graph */
-    ogTitle: 'Diksha Kumari • Creative Dev.',
+    ogTitle: 'Diksha Kumari | Software Engineer',
     ogDescription:
-      'Creative developer and designer crafting digital experiences with modern web technologies.',
+      'Software engineer building dependable AI products, real time systems and cross platform applications.',
     ogImage: '/og-image.jpg',
     ogImageAlt: 'Diksha Kumari Portfolio',
     ogType: 'website',
     ogUrl: 'https://dikshakumari.dev',
-    ogSiteName: 'Diksha Kumari • Creative Dev.',
+    ogSiteName: 'Diksha Kumari | Software Engineer',
   })
 
   /* Structured Data*/
@@ -33,21 +33,21 @@
     {
       '@type': 'Person',
       name: 'Diksha Kumari',
-      jobTitle: 'Creative Developer & Designer',
+      jobTitle: 'Software Engineer',
       url: 'https://dikshakumari.dev',
       sameAs: [
         'https://github.com/DIKSHAKUMA',
         'https://www.linkedin.com/in/dikshavibe',
-        'https://www.linkedin.com/in/dikshavibe',
       ],
       knowsAbout: [
-        'Web Development',
-        'Vue.js',
-        'Nuxt.js',
-        'Creative Coding',
-        'UI/UX Design',
-        'APIs',
-        'Svelte',
+        'Software Engineering',
+        'Artificial Intelligence',
+        'React',
+        'TypeScript',
+        'Node.js',
+        'Python',
+        'Real Time Systems',
+        'Desktop Applications',
       ],
     },
     {
@@ -55,7 +55,7 @@
       name: 'Diksha Kumari Portfolio',
       url: 'https://dikshakumari.dev',
       description:
-        'Creative developer. I express content through motion and interactivity.',
+        'Software engineer building dependable AI products and practical digital systems.'
       author: {
         '@type': 'Person',
         name: 'Diksha Kumari',
