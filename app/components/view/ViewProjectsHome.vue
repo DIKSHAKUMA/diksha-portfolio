@@ -230,7 +230,16 @@
         :is-two-lines="false"
       />
       <section class="projects__abstract">
-        <div v-for="proj in dateSorted" :key="proj.slug">
+        <div
+          v-for="(proj, index) in dateSorted"
+          :key="proj.slug"
+          class="projects__abstract__row"
+          :class="
+            index % 2 === 0
+              ? 'projects__abstract__row--right'
+              : 'projects__abstract__row--left'
+          "
+        >
           <div class="projects__abstract__item">
             <div
               class="projects__abstract__image action"
@@ -429,17 +438,41 @@
         top: -4px;
       }
 
+      &__row {
+        width: 100%;
+
+        @include this-and-above('sm') {
+          width: 46vw;
+
+          &--right {
+            align-self: flex-end;
+          }
+
+          &--left {
+            align-self: flex-start;
+          }
+        }
+
+        @include this-and-above('md') {
+          width: 50vw;
+        }
+
+        @include this-and-above('lg') {
+          width: 42vw;
+        }
+
+        @include this-and-above('xl') {
+          width: 38vw;
+        }
+
+        @include this-and-above('xxl') {
+          width: 34vw;
+        }
+      }
+
       @include this-and-above('sm') {
-        /* now we give luft to rows */
+        /* Give the staggered rows more breathing room. */
         row-gap: $px-128-spacer;
-
-        :nth-child(odd) {
-          align-self: flex-end;
-        }
-
-        :nth-child(even) {
-          align-self: flex-start;
-        }
       }
 
       @include this-and-above('xl') {

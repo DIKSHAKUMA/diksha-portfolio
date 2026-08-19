@@ -30,14 +30,6 @@
    * 6. Define/Expose
    */
 
-  /*
-    Check if current route is in blog section
-    The below computed properties helps to add active class to subroutes
-   */
-  const isBlogActive = computed(() => {
-    return route.path === '/blog' || route.path.startsWith('/blog-post/')
-  })
-
   /* Same here, preserve active class highlight if on subroute  */
   const isProjectsActive = computed(() => {
     return route.path === '/projects' || route.path.startsWith('/project/')
@@ -289,34 +281,6 @@
             @click="!isAnimating && closeMenu()"
           >
             Projects
-          </NuxtLink>
-
-          <NuxtLink
-            to="/blog"
-            data-name="menu"
-            class="nav__item action magnet"
-            :aria-current="isBlogActive ? 'page' : undefined"
-            :class="{
-              'nav--link-active': isBlogActive,
-              'nav__item--disabled': isAnimating,
-            }"
-            @click="!isAnimating && closeMenu()"
-          >
-            Blog
-          </NuxtLink>
-
-          <NuxtLink
-            to="/about"
-            data-name="menu"
-            class="nav__item action magnet"
-            :aria-current="route.path === '/about' ? 'page' : undefined"
-            :class="[
-              { 'nav--link-active': route.path === '/about' },
-              { 'nav__item--disabled': isAnimating },
-            ]"
-            @click="!isAnimating && closeMenu()"
-          >
-            About
           </NuxtLink>
 
           <NuxtLink

@@ -3,24 +3,47 @@
  *
  * The shape mirrors the original GraphQL response exactly so that every
  * component and page works unchanged:
- *   - project.image        → array (the detail page reads image[0] and
- *                            image[len-3], [len-2], [len-1], so 5+ entries)
+ *   - project.image        → ordered gallery of local public images
  *   - project.description  → array of 4 strings
  *                            [0] Challenge, [1] Perspective, [2] & [3] body
  *   - project.video        → array (empty = no Mux video, renders images)
- *   - project.coverImage   → single object (used on listing pages)
- *
- * Replace the placeholder SVGs in /public/projects with real screenshots when
- * you have them — just keep the same array length.
+ *   - project.coverImage   → first gallery image, used on listing pages and in SEO
  */
 
-/** Build the 5-image array the detail page expects from one source file. */
-const imgSet = (slug: string) =>
-  [1, 2, 3, 4, 5].map((n) => ({
-    id: `${slug}-${n}`,
-    handle: `/projects/${slug}.svg`,
-    fileName: `${slug}-${n}.svg`,
+const projectImageSets = {
+  scytle: [
+    '/scytle%20img/1.png',
+    '/scytle%20img/2.png',
+    '/scytle%20img/3.png',
+    '/scytle%20img/4.png',
+    '/scytle%20img/5.png',
+  ],
+  thanku: [
+    '/Thanku/1.png',
+    '/Thanku/2.png',
+    '/Thanku/3.png',
+    '/Thanku/4.png',
+    '/Thanku/5.png',
+  ],
+  sniket: ['/sniket.png'],
+} as const
+
+const imgSet = (slug: keyof typeof projectImageSets) =>
+  projectImageSets[slug].map((handle, index) => ({
+    id: `${slug}-${index + 1}`,
+    handle,
+    fileName: handle.split('/').pop() || `${index + 1}.png`,
   }))
+
+const coverImage = (slug: keyof typeof projectImageSets) => {
+  const handle = projectImageSets[slug][0]
+
+  return {
+    id: `${slug}-cover`,
+    handle,
+    fileName: handle.split('/').pop() || 'cover.png',
+  }
+}
 
 export const folioContent = {
   about: {
@@ -84,15 +107,15 @@ export const folioContent = {
   },
 
   intro: {
-    heroIntroTitle: 'Software engineer building dependable products.',
+    heroIntroTitle: 'Engineer, builder, detail chaser.',
     heroIntroDesc:
-      'I turn complex product problems into reliable software, from AI powered interfaces and real time collaboration to cross platform desktop systems. My work spans React, TypeScript, Node.js and Python.',
+      'I turn ambitious AI ideas into products people can trust. From the first interaction to the system underneath, I make complex tools feel clear and natural to use.',
     aboutIntroTitle: 'About',
     aboutIntroDesc:
-      'Hi, I’m Diksha, a software engineer and 2026 BE CSE graduate. I enjoy learning through building and working on products that solve real problems. My current focus is AI product engineering, with a growing interest in reliable systems and thoughtful user experiences. I am looking for a team where I can contribute, learn quickly and take ownership.',
+      'I’m Diksha, a full-stack engineer drawn to the space between a promising idea and a product someone can actually depend on. I enjoy taking fuzzy product questions and turning them into clear interfaces, reliable systems, and interactions that make sense from the first click. That instinct runs through everything I build. Scytle gives people an editable workspace instead of a disposable AI draft. ThankU turns live conversations into useful context without getting in the way. Sniket brings a practical repair experience online. I work across React, TypeScript, Node.js, Python, and AI systems, but I care just as much about the last 10%: the reliability, clarity, and craft that make software feel right. I learn by building, testing the edges, and refining what does not work yet. The goal is always the same: make technology capable, useful, and easy to return to.',
     projIntroTitle: 'Selected work',
     projIntroDesc:
-      'Four projects that are real products, not tutorials. Every one has source code you can read.',
+      'Three projects that are real products, not tutorials. Every one has source code you can read.',
     knowIntroTitle: 'What I build',
     knowIntroDesc:
       'Software engineering focused on dependable systems, useful interfaces and applied AI.',
@@ -118,17 +141,6 @@ export const folioContent = {
     metaPublishDesc: 'Vercel, Cloudflare Workers, AWS, CI/CD with GitHub Actions',
     metaRepoTitle: 'GitHub',
     metaRepoUrl: 'https://github.com/DIKSHAKUMA',
-    blogTitle: 'Writing',
-    blogDesc: 'Notes on building with AI.',
-    blogExcerptsTitle: 'Publication',
-    blogExcerptsDesc:
-      'Published research on a Bing-GPT voice assistant, covering NLP, generative AI concepts and LLM architectures.',
-    /**
-     * ViewBlogExcerpts splits this on an em dash: [0] is the quote, [1] is the
-     * attribution. Keep the ' — ' separator or the attribution renders empty.
-     */
-    blogExcerptsQuote:
-      'The hard part of AI engineering is not the model. It is everything you build around it so the model can be trusted. — Diksha Kumari',
   },
 
   projects: [
@@ -173,11 +185,7 @@ export const folioContent = {
       testimonialAgency: '',
       testimonialText: '',
       image: imgSet('scytle'),
-      coverImage: {
-        id: 'scytle-cover',
-        handle: '/projects/scytle.svg',
-        fileName: 'scytle-cover.svg',
-      },
+      coverImage: coverImage('scytle'),
     },
     {
       id: 'thanku',
@@ -219,11 +227,7 @@ export const folioContent = {
       testimonialAgency: '',
       testimonialText: '',
       image: imgSet('thanku'),
-      coverImage: {
-        id: 'thanku-cover',
-        handle: '/projects/thanku.svg',
-        fileName: 'thanku-cover.svg',
-      },
+      coverImage: coverImage('thanku'),
     },
     {
       id: 'sniket',
@@ -263,57 +267,7 @@ export const folioContent = {
       testimonialAgency: '',
       testimonialText: '',
       image: imgSet('sniket'),
-      coverImage: {
-        id: 'sniket-cover',
-        handle: '/projects/sniket.svg',
-        fileName: 'sniket-cover.svg',
-      },
-    },
-    {
-      id: 'brainstorm-ai',
-      slug: 'brainstorm-ai',
-      name: 'BrainStorm AI',
-      client: 'Own product',
-      endclient: 'AI brainstorming board',
-      date: 'Mar 2026',
-      duration: '—',
-      type: 'AI product · Full-stack',
-      demo: '',
-      sourceCode: 'https://github.com/DIKSHAKUMA/brainstorm-ai',
-      labUrl: '',
-      video: [],
-      selectedproj: true,
-      projlab: false,
-      clientHistory: [],
-      tags: [
-        'React 18',
-        'TypeScript',
-        'Vite',
-        'Node.js',
-        'Express',
-        'MongoDB Atlas',
-        'Groq (Llama 3.1)',
-        'Tailwind CSS',
-        'dnd-kit',
-      ],
-      synop: [
-        'A drag-and-drop idea board where AI clusters related thoughts, summarises the board, and makes it searchable by meaning.',
-      ],
-      description: [
-        'A brainstorming board fills up fast and then stops being useful — you cannot see the themes, and keyword search misses ideas that are related but worded differently.',
-        'BrainStorm AI adds an AI layer that does the organising: it suggests related ideas, groups similar cards, reads the mood of each card, summarises the board into themes and next steps, and lets you search by meaning rather than keywords.',
-        'The semantic layer is built from scratch rather than pulled off a shelf. Each card gets a 384-dimension hash-based embedding with TF-IDF weighting, word stemming so deforestation matches forest, and n-gram support for context. Clustering is hierarchical agglomerative with a similarity threshold exposed to the user as a slider, and search compares cards by cosine similarity.',
-        'Board summarisation is deliberately hybrid: keyword and mood analysis run programmatically, and only the insight and next-steps layer goes to the model — cheaper, faster and more predictable than asking an LLM to do all of it. Groq runs the language model because inference speed matters when a suggestion should feel instant.',
-      ],
-      testimonialName: '',
-      testimonialAgency: '',
-      testimonialText: '',
-      image: imgSet('brainstorm'),
-      coverImage: {
-        id: 'brainstorm-cover',
-        handle: '/projects/brainstorm.svg',
-        fileName: 'brainstorm-cover.svg',
-      },
+      coverImage: coverImage('sniket'),
     },
   ],
 
@@ -329,21 +283,12 @@ export const folioContent = {
 
   /**
    * ViewAwardsHome reads `awards[0]` — one object holding a marquee of logos.
-   * `awardSvg` is the list of images; `awardLinks.logos[i].url` is the link for
-   * the logo at the same index (a logo only renders if it has a matching link).
    */
   awards: [
     {
       awardTitle: 'Recognition & credentials',
       awardDesc:
         'Published research on a Bing-GPT voice assistant covering NLP, generative AI and LLM architectures, plus certifications from Coursera and HackerRank.',
-      awardLinks: {
-        logos: [
-          { url: 'https://github.com/DIKSHAKUMA' },
-          { url: 'https://www.coursera.org/' },
-          { url: 'https://www.hackerrank.com/' },
-        ],
-      },
       awardSvg: [
         {
           id: 'pub',

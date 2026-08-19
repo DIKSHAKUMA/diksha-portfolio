@@ -16,12 +16,19 @@ export default defineNuxtConfig({
           content: 'width=device-width, initial-scale=1.0, viewport-fit=cover',
         },
       ],
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/svg+xml',
+          href: '/favicon.svg',
+        },
+      ],
     },
   },
 
   site: {
     url: 'https://dikshakumari.dev',
-    name: 'Diksha Kumari • Full-Stack Developer',
+    name: 'DK/ | Diksha Kumari',
     description:
       'Full-stack developer building AI-powered products with React, Next.js, Node and Python.',
     defaultLocale: 'en',
@@ -249,7 +256,6 @@ export default defineNuxtConfig({
         '/project/scytle',
         '/project/thanku',
         '/project/sniket',
-        '/project/brainstorm-ai',
       ],
     },
   },

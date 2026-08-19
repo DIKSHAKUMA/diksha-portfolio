@@ -43,10 +43,13 @@
     }
   }
 
-  /* To varaiate middle section a little bit If 6 images, show 2 middle section, if 8 show 4*/
+  /*
+   * Preserve the multi-image editorial layout while allowing a project with
+   * one real screenshot to render without empty gallery placeholders.
+   */
   const middleIndex = computed(() => {
     const totalImages = proj.value?.image?.length || 0
-    return totalImages - 3
+    return Math.max(1, totalImages - 3)
   })
 
   const proj = computed(() => {
@@ -93,7 +96,7 @@
       datePublished: () => proj.value?.date,
       author: {
         name: 'Diksha Kumari',
-        url: 'https://dikshakumari.dev/about',
+        url: 'https://dikshakumari.dev/',
       },
       keywords: () => proj.value?.tags?.join(', '),
       about: () => proj.value?.type,
@@ -334,7 +337,7 @@
 
           <!-- First image if NO video -->
           <div
-            v-if="!proj.video?.[0]?.playbackId"
+            v-if="!proj.video?.[0]?.playbackId && proj.image?.[0]"
             class="project__media project__media--first"
             data-media="0"
           >
@@ -388,7 +391,7 @@
 
           <!-- First image if video exists (comes after info) -->
           <div
-            v-if="proj.video?.[0]?.playbackId"
+            v-if="proj.video?.[0]?.playbackId && proj.image?.[0]"
             class="project__media project__media--first"
             data-media="0"
           >
@@ -457,7 +460,10 @@
             <div class="split-proj-w">{{ proj.description[2] }}</div>
           </div>
 
-          <div class="project__media">
+          <div
+            v-if="proj.image[middleIndex]"
+            class="project__media"
+          >
             <NuxtImg
               :src="proj.image[middleIndex].handle"
               provider="hygraph"
@@ -468,7 +474,10 @@
             />
           </div>
 
-          <div class="project__flex-wrapper">
+          <div
+            v-if="proj.image[middleIndex + 1] || proj.image[middleIndex + 2]"
+            class="project__flex-wrapper"
+          >
             <div class="project__img-col-1">
               <div class="project__media">
                 <NuxtImg

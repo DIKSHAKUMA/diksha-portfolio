@@ -1,19 +1,13 @@
 <script setup lang="ts">
   import { ExpoScaleEase } from 'gsap/all'
   import { useFolioStore } from '../stores/useFolioStore'
-  import { useBlogStore } from '../stores/useBlogStore'
 
   const route = useRoute()
 
   /* Pinia 🍍 */
   const store = useFolioStore()
-  const blogStore = useBlogStore()
 
-  /* Parallell */
-  await Promise.all([
-    callOnce('projects', () => store.fetchData()),
-    callOnce('blog', () => blogStore.fetchData()),
-  ])
+  await callOnce('projects', () => store.fetchData())
 
   const isLoaded = ref(false)
   const showIntroAnimation = ref(false)

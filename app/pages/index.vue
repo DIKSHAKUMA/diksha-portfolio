@@ -55,7 +55,7 @@
       name: 'Diksha Kumari Portfolio',
       url: 'https://dikshakumari.dev',
       description:
-        'Software engineer building dependable AI products and practical digital systems.'
+        'Software engineer building dependable AI products and practical digital systems.',
       author: {
         '@type': 'Person',
         name: 'Diksha Kumari',

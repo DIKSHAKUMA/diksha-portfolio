@@ -68,39 +68,19 @@
             >
               <!-- Original logos -->
               <div
-                v-for="(svg, index) in awards.awardSvg"
+                v-for="svg in awards.awardSvg"
                 :key="svg.id"
-                class="award-cell action"
-                data-name="proj"
-                data-text="View"
+                class="award-cell"
               >
-                <a
-                  v-if="awards.awardLinks?.logos?.[index]"
-                  :href="awards.awardLinks.logos[index].url"
-                  target="_blank"
-                  rel="noopener"
-                  class="award-link"
-                >
-                  <img :src="svg.url" class="award-svg" :alt="svg.fileName" />
-                </a>
+                <img :src="svg.url" class="award-svg" :alt="svg.fileName" />
               </div>
               <!-- Duplicated logos for seamless looping -->
               <div
-                v-for="(svg, index) in awards.awardSvg"
+                v-for="svg in awards.awardSvg"
                 :key="`${svg.id}-duplicate`"
-                class="award-cell action"
-                data-name="proj"
-                data-text="View"
+                class="award-cell"
               >
-                <a
-                  v-if="awards.awardLinks?.logos?.[index]"
-                  :href="awards.awardLinks.logos[index].url"
-                  target="_blank"
-                  rel="noopener"
-                  class="award-link"
-                >
-                  <img :src="svg.url" class="award-svg" :alt="svg.fileName" />
-                </a>
+                <img :src="svg.url" class="award-svg" :alt="svg.fileName" />
               </div>
             </div>
           </div>
@@ -141,15 +121,6 @@
     overflow: hidden;
     position: relative;
     padding: $px-16-spacer 0;
-  }
-
-  .award-link {
-    display: flex; // Force it to behave like a container
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
   }
 
   .award-svg {
